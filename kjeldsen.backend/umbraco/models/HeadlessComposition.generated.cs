@@ -25,6 +25,10 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		/// <summary>Cache Page</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.3.1+06a2a50")]
 		bool CachePage { get; }
+
+		/// <summary>Child Keys</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.3.1+06a2a50")]
+		bool ChildKeys { get; }
 	}
 
 	/// <summary>Headless Composition</summary>
@@ -68,5 +72,16 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		/// <summary>Static getter for Cache Page</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.3.1+06a2a50")]
 		public static bool GetCachePage(IHeadlessComposition that, IPublishedValueFallback publishedValueFallback) => that.Value<bool>(publishedValueFallback, "cachePage");
+
+		///<summary>
+		/// Child Keys
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.3.1+06a2a50")]
+		[ImplementPropertyType("childKeys")]
+		public virtual bool ChildKeys => GetChildKeys(this, _publishedValueFallback);
+
+		/// <summary>Static getter for Child Keys</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.3.1+06a2a50")]
+		public static bool GetChildKeys(IHeadlessComposition that, IPublishedValueFallback publishedValueFallback) => that.Value<bool>(publishedValueFallback, "childKeys");
 	}
 }

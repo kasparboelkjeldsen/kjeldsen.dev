@@ -65,6 +65,13 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual bool CachePage => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetCachePage(this, _publishedValueFallback);
 
 		///<summary>
+		/// Child Keys
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.3.1+06a2a50")]
+		[ImplementPropertyType("childKeys")]
+		public virtual bool ChildKeys => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetChildKeys(this, _publishedValueFallback);
+
+		///<summary>
 		/// Links
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.3.1+06a2a50")]

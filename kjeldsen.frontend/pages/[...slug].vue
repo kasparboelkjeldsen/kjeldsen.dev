@@ -43,6 +43,17 @@ const { data } = await useFetch<IApiContentResponseModel>(apiPath, {
   server: true, cache: "no-cache"
 });
 
+if (data.value?.properties.cacheKeys) {
+  const cacheKeys = data.value.properties.cacheKeys || [];
+  const tags = ["reset", ...cacheKeys];
+  console.log(cacheKeys)
+  useRouteCache((helper) => {
+    helper
+      .setMaxAge(3600 * 24)
+      .setCacheable()
+      .addTags(tags);
+  });
+}
 
 const { data: navigation } =
   await useFetch<NavigationCompositionContentResponseModel>(
@@ -58,17 +69,4 @@ watchEffect(() => {
     });
   }
 });
-
-if (navigation.value?.properties.cacheKeys) {
-  const cacheKeys = navigation.value.properties.cacheKeys || [];
-  const tags = ["reset", ...cacheKeys];
-  /*
-  useRouteCache((helper) => {
-    helper
-      .setMaxAge(3600 * 24)
-      .setCacheable()
-      .addTags(tags);
-  });*/
-  
-}
 </script>

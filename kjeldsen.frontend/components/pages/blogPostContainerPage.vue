@@ -2,7 +2,7 @@
   <section class="px-4 pb-24 max-w-6xl mx-auto">
     <h1 class="text-4xl font-bold leading-tight tracking-tight mb-10">Blog</h1>
 
-    <ul class="grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <ul class="grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
       <li
         v-for="child in blogPosts"
         :key="child.id"

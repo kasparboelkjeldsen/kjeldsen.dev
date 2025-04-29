@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ props.data.properties.seoTitle ?? props.data.name}}</h1>
+    <GridModule v-if="data.properties.grid" :data="data.properties.grid" />
   </div>
 </template>
 

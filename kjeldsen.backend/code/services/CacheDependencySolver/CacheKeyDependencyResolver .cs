@@ -10,6 +10,7 @@ public class CacheKeyDependencyResolver : ICacheKeyDependencyResolver
     private readonly PickerDependencyResolver _pickerResolver;
     private readonly BlockDependencyResolver _blockResolver;
     private readonly RelationDependencyResolver _relationResolver;
+    private readonly IContentService _contentService;
 
     public CacheKeyDependencyResolver(
         IRelationService relationService, IContentService contentService)
@@ -17,6 +18,7 @@ public class CacheKeyDependencyResolver : ICacheKeyDependencyResolver
         _pickerResolver = new PickerDependencyResolver();
         _relationResolver = new RelationDependencyResolver(relationService, contentService);
         _blockResolver = new BlockDependencyResolver(); // Pass self for recursion
+        _contentService = contentService;
     }
 
     public IEnumerable<string> GetDependencies(IContent content, ISet<Guid> visited = null)
@@ -29,6 +31,21 @@ public class CacheKeyDependencyResolver : ICacheKeyDependencyResolver
         dependencies.UnionWith(_pickerResolver.GetPickerDependencies(content));
         dependencies.UnionWith(_blockResolver.GetBlockDependencies(content));
         dependencies.UnionWith(_relationResolver.GetRelationDependencies(content));
+
+        if (content.HasProperty("childKeys"))
+        {
+            var includeChildren = content.GetValue<bool>("childKeys");
+
+            if (includeChildren)
+            {
+                var children = _contentService.GetPagedChildren(content.Id, 0, 100, out long _);
+                foreach (var child in children)
+                {
+                    dependencies.UnionWith(GetDependencies(child, visited));
+                }
+            }
+
+        }
 
         return dependencies;
     }

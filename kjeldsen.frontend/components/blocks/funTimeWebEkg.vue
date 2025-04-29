@@ -26,7 +26,7 @@
       </ul>
     </div>
     <div v-else class="text-gray-400 mt-6 italic">
-      🕊️ No murders on record. Peace reigns... for now.
+      🕊️ No murders on record. Peace reigns, or I'm dead.
     </div>
   </div>
 </template>
@@ -120,6 +120,7 @@ const fetchHeartbeat = async () => {
     spikeQueue = [...spikeShape];
   } catch {
     // No beat detected
+    status.value = "Potential heart failure! 💔";
   }
 };
 
