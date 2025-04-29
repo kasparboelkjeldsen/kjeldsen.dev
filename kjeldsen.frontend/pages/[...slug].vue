@@ -46,7 +46,17 @@ const { data } = await useFetch<IApiContentResponseModel>(apiPath, {
 if (data.value?.properties.cacheKeys) {
   const cacheKeys = data.value.properties.cacheKeys || [];
   const tags = ["reset", ...cacheKeys];
-  console.log(cacheKeys)
+  const timestamp = new Date().toISOString();
+
+console.log(`\n🔥 [${timestamp}] Cache Miss! These keys were not found: 🔥\n`);
+console.table(
+  cacheKeys.map((key, index) => ({
+    '#': index + 1,
+    'Cache Key': key,
+  }))
+);
+
+
   useRouteCache((helper) => {
     helper
       .setMaxAge(3600 * 24)

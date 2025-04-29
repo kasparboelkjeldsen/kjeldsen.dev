@@ -3481,8 +3481,6 @@ class DeliveryClient {
 }
 
 const ____slug_ = defineEventHandler(async (event) => {
-  var _a;
-  console.log("Fetching content for slug:", (_a = event.context.params) == null ? void 0 : _a.slug);
   const config = useRuntimeConfig();
   const { slug } = event.context.params;
   const api = new DeliveryClient({

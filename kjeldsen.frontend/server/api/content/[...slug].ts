@@ -2,7 +2,7 @@ import { DeliveryClient } from '@/server/delivery-api';
 import { useRuntimeConfig } from '#imports';
 
 export default defineEventHandler(async (event) => {
-  console.log("Fetching content for slug:", event.context.params?.slug);
+  
   const config = useRuntimeConfig();
   const { slug } = event.context.params!;
 
