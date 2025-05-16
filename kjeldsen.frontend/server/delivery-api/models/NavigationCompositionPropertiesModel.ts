@@ -5,6 +5,6 @@
 import type { ApiLinkModel } from './ApiLinkModel';
 export type NavigationCompositionPropertiesModel = {
     links?: Array<ApiLinkModel> | null;
-    cacheKeys?: Array<string> | null;
+    cacheKeys?: string;
 };
 

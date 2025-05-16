@@ -1,0 +1,1 @@
+import{s,v as a,x as r,y as o,z as i}from"./Ck1ec3uf.js";function u(n){var t;const e=n||a();return((t=e==null?void 0:e.ssrContext)==null?void 0:t.head)||(e==null?void 0:e.runWithContext(()=>{if(r())return o(i)}))}function d(n,e={}){const t=u(e.nuxt);if(t)return s(n,{head:t,...e})}export{d as u};

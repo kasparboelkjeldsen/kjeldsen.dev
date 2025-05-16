@@ -6,9 +6,9 @@ import type { ApiBlockGridModel } from './ApiBlockGridModel';
 import type { HeadlessCompositionPropertiesModel } from './HeadlessCompositionPropertiesModel';
 import type { IApiContentModel } from './IApiContentModel';
 import type { SeoCompositionPropertiesModel } from './SeoCompositionPropertiesModel';
-export type BlogPostPagePropertiesModel = (SeoCompositionPropertiesModel & HeadlessCompositionPropertiesModel & {
-    writer?: Array<IApiContentModel> | null;
+export type BlogPostPagePropertiesModel = (HeadlessCompositionPropertiesModel & SeoCompositionPropertiesModel & {
     grid?: ApiBlockGridModel;
-    cacheKeys?: Array<string> | null;
+    writer?: Array<IApiContentModel> | null;
+    cacheKeys?: string;
 });
 

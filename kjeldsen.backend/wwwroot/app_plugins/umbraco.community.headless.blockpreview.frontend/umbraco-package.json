@@ -1,0 +1,15 @@
+{
+    "$schema": "./../umbraco-package-schema.json",
+    "id": "umbraco.community.headless.blockpreview.Frontend",
+    "name": "umbraco.community.headless.blockpreview.Frontend",
+    "allowPackageTelemetry": true,
+    "version": "0.0.0",
+    "extensions": [
+        {
+          "name": "knowit-umbraco.community.headless.blockpreview.Frontend EntryPoint",
+          "alias": "knowit-umbraco.community.headless.blockpreview.Frontend.entrypoint",
+          "type": "entryPoint",
+          "js": "/app_plugins/umbraco.community.headless.blockpreview.frontend/dist.js"
+        }
+      ]
+}

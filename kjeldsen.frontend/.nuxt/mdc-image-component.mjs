@@ -1,1 +1,1 @@
-export { default } from "C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@nuxt/image/dist/runtime/components/NuxtImg.vue"
+export { default } from "X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@nuxt/image/dist/runtime/components/NuxtImg.vue"

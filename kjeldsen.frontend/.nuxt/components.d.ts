@@ -18,6 +18,7 @@ interface _GlobalComponents {
     'BlocksImageBlock': typeof import("../components/blocks/imageBlock.vue")['default']
     'BlocksResolverComponent': typeof import("../components/blocks/resolverComponent.vue")['default']
     'BlocksRteBlock': typeof import("../components/blocks/rteBlock.vue")['default']
+    'BlocksTestBlock': typeof import("../components/blocks/testBlock.vue")['default']
     'GridItem': typeof import("../components/gridItem.vue")['default']
     'GridModule': typeof import("../components/gridModule.vue")['default']
     'PagesBlogPostContainerPage': typeof import("../components/pages/blogPostContainerPage.vue")['default']
@@ -84,6 +85,7 @@ interface _GlobalComponents {
     'LazyBlocksImageBlock': LazyComponent<typeof import("../components/blocks/imageBlock.vue")['default']>
     'LazyBlocksResolverComponent': LazyComponent<typeof import("../components/blocks/resolverComponent.vue")['default']>
     'LazyBlocksRteBlock': LazyComponent<typeof import("../components/blocks/rteBlock.vue")['default']>
+    'LazyBlocksTestBlock': LazyComponent<typeof import("../components/blocks/testBlock.vue")['default']>
     'LazyGridItem': LazyComponent<typeof import("../components/gridItem.vue")['default']>
     'LazyGridModule': LazyComponent<typeof import("../components/gridModule.vue")['default']>
     'LazyPagesBlogPostContainerPage': LazyComponent<typeof import("../components/pages/blogPostContainerPage.vue")['default']>
@@ -156,6 +158,7 @@ export const BlocksFunTimeWebMurderBlock: typeof import("../components/blocks/fu
 export const BlocksImageBlock: typeof import("../components/blocks/imageBlock.vue")['default']
 export const BlocksResolverComponent: typeof import("../components/blocks/resolverComponent.vue")['default']
 export const BlocksRteBlock: typeof import("../components/blocks/rteBlock.vue")['default']
+export const BlocksTestBlock: typeof import("../components/blocks/testBlock.vue")['default']
 export const GridItem: typeof import("../components/gridItem.vue")['default']
 export const GridModule: typeof import("../components/gridModule.vue")['default']
 export const PagesBlogPostContainerPage: typeof import("../components/pages/blogPostContainerPage.vue")['default']
@@ -222,6 +225,7 @@ export const LazyBlocksFunTimeWebMurderBlock: LazyComponent<typeof import("../co
 export const LazyBlocksImageBlock: LazyComponent<typeof import("../components/blocks/imageBlock.vue")['default']>
 export const LazyBlocksResolverComponent: LazyComponent<typeof import("../components/blocks/resolverComponent.vue")['default']>
 export const LazyBlocksRteBlock: LazyComponent<typeof import("../components/blocks/rteBlock.vue")['default']>
+export const LazyBlocksTestBlock: LazyComponent<typeof import("../components/blocks/testBlock.vue")['default']>
 export const LazyGridItem: LazyComponent<typeof import("../components/gridItem.vue")['default']>
 export const LazyGridModule: LazyComponent<typeof import("../components/gridModule.vue")['default']>
 export const LazyPagesBlogPostContainerPage: LazyComponent<typeof import("../components/pages/blogPostContainerPage.vue")['default']>

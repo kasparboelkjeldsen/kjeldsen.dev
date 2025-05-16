@@ -1,0 +1,1 @@
+{"file":"app.vue.mjs","mappings":";;;;AAOA,MAAM,SAAS;;;;;;;;;;;;;;;;;;;;;;;;;;;;;","names":[],"sources":["../../../app.vue"],"sourcesContent":["<template>\r\n  <NuxtLayout :name=\"layout\">\r\n    <NuxtPage />\r\n  </NuxtLayout>\r\n</template>\r\n\r\n<script setup>\r\nconst layout = \"main\";\r\n</script>\r\n"],"version":3}

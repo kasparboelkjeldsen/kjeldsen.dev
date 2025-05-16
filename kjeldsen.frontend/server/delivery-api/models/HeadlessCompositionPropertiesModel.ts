@@ -4,6 +4,7 @@
 /* eslint-disable */
 export type HeadlessCompositionPropertiesModel = {
     cachePage?: boolean | null;
-    cacheKeys?: Array<string> | null;
+    childKeys?: boolean | null;
+    cacheKeys?: string;
 };
 

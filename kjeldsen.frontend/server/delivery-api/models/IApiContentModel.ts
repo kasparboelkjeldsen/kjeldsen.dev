@@ -10,5 +10,5 @@ import type { NavigationCompositionContentModel } from './NavigationCompositionC
 import type { SeoCompositionContentModel } from './SeoCompositionContentModel';
 import type { WriterContainerPageContentModel } from './WriterContainerPageContentModel';
 import type { WriterContentModel } from './WriterContentModel';
-export type IApiContentModel = (HomePageContentModel | SeoCompositionContentModel | BlogPostContainerPageContentModel | BlogPostPageContentModel | NavigationCompositionContentModel | HeadlessCompositionContentModel | WriterContainerPageContentModel | WriterContentModel);
+export type IApiContentModel = (BlogPostPageContentModel | HeadlessCompositionContentModel | HomePageContentModel | NavigationCompositionContentModel | SeoCompositionContentModel | BlogPostContainerPageContentModel | WriterContentModel | WriterContainerPageContentModel);
 

@@ -20,15 +20,19 @@
       v-else-if="props.data.contentType === 'imageBlock'"
       :data="props.data"
     />
-    <pre v-else>{{ props.data }}</pre>
+    <div v-else>
+      <h1>{{ props.data.contentType }}</h1>
+      <pre>{{ props.data }}</pre>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { BlocksCodeBlock, BlocksFunTimeWebMurderBlock } from "#components";
+import { BlocksCodeBlock, BlocksFunTimeWebMurderBlock, BlocksFunTimeWebEkg, BlocksRteBlock, BlocksImageBlock } from "#components";
 import type { IApiElementModel } from "~/server/delivery-api";
 
 const props = defineProps<{ data: IApiElementModel }>();
+
 </script>
 
 <style></style>

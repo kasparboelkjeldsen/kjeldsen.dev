@@ -7,5 +7,6 @@ import type { FunTimeWebEkgElementModel } from './FunTimeWebEkgElementModel';
 import type { FunTimeWebMurderBlockElementModel } from './FunTimeWebMurderBlockElementModel';
 import type { ImageBlockElementModel } from './ImageBlockElementModel';
 import type { RteBlockElementModel } from './RteBlockElementModel';
-export type IApiElementModel = (RteBlockElementModel | ImageBlockElementModel | FunTimeWebMurderBlockElementModel | FunTimeWebEkgElementModel | CodeBlockElementModel);
+import type { TestBlockElementModel } from './TestBlockElementModel';
+export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel);
 

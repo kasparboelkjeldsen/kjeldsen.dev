@@ -4,7 +4,6 @@
 /* eslint-disable */
 export type CodeBlockPropertiesModel = {
     code?: string | null;
-    language?: string | null;
-    cacheKeys?: Array<string> | null;
+    cacheKeys?: string;
 };
 

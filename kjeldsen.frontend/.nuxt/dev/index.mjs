@@ -3,41 +3,41 @@ import { Server } from 'node:http';
 import { resolve as resolve$1, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader as getResponseHeader$1, defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setHeaders, sendRedirect, proxyRequest, createError, getResponseHeaders, getHeader, readBody, getQuery as getQuery$1, lazyEventHandler, useBase, createApp, createRouter as createRouter$1, toNodeListener, getRouterParam, sendError, getResponseStatusText } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
-import { createOnigurumaEngine } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/engine-oniguruma.mjs';
-import { createJavaScriptRegexEngine } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/engine-javascript.mjs';
-import { serialize as serialize$1 } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/cookie/dist/index.js';
-import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import destr from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/destr/dist/index.mjs';
-import { withQuery, joinURL, withTrailingSlash, parseURL, withoutBase, getQuery, joinRelativeURL } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/ufo/dist/index.mjs';
-import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/unhead/dist/server.mjs';
-import { isVNode, toValue, isRef } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/index.mjs';
-import { walkResolver } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/unhead/dist/utils.mjs';
-import { renderToString } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/server-renderer/index.mjs';
-import { klona } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/scule/dist/index.mjs';
-import { stringify as stringify$1, uneval } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/devalue/index.js';
-import { DeprecationsPlugin, PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/unhead/dist/plugins.mjs';
-import { createHooks } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1 } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/node-mock-http/dist/index.mjs';
+import { getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader as getResponseHeader$1, defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setHeaders, sendRedirect, proxyRequest, createError, getResponseHeaders, readBody, getHeader, getQuery as getQuery$1, lazyEventHandler, useBase, createApp, createRouter as createRouter$1, toNodeListener, getRouterParam, sendError, getResponseStatusText } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
+import { createOnigurumaEngine } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/engine-oniguruma.mjs';
+import { createJavaScriptRegexEngine } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/engine-javascript.mjs';
+import { serialize as serialize$1 } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/cookie/dist/index.js';
+import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import destr from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/destr/dist/index.mjs';
+import { withQuery, joinURL, withTrailingSlash, parseURL, withoutBase, getQuery, joinRelativeURL } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ufo/dist/index.mjs';
+import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unhead/dist/server.mjs';
+import { isVNode, toValue, isRef } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/index.mjs';
+import { walkResolver } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unhead/dist/utils.mjs';
+import { renderToString } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/server-renderer/index.mjs';
+import { klona } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/scule/dist/index.mjs';
+import { stringify as stringify$1, uneval } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/devalue/index.js';
+import { DeprecationsPlugin, PromisesPlugin, TemplateParamsPlugin, AliasSortingPlugin } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unhead/dist/plugins.mjs';
+import { createHooks } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1 } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/node-mock-http/dist/index.mjs';
 import { readFile } from 'node:fs/promises';
-import consola, { consola as consola$1 } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/youch-core/build/index.js';
-import { Youch } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/source-map/source-map.js';
+import consola, { consola as consola$1 } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/youch-core/build/index.js';
+import { Youch } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/source-map/source-map.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { getContext } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/unctx/dist/index.mjs';
-import { captureRawStackTrace, parseRawStackTrace } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/errx/dist/index.js';
-import { createStorage, prefixStorage } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/dist/index.mjs';
-import { format, CacheControl } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@tusbar/cache-control/dist/cache-control.modern.js';
+import { getContext } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unctx/dist/index.mjs';
+import { captureRawStackTrace, parseRawStackTrace } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/errx/dist/index.js';
+import { createStorage, prefixStorage } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/dist/index.mjs';
+import { format, CacheControl } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@tusbar/cache-control/dist/cache-control.modern.js';
 import { fileURLToPath } from 'node:url';
-import { ipxFSStorage, ipxHttpStorage, createIPX, createIPXH3Handler } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/ipx/dist/index.mjs';
-import { isAbsolute } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/pathe/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/drivers/fs.mjs';
-import { digest } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/ohash/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/radix3/dist/index.mjs';
+import { ipxFSStorage, ipxHttpStorage, createIPX, createIPXH3Handler } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ipx/dist/index.mjs';
+import { isAbsolute } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/pathe/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/drivers/fs.mjs';
+import { digest } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ohash/dist/index.mjs';
+import { toRouteMatcher, createRouter } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/radix3/dist/index.mjs';
 
 function isJsonRequest(event) {
   if (hasReqHeader(event, "accept", "text/html")) {
@@ -248,13 +248,13 @@ if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
 window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
 `;
 
-const _8PfVhf3WYsnSjJAXQVE0yZyQpkNkVTx6kJLywEFIZyI = (function(nitro) {
+const _oVhL5mtFOvJh7VffWtzNBlWFpdiJVRYW6Jyc0VoVA = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
 });
 
-const rootDir = "C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend";
+const rootDir = "X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend";
 
 const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[]};
 
@@ -273,7 +273,7 @@ const devReducers = {
   URL: (data) => data instanceof URL ? data.toString() : void 0
 };
 const asyncContext = getContext("nuxt-dev", { asyncContext: true, AsyncLocalStorage });
-const _ir6Kg85dfNyZK6bpIy425c_WF4zaS65Gq1h8Hkg99o = (nitroApp) => {
+const _Yf_N5DT8W3Inpepfou1EKEjiOFbHGrhqSerlKb94f0 = (nitroApp) => {
   const handler = nitroApp.h3App.handler;
   nitroApp.h3App.handler = (event) => {
     return asyncContext.callAsync({ logs: [], event }, () => handler(event));
@@ -725,6 +725,10 @@ const _inlineRuntimeConfig = {
       "/__nuxt_error": {
         "cache": false
       },
+      "/__blockpreview": {
+        "ssr": true,
+        "prerender": false
+      },
       "/_nuxt/builds/meta/**": {
         "headers": {
           "cache-control": "public, max-age=31536000, immutable"
@@ -738,7 +742,7 @@ const _inlineRuntimeConfig = {
     }
   },
   "public": {
-    "useCache": "true",
+    "useCache": "",
     "murderClient": "Ov23liqsA45smHf8QZRR",
     "cmsHost": "https://localhost:44375",
     "mdc": {
@@ -762,7 +766,7 @@ const _inlineRuntimeConfig = {
   "deliveryKey": "woot",
   "multiCache": {
     "debug": false,
-    "rootDir": "C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend",
+    "rootDir": "X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend",
     "cdn": {
       "enabled": false,
       "cacheControlHeader": "Surrogate-Control",
@@ -784,7 +788,7 @@ const _inlineRuntimeConfig = {
     "alias": {},
     "fs": {
       "dir": [
-        "C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend/public"
+        "X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/public"
       ]
     },
     "http": {
@@ -842,7 +846,7 @@ function defineNitroPlugin(def) {
   return def;
 }
 
-const serverAssets = [{"baseName":"server","dir":"C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/server/assets"}];
 
 const assets = createStorage();
 
@@ -854,11 +858,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend/server","watchOptions":{"ignored":[null]}}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend/.nuxt"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend/.nuxt/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/code/personal projects/kjeldsen.dev/kjeldsen.frontend/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/server","watchOptions":{"ignored":[null]}}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/.nuxt"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/.nuxt/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -1740,7 +1744,7 @@ function createMultiCacheApp() {
     state: new MultiCacheState()
   };
 }
-const _MzT5MT69x1cgkq2DAz45EQNrxGDq9vuD3GsEIfAO4 = defineNitroPlugin((nitroApp) => {
+const _5vHR7zmGgnhiQc3QyV2oIPK2iBb967YiFzjF70kK2ww = defineNitroPlugin((nitroApp) => {
   const multiCache = createMultiCacheApp();
   nitroApp.multiCache = multiCache;
   nitroApp.hooks.hook("request", onRequest);
@@ -1758,10 +1762,17 @@ const _MzT5MT69x1cgkq2DAz45EQNrxGDq9vuD3GsEIfAO4 = defineNitroPlugin((nitroApp) 
 });
 
 const plugins = [
-  _8PfVhf3WYsnSjJAXQVE0yZyQpkNkVTx6kJLywEFIZyI,
-_ir6Kg85dfNyZK6bpIy425c_WF4zaS65Gq1h8Hkg99o,
-_MzT5MT69x1cgkq2DAz45EQNrxGDq9vuD3GsEIfAO4
+  _oVhL5mtFOvJh7VffWtzNBlWFpdiJVRYW6Jyc0VoVA,
+_Yf_N5DT8W3Inpepfou1EKEjiOFbHGrhqSerlKb94f0,
+_5vHR7zmGgnhiQc3QyV2oIPK2iBb967YiFzjF70kK2ww
 ];
+
+const _ST3oji = defineEventHandler(async (event) => {
+  if (event.node.req.method == "POST") {
+    const body = await readBody(event);
+    event.context.body = body;
+  }
+});
 
 const AUTH_HEADER = "x-nuxt-multi-cache-token";
 function getCacheInstance(event) {
@@ -1811,7 +1822,7 @@ async function checkAuth(event) {
   });
 }
 
-const _3ciH0a = defineEventHandler(async (event) => {
+const _kD_xYb = defineEventHandler(async (event) => {
   await checkAuth(event);
   const app = useMultiCacheApp();
   if (!app.cache) {
@@ -1935,7 +1946,7 @@ class DebouncedInvalidator {
   }
 }
 const invalidator = new DebouncedInvalidator();
-const _dCgiRR = defineEventHandler(async (event) => {
+const _t3RxPu = defineEventHandler(async (event) => {
   await checkAuth(event);
   const tags = await getTagsToPurge(event);
   if (!invalidator.cacheContext) {
@@ -1961,7 +1972,7 @@ async function getKeysToPurge(event) {
     statusMessage: "No valid keys provided."
   });
 }
-const _mlmLRP = defineEventHandler(async (event) => {
+const _N0A1PD = defineEventHandler(async (event) => {
   await checkAuth(event);
   const affectedKeys = await getKeysToPurge(event);
   const cache = getCacheInstance(event);
@@ -1972,7 +1983,7 @@ const _mlmLRP = defineEventHandler(async (event) => {
   };
 });
 
-const _iYgiM1 = defineEventHandler(async (event) => {
+const _6j1bIz = defineEventHandler(async (event) => {
   await checkAuth(event);
   const cache = getCacheInstance(event);
   const rows = await cache.getKeys().then((keys) => {
@@ -1991,7 +2002,7 @@ const _iYgiM1 = defineEventHandler(async (event) => {
   };
 });
 
-const _3pg8xf = defineEventHandler(async (event) => {
+const _n5gYX8 = defineEventHandler(async (event) => {
   await checkAuth(event);
   const cache = getCacheInstance(event);
   const query = getQuery$1(event);
@@ -2006,7 +2017,7 @@ const _3pg8xf = defineEventHandler(async (event) => {
   return item;
 });
 
-const _tsjtFe = eventHandler(async (event) => {
+const _9S25FR = eventHandler(async (event) => {
   const { code, lang, theme: themeString, options: optionsStr } = getQuery$1(event);
   const theme = JSON.parse(themeString);
   const options = optionsStr ? JSON.parse(optionsStr) : {};
@@ -2014,7 +2025,7 @@ const _tsjtFe = eventHandler(async (event) => {
   return await highlighter(code, lang, theme, options);
 });
 
-const _Bta47U = lazyEventHandler(() => {
+const _Hpaopv = lazyEventHandler(() => {
   const opts = useRuntimeConfig().ipx || {};
   const fsDir = opts?.fs?.dir ? (Array.isArray(opts.fs.dir) ? opts.fs.dir : [opts.fs.dir]).map((dir) => isAbsolute(dir) ? dir : fileURLToPath(new URL(dir, globalThis._importMeta_.url))) : void 0;
   const fsStorage = opts.fs?.dir ? ipxFSStorage({ ...opts.fs, dir: fsDir }) : void 0;
@@ -2032,30 +2043,31 @@ const _Bta47U = lazyEventHandler(() => {
   return useBase(opts.baseURL, ipxHandler);
 });
 
-const _lazy_b5PfBk = () => Promise.resolve().then(function () { return ____slug_$1; });
-const _lazy_GTHuUR = () => Promise.resolve().then(function () { return _id_$1; });
-const _lazy_5tizfL = () => Promise.resolve().then(function () { return navigation$1; });
-const _lazy_WyMr9G = () => Promise.resolve().then(function () { return callback$1; });
-const _lazy_NhGtlF = () => Promise.resolve().then(function () { return list_get$1; });
-const _lazy_J7oUvT = () => Promise.resolve().then(function () { return push_post$1; });
-const _lazy_4uKtjq = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_xSnT1C = () => Promise.resolve().then(function () { return ____slug_$1; });
+const _lazy_Q1FVpx = () => Promise.resolve().then(function () { return _id_$1; });
+const _lazy_MeUgJg = () => Promise.resolve().then(function () { return navigation$1; });
+const _lazy_sFjQTo = () => Promise.resolve().then(function () { return callback$1; });
+const _lazy_SEwznU = () => Promise.resolve().then(function () { return list_get$1; });
+const _lazy_JA75IE = () => Promise.resolve().then(function () { return push_post$1; });
+const _lazy_pkLN9i = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '/api/content/**:slug', handler: _lazy_b5PfBk, lazy: true, middleware: false, method: undefined },
-  { route: '/api/content/children/:id', handler: _lazy_GTHuUR, lazy: true, middleware: false, method: undefined },
-  { route: '/api/content/navigation', handler: _lazy_5tizfL, lazy: true, middleware: false, method: undefined },
-  { route: '/api/github/callback', handler: _lazy_WyMr9G, lazy: true, middleware: false, method: undefined },
-  { route: '/api/murder/list', handler: _lazy_NhGtlF, lazy: true, middleware: false, method: "get" },
-  { route: '/api/murder/push', handler: _lazy_J7oUvT, lazy: true, middleware: false, method: "post" },
-  { route: '/__nuxt_error', handler: _lazy_4uKtjq, lazy: true, middleware: false, method: undefined },
-  { route: '/__nuxt_multi_cache/purge/all', handler: _3ciH0a, lazy: false, middleware: false, method: "post" },
-  { route: '/__nuxt_multi_cache/purge/tags', handler: _dCgiRR, lazy: false, middleware: false, method: "post" },
-  { route: '/__nuxt_multi_cache/purge/:cacheName', handler: _mlmLRP, lazy: false, middleware: false, method: "post" },
-  { route: '/__nuxt_multi_cache/stats/:cacheName', handler: _iYgiM1, lazy: false, middleware: false, method: "get" },
-  { route: '/__nuxt_multi_cache/inspect/:cacheName', handler: _3pg8xf, lazy: false, middleware: false, method: "get" },
-  { route: '/api/_mdc/highlight', handler: _tsjtFe, lazy: false, middleware: false, method: undefined },
-  { route: '/_ipx/**', handler: _Bta47U, lazy: false, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_4uKtjq, lazy: true, middleware: false, method: undefined }
+  { route: '', handler: _ST3oji, lazy: false, middleware: true, method: undefined },
+  { route: '/api/content/**:slug', handler: _lazy_xSnT1C, lazy: true, middleware: false, method: undefined },
+  { route: '/api/content/children/:id', handler: _lazy_Q1FVpx, lazy: true, middleware: false, method: undefined },
+  { route: '/api/content/navigation', handler: _lazy_MeUgJg, lazy: true, middleware: false, method: undefined },
+  { route: '/api/github/callback', handler: _lazy_sFjQTo, lazy: true, middleware: false, method: undefined },
+  { route: '/api/murder/list', handler: _lazy_SEwznU, lazy: true, middleware: false, method: "get" },
+  { route: '/api/murder/push', handler: _lazy_JA75IE, lazy: true, middleware: false, method: "post" },
+  { route: '/__nuxt_error', handler: _lazy_pkLN9i, lazy: true, middleware: false, method: undefined },
+  { route: '/__nuxt_multi_cache/purge/all', handler: _kD_xYb, lazy: false, middleware: false, method: "post" },
+  { route: '/__nuxt_multi_cache/purge/tags', handler: _t3RxPu, lazy: false, middleware: false, method: "post" },
+  { route: '/__nuxt_multi_cache/purge/:cacheName', handler: _N0A1PD, lazy: false, middleware: false, method: "post" },
+  { route: '/__nuxt_multi_cache/stats/:cacheName', handler: _6j1bIz, lazy: false, middleware: false, method: "get" },
+  { route: '/__nuxt_multi_cache/inspect/:cacheName', handler: _n5gYX8, lazy: false, middleware: false, method: "get" },
+  { route: '/api/_mdc/highlight', handler: _9S25FR, lazy: false, middleware: false, method: undefined },
+  { route: '/_ipx/**', handler: _Hpaopv, lazy: false, middleware: false, method: undefined },
+  { route: '/**', handler: _lazy_pkLN9i, lazy: true, middleware: false, method: undefined }
 ];
 
 function _captureError(error, type) {
@@ -2350,8 +2362,8 @@ function createShikiHighlighter({
   let shiki;
   let configs;
   async function _getShiki() {
-    const { createHighlighterCore, addClassToHast, isSpecialLang, isSpecialTheme } = await import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/core.mjs');
-    const { transformerNotationDiff, transformerNotationErrorLevel, transformerNotationFocus, transformerNotationHighlight } = await import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/transformers/dist/index.mjs');
+    const { createHighlighterCore, addClassToHast, isSpecialLang, isSpecialTheme } = await import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/core.mjs');
+    const { transformerNotationDiff, transformerNotationErrorLevel, transformerNotationFocus, transformerNotationHighlight } = await import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/transformers/dist/index.mjs');
     const shiki2 = await createHighlighterCore({
       langs,
       themes,
@@ -2519,22 +2531,22 @@ function createShikiHighlighter({
 }
 
 const bundledLangs = {
-"typescript": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/typescript.mjs').then(r => r.default || r),
-"ts": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/typescript.mjs').then(r => r.default || r),
-"javascript": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/javascript.mjs').then(r => r.default || r),
-"js": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/javascript.mjs').then(r => r.default || r),
-"csharp": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/csharp.mjs').then(r => r.default || r),
-"c#": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/csharp.mjs').then(r => r.default || r),
-"cs": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/csharp.mjs').then(r => r.default || r),
-"vue-html": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/vue-html.mjs').then(r => r.default || r),
-"vue": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/vue.mjs').then(r => r.default || r),
-"json": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/json.mjs').then(r => r.default || r),
+"typescript": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/typescript.mjs').then(r => r.default || r),
+"ts": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/typescript.mjs').then(r => r.default || r),
+"javascript": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/javascript.mjs').then(r => r.default || r),
+"js": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/javascript.mjs').then(r => r.default || r),
+"csharp": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/csharp.mjs').then(r => r.default || r),
+"c#": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/csharp.mjs').then(r => r.default || r),
+"cs": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/csharp.mjs').then(r => r.default || r),
+"vue-html": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/vue-html.mjs').then(r => r.default || r),
+"vue": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/vue.mjs').then(r => r.default || r),
+"json": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/langs/dist/json.mjs').then(r => r.default || r),
 };
 const bundledThemes = {
-"github-dark": () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/themes/dist/github-dark.mjs').then(r => r.default || r),
+"github-dark": () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@shikijs/themes/dist/github-dark.mjs').then(r => r.default || r),
 };
 const options = {"wrapperStyle":true};
-const engine = createOnigurumaEngine(() => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/wasm.mjs'));
+const engine = createOnigurumaEngine(() => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/wasm.mjs'));
 const highlighter = createShikiHighlighter({ bundledLangs, bundledThemes, options, getMdcConfigs, engine });
 
 const mdcHighlighter = /*#__PURE__*/Object.freeze({
@@ -2938,46 +2950,6 @@ class ContentService {
     this.httpRequest = httpRequest;
   }
   /**
-   * @deprecated
-   * @returns PagedIApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContent({
-    fetch,
-    filter,
-    sort,
-    skip,
-    take = 10,
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content",
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "fetch": fetch,
-        "filter": filter,
-        "sort": sort,
-        "skip": skip,
-        "take": take,
-        "expand": expand
-      },
-      errors: {
-        400: `Bad Request`,
-        404: `Not Found`
-      }
-    });
-  }
-  /**
    * @returns PagedIApiContentResponseModel OK
    * @throws ApiError
    */
@@ -2990,6 +2962,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -2999,6 +2972,7 @@ class ContentService {
       url: "/umbraco/delivery/api/v2/content",
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -3014,73 +2988,6 @@ class ContentService {
       },
       errors: {
         400: `Bad Request`,
-        404: `Not Found`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContentItem({
-    id,
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content/item",
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "id": id,
-        "expand": expand
-      },
-      errors: {
-        401: `Unauthorized`,
-        403: `Forbidden`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContentItemByPath({
-    path = "",
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content/item/{path}",
-      path: {
-        "path": path
-      },
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "expand": expand
-      },
-      errors: {
-        401: `Unauthorized`,
-        403: `Forbidden`,
         404: `Not Found`
       }
     });
@@ -3094,6 +3001,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -3106,6 +3014,7 @@ class ContentService {
       },
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -3113,41 +3022,6 @@ class ContentService {
       query: {
         "expand": expand,
         "fields": fields
-      },
-      errors: {
-        401: `Unauthorized`,
-        403: `Forbidden`,
-        404: `Not Found`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContentItemById({
-    id,
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content/item/{id}",
-      path: {
-        "id": id
-      },
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "expand": expand
       },
       errors: {
         401: `Unauthorized`,
@@ -3165,6 +3039,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -3177,6 +3052,7 @@ class ContentService {
       },
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -3201,6 +3077,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -3210,6 +3087,7 @@ class ContentService {
       url: "/umbraco/delivery/api/v2/content/items",
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -3230,39 +3108,6 @@ class ContentService {
 class MediaService {
   constructor(httpRequest) {
     this.httpRequest = httpRequest;
-  }
-  /**
-   * @deprecated
-   * @returns PagedIApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMedia({
-    fetch,
-    filter,
-    sort,
-    skip,
-    take = 10,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media",
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "fetch": fetch,
-        "filter": filter,
-        "sort": sort,
-        "skip": skip,
-        "take": take,
-        "expand": expand
-      },
-      errors: {
-        400: `Bad Request`
-      }
-    });
   }
   /**
    * @returns PagedIApiMediaWithCropsResponseModel OK
@@ -3299,55 +3144,6 @@ class MediaService {
     });
   }
   /**
-   * @deprecated
-   * @returns IApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMediaItem({
-    id,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media/item",
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "id": id,
-        "expand": expand
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMediaItemByPath({
-    path,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media/item/{path}",
-      path: {
-        "path": path
-      },
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "expand": expand
-      },
-      errors: {
-        404: `Not Found`
-      }
-    });
-  }
-  /**
    * @returns IApiMediaWithCropsResponseModel OK
    * @throws ApiError
    */
@@ -3369,33 +3165,6 @@ class MediaService {
       query: {
         "expand": expand,
         "fields": fields
-      },
-      errors: {
-        404: `Not Found`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMediaItemById({
-    id,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media/item/{id}",
-      path: {
-        "id": id
-      },
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "expand": expand
       },
       errors: {
         404: `Not Found`
@@ -3742,8 +3511,8 @@ function resolveUnrefHeadInput(input) {
 
 const APP_ROOT_OPEN_TAG = `<${appRootTag}${propsToString(appRootAttrs)}>`;
 const APP_ROOT_CLOSE_TAG = `</${appRootTag}>`;
-const getClientManifest = () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
-const getServerEntry = () => import('file://C:/code/personal%20projects/kjeldsen.dev/kjeldsen.frontend/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
 const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
