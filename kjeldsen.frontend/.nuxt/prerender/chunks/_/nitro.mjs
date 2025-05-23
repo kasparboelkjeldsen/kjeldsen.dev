@@ -1,4 +1,4 @@
-import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader, defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setHeaders, sendRedirect, proxyRequest, getResponseHeaders, appendResponseHeader, removeResponseHeader, createError, readBody, getHeader, getQuery as getQuery$1, lazyEventHandler, useBase, createApp, createRouter as createRouter$1, toNodeListener } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
+import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader, defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setHeaders, sendRedirect, proxyRequest, getResponseHeaders, appendResponseHeader, removeResponseHeader, createError, readBody, getHeader, getQuery as getQuery$1, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
 import { withQuery, joinURL, parseURL, withoutBase, getQuery, joinRelativeURL, decodePath, withLeadingSlash, withoutTrailingSlash } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ufo/dist/index.mjs';
 import destr from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/destr/dist/index.mjs';
 import { createHooks } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/hookable/dist/index.mjs';
@@ -12,8 +12,7 @@ import defu, { defuFn } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen
 import { snakeCase } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/scule/dist/index.mjs';
 import { promises } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, resolve, isAbsolute } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/pathe/dist/index.mjs';
-import { ipxFSStorage, ipxHttpStorage, createIPX, createIPXH3Handler } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ipx/dist/index.mjs';
+import { dirname, resolve } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/pathe/dist/index.mjs';
 import unstorage_47drivers_47fs from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/drivers/fs.mjs';
 import file_58_47_47_47X_58_47kasparboelkjeldsen_47kjeldsen_46dev_47kjeldsen_46frontend_47node_modules_47nuxt_47dist_47core_47runtime_47nitro_47utils_47cache_45driver_46js from 'file:///X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/nuxt/dist/core/runtime/nitro/utils/cache-driver.js';
 import unstorage_47drivers_47fs_45lite from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/drivers/fs-lite.mjs';
@@ -529,7 +528,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "61510ded-3bed-4338-9952-e59f4900b820",
+    "buildId": "8242ff98-eb4c-49e0-9210-587f8fc32f96",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -600,20 +599,6 @@ const _inlineRuntimeConfig = {
       "cacheTagInvalidationDelay": 1000,
       "authorizationToken": "woot",
       "authorizationDisabled": false
-    }
-  },
-  "ipx": {
-    "baseURL": "/_ipx",
-    "alias": {},
-    "fs": {
-      "dir": [
-        "X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/public"
-      ]
-    },
-    "http": {
-      "domains": [
-        "localhost:44375"
-      ]
     }
   }
 };
@@ -1641,9 +1626,10 @@ const _A73Z7F = eventHandler((event) => {
 });
 
 const _ST3oji = defineEventHandler(async (event) => {
-  if (event.node.req.method == "POST") {
+  if (event.node.req.method == "POST" && event.node.req.headers["uchb-header"]) {
     const body = await readBody(event);
     event.context.body = body;
+    event.context.blockPreview = true;
   }
 });
 
@@ -1898,24 +1884,6 @@ const _9S25FR = eventHandler(async (event) => {
   return await highlighter(code, lang, theme, options);
 });
 
-const _Hpaopv = lazyEventHandler(() => {
-  const opts = useRuntimeConfig().ipx || {};
-  const fsDir = opts?.fs?.dir ? (Array.isArray(opts.fs.dir) ? opts.fs.dir : [opts.fs.dir]).map((dir) => isAbsolute(dir) ? dir : fileURLToPath(new URL(dir, globalThis._importMeta_.url))) : void 0;
-  const fsStorage = opts.fs?.dir ? ipxFSStorage({ ...opts.fs, dir: fsDir }) : void 0;
-  const httpStorage = opts.http?.domains ? ipxHttpStorage({ ...opts.http }) : void 0;
-  if (!fsStorage && !httpStorage) {
-    throw new Error("IPX storage is not configured!");
-  }
-  const ipxOptions = {
-    ...opts,
-    storage: fsStorage || httpStorage,
-    httpStorage
-  };
-  const ipx = createIPX(ipxOptions);
-  const ipxHandler = createIPXH3Handler(ipx);
-  return useBase(opts.baseURL, ipxHandler);
-});
-
 const _lazy_xSnT1C = () => import('../routes/api/content/_...slug_.mjs');
 const _lazy_Q1FVpx = () => import('../routes/api/content/children/_id_.mjs');
 const _lazy_MeUgJg = () => import('../routes/api/content/navigation.mjs');
@@ -1939,7 +1907,6 @@ const handlers = [
   { route: '/__nuxt_multi_cache/stats/:cacheName', handler: _6j1bIz, lazy: false, middleware: false, method: "get" },
   { route: '/__nuxt_multi_cache/inspect/:cacheName', handler: _n5gYX8, lazy: false, middleware: false, method: "get" },
   { route: '/api/_mdc/highlight', handler: _9S25FR, lazy: false, middleware: false, method: undefined },
-  { route: '/_ipx/**', handler: _Hpaopv, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_pkLN9i, lazy: true, middleware: false, method: undefined }
 ];
 

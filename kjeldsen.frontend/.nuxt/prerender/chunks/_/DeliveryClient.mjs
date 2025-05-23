@@ -393,46 +393,6 @@ class ContentService {
     this.httpRequest = httpRequest;
   }
   /**
-   * @deprecated
-   * @returns PagedIApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContent({
-    fetch,
-    filter,
-    sort,
-    skip,
-    take = 10,
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content",
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "fetch": fetch,
-        "filter": filter,
-        "sort": sort,
-        "skip": skip,
-        "take": take,
-        "expand": expand
-      },
-      errors: {
-        400: `Bad Request`,
-        404: `Not Found`
-      }
-    });
-  }
-  /**
    * @returns PagedIApiContentResponseModel OK
    * @throws ApiError
    */
@@ -445,6 +405,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -454,6 +415,7 @@ class ContentService {
       url: "/umbraco/delivery/api/v2/content",
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -469,73 +431,6 @@ class ContentService {
       },
       errors: {
         400: `Bad Request`,
-        404: `Not Found`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContentItem({
-    id,
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content/item",
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "id": id,
-        "expand": expand
-      },
-      errors: {
-        401: `Unauthorized`,
-        403: `Forbidden`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContentItemByPath({
-    path = "",
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content/item/{path}",
-      path: {
-        "path": path
-      },
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "expand": expand
-      },
-      errors: {
-        401: `Unauthorized`,
-        403: `Forbidden`,
         404: `Not Found`
       }
     });
@@ -549,6 +444,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -561,6 +457,7 @@ class ContentService {
       },
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -568,41 +465,6 @@ class ContentService {
       query: {
         "expand": expand,
         "fields": fields
-      },
-      errors: {
-        401: `Unauthorized`,
-        403: `Forbidden`,
-        404: `Not Found`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiContentResponseModel OK
-   * @throws ApiError
-   */
-  getContentItemById({
-    id,
-    expand,
-    acceptLanguage,
-    apiKey,
-    preview,
-    startItem
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/content/item/{id}",
-      path: {
-        "id": id
-      },
-      headers: {
-        "Accept-Language": acceptLanguage,
-        "Api-Key": apiKey,
-        "Preview": preview,
-        "Start-Item": startItem
-      },
-      query: {
-        "expand": expand
       },
       errors: {
         401: `Unauthorized`,
@@ -620,6 +482,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -632,6 +495,7 @@ class ContentService {
       },
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -656,6 +520,7 @@ class ContentService {
     expand,
     fields,
     acceptLanguage,
+    acceptSegment,
     apiKey,
     preview,
     startItem
@@ -665,6 +530,7 @@ class ContentService {
       url: "/umbraco/delivery/api/v2/content/items",
       headers: {
         "Accept-Language": acceptLanguage,
+        "Accept-Segment": acceptSegment,
         "Api-Key": apiKey,
         "Preview": preview,
         "Start-Item": startItem
@@ -685,39 +551,6 @@ class ContentService {
 class MediaService {
   constructor(httpRequest) {
     this.httpRequest = httpRequest;
-  }
-  /**
-   * @deprecated
-   * @returns PagedIApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMedia({
-    fetch,
-    filter,
-    sort,
-    skip,
-    take = 10,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media",
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "fetch": fetch,
-        "filter": filter,
-        "sort": sort,
-        "skip": skip,
-        "take": take,
-        "expand": expand
-      },
-      errors: {
-        400: `Bad Request`
-      }
-    });
   }
   /**
    * @returns PagedIApiMediaWithCropsResponseModel OK
@@ -754,55 +587,6 @@ class MediaService {
     });
   }
   /**
-   * @deprecated
-   * @returns IApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMediaItem({
-    id,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media/item",
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "id": id,
-        "expand": expand
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMediaItemByPath({
-    path,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media/item/{path}",
-      path: {
-        "path": path
-      },
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "expand": expand
-      },
-      errors: {
-        404: `Not Found`
-      }
-    });
-  }
-  /**
    * @returns IApiMediaWithCropsResponseModel OK
    * @throws ApiError
    */
@@ -824,33 +608,6 @@ class MediaService {
       query: {
         "expand": expand,
         "fields": fields
-      },
-      errors: {
-        404: `Not Found`
-      }
-    });
-  }
-  /**
-   * @deprecated
-   * @returns IApiMediaWithCropsResponseModel OK
-   * @throws ApiError
-   */
-  getMediaItemById({
-    id,
-    expand,
-    apiKey
-  }) {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/umbraco/delivery/api/v1/media/item/{id}",
-      path: {
-        "id": id
-      },
-      headers: {
-        "Api-Key": apiKey
-      },
-      query: {
-        "expand": expand
       },
       errors: {
         404: `Not Found`

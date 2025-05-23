@@ -4,6 +4,6 @@
 /* eslint-disable */
 import type { HeadlessCompositionPropertiesModel } from './HeadlessCompositionPropertiesModel';
 export type BlogPostContainerPagePropertiesModel = (HeadlessCompositionPropertiesModel & {
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 });
 

@@ -29,7 +29,6 @@ export { withCtx, withDirectives, withKeys, withMemo, withModifiers, withScopeId
 export { useDataCache } from '../node_modules/nuxt-multi-cache/dist/runtime/composables/useDataCache';
 export { useCachedAsyncData } from '../node_modules/nuxt-multi-cache/dist/runtime/composables/useCachedAsyncData';
 export { useRouteCache } from '../node_modules/nuxt-multi-cache/dist/runtime/composables/useRouteCache';
-export { useImage } from '../node_modules/@nuxt/image/dist/runtime/composables';
 export { flatUnwrap as unwrapSlot } from '../node_modules/@nuxtjs/mdc/dist/runtime/utils/node';
 export { parseMarkdown } from '../node_modules/@nuxtjs/mdc/dist/runtime/parser';
 export { stringifyMarkdown } from '../node_modules/@nuxtjs/mdc/dist/runtime/stringify';

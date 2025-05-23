@@ -9,6 +9,6 @@ import type { SeoCompositionPropertiesModel } from './SeoCompositionPropertiesMo
 export type BlogPostPagePropertiesModel = (HeadlessCompositionPropertiesModel & SeoCompositionPropertiesModel & {
     grid?: ApiBlockGridModel;
     writer?: Array<IApiContentModel> | null;
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 });
 

@@ -13,6 +13,7 @@
     <PackageReference Include="Umbraco.Cms" Version="16.0.0-rc2" />
     <PackageReference Include="Umbraco.Community.DeliveryApiExtensions" Version="15.0.1" />
     <PackageReference Include="umbraco.community.headless.blockpreview" Version="0.1.1" />
+    <PackageReference Include="Umbraco.Community.Headless.CacheKeys" Version="1.0.1" />
     <PackageReference Include="uSync" Version="16.0.0-beta01" />
   </ItemGroup>
 

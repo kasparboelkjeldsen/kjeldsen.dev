@@ -37,6 +37,6 @@ export type TestBlockPropertiesModel = {
     codeEditor?: string | null;
     markDownEditor?: string | null;
     richTextEditor?: RichTextModel;
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 };
 

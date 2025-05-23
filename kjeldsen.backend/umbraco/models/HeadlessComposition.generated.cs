@@ -29,6 +29,10 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		/// <summary>Child Keys</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "16.0.0-rc2+41bf741")]
 		bool ChildKeys { get; }
+
+		/// <summary>No Slug</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "16.0.0-rc2+41bf741")]
+		bool NoSlug { get; }
 	}
 
 	/// <summary>Headless Composition</summary>
@@ -83,5 +87,16 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		/// <summary>Static getter for Child Keys</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "16.0.0-rc2+41bf741")]
 		public static bool GetChildKeys(IHeadlessComposition that, IPublishedValueFallback publishedValueFallback) => that.Value<bool>(publishedValueFallback, "childKeys");
+
+		///<summary>
+		/// No Slug
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "16.0.0-rc2+41bf741")]
+		[ImplementPropertyType("noSlug")]
+		public virtual bool NoSlug => GetNoSlug(this, _publishedValueFallback);
+
+		/// <summary>Static getter for No Slug</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "16.0.0-rc2+41bf741")]
+		public static bool GetNoSlug(IHeadlessComposition that, IPublishedValueFallback publishedValueFallback) => that.Value<bool>(publishedValueFallback, "noSlug");
 	}
 }

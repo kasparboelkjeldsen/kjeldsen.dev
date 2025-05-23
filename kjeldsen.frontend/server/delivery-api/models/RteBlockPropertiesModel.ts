@@ -5,6 +5,6 @@
 import type { RichTextModel } from './RichTextModel';
 export type RteBlockPropertiesModel = {
     richText?: RichTextModel;
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 };
 

@@ -3,6 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type FunTimeWebEkgPropertiesModel = {
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 };
 

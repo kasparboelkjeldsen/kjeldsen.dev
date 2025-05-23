@@ -5,6 +5,7 @@
 export type HeadlessCompositionPropertiesModel = {
     cachePage?: boolean | null;
     childKeys?: boolean | null;
-    cacheKeys?: string;
+    noSlug?: boolean | null;
+    cacheKeys?: Array<string>;
 };
 

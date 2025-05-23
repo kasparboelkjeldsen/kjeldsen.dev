@@ -1,8 +1,6 @@
-import "../../node_modules/_nuxt/image/dist/runtime/components/NuxtImg.vue.mjs";
 import { defineComponent, withAsyncContext, mergeProps, unref } from "vue";
-import { ssrRenderAttrs, ssrRenderList, ssrRenderAttr, ssrRenderComponent, ssrInterpolate } from "vue/server-renderer";
+import { ssrRenderAttrs, ssrRenderList, ssrRenderAttr, ssrInterpolate } from "vue/server-renderer";
 import { useFetch } from "../../node_modules/nuxt/dist/app/composables/fetch.mjs";
-import _sfc_main$1 from "../../node_modules/_nuxt/image/dist/runtime/components/NuxtImg.vue2.mjs";
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "blogPostContainerPage",
   __ssrInlineRender: true,
@@ -22,20 +20,12 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     const { data: children } = ([__temp, __restore] = withAsyncContext(() => useFetch(`/api/content/children/${props.data.id}`, { server: true }, "$sFdoVrx6oy")), __temp = await __temp, __restore(), __temp);
     const blogPosts = (_a = children.value) == null ? void 0 : _a.items;
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_NuxtImg = _sfc_main$1;
       _push(`<section${ssrRenderAttrs(mergeProps({ class: "px-4 pb-24 max-w-6xl mx-auto" }, _attrs))}><h1 class="text-4xl font-bold leading-tight tracking-tight mb-10">Blog</h1><ul class="grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2"><!--[-->`);
       ssrRenderList(unref(blogPosts), (child) => {
         var _a2, _b, _c;
         _push(`<li class="bg-zinc-900 rounded-xl overflow-hidden shadow hover:shadow-xl transition-shadow"><a${ssrRenderAttr("href", ((_a2 = child.route) == null ? void 0 : _a2.path) ?? "#")} class="block group h-full">`);
         if ((_c = (_b = child.properties.seoListImage) == null ? void 0 : _b[0]) == null ? void 0 : _c.url) {
-          _push(`<div>`);
-          _push(ssrRenderComponent(_component_NuxtImg, {
-            src: child.properties.seoListImage[0].url,
-            alt: "",
-            class: "w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105",
-            width: "400"
-          }, null, _parent));
-          _push(`</div>`);
+          _push(`<div><img${ssrRenderAttr("src", child.properties.seoListImage[0].url)} alt="" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"></div>`);
         } else {
           _push(`<!---->`);
         }

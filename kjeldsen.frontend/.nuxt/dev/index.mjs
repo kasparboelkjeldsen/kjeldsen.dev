@@ -3,7 +3,7 @@ import { Server } from 'node:http';
 import { resolve as resolve$1, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader as getResponseHeader$1, defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setHeaders, sendRedirect, proxyRequest, createError, getResponseHeaders, readBody, getHeader, getQuery as getQuery$1, lazyEventHandler, useBase, createApp, createRouter as createRouter$1, toNodeListener, getRouterParam, sendError, getResponseStatusText } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
+import { getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, getRequestURL, getResponseHeader as getResponseHeader$1, defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, getResponseStatus, setHeaders, sendRedirect, proxyRequest, createError, getResponseHeaders, readBody, getHeader, getQuery as getQuery$1, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getRouterParam, sendError, getResponseStatusText } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
 import { createOnigurumaEngine } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/engine-oniguruma.mjs';
 import { createJavaScriptRegexEngine } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/shiki/dist/engine-javascript.mjs';
 import { serialize as serialize$1 } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/cookie/dist/index.js';
@@ -32,9 +32,6 @@ import { getContext } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.f
 import { captureRawStackTrace, parseRawStackTrace } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/errx/dist/index.js';
 import { createStorage, prefixStorage } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/dist/index.mjs';
 import { format, CacheControl } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@tusbar/cache-control/dist/cache-control.modern.js';
-import { fileURLToPath } from 'node:url';
-import { ipxFSStorage, ipxHttpStorage, createIPX, createIPXH3Handler } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ipx/dist/index.mjs';
-import { isAbsolute } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/pathe/dist/index.mjs';
 import unstorage_47drivers_47fs from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/drivers/fs.mjs';
 import { digest } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ohash/dist/index.mjs';
 import { toRouteMatcher, createRouter } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/radix3/dist/index.mjs';
@@ -781,20 +778,6 @@ const _inlineRuntimeConfig = {
       "cacheTagInvalidationDelay": 1000,
       "authorizationToken": "woot",
       "authorizationDisabled": false
-    }
-  },
-  "ipx": {
-    "baseURL": "/_ipx",
-    "alias": {},
-    "fs": {
-      "dir": [
-        "X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/public"
-      ]
-    },
-    "http": {
-      "domains": [
-        "localhost:44375"
-      ]
     }
   }
 };
@@ -1768,9 +1751,10 @@ _5vHR7zmGgnhiQc3QyV2oIPK2iBb967YiFzjF70kK2ww
 ];
 
 const _ST3oji = defineEventHandler(async (event) => {
-  if (event.node.req.method == "POST") {
+  if (event.node.req.method == "POST" && event.node.req.headers["uchb-header"]) {
     const body = await readBody(event);
     event.context.body = body;
+    event.context.blockPreview = true;
   }
 });
 
@@ -2025,24 +2009,6 @@ const _9S25FR = eventHandler(async (event) => {
   return await highlighter(code, lang, theme, options);
 });
 
-const _Hpaopv = lazyEventHandler(() => {
-  const opts = useRuntimeConfig().ipx || {};
-  const fsDir = opts?.fs?.dir ? (Array.isArray(opts.fs.dir) ? opts.fs.dir : [opts.fs.dir]).map((dir) => isAbsolute(dir) ? dir : fileURLToPath(new URL(dir, globalThis._importMeta_.url))) : void 0;
-  const fsStorage = opts.fs?.dir ? ipxFSStorage({ ...opts.fs, dir: fsDir }) : void 0;
-  const httpStorage = opts.http?.domains ? ipxHttpStorage({ ...opts.http }) : void 0;
-  if (!fsStorage && !httpStorage) {
-    throw new Error("IPX storage is not configured!");
-  }
-  const ipxOptions = {
-    ...opts,
-    storage: fsStorage || httpStorage,
-    httpStorage
-  };
-  const ipx = createIPX(ipxOptions);
-  const ipxHandler = createIPXH3Handler(ipx);
-  return useBase(opts.baseURL, ipxHandler);
-});
-
 const _lazy_xSnT1C = () => Promise.resolve().then(function () { return ____slug_$1; });
 const _lazy_Q1FVpx = () => Promise.resolve().then(function () { return _id_$1; });
 const _lazy_MeUgJg = () => Promise.resolve().then(function () { return navigation$1; });
@@ -2066,7 +2032,6 @@ const handlers = [
   { route: '/__nuxt_multi_cache/stats/:cacheName', handler: _6j1bIz, lazy: false, middleware: false, method: "get" },
   { route: '/__nuxt_multi_cache/inspect/:cacheName', handler: _n5gYX8, lazy: false, middleware: false, method: "get" },
   { route: '/api/_mdc/highlight', handler: _9S25FR, lazy: false, middleware: false, method: undefined },
-  { route: '/_ipx/**', handler: _Hpaopv, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_pkLN9i, lazy: true, middleware: false, method: undefined }
 ];
 

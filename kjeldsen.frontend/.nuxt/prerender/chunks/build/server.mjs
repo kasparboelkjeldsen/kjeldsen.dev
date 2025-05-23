@@ -1,7 +1,7 @@
 import { shallowReactive, reactive, effectScope, getCurrentScope, hasInjectionContext, getCurrentInstance, toRef, inject, shallowRef, isReadonly, isRef, isShallow, isReactive, toRaw, defineAsyncComponent, defineComponent, computed, unref, ref, h, Suspense, nextTick, mergeProps, provide, watch, Fragment, withCtx, createVNode, useSSRContext, onErrorCaptured, onServerPrefetch, resolveDynamicComponent, createApp } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/index.mjs';
 import { createHooks } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/hookable/dist/index.mjs';
 import { getContext, executeAsync } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unctx/dist/index.mjs';
-import { createError as createError$1, sanitizeStatusCode, appendHeader } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
+import { createError as createError$1, sanitizeStatusCode } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
 import { START_LOCATION, createMemoryHistory, createRouter as createRouter$1, useRoute as useRoute$1, RouterView } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue-router/dist/vue-router.node.mjs';
 import { toRouteMatcher, createRouter } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/radix3/dist/index.mjs';
 import { defu } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/defu/dist/defu.mjs';
@@ -277,7 +277,7 @@ const generateRouteKey$1 = (routeProps, override) => {
   const source = override ?? (matchedRoute == null ? void 0 : matchedRoute.meta.key) ?? (matchedRoute && interpolatePath(routeProps.route, matchedRoute));
   return typeof source === "function" ? source(routeProps.route) : source;
 };
-function toArray$1(value) {
+function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
 
@@ -651,7 +651,7 @@ const plugin = defineNuxtPlugin({
           if (!componentMiddleware) {
             continue;
           }
-          for (const entry of toArray$1(componentMiddleware)) {
+          for (const entry of toArray(componentMiddleware)) {
             middlewareEntries.add(entry);
           }
         }
@@ -840,67 +840,11 @@ const components_plugin_z4hgvsiddfKkfXTP6M8M4zG5Cb7sGnDhcryKVM45Di4 = defineNuxt
   }
 });
 
-function toArray(value) {
-  return Array.isArray(value) ? value : [value];
-}
-
-function useRequestEvent(nuxtApp = useNuxtApp()) {
-  var _a;
-  return (_a = nuxtApp.ssrContext) == null ? void 0 : _a.event;
-}
-function useRequestFetch() {
-  var _a;
-  return ((_a = useRequestEvent()) == null ? void 0 : _a.$fetch) || globalThis.$fetch;
-}
-function prerenderRoutes(path) {
-  const paths = toArray(path);
-  appendHeader(useRequestEvent(), "x-nitro-prerender", paths.map((p) => encodeURIComponent(p)).join(", "));
-}
-
-let routes;
-const prerender_server_sqIxOBipVr4FbVMA9kqWL0wT8FPop6sKAXLVfifsJzk = defineNuxtPlugin(async () => {
-  let __temp, __restore;
-  if (routes && !routes.length) {
-    return;
-  }
-  useRuntimeConfig().nitro.routeRules;
-  routes || (routes = Array.from(processRoutes(([__temp, __restore] = executeAsync(() => {
-    var _a, _b;
-    return (_b = (_a = routerOptions).routes) == null ? void 0 : _b.call(_a, _routes);
-  }), __temp = await __temp, __restore(), __temp) ?? _routes)));
-  const batch = routes.splice(0, 10);
-  prerenderRoutes(batch);
-});
-const OPTIONAL_PARAM_RE = /^\/?:.*(?:\?|\(\.\*\)\*)$/;
-function shouldPrerender(path) {
-  return true;
-}
-function processRoutes(routes2, currentPath = "/", routesToPrerender = /* @__PURE__ */ new Set()) {
-  var _a;
-  for (const route of routes2) {
-    if (OPTIONAL_PARAM_RE.test(route.path) && !((_a = route.children) == null ? void 0 : _a.length) && shouldPrerender()) {
-      routesToPrerender.add(currentPath);
-    }
-    if (route.path.includes(":")) {
-      continue;
-    }
-    const fullPath = joinURL(currentPath, route.path);
-    {
-      routesToPrerender.add(fullPath);
-    }
-    if (route.children) {
-      processRoutes(route.children, fullPath, routesToPrerender);
-    }
-  }
-  return routesToPrerender;
-}
-
 const plugins = [
   unhead_k2P3m_ZDyjlr2mMYnoDPwavjsDN8hBlk9cFai0bbopU,
   plugin,
   revive_payload_server_MVtmlZaQpj6ApFmshWfUWl5PehCebzaBf2NuRMiIbms,
-  components_plugin_z4hgvsiddfKkfXTP6M8M4zG5Cb7sGnDhcryKVM45Di4,
-  prerender_server_sqIxOBipVr4FbVMA9kqWL0wT8FPop6sKAXLVfifsJzk
+  components_plugin_z4hgvsiddfKkfXTP6M8M4zG5Cb7sGnDhcryKVM45Di4
 ];
 
 const layouts = {
@@ -1271,5 +1215,5 @@ const server = /*#__PURE__*/Object.freeze({
   default: entry$1
 });
 
-export { useRequestFetch as a, useNuxtApp as b, createError as c, asyncDataDefaults as d, useRuntimeConfig as e, fetchDefaults as f, useRouter as g, nuxtLinkDefaults as h, navigateTo as n, resolveRouteObject as r, server as s, tryUseNuxtApp as t, useRequestEvent as u };
+export { asyncDataDefaults as a, useRuntimeConfig as b, createError as c, useRouter as d, nuxtLinkDefaults as e, fetchDefaults as f, navigateTo as n, resolveRouteObject as r, server as s, tryUseNuxtApp as t, useNuxtApp as u };
 //# sourceMappingURL=server.mjs.map

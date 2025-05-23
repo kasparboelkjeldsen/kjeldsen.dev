@@ -3,6 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type WriterContainerPagePropertiesModel = {
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 };
 

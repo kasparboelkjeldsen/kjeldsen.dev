@@ -1,6 +1,6 @@
 import { defineComponent, ref, h, resolveComponent, computed } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/index.mjs';
 import { parseQuery, hasProtocol, joinURL, withTrailingSlash, withoutTrailingSlash } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ufo/dist/index.mjs';
-import { g as useRouter, b as useNuxtApp, r as resolveRouteObject, e as useRuntimeConfig, n as navigateTo, h as nuxtLinkDefaults } from './server.mjs';
+import { d as useRouter, u as useNuxtApp, r as resolveRouteObject, b as useRuntimeConfig, n as navigateTo, e as nuxtLinkDefaults } from './server.mjs';
 
 const firstNonUndefined = (...args) => args.find((arg) => arg !== void 0);
 // @__NO_SIDE_EFFECTS__

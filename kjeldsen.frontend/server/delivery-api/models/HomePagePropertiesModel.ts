@@ -8,6 +8,6 @@ import type { NavigationCompositionPropertiesModel } from './NavigationCompositi
 import type { SeoCompositionPropertiesModel } from './SeoCompositionPropertiesModel';
 export type HomePagePropertiesModel = (HeadlessCompositionPropertiesModel & NavigationCompositionPropertiesModel & SeoCompositionPropertiesModel & {
     grid?: ApiBlockGridModel;
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 });
 

@@ -3,6 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type FunTimeWebMurderBlockPropertiesModel = {
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 };
 

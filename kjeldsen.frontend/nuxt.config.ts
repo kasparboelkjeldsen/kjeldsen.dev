@@ -1,14 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+import { existsSync, readFileSync } from "fs";
+import { resolve } from "path";
+
+// https://localhost:44375/api/slug
 export default defineNuxtConfig({
-  
+  css: ['~/assets/css/tailwind.css'],
+  webpack: {
+    extractCSS: true,
+  },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   modules: [
     "nuxt-multi-cache",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/google-fonts",
-    "@nuxt/image",
     "@nuxtjs/mdc",
   ],
   googleFonts: {
@@ -37,11 +43,6 @@ export default defineNuxtConfig({
   experimental: {
     componentIslands: true,
   },
-  image: {
-    domains: ["localhost:44375"],
-    provider: "ipx",
-    ipx: {},
-  },
   runtimeConfig: {
     murderKey: process.env.MURDER_KEY,
     deliveryKey: process.env.DELIVERY_KEY,
@@ -61,4 +62,19 @@ export default defineNuxtConfig({
   routeRules: {
     "/__blockpreview": {ssr: true, prerender: false}
   },
+  nitro: {
+    prerender: {
+      routes: (() => {
+        const filePath = resolve('./.nuxt-prerender-routes.json')
+        if (!existsSync(filePath)) {
+          console.warn('⚠️  No prerender routes file found')
+          return []
+        }
+
+        const raw = readFileSync(filePath, 'utf-8')
+        return JSON.parse(raw)
+      })()
+    }
+  }
+
 });

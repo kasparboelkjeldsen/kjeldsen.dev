@@ -62,5 +62,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "16.0.0-rc2+41bf741")]
 		[ImplementPropertyType("childKeys")]
 		public virtual bool ChildKeys => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetChildKeys(this, _publishedValueFallback);
+
+		///<summary>
+		/// No Slug
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "16.0.0-rc2+41bf741")]
+		[ImplementPropertyType("noSlug")]
+		public virtual bool NoSlug => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetNoSlug(this, _publishedValueFallback);
 	}
 }

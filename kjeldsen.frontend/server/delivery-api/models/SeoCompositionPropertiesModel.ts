@@ -8,6 +8,6 @@ export type SeoCompositionPropertiesModel = {
     seoDescription?: string | null;
     seoPublishingDate?: string | null;
     seoListImage?: Array<IApiMediaWithCropsModel> | null;
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 };
 

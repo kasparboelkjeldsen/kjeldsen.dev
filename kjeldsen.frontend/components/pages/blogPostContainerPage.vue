@@ -10,11 +10,10 @@
       >
         <a :href="child.route?.path ?? '#'" class="block group h-full">
           <div v-if="child.properties.seoListImage?.[0]?.url">
-            <NuxtImg 
+            <img 
               :src="child.properties.seoListImage[0].url"
               alt=""
               class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-              width="400"
             />
           </div>
           <div class="p-6">

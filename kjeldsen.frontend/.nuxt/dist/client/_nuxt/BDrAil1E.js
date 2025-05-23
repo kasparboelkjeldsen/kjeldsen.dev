@@ -1,0 +1,1 @@
+import{u as a,_ as n}from"./DwsIZud9.js";import{e as s,c,o as _,b as r,u as t}from"./slGeQzaA.js";import"./DlAUqK2U.js";const i={id:"__preview"},b=s({__name:"__blockpreview",setup(p){const e=a(),o=e==null?void 0:e.context.body.content;return(d,m)=>(_(),c("div",i,[r(t(n),{data:t(o)},null,8,["data"])]))}});export{b as default};

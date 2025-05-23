@@ -5,6 +5,6 @@
 export type WriterPropertiesModel = {
     writerName?: string | null;
     luckyNumber?: number | null;
-    cacheKeys?: string;
+    cacheKeys?: Array<string>;
 };
 

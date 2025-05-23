@@ -2,25 +2,24 @@ import { defineComponent, mergeProps, computed, toValue, reactive, withAsyncCont
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderList, ssrInterpolate, ssrRenderStyle, ssrRenderAttr } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/server-renderer/index.mjs';
 import { useRoute } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue-router/dist/vue-router.node.mjs';
 import { hash } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ohash/dist/index.mjs';
-import { f as fetchDefaults, a as useRequestFetch } from './server.mjs';
-import { _ as _sfc_main$7, u as useAsyncData } from './resolverComponent.vue2.mjs';
+import { _ as _sfc_main$7, a as useAsyncData, b as useRequestFetch } from './resolverComponent.vue2.mjs';
+import { f as fetchDefaults } from './server.mjs';
 import { u as useHead } from './v3.mjs';
 import { _ as _export_sfc } from './_plugin-vue_export-helper.mjs';
-import { _ as _sfc_main$8 } from './NuxtImg.vue2.mjs';
-import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/hookable/dist/index.mjs';
-import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unctx/dist/index.mjs';
-import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
-import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/radix3/dist/index.mjs';
-import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/defu/dist/defu.mjs';
-import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ufo/dist/index.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue-chartjs/dist/index.js';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/chart.js/dist/chart.js';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/cookie-es/dist/index.mjs';
+import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/destr/dist/index.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ohash/dist/utils/index.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/klona/dist/index.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/scule/dist/index.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/property-information/index.js';
+import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/hookable/dist/index.mjs';
+import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unctx/dist/index.mjs';
+import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/radix3/dist/index.mjs';
+import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/defu/dist/defu.mjs';
+import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ufo/dist/index.mjs';
 import '../_/renderer.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unhead/dist/server.mjs';
@@ -34,7 +33,6 @@ import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules
 import 'node:fs';
 import 'node:url';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/pathe/dist/index.mjs';
-import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/ipx/dist/index.mjs';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/drivers/fs.mjs';
 import 'file:///X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/nuxt/dist/core/runtime/nitro/utils/cache-driver.js';
 import 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/unstorage/drivers/fs-lite.mjs';
@@ -240,20 +238,12 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     const { data: children } = ([__temp, __restore] = withAsyncContext(() => useFetch(`/api/content/children/${props.data.id}`, { server: true }, "$sFdoVrx6oy")), __temp = await __temp, __restore(), __temp);
     const blogPosts = (_a = children.value) == null ? void 0 : _a.items;
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_NuxtImg = _sfc_main$8;
       _push(`<section${ssrRenderAttrs(mergeProps({ class: "px-4 pb-24 max-w-6xl mx-auto" }, _attrs))}><h1 class="text-4xl font-bold leading-tight tracking-tight mb-10">Blog</h1><ul class="grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2"><!--[-->`);
       ssrRenderList(unref(blogPosts), (child) => {
         var _a2, _b, _c;
         _push(`<li class="bg-zinc-900 rounded-xl overflow-hidden shadow hover:shadow-xl transition-shadow"><a${ssrRenderAttr("href", ((_a2 = child.route) == null ? void 0 : _a2.path) ?? "#")} class="block group h-full">`);
         if ((_c = (_b = child.properties.seoListImage) == null ? void 0 : _b[0]) == null ? void 0 : _c.url) {
-          _push(`<div>`);
-          _push(ssrRenderComponent(_component_NuxtImg, {
-            src: child.properties.seoListImage[0].url,
-            alt: "",
-            class: "w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105",
-            width: "400"
-          }, null, _parent));
-          _push(`</div>`);
+          _push(`<div><img${ssrRenderAttr("src", child.properties.seoListImage[0].url)} alt="" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"></div>`);
         } else {
           _push(`<!---->`);
         }

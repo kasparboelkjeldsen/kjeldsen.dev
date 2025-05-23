@@ -1,8 +1,8 @@
 import { defineComponent, h, getCurrentInstance, computed, toRaw, reactive, watch, resolveComponent, defineAsyncComponent, Text, Comment, useSSRContext, ref, shallowRef, toRef, onServerPrefetch, unref, withAsyncContext, mergeProps, provide, createElementBlock } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/index.mjs';
-import { ssrRenderSlot, ssrRenderComponent, ssrRenderAttrs, ssrInterpolate, ssrRenderList } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/server-renderer/index.mjs';
+import { ssrRenderSlot, ssrRenderComponent, ssrRenderAttrs, ssrInterpolate, ssrRenderList, ssrRenderAttr } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue/server-renderer/index.mjs';
 import { Line } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/vue-chartjs/dist/index.js';
 import { Chart, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/chart.js/dist/chart.js';
-import { b as useNuxtApp, d as asyncDataDefaults, c as createError, u as useRequestEvent, e as useRuntimeConfig } from './server.mjs';
+import { u as useNuxtApp, a as asyncDataDefaults, c as createError, b as useRuntimeConfig } from './server.mjs';
 import { _ as _export_sfc } from './_plugin-vue_export-helper.mjs';
 import { parse } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/cookie-es/dist/index.mjs';
 import { getRequestHeader, setCookie, getCookie, deleteCookie } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/h3/dist/index.mjs';
@@ -11,7 +11,15 @@ import { isEqual } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.fron
 import { klona } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/klona/dist/index.mjs';
 import { pascalCase, kebabCase } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/scule/dist/index.mjs';
 import { find, html } from 'file://X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/property-information/index.js';
-import { _ as _sfc_main$8 } from './NuxtImg.vue2.mjs';
+
+function useRequestEvent(nuxtApp = useNuxtApp()) {
+  var _a;
+  return (_a = nuxtApp.ssrContext) == null ? void 0 : _a.event;
+}
+function useRequestFetch() {
+  var _a;
+  return ((_a = useRequestEvent()) == null ? void 0 : _a.$fetch) || globalThis.$fetch;
+}
 
 const htmlTags = [
   "a",
@@ -1123,16 +1131,21 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     data: {}
   },
   setup(__props) {
+    const event = useRequestEvent();
+    const isBlockPreview = event == null ? void 0 : event.context.blockPreview;
     return (_ctx, _push, _parent, _attrs) => {
-      var _a, _b, _c, _d;
-      const _component_NuxtImg = _sfc_main$8;
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "prose" }, _attrs))}>`);
-      _push(ssrRenderComponent(_component_NuxtImg, {
-        src: (_c = (_b = (_a = _ctx.data.properties) == null ? void 0 : _a.image) == null ? void 0 : _b.at(0)) == null ? void 0 : _c.url,
-        alt: ((_d = _ctx.data.properties) == null ? void 0 : _d.altText) ?? "",
-        class: "rounded-lg",
-        width: "800"
-      }, null, _parent));
+      var _a, _b, _c, _d, _e, _f, _g, _h;
+      _push(`<div${ssrRenderAttrs(_attrs)}>`);
+      if (!unref(isBlockPreview)) {
+        _push(`<img${ssrRenderAttr("src", (_c = (_b = (_a = _ctx.data.properties) == null ? void 0 : _a.image) == null ? void 0 : _b.at(0)) == null ? void 0 : _c.url)}${ssrRenderAttr("alt", ((_d = _ctx.data.properties) == null ? void 0 : _d.altText) ?? "")} class="rounded-lg">`);
+      } else {
+        _push(`<!---->`);
+      }
+      if (unref(isBlockPreview)) {
+        _push(`<img${ssrRenderAttr("src", (_g = (_f = (_e = _ctx.data.properties) == null ? void 0 : _e.image) == null ? void 0 : _f.at(0)) == null ? void 0 : _g.url)}${ssrRenderAttr("alt", ((_h = _ctx.data.properties) == null ? void 0 : _h.altText) ?? "")} class="w-full">`);
+      } else {
+        _push(`<!---->`);
+      }
       _push(`</div>`);
     };
   }
@@ -1176,5 +1189,5 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
   }
 });
 
-export { TEXT_TAGS as T, _sfc_main as _, isText as a, nodeChildren as b, unwrap as c, flatUnwrap as f, htmlTags as h, isTag as i, nodeTextContent as n, useAsyncData as u };
+export { TEXT_TAGS as T, _sfc_main as _, useAsyncData as a, useRequestFetch as b, isText as c, nodeChildren as d, unwrap as e, flatUnwrap as f, htmlTags as h, isTag as i, nodeTextContent as n, useRequestEvent as u };
 //# sourceMappingURL=resolverComponent.vue2.mjs.map
