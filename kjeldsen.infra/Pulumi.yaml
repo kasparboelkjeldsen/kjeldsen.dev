@@ -1,0 +1,13 @@
+name: kjeldsen.dev
+description: A minimal Azure Native TypeScript Pulumi program
+runtime:
+  name: nodejs
+  options:
+    packagemanager: npm
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: azure-typescript
+  pulumi:autonaming:
+    value:
+      mode: disabled

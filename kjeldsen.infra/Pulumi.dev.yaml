@@ -1,0 +1,5 @@
+config:
+  azure-native:location: westeurope
+  azure:location: westeurope
+  azure:subscriptionId: e544652d-b079-448d-b112-5e46db72c8f7
+  azure:tenantId: 10a49740-5b2d-41c8-aff0-a9acb8ad414a

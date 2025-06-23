@@ -1,0 +1,45 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:tailwind": "postcss assets/css/tailwind.css -o .tmp-tailwind.css",
+    "build:cms-css": "npm run build:tailwind && node scripts/copy-css.js",
+    "build:routes": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node scripts/generate-routes.js",
+    "build:frontend": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nuxi build",
+    "build": "npm run build:routes && npm run build:frontend && npm run build:cms-css",
+    "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nuxi dev",
+    "gen": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npx openapi-typescript-codegen --input https://localhost:44375/umbraco/swagger/delivery/swagger.json --output ./server/delivery-api --client fetch --name DeliveryClient --useOptions"
+  },
+  "dependencies": {
+    "@nuxt/content": "^3.5.1",
+    "@nuxt/image": "^1.10.0",
+    "@nuxtjs/mdc": "^0.17.0",
+    "@nuxtjs/tailwindcss": "^6.13.2",
+    "@tailwindcss/typography": "^0.5.16",
+    "chart.js": "^4.4.9",
+    "nuxt": "^3.16.0",
+    "redis": "^4.7.0",
+    "vue": "^3.5.13",
+    "vue-chartjs": "^5.3.2",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@nuxt/eslint-config": "^1.4.0",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@types/markdown-it": "^14.1.2",
+    "autoprefixer": "^10.4.21",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.26.0",
+    "eslint-plugin-vue": "^10.0.0",
+    "globals": "^16.0.0",
+    "nuxt-multi-cache": "^3.4.0",
+    "openapi-typescript-codegen": "^0.29.0",
+    "postcss": "^8.5.3",
+    "postcss-cli": "^11.0.1",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript-eslint": "^8.30.1"
+  }
+}
