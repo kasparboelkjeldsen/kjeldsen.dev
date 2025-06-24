@@ -11,6 +11,7 @@ export enum ResourceType {
     SqlServer = "sql",
     SqlDb = "sqldb",
     AppServicePlan = "asp",
+    DnsZone = "dns",
 }
 
 export class ResourceVars {
