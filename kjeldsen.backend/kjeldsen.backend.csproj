@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="blockpreview\" />
+    <Folder Include="umbraco\" />
   </ItemGroup>
 
   <PropertyGroup>

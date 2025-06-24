@@ -11,6 +11,7 @@ import { createAppServicePlans, createWebApps } from "./resources/appService";
 import { createDns } from "./resources/dns";
 import { createCdn } from "./resources/cdn";
 import { createKeyVaultSecrets } from "./resources/secrets";
+import { getStorageConnectionString } from "./resources/storageConnectionString";
 
 // 🔹 Config and Tags
 const config = new pulumi.Config("azure");
@@ -27,6 +28,7 @@ const resourceGroup = createResourceGroup(rsv, location, tags);
 
 // 🔹 Storage
 const { storageAccount, blobContainer } = createStorage(rsv, resourceGroup.name, location, tags);
+const blobConnectionString = getStorageConnectionString(storageAccount.name, resourceGroup.name);
 
 // 🔹 SQL
 const { sqlPassword, sqlServer, sqlDatabase, connectionString } = createSql(rsv, resourceGroup.name, location, tags);
@@ -45,6 +47,7 @@ const { frontendApp, backofficeApp } = createWebApps(
     frontendPlan.id,
     backofficePlan.id,
     connectionString,
+    blobConnectionString,
     tags
 );
 

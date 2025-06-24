@@ -26,7 +26,7 @@ export function createAppServicePlans(rsv: ResourceVars, resourceGroupName: pulu
     return { frontendPlan, backofficePlan };
 }
 
-export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input<string>, location: pulumi.Input<string>, frontendPlanId: pulumi.Input<string>, backofficePlanId: pulumi.Input<string>, connectionString: pulumi.Output<string>, tags: Record<string, string>) {
+export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input<string>, location: pulumi.Input<string>, frontendPlanId: pulumi.Input<string>, backofficePlanId: pulumi.Input<string>, connectionString: pulumi.Output<string>, blobConnectionString: pulumi.Output<string>, tags: Record<string, string>) {
     const frontendApp = new azureNative.web.WebApp(rsv.name(ResourceType.AppService, "frontend"), {
         name: rsv.name(ResourceType.AppService, "frontend"),
         resourceGroupName,
@@ -53,6 +53,7 @@ export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input
             appSettings: [
                 { name: "WEBSITES_ENABLE_APP_SERVICE_STORAGE", value: "true" },
                 { name: "ConnectionStrings__umbracoDbDSN", value: connectionString },
+                { name: "umbraco:Storage:AzureBlob:Media:ConnectionString", value: blobConnectionString },
                 { name: "ASPNETCORE_ENVIRONMENT", value: "Production" },
             ],
         },

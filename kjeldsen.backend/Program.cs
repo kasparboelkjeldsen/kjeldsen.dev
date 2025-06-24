@@ -1,5 +1,4 @@
 using kjeldsen.backend.code.middleware;
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +12,8 @@ var allowedOrigins = new[]
     "https://*.kjeldsen.dev",       // Wildcards are not directly supported in ASP.NET Core CORS, see note below
     "http://*.kjeldsen.dev"
 };
+
+var config = builder.Configuration;
 
 builder.Services.AddCors(options =>
 {
