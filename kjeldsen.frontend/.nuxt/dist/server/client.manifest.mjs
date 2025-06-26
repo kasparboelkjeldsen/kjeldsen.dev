@@ -1,1 +1,0 @@
-export { default } from "file:///X:/kasparboelkjeldsen/kjeldsen.dev/kjeldsen.frontend/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"

@@ -1,1 +1,0 @@
-{"version":3,"file":"mdc-configs.mjs","sources":["../../../mdc-configs.mjs"],"sourcesContent":["let configs\nexport function getMdcConfigs () {\nif (!configs) {\n  configs = Promise.all([\n  ])\n}\nreturn configs\n}"],"names":[],"mappings":"AAAA,IAAI;AACG,SAAS,gBAAiB;AACjC,MAAI,CAAC,SAAS;AACZ,cAAU,QAAQ,IAAI,CACrB,CAAA;AAAA,EACH;AACA,SAAO;AACP;"}

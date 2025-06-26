@@ -4,14 +4,19 @@ import path from 'path'
 import fetch from 'node-fetch'
 
 const baseUrl = 'https://localhost:44375' // or read from env
-
-const res = await fetch(`${baseUrl}/api/slug`)
-const slugs = await res.json()
-
-// e.g., ["about", "contact"] → ["/about", "/contact"]
-const routes = slugs.map(slug => `/${slug}`)
-
 const outputPath = path.resolve('./.nuxt-prerender-routes.json')
-fs.writeFileSync(outputPath, JSON.stringify(routes, null, 2))
 
+let routes = []
+
+try {
+  const res = await fetch(`${baseUrl}/api/slug`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  const slugs = await res.json()
+  routes = slugs.map(slug => `/${slug}`)
+} catch (err) {
+  console.warn(`⚠️ Could not fetch slugs from ${baseUrl}: ${err.message}`)
+  routes = []
+}
+
+fs.writeFileSync(outputPath, JSON.stringify(routes, null, 2))
 console.log(`✅ Wrote ${routes.length} prerender routes to ${outputPath}`)
