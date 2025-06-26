@@ -7,8 +7,7 @@ trigger:
       - kjeldsen.backend/**
       - kjeldsen.frontend/**
 
-pool:
-  vmImage: 'windows-latest'
+pool: Default
 
 variables:
   configuration: 'Release'
