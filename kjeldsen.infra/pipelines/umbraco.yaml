@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - kjeldsen.backend/**
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  configuration: 'Release'
+  project: 'kjeldsen.backend/kjeldsen.backend.csproj'
+  azureSubscription: 'kjeldsen.dev'
+  resourceGroup: 'kjdev-rg'
+  webAppNameCm: 'kjdev-app-backoffice'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '9.x'
+    includePreviewVersions: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish Umbraco'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(project)'
+    arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory)/umbraco'
+
+- task: AzureWebApp@1
+  displayName: 'Deploy Umbraco CM to Azure App Service'
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appName: '$(webAppNameCm)'
+    package: '$(Build.ArtifactStagingDirectory)/umbraco'
+    appType: 'webApp'
+    deploymentMethod: zipDeploy
