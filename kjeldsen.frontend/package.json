@@ -7,9 +7,11 @@
     "build:cms-css": "npm run build:tailwind && node scripts/copy-css.js",
     "build:routes": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node scripts/generate-routes.js",
     "build:frontend": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nuxi build",
-    "build": "npm run build:routes && npm run build:frontend && npm run build:cms-css",
+    "build:package": "node scripts/update-build-package.js",
+    "build": "npm run build:routes && npm run build:frontend && npm run build:cms-css && npm run build:package",
     "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nuxi dev",
-    "gen": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npx openapi-typescript-codegen --input https://localhost:44375/umbraco/swagger/delivery/swagger.json --output ./server/delivery-api --client fetch --name DeliveryClient --useOptions"
+    "gen": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npx openapi-typescript-codegen --input https://localhost:44375/umbraco/swagger/delivery/swagger.json --output ./server/delivery-api --client fetch --name DeliveryClient --useOptions",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@nuxt/content": "^3.5.1",

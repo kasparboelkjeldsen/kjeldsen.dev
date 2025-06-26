@@ -484,3 +484,11 @@ $RECYCLE.BIN/
 *.swp
 
 kjeldsen.infra/.env.infra
+
+kjeldsen.frontend/.nuxt/
+
+kjeldsen.frontend/dist/
+
+kjeldsen.frontend/.nuxt-prerender-routes.json
+
+kjeldsen.frontend/.output/
