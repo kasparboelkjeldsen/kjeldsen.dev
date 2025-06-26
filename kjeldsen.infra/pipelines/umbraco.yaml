@@ -5,38 +5,92 @@ trigger:
   paths:
     include:
       - kjeldsen.backend/**
+      - kjeldsen.frontend/**
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
   configuration: 'Release'
-  project: 'kjeldsen.backend/kjeldsen.backend.csproj'
+  backendProject: 'kjeldsen.backend/kjeldsen.backend.csproj'
+  frontendDirectory: 'kjeldsen.frontend'
   azureSubscription: 'kjeldsen.dev'
   resourceGroup: 'kjdev-rg'
   webAppNameCm: 'kjdev-app-backoffice'
+  webAppNameFrontend: 'kjdev-app-frontend'
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET SDK'
-  inputs:
-    packageType: 'sdk'
-    version: '9.x'
-    includePreviewVersions: true
+stages:
+  - stage: BuildFrontend
+    displayName: 'Build Frontend (Nuxt)'
+    condition: |
+      or(
+        contains(variables['Build.TriggeredByChanges'], 'kjeldsen.frontend'),
+        eq(variables['Build.Reason'], 'Manual')
+      )
+    jobs:
+      - job: BuildAndPublishFrontend
+        displayName: 'Build and Publish Frontend'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Publish Umbraco'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '$(project)'
-    arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory)/umbraco'
+          - script: |
+              cd $(frontendDirectory)
+              npm ci
+              npm run build
+            displayName: 'Install dependencies and build Nuxt'
 
-- task: AzureWebApp@1
-  displayName: 'Deploy Umbraco CM to Azure App Service'
-  inputs:
-    azureSubscription: '$(azureSubscription)'
-    appName: '$(webAppNameCm)'
-    package: '$(Build.ArtifactStagingDirectory)/umbraco'
-    appType: 'webApp'
-    deploymentMethod: zipDeploy
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(frontendDirectory)/.output/public'
+              artifactName: 'frontend'
+            displayName: 'Publish frontend artifact'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy Frontend to Azure App Service'
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              appName: '$(webAppNameFrontend)'
+              package: '$(frontendDirectory)/.output/public'
+              appType: 'webApp'
+              deploymentMethod: 'zipDeploy'
+
+  - stage: BuildBackend
+    displayName: 'Build and Deploy Umbraco Backend'
+    dependsOn: BuildFrontend
+    jobs:
+      - job: BuildAndPublishBackend
+        displayName: 'Build and Deploy Umbraco'
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '9.x'
+              includePreviewVersions: true
+
+          - download: current
+            artifact: frontend
+            displayName: 'Download frontend artifact'
+
+          # The frontend build has already copied cms.css + fonts into wwwroot,
+          # so nothing else is needed here
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish Umbraco'
+            inputs:
+              command: 'publish'
+              publishWebProjects: false
+              projects: '$(backendProject)'
+              arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory)/umbraco'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy Umbraco CM to Azure App Service'
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              appName: '$(webAppNameCm)'
+              package: '$(Build.ArtifactStagingDirectory)/umbraco'
+              appType: 'webApp'
+              deploymentMethod: zipDeploy
