@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using kjeldsen.backend.code.settings;
+using Kraftvaerk.Umbraco.Headless.CacheKeys.Backend.Services.CacheDependencySolver;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Community.Headless.CacheKeys.Backend.Services.CacheDependencySolver;
 
 namespace kjeldsen.backend.code.notifications.ContentSaved
 {

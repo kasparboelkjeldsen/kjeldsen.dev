@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import fetch from 'node-fetch'
 
-const baseUrl = 'https://localhost:44375' // or read from env
+const baseUrl = process.env.CMSHOST // or read from env
 const outputPath = path.resolve('./.nuxt-prerender-routes.json')
 
 let routes = []

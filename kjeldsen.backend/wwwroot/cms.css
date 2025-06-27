@@ -1258,9 +1258,9 @@ video {
 
 .fancy-background{filter:blur(var(--blur,0));mix-blend-mode:soft-light;transition:filter 1s ease}.custom-vignette-gradient{background-image:linear-gradient(180deg,#000 40px,#00000080 500px,#000)}
 
+h3[data-v-a1c62d90]{color:#fff}
+
 pre code .line{display:block}
 
 canvas[data-v-6ffea522]{background:#00000080}ul li[data-v-6ffea522]:hover{background-color:#ffffff1a;transition:background-color .2s ease-in-out}h2,p a,p strong{color:#fff!important}p a{text-decoration:underline!important}
-
-h3[data-v-a1c62d90]{color:#fff}
 
