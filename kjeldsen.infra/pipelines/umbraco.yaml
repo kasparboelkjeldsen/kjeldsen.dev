@@ -59,13 +59,13 @@ stages:
               package: '$(frontendDirectory)/.output'
               appType: 'webApp'
               deploymentMethod: 'zipDeploy'
-
+  
   - stage: BuildBackend
     displayName: 'Build and Deploy Umbraco Backend'
     dependsOn: BuildFrontend
     jobs:
       - job: BuildAndPublishBackend
-        displayName: 'Build and Deploy Umbraco'
+        displayName: 'Build and Publish Umbraco Artifact'
         steps:
           - task: UseDotNet@2
             displayName: 'Use .NET SDK'
@@ -78,9 +78,6 @@ stages:
             artifact: frontend
             displayName: 'Download frontend artifact'
 
-          # The frontend build has already copied cms.css + fonts into wwwroot,
-          # so nothing else is needed here
-
           - task: DotNetCoreCLI@2
             displayName: 'Publish Umbraco'
             inputs:
@@ -90,6 +87,20 @@ stages:
               arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory)/umbraco'
               zipAfterPublish: true
 
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Umbraco Artifact'
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/umbraco'
+              artifactName: 'umbraco'
+
+      - job: DeployBackend
+        displayName: 'Deploy Umbraco to Azure App Service'
+        dependsOn: BuildAndPublishBackend
+        steps:
+          - download: current
+            artifact: umbraco
+            displayName: 'Download Umbraco Artifact'
+
           - task: AzureRmWebAppDeployment@5
             displayName: 'Deploy Umbraco CM to Azure App Service'
             inputs:
@@ -97,7 +108,6 @@ stages:
               azureSubscription: '$(azureSubscription)'
               appType: 'webApp'
               WebAppName: '$(webAppNameCm)'
-              packageForLinux: '$(Build.ArtifactStagingDirectory)/umbraco/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)/umbraco/*.zip'
               enableCustomDeployment: true
               DeploymentType: 'zipDeploy'
-
