@@ -88,12 +88,16 @@ stages:
               publishWebProjects: false
               projects: '$(backendProject)'
               arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory)/umbraco'
+              zipAfterPublish: true
 
-          - task: AzureWebApp@1
+          - task: AzureRmWebAppDeployment@5
             displayName: 'Deploy Umbraco CM to Azure App Service'
             inputs:
+              ConnectionType: 'AzureRM'
               azureSubscription: '$(azureSubscription)'
-              appName: '$(webAppNameCm)'
-              package: '$(Build.ArtifactStagingDirectory)/umbraco'
               appType: 'webApp'
-              deploymentMethod: zipDeploy
+              WebAppName: '$(webAppNameCm)'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/umbraco/*.zip'
+              enableCustomDeployment: true
+              DeploymentType: 'zipDeploy'
+
