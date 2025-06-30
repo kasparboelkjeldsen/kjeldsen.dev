@@ -1,3 +1,5 @@
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using kjeldsen.backend.code.middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,22 @@ var allowedOrigins = new[]
 };
 
 var config = builder.Configuration;
+
+var secretClient = new SecretClient(
+    new Uri("https://kjdevkv.vault.azure.net/"),
+    new DefaultAzureCredential());
+
+// Fetch secrets manually
+var sql = secretClient.GetSecret("UmbracoSqlConnectionString").Value.Value;
+var blob = secretClient.GetSecret("UmbracoPrimaryStorageKey").Value.Value;
+var storage = $"DefaultEndpointsProtocol=https;AccountName=kjdevstorage;AccountKey={blob};EndpointSuffix=core.windows.net";
+
+var deliveryKey = secretClient.GetSecret("UmbracoDeliveryKey").Value.Value;
+
+builder.Configuration["ConnectionStrings:umbracoDbDSN"] = sql;
+builder.Configuration["Umbraco:Storage:AzureBlob:Media:ConnectionString"] = storage;
+builder.Configuration["Umbraco:DeliveryApi:Authentication:ApiKey"] = deliveryKey;
+
 
 builder.Services.AddCors(options =>
 {
