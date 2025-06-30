@@ -41,9 +41,15 @@ import type {
 
 const route = useRoute();
 const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug];
-// Filter out empty segments
-const cleanSlug = "/" + slugArray.filter(Boolean).join("/");
-const apiPath = "/api/content" + cleanSlug;
+
+// Ensure slug segments are valid, but keep it safe for the trailing slash requirement
+const cleanSlug = slugArray.filter(Boolean).join("/");
+
+// Ensure leading *and* trailing slash
+const slugWithSlashes = "/" + cleanSlug + "/";
+
+const apiPath = "/api/content" + slugWithSlashes;
+
 
 const { data } = await useFetch<IApiContentResponseModel>(apiPath, {
   server: true, cache: "no-cache"
