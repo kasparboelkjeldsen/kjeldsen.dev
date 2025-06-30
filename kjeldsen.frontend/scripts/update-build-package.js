@@ -2,8 +2,11 @@
 import fs from 'fs'
 import path from 'path'
 
-const outputPath = path.resolve('.output/package.json')
+const outputPackageJsonPath = path.resolve('.output/package.json')
+const inputEnvPath = path.resolve('.env')
+const outputEnvPath = path.resolve('.output/.env')
 
+// Write custom package.json
 const deployPackage = {
   name: 'nuxt-app-ssr',
   private: true,
@@ -13,5 +16,14 @@ const deployPackage = {
   }
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(deployPackage, null, 2))
-console.log(`✅ Wrote custom package.json to ${outputPath}`)
+fs.writeFileSync(outputPackageJsonPath, JSON.stringify(deployPackage, null, 2))
+console.log(`✅ Wrote custom package.json to ${outputPackageJsonPath}`)
+
+// Copy .env.production to .output/.env
+if (fs.existsSync(inputEnvPath)) {
+  const envContent = fs.readFileSync(inputEnvPath, 'utf-8')
+  fs.writeFileSync(outputEnvPath, envContent)
+  console.log(`✅ Copied .env.production to ${outputEnvPath}`)
+} else {
+  console.warn(`⚠️  .env.production not found at ${inputEnvPath}`)
+}

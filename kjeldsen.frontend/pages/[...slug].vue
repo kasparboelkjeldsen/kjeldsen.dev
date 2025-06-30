@@ -22,7 +22,11 @@
       :data="data"
       class="relative z-10"
     />
+      <pre v-if="!data" class="text-white">
+    Failed to load content for <code>{{ apiPath }}</code>. Please check the console for more details.
+  </pre>
   </main>
+
 </template>
 
 <script setup lang="ts">
@@ -39,7 +43,6 @@ const route = useRoute();
 const slug = toValue((route.params.slug as string[]) || []);
 const cleanSlug = "/" + slug.join("/");
 const apiPath = "/api/content/" + cleanSlug.replaceAll("//", "/");
-
 const { data } = await useFetch<IApiContentResponseModel>(apiPath, {
   server: true, cache: "no-cache"
 });
@@ -69,7 +72,8 @@ console.table(
 const { data: navigation } =
   await useFetch<NavigationCompositionContentResponseModel>(
     "/api/content/navigation",
-    { server: true, cache: "no-cache" }
+    { server: true, cache: "no-cache"
+    },
   );
 
 watchEffect(() => {

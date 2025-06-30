@@ -3,11 +3,14 @@ import fs from "fs/promises";
 import path from "path";
 import process from "process";
 import { ClientSecretCredential } from "@azure/identity";
+import 'dotenv/config'
 
 const mappingFilePath = path.resolve("./secrets-keys.json");
 const outputEnvPath = path.resolve("./.env");
 
 const keyVaultUrl = "https://kjdevkv.vault.azure.net/";
+
+console.log(process.env.AZURE_TENANT_ID)
 
 const credential = new ClientSecretCredential(
   process.env.AZURE_TENANT_ID,
