@@ -2,6 +2,7 @@ import { SecretClient } from "@azure/keyvault-secrets";
 import fs from "fs/promises";
 import path from "path";
 import process from "process";
+import { ClientSecretCredential } from "@azure/identity";
 
 const mappingFilePath = path.resolve("./secrets-keys.json");
 const outputEnvPath = path.resolve("./.env");
