@@ -62,7 +62,7 @@ stages:
                     $sourceKey = $item.key
                     $targetKey = $item.as
 
-                    $secretValue = $env:$sourceKey
+                    $secretValue = $env["$sourceKey"]
                     if (-not $secretValue) {
                         Write-Warning "No value found for secret key: $sourceKey"
                         continue
@@ -75,6 +75,7 @@ stages:
 
                 $envLines | Out-File -FilePath $envFilePath -Encoding UTF8 -Force
                 Write-Host "✅ .env file created at $envFilePath"
+
 
           - task: PowerShell@2
             inputs:
