@@ -1,5 +1,4 @@
 import { SecretClient } from "@azure/keyvault-secrets";
-import { DefaultAzureCredential } from "@azure/identity";
 import fs from "fs/promises";
 import path from "path";
 import process from "process";
@@ -9,7 +8,11 @@ const outputEnvPath = path.resolve("./.env");
 
 const keyVaultUrl = "https://kjdevkv.vault.azure.net/";
 
-const credential = new DefaultAzureCredential();
+const credential = new ClientSecretCredential(
+  process.env.AZURE_TENANT_ID,
+  process.env.AZURE_CLIENT_ID,
+  process.env.AZURE_CLIENT_SECRET
+);
 const client = new SecretClient(keyVaultUrl, credential);
 
 const run = async () => {

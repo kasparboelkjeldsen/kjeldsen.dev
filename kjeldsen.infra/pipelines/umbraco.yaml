@@ -44,13 +44,19 @@ stages:
             displayName: 'Install Node.js'
 
           - task: PowerShell@2
+            displayName: 'Install dependencies and build Nuxt'
+            env:
+              AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+              AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+              AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
             inputs:
               targetType: 'inline'
               script: |
                 cd "$(frontendDirectory)"
                 npm ci
+                npm run generate-env
                 npm run build
-            displayName: 'Install dependencies and build Nuxt (PS)'
+
 
           - task: PublishBuildArtifacts@1
             inputs:
