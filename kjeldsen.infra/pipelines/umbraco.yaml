@@ -44,37 +44,48 @@ stages:
             displayName: 'Install Node.js'
 
           - task: PowerShell@2
-            displayName: 'Generate .env file from Key Vault secrets'
-            inputs:
-              targetType: 'inline'
-              script: |
-                $ErrorActionPreference = "Stop"
+        displayName: 'Generate .env file from Key Vault secrets'
+        inputs:
+          targetType: 'inline'
+          script: |
+            $ErrorActionPreference = "Stop"
 
-                $mappingFile = "$(frontendDirectory)/secrets-keys.json"
-                $envFilePath = "$(frontendDirectory)/.env"
+            $mappingFile = "$(Build.SourcesDirectory)/$(frontendDirectory)/secrets-keys.json"
+            $envFilePath = "$(Build.SourcesDirectory)/$(frontendDirectory)/.env"
 
-                Write-Host "Reading secret mapping from: $mappingFile"
-                $json = Get-Content -Raw -Path $mappingFile | ConvertFrom-Json
+            if (-not (Test-Path $mappingFile)) {
+                Write-Error "❌ Mapping file not found at: $mappingFile"
+                exit 1
+            }
 
-                $envLines = @()
+            Write-Host "📖 Reading secret mapping from: $mappingFile"
+            $json = Get-Content -Raw -Path $mappingFile | ConvertFrom-Json
 
-                foreach ($item in $json) {
-                    $sourceKey = $item.key
-                    $targetKey = $item.as
+            if (-not $json) {
+                Write-Error "❌ Mapping file is empty or invalid JSON."
+                exit 1
+            }
 
-                    $secretValue = $env["$sourceKey"]
-                    if (-not $secretValue) {
-                        Write-Warning "No value found for secret key: $sourceKey"
-                        continue
-                    }
+            $envLines = @()
 
-                    $line = "$targetKey=$secretValue"
-                    Write-Host "Writing $targetKey from $sourceKey"
-                    $envLines += $line
+            foreach ($item in $json) {
+                $sourceKey = $item.key
+                $targetKey = $item.as
+
+                $secretValue = $env["$sourceKey"]
+                if (-not $secretValue) {
+                    Write-Warning "⚠️ No value found for secret key: $sourceKey"
+                    continue
                 }
 
-                $envLines | Out-File -FilePath $envFilePath -Encoding UTF8 -Force
-                Write-Host "✅ .env file created at $envFilePath"
+                $line = "$targetKey=$secretValue"
+                Write-Host "✅ Writing $targetKey from $sourceKey"
+                $envLines += $line
+            }
+
+            $envLines | Out-File -FilePath $envFilePath -Encoding UTF8 -Force
+            Write-Host "✅ .env file created at $envFilePath"
+
 
 
           - task: PowerShell@2
