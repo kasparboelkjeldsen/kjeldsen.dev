@@ -11,14 +11,20 @@ pool: Default
 
 variables:
   - group: site
-
-  configuration: 'Release'
-  backendProject: 'kjeldsen.backend/kjeldsen.backend.csproj'
-  frontendDirectory: 'kjeldsen.frontend'
-  azureSubscription: 'kjeldsen.dev'
-  resourceGroup: 'kjdev-rg'
-  webAppNameCm: 'kjdev-app-backoffice'
-  webAppNameFrontend: 'kjdev-app-frontend'
+  - name: configuration
+    value: 'Release'
+  - name: backendProject
+    value: 'kjeldsen.backend/kjeldsen.backend.csproj'
+  - name: frontendDirectory
+    value: 'kjeldsen.frontend'
+  - name: azureSubscription
+    value: 'kjeldsen.dev'
+  - name: resourceGroup
+    value: 'kjdev-rg'
+  - name: webAppNameCm
+    value: 'kjdev-app-backoffice'
+  - name: webAppNameFrontend
+    value: 'kjdev-app-frontend'
 
 stages:
   - stage: BuildFrontend
