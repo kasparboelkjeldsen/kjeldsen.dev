@@ -44,48 +44,76 @@ stages:
             displayName: 'Install Node.js'
 
           - task: PowerShell@2
-            displayName: 'Generate .env file from Key Vault secrets'
+            displayName: '🔍 Debug: Generate .env file from Key Vault secrets'
             inputs:
               targetType: 'inline'
               script: |
                 $ErrorActionPreference = "Stop"
 
-                $mappingFile = "$(Build.SourcesDirectory)\$(frontendDirectory)\secrets-keys.json"
-                $envFilePath = "$(Build.SourcesDirectory)\$(frontendDirectory)\.env"
+                $mappingFile = "$(Build.SourcesDirectory)/$(frontendDirectory)/secrets-keys.json"
+                $envFilePath = "$(Build.SourcesDirectory)/$(frontendDirectory)/.env"
+
+                Write-Host "📂 Build.SourcesDirectory = $env:BUILD_SOURCESDIRECTORY"
+                Write-Host "📄 Mapping file path: $mappingFile"
+                Write-Host "📄 Output .env path: $envFilePath"
 
                 if (-not (Test-Path $mappingFile)) {
-                    Write-Error "Mapping file not found at: $mappingFile"
+                    Write-Error "❌ Mapping file not found at: $mappingFile"
                     exit 1
                 }
 
-                Write-Host "📖 Reading secret mapping from: $mappingFile"
+                Write-Host "`n📖 Contents of mapping file:"
+                Get-Content -Path $mappingFile | Write-Host
+
                 $json = Get-Content -Raw -Path $mappingFile | ConvertFrom-Json
-
                 if (-not $json) {
-                    Write-Error "Mapping file is empty or invalid JSON."
+                    Write-Error "❌ Mapping file is empty or invalid JSON."
                     exit 1
                 }
+
+                # Dump available environment variable names
+                Write-Host "`n🌍 Available environment variables:"
+                Get-ChildItem env: | Sort-Object Name | ForEach-Object { Write-Host "  $($_.Name)=$($_.Value)" }
+
+                # Dump pipeline-level variables
+                Write-Host "`n🛠️ Available PowerShell pipeline variables:"
+                Get-Variable | ForEach-Object { Write-Host "  $($_.Name)=$($_.Value)" }
 
                 $envLines = @()
+                Write-Host "`n🔁 Resolving secrets from mapping..."
 
                 foreach ($item in $json) {
                     $sourceKey = $item.key
                     $targetKey = $item.as
 
-                    $secretValue = (Get-Variable -Name $sourceKey -ValueOnly -ErrorAction SilentlyContinue)
+                    Write-Host "🔎 Looking for secret: $sourceKey → $targetKey"
+
+                    $secretValue = $env["$sourceKey"]
+
                     if (-not $secretValue) {
-                        Write-Warning "No value found for secret key: $sourceKey"
+                        Write-Host "  🔸 Not in environment, checking pipeline variables..."
+                        $secretValue = Get-Variable -Name $sourceKey -ValueOnly -ErrorAction SilentlyContinue
+                    }
+
+                    if (-not $secretValue) {
+                        Write-Warning "  ⚠️ No value found for $sourceKey — skipping"
                         continue
                     }
 
-                    $line = "$targetKey=$secretValue"
-                    Write-Host "✅ Writing $targetKey from $sourceKey"
-                    $envLines += $line
+                    Write-Host "  ✅ Found value for $targetKey"
+                    $envLines += "$targetKey=$secretValue"
                 }
 
-                $envLines | Out-File -FilePath $envFilePath -Encoding UTF8 -Force
-                Write-Host "✅ .env file created at $envFilePath"
+                if ($envLines.Count -eq 0) {
+                    Write-Warning "⚠️ No valid secrets found to write. Skipping .env generation."
+                    exit 1
+                }
 
+                Write-Host "`n📝 Writing .env file:"
+                $envLines | ForEach-Object { Write-Host "  $_" }
+
+                $envLines | Out-File -FilePath $envFilePath -Encoding UTF8 -Force
+                Write-Host "✅ .env file written to $envFilePath"
 
 
           - task: PowerShell@2
