@@ -72,7 +72,7 @@ stages:
                     $sourceKey = $item.key
                     $targetKey = $item.as
 
-                    $secretValue = $env["$sourceKey"]
+                    $secretValue = (Get-Variable -Name $sourceKey -ValueOnly -ErrorAction SilentlyContinue)
                     if (-not $secretValue) {
                         Write-Warning "No value found for secret key: $sourceKey"
                         continue
