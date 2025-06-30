@@ -10,6 +10,8 @@ trigger:
 pool: Default
 
 variables:
+  - group: site
+
   configuration: 'Release'
   backendProject: 'kjeldsen.backend/kjeldsen.backend.csproj'
   frontendDirectory: 'kjeldsen.frontend'
@@ -36,6 +38,39 @@ stages:
             displayName: 'Install Node.js'
 
           - task: PowerShell@2
+            displayName: 'Generate .env file from Key Vault secrets'
+            inputs:
+              targetType: 'inline'
+              script: |
+                $ErrorActionPreference = "Stop"
+
+                $mappingFile = "$(frontendDirectory)/secret-keys.json"
+                $envFilePath = "$(frontendDirectory)/.env"
+
+                Write-Host "Reading secret mapping from: $mappingFile"
+                $json = Get-Content -Raw -Path $mappingFile | ConvertFrom-Json
+
+                $envLines = @()
+
+                foreach ($item in $json) {
+                    $sourceKey = $item.key
+                    $targetKey = $item.as
+
+                    $secretValue = $env:$sourceKey
+                    if (-not $secretValue) {
+                        Write-Warning "No value found for secret key: $sourceKey"
+                        continue
+                    }
+
+                    $line = "$targetKey=$secretValue"
+                    Write-Host "Writing $targetKey from $sourceKey"
+                    $envLines += $line
+                }
+
+                $envLines | Out-File -FilePath $envFilePath -Encoding UTF8 -Force
+                Write-Host "✅ .env file created at $envFilePath"
+
+          - task: PowerShell@2
             inputs:
               targetType: 'inline'
               script: |
@@ -43,7 +78,6 @@ stages:
                 npm ci
                 npm run build
             displayName: 'Install dependencies and build Nuxt (PS)'
-
 
           - task: PublishBuildArtifacts@1
             inputs:
@@ -59,7 +93,7 @@ stages:
               package: '$(frontendDirectory)/.output'
               appType: 'webApp'
               deploymentMethod: 'zipDeploy'
-  
+
   - stage: BuildBackend
     displayName: 'Build and Deploy Umbraco Backend'
     dependsOn: BuildFrontend
@@ -88,7 +122,6 @@ stages:
                 /p:PublishReadyToRun=true
                 /p:EnableCompressionInSingleFile=true
               zipAfterPublish: true
-
 
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Umbraco Artifact'

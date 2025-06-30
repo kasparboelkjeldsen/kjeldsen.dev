@@ -1,7 +1,14 @@
 import * as azureNative from "@pulumi/azure-native";
 import * as pulumi from "@pulumi/pulumi";
+import * as random from "@pulumi/random";
 
 export function createKeyVaultSecrets(keyVault: azureNative.keyvault.Vault, resourceGroupName: pulumi.Input<string>, storageAccount: azureNative.storage.StorageAccount, sqlPassword: pulumi.Output<string>, connectionString: pulumi.Output<string>) {
+    const deliveryKey = new random.RandomPassword("UmbracoDeliveryKey", {
+            length: 24,
+            special: true,
+            overrideSpecial: "_%@",
+        });
+    
     const keyVaultSecrets = [
         {
             name: "UmbracoPrimaryStorageKey",
@@ -19,6 +26,14 @@ export function createKeyVaultSecrets(keyVault: azureNative.keyvault.Vault, reso
             name: "UmbracoSqlConnectionString",
             value: connectionString,
         },
+        {
+            name: "UmbracoDeliveryKey",
+            value: deliveryKey.result,
+        },
+        {
+            name: "CMSHOST",
+            value: "https://umbraco.kjeldsen.dev",
+        },
     ];
 
     for (const secret of keyVaultSecrets) {
@@ -30,3 +45,4 @@ export function createKeyVaultSecrets(keyVault: azureNative.keyvault.Vault, reso
         });
     }
 }
+

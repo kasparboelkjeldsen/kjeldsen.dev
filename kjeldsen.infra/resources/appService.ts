@@ -52,8 +52,6 @@ export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input
             windowsFxVersion: "DOTNETCORE|9.0",
             appSettings: [
                 { name: "WEBSITES_ENABLE_APP_SERVICE_STORAGE", value: "true" },
-                { name: "ConnectionStrings__umbracoDbDSN", value: connectionString },
-                { name: "umbraco:Storage:AzureBlob:Media:ConnectionString", value: blobConnectionString },
                 { name: "ASPNETCORE_ENVIRONMENT", value: "Production" },
             ],
         },
