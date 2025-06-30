@@ -2,10 +2,11 @@
 import fs from 'fs'
 import path from 'path'
 import fetch from 'node-fetch'
+import 'dotenv/config'
 
 const baseUrl = process.env.CMSHOST // or read from env
 const outputPath = path.resolve('./.nuxt-prerender-routes.json')
-
+console.log(`🔍 Fetching slugs from ${baseUrl}/api/slug`)
 let routes = []
 
 try {
