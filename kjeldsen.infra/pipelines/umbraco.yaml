@@ -79,13 +79,22 @@ stages:
             displayName: 'Download frontend artifact'
 
           - task: DotNetCoreCLI@2
-            displayName: 'Publish Umbraco'
+            displayName: 'Publish Umbraco (Trimmed)'
             inputs:
               command: 'publish'
               publishWebProjects: false
               projects: '$(backendProject)'
-              arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory)/umbraco'
+              arguments: >
+                --configuration $(configuration)
+                --output $(Build.ArtifactStagingDirectory)/umbraco
+                /p:PublishTrimmed=true
+                /p:PublishReadyToRun=true
+                /p:SelfContained=false
+                /p:EnableCompressionInSingleFile=true
+                /p:PublishSingleFile=false
+                /p:RuntimeIdentifier=win-x86
               zipAfterPublish: true
+
 
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Umbraco Artifact'
