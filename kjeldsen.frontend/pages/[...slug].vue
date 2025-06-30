@@ -40,9 +40,11 @@ import type {
 
 
 const route = useRoute();
-const slug = toValue((route.params.slug as string[]) || []);
-const cleanSlug = "/" + slug.join("/");
-const apiPath = "/api/content/" + cleanSlug.replaceAll("//", "/");
+const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug];
+// Filter out empty segments
+const cleanSlug = "/" + slugArray.filter(Boolean).join("/");
+const apiPath = "/api/content" + cleanSlug;
+
 const { data } = await useFetch<IApiContentResponseModel>(apiPath, {
   server: true, cache: "no-cache"
 });

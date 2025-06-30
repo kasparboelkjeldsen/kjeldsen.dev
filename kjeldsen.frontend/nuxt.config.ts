@@ -47,6 +47,7 @@ export default defineNuxtConfig({
     murderKey: process.env.MURDER_KEY,
     deliveryKey: process.env.DELIVERY_KEY,
     public: {
+      siteUrl: 'https://www.kjeldsen.dev',
       useCache: process.env.USE_CACHE,
       murderClient: process.env.MURDER_CLIENT,
       cmsHost: process.env.CMSHOST || "https://localhost:44375",
