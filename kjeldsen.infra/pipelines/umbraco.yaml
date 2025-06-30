@@ -50,8 +50,8 @@ stages:
               script: |
                 $ErrorActionPreference = "Stop"
 
-                $mappingFile = "$(Build.SourcesDirectory)\\$(frontendDirectory)\\secrets-keys.json"
-                $envFilePath = "$(Build.SourcesDirectory)\\$(frontendDirectory)\\.env"
+                $mappingFile = "$(Build.SourcesDirectory)\$(frontendDirectory)\secrets-keys.json"
+                $envFilePath = "$(Build.SourcesDirectory)\$(frontendDirectory)\.env"
 
                 if (-not (Test-Path $mappingFile)) {
                     Write-Error "Mapping file not found at: $mappingFile"
