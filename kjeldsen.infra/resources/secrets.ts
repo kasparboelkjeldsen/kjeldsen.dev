@@ -8,6 +8,7 @@ export function createKeyVaultSecrets(keyVault: azureNative.keyvault.Vault, reso
             special: true,
             overrideSpecial: "_%@",
         });
+        
     
     const keyVaultSecrets = [
         {
