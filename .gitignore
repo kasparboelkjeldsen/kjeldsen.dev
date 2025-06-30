@@ -492,3 +492,5 @@ kjeldsen.frontend/dist/
 kjeldsen.frontend/.nuxt-prerender-routes.json
 
 kjeldsen.frontend/.output/
+
+kjeldsen.frontend/.env.local

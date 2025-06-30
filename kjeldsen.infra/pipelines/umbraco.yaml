@@ -44,51 +44,6 @@ stages:
             displayName: 'Install Node.js'
 
           - task: PowerShell@2
-            displayName: 'Generate .env file from Key Vault secrets'
-            inputs:
-              targetType: 'inline'
-              script: |
-                $ErrorActionPreference = "Stop"
-
-                $mappingFile = "$(Build.SourcesDirectory)\$(frontendDirectory)\secrets-keys.json"
-                $envFilePath = "$(Build.SourcesDirectory)\$(frontendDirectory)\.env"
-
-                if (-not (Test-Path $mappingFile)) {
-                    Write-Error "Mapping file not found at: $mappingFile"
-                    exit 1
-                }
-
-                Write-Host "📖 Reading secret mapping from: $mappingFile"
-                $json = Get-Content -Raw -Path $mappingFile | ConvertFrom-Json
-
-                if (-not $json) {
-                    Write-Error "Mapping file is empty or invalid JSON."
-                    exit 1
-                }
-
-                $envLines = @()
-
-                foreach ($item in $json) {
-                    $sourceKey = $item.key
-                    $targetKey = $item.as
-
-                    $secretValue = (Get-Variable -Name $sourceKey -ValueOnly -ErrorAction SilentlyContinue)
-                    if (-not $secretValue) {
-                        Write-Warning "No value found for secret key: $sourceKey"
-                        continue
-                    }
-
-                    $line = "$targetKey=$secretValue"
-                    Write-Host "✅ Writing $targetKey from $sourceKey"
-                    $envLines += $line
-                }
-
-                $envLines | Out-File -FilePath $envFilePath -Encoding UTF8 -Force
-                Write-Host "✅ .env file created at $envFilePath"
-
-
-
-          - task: PowerShell@2
             inputs:
               targetType: 'inline'
               script: |
