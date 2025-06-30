@@ -10,6 +10,10 @@ export default defineEventHandler(async (event) => {
     BASE: config.public.cmsHost,
   });
 
+  if(slug.startsWith('/.')) {
+    return null;
+  }
+
   try {
     const response = await api.content.getContentItemByPath20({
       apiKey: config.deliveryKey,

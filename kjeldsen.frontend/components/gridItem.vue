@@ -12,7 +12,7 @@
   >
     <!-- Render the content -->
     <div class="mb-2">
-      <BlocksResolverComponent v-if="item.content" :data="item.content" />
+      <BlocksResolverComponent v-if="item.content" :data="item.content" :columns="item.columnSpan ?? 12" />
     </div>
 
     <!-- If the item has areas, render them -->
@@ -20,9 +20,9 @@
       <div
         v-for="(area, areaIndex) in item.areas"
         :key="areaIndex"
-        class="mt-4 border-t pt-4"
+        class="pt-4 mt-4 border-t"
       >
-        <div class="font-bold mb-2">Area: {{ area.alias }}</div>
+        <div class="mb-2 font-bold">Area: {{ area.alias }}</div>
         <div
           class="grid gap-2"
           :style="`grid-template-columns: repeat(${area.columnSpan}, minmax(0, 1fr));`"

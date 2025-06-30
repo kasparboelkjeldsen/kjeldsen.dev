@@ -6,7 +6,7 @@ import type { ApiBlockGridModel } from './ApiBlockGridModel';
 import type { HeadlessCompositionPropertiesModel } from './HeadlessCompositionPropertiesModel';
 import type { NavigationCompositionPropertiesModel } from './NavigationCompositionPropertiesModel';
 import type { SeoCompositionPropertiesModel } from './SeoCompositionPropertiesModel';
-export type HomePagePropertiesModel = (HeadlessCompositionPropertiesModel & NavigationCompositionPropertiesModel & SeoCompositionPropertiesModel & {
+export type HomePagePropertiesModel = (SeoCompositionPropertiesModel & HeadlessCompositionPropertiesModel & NavigationCompositionPropertiesModel & {
     grid?: ApiBlockGridModel;
     cacheKeys?: Array<string>;
 });

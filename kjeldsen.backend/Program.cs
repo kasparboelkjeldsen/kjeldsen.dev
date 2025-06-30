@@ -30,8 +30,7 @@ var deliveryKey = secretClient.GetSecret("UmbracoDeliveryKey").Value.Value;
 
 builder.Configuration["ConnectionStrings:umbracoDbDSN"] = sql;
 builder.Configuration["Umbraco:Storage:AzureBlob:Media:ConnectionString"] = storage;
-builder.Configuration["Umbraco:DeliveryApi:Authentication:ApiKey"] = deliveryKey;
-
+builder.Configuration["Umbraco:CMS:DeliveryApi:ApiKey"] = deliveryKey;
 
 builder.Services.AddCors(options =>
 {

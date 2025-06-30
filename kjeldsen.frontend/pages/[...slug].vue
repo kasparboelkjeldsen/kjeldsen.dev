@@ -2,7 +2,7 @@
   <!-- ✅ Navigation -->
   <header v-if="navigation?.properties.links" class="relative z-10 py-6">
     <nav>
-      <ul class="flex justify-center gap-8 text-lg font-mono">
+      <ul class="flex justify-center gap-8 font-mono text-lg">
         <li v-for="link in navigation.properties.links" :key="link.title!">
           <a
             :href="link.route?.path ?? '/'"
@@ -16,11 +16,11 @@
   </header>
 
   <!-- ✅ Page content -->
-  <main class="relative z-10 px-4 pb-24 max-w-4xl mx-auto prose prose-invert">
+  <main class="relative z-10 max-w-4xl px-4 pb-24 mx-auto prose prose-invert">
     <PagesPageResolverComponent
       v-if="data"
       :data="data"
-      class="z-10 relative"
+      class="relative z-10"
     />
   </main>
 </template>
@@ -37,7 +37,8 @@ import type {
 
 const route = useRoute();
 const slug = toValue((route.params.slug as string[]) || []);
-const apiPath = "/api/content/" + "/" + slug.join("/");
+const cleanSlug = "/" + slug.join("/");
+const apiPath = "/api/content/" + cleanSlug.replaceAll("//", "/");
 
 const { data } = await useFetch<IApiContentResponseModel>(apiPath, {
   server: true, cache: "no-cache"
@@ -56,13 +57,13 @@ console.table(
   }))
 );
 
-
+/*
   useRouteCache((helper) => {
     helper
       .setMaxAge(3600 * 24)
       .setCacheable()
       .addTags(tags);
-  });
+  });*/
 }
 
 const { data: navigation } =

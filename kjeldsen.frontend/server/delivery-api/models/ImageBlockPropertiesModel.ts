@@ -6,6 +6,7 @@ import type { IApiMediaWithCropsModel } from './IApiMediaWithCropsModel';
 export type ImageBlockPropertiesModel = {
     image?: Array<IApiMediaWithCropsModel> | null;
     altText?: string | null;
+    cropPreference?: string | null;
     cacheKeys?: Array<string>;
 };
 

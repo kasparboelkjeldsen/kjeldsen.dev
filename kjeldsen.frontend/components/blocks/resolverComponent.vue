@@ -18,7 +18,7 @@
     />
     <BlocksImageBlock
       v-else-if="props.data.contentType === 'imageBlock'"
-      :data="props.data"
+      :data="props.data" :columns="props.columns"
     />
     <BlocksTestBlock
       v-else-if="props.data.contentType === 'testBlock'"
@@ -35,7 +35,7 @@
 import { BlocksCodeBlock, BlocksFunTimeWebMurderBlock, BlocksFunTimeWebEkg, BlocksRteBlock, BlocksImageBlock, BlocksTestBlock } from "#components";
 import type { IApiElementModel } from "~/server/delivery-api";
 
-const props = defineProps<{ data: IApiElementModel }>();
+const props = defineProps<{ data: IApiElementModel, columns: number }>();
 
 </script>
 
