@@ -30,6 +30,7 @@ const props = defineProps<{
 
 const image = props.data.properties?.image?.at(0);
 const cropPref = props.data.properties?.cropPreference ?? 'Ratio';
+
 const altText = props.data.properties?.altText ?? '';
 const sources: string[] = [];
 
@@ -56,6 +57,11 @@ if (image?.url && image.crops?.length) {
     .sort((a, b) => b.width - a.width); // largest first
 
   filteredCrops.forEach((crop, index) => {
+    if(cropPref === 'None') {
+      // If no crop preference, use the original image URL
+      sources.push(image.url);
+      return;
+    }
     const cropUrl = buildCropUrl(image.url, crop, crop.width, image.focalPoint);
     sources.push(cropUrl);
   });
