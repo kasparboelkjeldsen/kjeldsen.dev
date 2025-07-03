@@ -24,6 +24,10 @@
       v-else-if="props.data.contentType === 'testBlock'"
       :data="props.data"
     />
+    <BlocksHeaderBlock
+      v-else-if="props.data.contentType === 'headerBlock'"
+      :data="props.data"
+    />
     <div v-else>
       <h1>{{ props.data.contentType }}</h1>
       <pre>{{ props.data }}</pre>
@@ -32,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BlocksCodeBlock, BlocksFunTimeWebMurderBlock, BlocksFunTimeWebEkg, BlocksRteBlock, BlocksImageBlock, BlocksTestBlock } from "#components";
+import { BlocksCodeBlock, BlocksFunTimeWebMurderBlock, BlocksFunTimeWebEkg, BlocksRteBlock, BlocksImageBlock, BlocksTestBlock, BlocksHeaderBlock } from "#components";
 import type { IApiElementModel } from "~/server/delivery-api";
 
 const props = defineProps<{ data: IApiElementModel, columns: number }>();

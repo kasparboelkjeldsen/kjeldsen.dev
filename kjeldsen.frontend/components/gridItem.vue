@@ -1,21 +1,11 @@
 <template>
-  <div
-    class="pt-4 pb-4"
-    :style="{
-      gridColumn: item.columnSpan
-        ? `span ${item.columnSpan} / span ${item.columnSpan}`
-        : undefined,
-      gridRow: item.rowSpan
-        ? `span ${item.rowSpan} / span ${item.rowSpan}`
-        : undefined,
-    }"
-  >
+  <div :class="itemClasses">
     <!-- Render the content -->
     <div class="mb-2">
       <BlocksResolverComponent v-if="item.content" :data="item.content" :columns="item.columnSpan ?? 12" />
     </div>
 
-    <!-- If the item has areas, render them -->
+    <!-- Areas -->
     <div v-if="item.areas && item.areas.length">
       <div
         v-for="(area, areaIndex) in item.areas"
@@ -25,7 +15,7 @@
         <div class="mb-2 font-bold">Area: {{ area.alias }}</div>
         <div
           class="grid gap-2"
-          :style="`grid-template-columns: repeat(${area.columnSpan}, minmax(0, 1fr));`"
+          :class="`grid-cols-1 sm:grid-cols-${area.columnSpan}`"
         >
           <GridItem
             v-for="(areaItem, areaItemIndex) in area.items"
@@ -38,10 +28,21 @@
   </div>
 </template>
 
+
 <script lang="ts" setup>
+import { clsx } from 'clsx';
 import type { ApiBlockGridItemModel } from "~/server/delivery-api";
 
-defineProps<{
+const props = defineProps<{
   item: ApiBlockGridItemModel;
 }>();
+
+const itemClasses = clsx(
+  'pt-2 pb-2',                   // Mobile
+  'sm:pt-4 sm:pb-4',             // sm and up
+  'col-span-full row-span-1',   // Mobile fallback grid
+  props.item.columnSpan && `sm:col-span-${props.item.columnSpan}`,
+  props.item.rowSpan && `sm:row-span-${props.item.rowSpan}`
+);
+
 </script>

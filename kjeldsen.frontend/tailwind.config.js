@@ -14,7 +14,7 @@ export default {
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            fontSize: theme('fontSize.lg')[0], // bump up from default (1rem) to 1.125rem
+            fontSize: theme('fontSize.lg')[0],
             h1: {
               fontSize: theme('fontSize.4xl')[0],
               fontWeight: theme('fontWeight.bold'),
@@ -27,20 +27,34 @@ export default {
         },
         invert: {
           css: {
-            fontSize: theme('fontSize.lg')[0], // optional: apply same size for dark mode
+            fontSize: theme('fontSize.lg')[0],
             h1: {
               color: theme('colors.white'),
             },
           },
         },
       }),
-      
+
       fontFamily: {
         sans: ['Atkinson Hyperlegible', 'ui-sans-serif', 'system-ui'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
-    }
+    },
   },
+  safelist: [
+  {
+    pattern: /col-span-(\d+)/,
+    variants: ['sm'],
+  },
+  {
+    pattern: /row-span-(\d+)/,
+    variants: ['sm'],
+  },
+  {
+    pattern: /grid-cols-(\d+)/,
+    variants: ['sm'],
+  }
+  ],
+
   plugins: [typography],
 }
-

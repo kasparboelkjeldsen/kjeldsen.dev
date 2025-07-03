@@ -1,5 +1,5 @@
 <template>
-  <div id="__preview"><BlocksResolverComponent :data="data" /></div>
+  <div id="__preview"><BlocksResolverComponent :data="data" :columns="12"/></div>
 </template>
 
 <script setup lang="ts">

@@ -39,10 +39,10 @@ export default defineNuxtConfig({
       cacheTagInvalidationDelay: 1000,
     },
   },
-
+/*
   experimental: {
     componentIslands: true,
-  },
+  },*/
   runtimeConfig: {
     murderKey: process.env.MURDER_KEY,
     deliveryKey: process.env.DELIVERY_KEY,
@@ -56,7 +56,7 @@ export default defineNuxtConfig({
   mdc: {
     highlight: {
       theme: "github-dark",
-      langs: ["ts", "js", "csharp", "vue-html", "vue", "json"],
+      langs: ["ts", "js", "csharp", "vue-html", "vue", "json", "mermaid"],
       wrapperStyle: true,
     },
   },

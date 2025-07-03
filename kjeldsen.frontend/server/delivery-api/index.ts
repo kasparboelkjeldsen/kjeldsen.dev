@@ -30,6 +30,8 @@ export type { FunTimeWebEkgElementModel } from './models/FunTimeWebEkgElementMod
 export type { FunTimeWebEkgPropertiesModel } from './models/FunTimeWebEkgPropertiesModel';
 export type { FunTimeWebMurderBlockElementModel } from './models/FunTimeWebMurderBlockElementModel';
 export type { FunTimeWebMurderBlockPropertiesModel } from './models/FunTimeWebMurderBlockPropertiesModel';
+export type { HeaderBlockElementModel } from './models/HeaderBlockElementModel';
+export type { HeaderBlockPropertiesModel } from './models/HeaderBlockPropertiesModel';
 export type { HeadlessCompositionContentModel } from './models/HeadlessCompositionContentModel';
 export type { HeadlessCompositionContentResponseModel } from './models/HeadlessCompositionContentResponseModel';
 export type { HeadlessCompositionPropertiesModel } from './models/HeadlessCompositionPropertiesModel';

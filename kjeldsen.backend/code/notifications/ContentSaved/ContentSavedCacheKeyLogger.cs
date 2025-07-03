@@ -64,7 +64,7 @@ namespace kjeldsen.backend.code.notifications.ContentSaved
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.LogWarning("Nuxt cache invalidation failed: {StatusCode} - {Reason}", response.StatusCode, response.ReasonPhrase);
-                }
+                } 
                 else
                 {
                     _logger.LogInformation("Nuxt cache invalidation triggered for tags: {Tags}", string.Join(", ", tags));

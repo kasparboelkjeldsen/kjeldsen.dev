@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen bg-black text-white font-sans">
+  <div class="relative min-h-screen font-sans text-white bg-black">
     <!-- Background image layer -->
     <div class="fixed inset-0 z-0 overflow-hidden">
       <div
@@ -9,7 +9,7 @@
         <img
           src="/assets/img/bg.jpg"
           alt=""
-          class="w-full h-full object-cover fancy-background"
+          class="object-cover w-full h-full fancy-background"
         />
       </div>
       <div class="absolute inset-0 custom-vignette-gradient"></div>
@@ -47,6 +47,9 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
+.will-change-transform {
+  height: 100%;
+}
 .fancy-background {
   filter: blur(var(--blur, 0));
   mix-blend-mode: soft-light;

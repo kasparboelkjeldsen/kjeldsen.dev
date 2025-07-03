@@ -28,5 +28,15 @@
     "EnabledRTE": true,
     "AdvancedSettings": null,
     "Alias": "imageBlock"
+  },
+  {
+    "Id": "9ede4277-930d-4106-b18c-b3380269d981",
+    "Enabled": true,
+    "EnabledNested": true,
+    "EnabledList": true,
+    "EnabledGrid": true,
+    "EnabledRTE": true,
+    "AdvancedSettings": null,
+    "Alias": "headerBlock"
   }
 ]

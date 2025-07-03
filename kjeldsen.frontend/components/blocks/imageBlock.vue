@@ -1,6 +1,6 @@
 <template>
   <div>
-    <picture v-if="!isBlockPreview && sources.length">
+    <picture v-if="!isBlockPreview && sources.length" class="m-0">
       <source
         v-for="(src, index) in sources"
         :key="index"
@@ -11,8 +11,8 @@
     </picture>
 
     <img
-      v-if="isBlockPreview"
-      :src="image?.url"
+      v-if="isBlockPreview && sources.length"
+      :src="sources.at(-1)?.replace('/api','')"
       :alt="altText"
       class="w-full"
     />
