@@ -141,6 +141,20 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
             
             await endpoint.PurgeContentAsync(WaitUntil.Completed, purgeOptions);
 
+            foreach(var url in urls)
+            {
+                try
+                {
+                    await _httpClient.GetAsync($"{_nuxtHost}{url}");
+                    _logger.LogInformation(url + " is available after purge.");
+                }
+                catch
+                {
+
+                }
+            }
+            
+
             _logger.LogInformation("Azure Front Door CDN purge triggered for path: /*");
         }
         catch (Exception ex)
