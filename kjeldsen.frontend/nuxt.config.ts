@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   webpack: {
     extractCSS: true,
   },
+  ssr: true,
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   modules: [
