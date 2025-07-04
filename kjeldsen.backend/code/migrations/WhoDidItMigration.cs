@@ -53,7 +53,7 @@ public class WhoDidItMigrationComponent : IAsyncComponent
             .To<AddWhoDidItTable>("whodidit-db");
 
         var upgrader = new Upgrader(migrationPlan);
-        upgrader.Execute(_migrationPlanExecutor, _coreScopeProvider, _keyValueService);
+         await upgrader.ExecuteAsync(_migrationPlanExecutor, _coreScopeProvider, _keyValueService);
     }
 
     public void Terminate()
@@ -70,13 +70,13 @@ public class WhoDidItMigrationComponent : IAsyncComponent
 /// <summary>
 /// Migration step that creates the WhoDidIt table.
 /// </summary>
-public class AddWhoDidItTable : MigrationBase
+public class AddWhoDidItTable : AsyncMigrationBase
 {
     public AddWhoDidItTable(IMigrationContext context) : base(context)
     {
     }
 
-    protected override void Migrate()
+    protected override Task MigrateAsync()
     {
         Logger.LogDebug("Running migration {MigrationStep}", "AddWhoDidItTable");
 
@@ -89,6 +89,8 @@ public class AddWhoDidItTable : MigrationBase
         {
             Logger.LogDebug("ℹ️ Table {TableName} already exists, skipping creation.", WhoDidItSchema.TableName);
         }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>

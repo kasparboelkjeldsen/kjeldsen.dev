@@ -58,16 +58,13 @@ if (data.value?.properties?.cacheKeys) {
   const cacheKeys = data.value.properties.cacheKeys || [];
   const tags = ["reset", ...cacheKeys];
 
-  /*
+  
   useRouteCache((helper) => {
-    helper.setMaxAge(3600 * 24).setCacheable().addTags(tags);
-  });*/
+    helper.setMaxAge(60).setCacheable().addTags(tags);
+  });
 
   if (import.meta.server) {
     console.table(cacheKeys.map((key, i) => ({ '#': i + 1, 'Cache Key': key })));
-    const event = useRequestEvent();
-    event?.node.res.setHeader("x-cache-tags", tags.join(","));
-    event?.node.res.setHeader("Cache-Control", "public, max-age=86400");
   }
 }
 

@@ -9,7 +9,7 @@ public static class SecretsExtension
     {
         var vault = builder.Configuration["Azure:KeyVault"];
         var secretClient = new SecretClient(
-            new Uri(vault),
+            new Uri(vault!),
             new DefaultAzureCredential());
 
         // Fetch secrets manually

@@ -15,6 +15,6 @@ public interface IMurderService
 public class MurderRecord
 {
     public int Id { get; set; }
-    public string Username { get; set; }
+    public string? Username { get; set; }
     public DateTime Created { get; set; }
 }

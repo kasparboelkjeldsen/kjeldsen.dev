@@ -43,7 +43,7 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         _umbracoHelperAccessor = umbracoHelperAccessor;
     }
 
-    public async Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken)
+    public Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken)
     {
         var tags = new HashSet<string>();
         var urls = new HashSet<string>();
@@ -84,6 +84,8 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         {
             _ = InvalidateFrontendAsync(tags, urls); // Fire and forget
         }
+
+        return Task.CompletedTask;
     }
 
     private async Task InvalidateFrontendAsync(IEnumerable<string> tags, IEnumerable<string> urls)

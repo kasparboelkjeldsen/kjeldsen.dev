@@ -79,7 +79,7 @@ public class MurderService : IMurderService
 
         [Column("Username")]
         [Length(255)]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [Column("Created")]
         public DateTime Created { get; set; }
