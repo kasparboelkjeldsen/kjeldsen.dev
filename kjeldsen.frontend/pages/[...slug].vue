@@ -31,58 +31,50 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import { watchEffect } from "vue";
+import { watchEffect, ref } from "vue";
 import type {
   SeoCompositionContentResponseModel,
   NavigationCompositionContentResponseModel,
   IApiContentResponseModel,
 } from "~/server/delivery-api";
 
-
 const route = useRoute();
 const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug];
-
-// Ensure slug segments are valid, but keep it safe for the trailing slash requirement
 const cleanSlug = slugArray.filter(Boolean).join("/");
+const slugHasDot = cleanSlug.includes(".");
+const apiPath = "/api/content/" + cleanSlug + "/";
 
-// Ensure leading *and* trailing slash
-const slugWithSlashes = "/" + cleanSlug + "/";
+const data = ref<IApiContentResponseModel | null>(null);
 
-const apiPath = "/api/content" + slugWithSlashes;
+if (!slugHasDot) {
+  const result = await useFetch<IApiContentResponseModel>(apiPath, {
+    server: true,
+    cache: "no-cache",
+  });
+  data.value = result.data.value;
+}
 
-
-const { data } = await useFetch<IApiContentResponseModel>(apiPath, {
-  server: true, cache: "no-cache"
-});
-
-if (data.value?.properties.cacheKeys) {
+if (data.value?.properties?.cacheKeys) {
   const cacheKeys = data.value.properties.cacheKeys || [];
   const tags = ["reset", ...cacheKeys];
-  const timestamp = new Date().toISOString();
 
-console.log(`\n🔥 [${timestamp}] Cache Miss! These keys were not found: 🔥\n`);
-console.table(
-  cacheKeys.map((key, index) => ({
-    '#': index + 1,
-    'Cache Key': key,
-  }))
-);
-
-/*
   useRouteCache((helper) => {
-    helper
-      .setMaxAge(3600 * 24)
-      .setCacheable()
-      .addTags(tags);
-  });*/
+    helper.setMaxAge(3600 * 24).setCacheable().addTags(tags);
+  });
+
+  if (import.meta.server) {
+    console.table(cacheKeys.map((key, i) => ({ '#': i + 1, 'Cache Key': key })));
+    const event = useRequestEvent();
+    event?.node.res.setHeader("x-cache-tags", tags.join(","));
+    event?.node.res.setHeader("Cache-Control", "public, max-age=86400");
+  }
 }
 
 const { data: navigation } =
-  await useFetch<NavigationCompositionContentResponseModel>(
-    "/api/content/navigation",
-    { server: true, cache: "no-cache"
-    },
-  );
+  await useFetch<NavigationCompositionContentResponseModel>("/api/content/navigation", {
+    server: true,
+    cache: "no-cache",
+  });
 
 watchEffect(() => {
   if (data.value) {

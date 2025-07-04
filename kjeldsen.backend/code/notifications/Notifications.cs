@@ -8,6 +8,6 @@ public class Notifications : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
     {
-        builder.AddNotificationAsyncHandler<ContentSavedNotification, ContentPublishedCacheKeyLogger>();
+        builder.AddNotificationAsyncHandler<ContentPublishedNotification, ContentPublishedCacheKeyLogger>();
     }
 }

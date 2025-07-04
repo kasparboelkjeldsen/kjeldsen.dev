@@ -35,6 +35,10 @@ export function createKeyVaultSecrets(keyVault: azureNative.keyvault.Vault, reso
             name: "CMSHOST",
             value: "https://umbraco.kjeldsen.dev",
         },
+        {
+            name: "FrontDoorEndpointResourceId",
+            value: "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/afdendpoints/kjeldsen-dev",
+        }
     ];
 
     for (const secret of keyVaultSecrets) {

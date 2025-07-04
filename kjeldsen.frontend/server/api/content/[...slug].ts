@@ -2,22 +2,22 @@ import { DeliveryClient } from '@/server/delivery-api';
 import { useRuntimeConfig } from '#imports';
 
 export default defineEventHandler(async (event) => {
-  
   const config = useRuntimeConfig();
   const { slug } = event.context.params!;
+
+  // Disallow any path segment with a dot
+  if (slug.includes('.')) {
+    return null;
+  }
 
   const api = new DeliveryClient({
     BASE: config.public.cmsHost,
   });
 
-  if(slug.startsWith('/.')) {
-    return null;
-  }
-
   try {
     const response = await api.content.getContentItemByPath20({
       apiKey: config.deliveryKey,
-      path: '/' + slug, // Assuming slug is the path here
+      path: '/' + slug,
     });
 
     if (!response) {

@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.14.1" />
+    <PackageReference Include="Azure.ResourceManager.Cdn" Version="1.4.0" />
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.10" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.CacheKeys" Version="1.0.2" />
