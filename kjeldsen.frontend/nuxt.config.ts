@@ -40,6 +40,9 @@ export default defineNuxtConfig({
       cacheTagInvalidationDelay: 1000,
     },
   },
+  experimental: {
+    payloadExtraction: false
+  },
 /*
   experimental: {
     componentIslands: true,
