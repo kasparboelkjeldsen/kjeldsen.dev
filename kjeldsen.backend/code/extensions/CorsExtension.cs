@@ -1,4 +1,6 @@
-﻿namespace kjeldsen.backend.extensions;
+﻿using kjeldsen.backend.code.extensions;
+
+namespace kjeldsen.backend.code.extensions;
 
 public static class CorsExtension
 {
