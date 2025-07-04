@@ -7,7 +7,7 @@
         :style="{ transform: `translateY(${parallaxOffset}px)` }"
       >
         <img
-          src="/assets/img/bg.jpg"
+          src="/assets/img/bg.webp"
           alt=""
           class="object-cover w-full h-full fancy-background"
         />

@@ -1,5 +1,8 @@
 <template>
-  <div id="__preview"><BlocksResolverComponent :data="data" :columns="12"/></div>
+  <div id="__preview">
+    
+    <BlocksResolverComponent :data="data" :columns="12" class="max-w-4xl prose prose-invert" />
+  </div>
 </template>
 
 <script setup lang="ts">

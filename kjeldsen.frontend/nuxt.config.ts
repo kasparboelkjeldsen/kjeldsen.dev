@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     api: {
       enabled: true,
       prefix: "/__nuxt_multi_cache",
-      authorization: "woot",
+      authorization: process.env.DELIVERY_KEY!,
       cacheTagInvalidationDelay: 1000,
     },
   },

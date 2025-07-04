@@ -48,5 +48,7 @@ export default function buildCropUrl(
   if (width) customParams.push(`width=${width}`);
   if (height) customParams.push(`height=${height}`);
 
+  customParams.push("quality=80", "format=webp");
+  
   return `${baseImageUrl}?${customParams.join("&")}`;
 }

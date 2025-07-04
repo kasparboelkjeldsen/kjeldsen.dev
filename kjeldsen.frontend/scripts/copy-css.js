@@ -3,8 +3,8 @@ import fs from 'fs';
 import path from 'path';
 
 const nuxtOutputDir = path.resolve('.output/public/_nuxt');
-const publicDir = path.resolve('public');
-const targetCssFile = path.resolve('./../kjeldsen.backend/wwwroot/cms.css');
+const publicDir = path.resolve('.output/public');
+const targetCssFile = path.resolve('./../kjeldsen.backend/wwwroot/css/cms.css');
 const targetFontsDir = path.resolve('./../kjeldsen.backend/wwwroot/fonts');
 const tailwindCssPath = path.resolve('.tmp-tailwind.css');
 

@@ -494,3 +494,5 @@ kjeldsen.frontend/.nuxt-prerender-routes.json
 kjeldsen.frontend/.output/
 
 kjeldsen.frontend/.env.local
+
+kjeldsen.frontend/.env copy

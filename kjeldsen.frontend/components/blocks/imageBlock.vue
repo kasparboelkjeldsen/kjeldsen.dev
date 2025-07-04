@@ -34,20 +34,20 @@ const cropPref = props.data.properties?.cropPreference ?? 'Ratio';
 const altText = props.data.properties?.altText ?? '';
 const sources: string[] = [];
 
-const breakpoints = [1600, 1200, 800, 320];
+// Updated breakpoints to match the new crop sizes
+const breakpoints = [1000, 800, 600, 400];
 
-// Matches Umbraco-style crop name logic
 function matchesCropPref(crop: { width: number, height: number }) {
   const ratio = crop.width / crop.height;
   if (cropPref === 'Square') return Math.abs(ratio - 1) < 0.05;
-  if (cropPref === 'Slim') return ratio >= 3.5;
-  return ratio >= 1.6 && ratio <= 1.85; // default: 16:9-ish
+  if (cropPref === 'Slim') return ratio >= 3.9;
+  return ratio >= 1.75 && ratio <= 1.85; // updated for tighter 16:9 match
 }
 
 function matchesColumnWidth(crop: { width: number }) {
   const cols = props.columns ?? 12;
-  if (cols >= 9) return crop.width >= 1200;
-  if (cols >= 5) return crop.width >= 800 && crop.width < 1200;
+  if (cols >= 9) return crop.width >= 1000;
+  if (cols >= 5) return crop.width >= 800 && crop.width < 1000;
   return crop.width < 800;
 }
 
@@ -57,8 +57,7 @@ if (image?.url && image.crops?.length) {
     .sort((a, b) => b.width - a.width); // largest first
 
   filteredCrops.forEach((crop, index) => {
-    if(cropPref === 'None') {
-      // If no crop preference, use the original image URL
+    if (cropPref === 'None') {
       sources.push(image.url);
       return;
     }

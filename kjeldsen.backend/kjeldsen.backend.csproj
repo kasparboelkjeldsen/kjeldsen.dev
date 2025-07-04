@@ -9,12 +9,12 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
-    <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.8" />
+    <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.10" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.CacheKeys" Version="1.0.2" />
-    <PackageReference Include="Scrutor" Version="6.0.1" />
-    <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
+    <PackageReference Include="Scrutor" Version="6.1.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.41" />
     <PackageReference Include="Umbraco.Cms" Version="16.0.0" />
-    <PackageReference Include="Umbraco.Community.DeliveryApiExtensions" Version="15.0.1" />
+    <PackageReference Include="Umbraco.Community.DeliveryApiExtensions" Version="16.0.1" />
     <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="16.0.0" />
     <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="16.0.0" />
     <PackageReference Include="uSync" Version="16.0.0" />
@@ -29,6 +29,7 @@
   <ItemGroup>
     <Folder Include="blockpreview\" />
     <Folder Include="umbraco\" />
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
   <PropertyGroup>

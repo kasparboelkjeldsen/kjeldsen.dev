@@ -32,6 +32,9 @@ builder.Configuration["ConnectionStrings:umbracoDbDSN"] = sql;
 builder.Configuration["Umbraco:Storage:AzureBlob:Media:ConnectionString"] = storage;
 builder.Configuration["Umbraco:CMS:DeliveryApi:ApiKey"] = deliveryKey;
 
+builder.Configuration["Nuxt:ApiKey"] = deliveryKey;
+builder.Configuration["HeadlessBlockPreview:ApiKey"] = deliveryKey;
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhostAndKjeldsenDev", policy =>
