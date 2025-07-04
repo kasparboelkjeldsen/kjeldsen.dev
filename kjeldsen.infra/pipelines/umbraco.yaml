@@ -97,7 +97,7 @@ stages:
                 --configuration $(configuration)
                 --output $(Build.ArtifactStagingDirectory)/umbraco
                 /p:SelfContained=false
-                /p:RuntimeIdentifier=win-x86
+                /p:RuntimeIdentifier=linux-x64
                 /p:PublishReadyToRun=true
                 /p:EnableCompressionInSingleFile=true
               zipAfterPublish: true
