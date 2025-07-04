@@ -1,7 +1,7 @@
 ﻿using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 
-namespace kjeldsen.backend.extensions;
+namespace kjeldsen.backend.code.extensions;
 
 public static class SecretsExtension
 {

@@ -1,5 +1,5 @@
+using kjeldsen.backend.code.extensions;
 using kjeldsen.backend.code.middleware;
-using kjeldsen.backend.extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
