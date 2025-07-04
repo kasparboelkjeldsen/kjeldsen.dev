@@ -22,7 +22,7 @@ variables:
   - name: resourceGroup
     value: 'kjdev-rg'
   - name: webAppNameCm
-    value: 'kjdev-app-backoffice'
+    value: 'kjdev-app-backend'
   - name: webAppNameFrontend
     value: 'kjdev-app-frontend'
 

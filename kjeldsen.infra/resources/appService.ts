@@ -13,13 +13,16 @@ export function createAppServicePlans(rsv: ResourceVars, resourceGroupName: pulu
         tags,
     });
 
-    const backofficePlan = new azureNative.web.AppServicePlan(rsv.name(ResourceType.AppServicePlan, "backoffice"), {
-        name: rsv.name(ResourceType.AppServicePlan, "backoffice"),
+    const backofficePlan = new azureNative.web.AppServicePlan(rsv.name(ResourceType.AppServicePlan, "backend"), {
+        name: rsv.name(ResourceType.AppServicePlan, "backend"),
         resourceGroupName,
         location,
-        kind: "App",
-        reserved: false,
-        sku: { tier: "Shared", name: "D1" },
+        kind: "Linux", // Required for Linux apps
+        reserved: true, // Required for Linux plans
+        sku: {
+            tier: "Basic",
+            name: "B1",
+        },
         tags,
     });
 
@@ -43,13 +46,15 @@ export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input
         tags,
     });
 
-    const backofficeApp = new azureNative.web.WebApp(rsv.name(ResourceType.AppService, "backoffice"), {
-        name: rsv.name(ResourceType.AppService, "backoffice"),
+    const backofficeApp = new azureNative.web.WebApp(rsv.name(ResourceType.AppService, "backend"), {
+        name: rsv.name(ResourceType.AppService, "backend"),
         resourceGroupName,
         location,
         serverFarmId: backofficePlanId,
+        kind: "app,linux", // make sure it’s treated as a Linux app
+        reserved: true, // explicitly says it's a Linux app
         siteConfig: {
-            windowsFxVersion: "DOTNETCORE|9.0",
+            linuxFxVersion: "DOTNETCORE|9.0", // Linux runtime for .NET 9
             appSettings: [
                 { name: "WEBSITES_ENABLE_APP_SERVICE_STORAGE", value: "true" },
                 { name: "ASPNETCORE_ENVIRONMENT", value: "Production" },
