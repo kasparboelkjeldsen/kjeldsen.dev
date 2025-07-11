@@ -72,6 +72,13 @@ stages:
               package: '$(frontendDirectory)/.output'
               appType: 'webApp'
               deploymentMethod: 'zipDeploy'
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(frontendDirectory)/.nuxt-prerender-routes.json'
+              artifactName: 'routes'
+            displayName: 'Publish prerender routes'
+
 
   - stage: BuildBackend
     displayName: 'Build and Deploy Umbraco Backend'
@@ -126,3 +133,46 @@ stages:
               packageForLinux: '$(Pipeline.Workspace)/umbraco/*.zip'
               enableCustomDeployment: true
               DeploymentType: 'zipDeploy'
+  - stage: Warmup
+    displayName: 'Warm Up Routes'
+    dependsOn: BuildBackend
+    condition: succeeded()
+    jobs:
+      - job: WarmupRoutes
+        displayName: 'Fetch all frontend routes to warm cache'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
+
+          - checkout: self
+            displayName: 'Checkout source'
+
+          - download: current
+            artifact: routes
+            displayName: 'Download prerender routes artifact'
+
+          - task: PowerShell@2
+            displayName: 'Warm routes by fetching them from www.kjeldsen.dev'
+            inputs:
+              targetType: 'inline'
+              script: |
+                $routesFile = "$(Pipeline.Workspace)/routes/.nuxt-prerender-routes.json"
+                if (!(Test-Path $routesFile)) {
+                  Write-Warning "⚠️ No prerender routes file found at $routesFile"
+                  exit 0
+                }
+
+                $routes = Get-Content $routesFile | ConvertFrom-Json
+                $baseUrl = "https://www.kjeldsen.dev"
+
+                foreach ($route in $routes) {
+                  $url = "$baseUrl$route"
+                  try {
+                    $res = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 10
+                    Write-Host "✅ Warmed: $url ($($res.StatusCode))"
+                  } catch {
+                    Write-Warning "❌ Failed: $url ($($_.Exception.Message))"
+                  }
+                }
