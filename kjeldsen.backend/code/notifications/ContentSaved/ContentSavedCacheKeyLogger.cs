@@ -13,6 +13,12 @@ using Azure.Core;
 using Azure;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Core.Services;
+using static Umbraco.Cms.Core.Constants.HttpContext;
+using Umbraco.Cms.Infrastructure.Scoping;
+using Polly;
 
 namespace kjeldsen.backend.code.notifications.ContentSaved;
 
@@ -25,6 +31,9 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
     private readonly IUmbracoHelperAccessor _umbracoHelperAccessor;
+    private readonly IContentService _contentService;
+    private readonly IScopeProvider _scopeProvider;
+    private readonly IUmbracoContextFactory _umbracoContextFactory;
 
     public ContentPublishedCacheKeyLogger(
         ICacheKeyDependencyResolver resolver,
@@ -32,7 +41,10 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         IHttpClientFactory httpClientFactory,
         ILogger<ContentPublishedCacheKeyLogger> logger,
         IConfiguration configuration,
-        IUmbracoHelperAccessor umbracoHelperAccessor)
+        IUmbracoContextFactory umbracoContextFactory,
+        IUmbracoHelperAccessor umbracoHelperAccessor,
+        IContentService contentService,
+        IScopeProvider scopeProvider)
     {
         _resolver = resolver;
         _logger = logger;
@@ -41,12 +53,15 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         _httpClient = httpClientFactory.CreateClient();
         _configuration = configuration;
         _umbracoHelperAccessor = umbracoHelperAccessor;
+        _contentService = contentService;
+        _scopeProvider = scopeProvider;
+        _umbracoContextFactory = umbracoContextFactory;
     }
 
     public Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken)
     {
         var tags = new HashSet<string>();
-        var urls = new HashSet<string>();
+        var urls = new HashSet<IPublishedContent>();
         
         if (!_umbracoHelperAccessor.TryGetUmbracoHelper(out UmbracoHelper? umbracoHelper) || umbracoHelper == null)
         {
@@ -65,33 +80,22 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
                 var type = key.Split('-')[0];
                 var value = key.Replace(type + "-","");
 
-                string url = string.Empty;
-                if(type == "content")
-                {
-                    url = umbracoHelper.Content(value)?.Url(mode: UrlMode.Relative) ?? string.Empty;
-                }
-                else if(type == "media")
-                {
-                    url = "/api"+ umbracoHelper.Media(value)?.Url(mode: UrlMode.Relative) ?? string.Empty;
-                }
-
-                if (!string.IsNullOrEmpty(url))
-                    urls.Add(url);
+                 urls.Add(umbracoHelper.Content(value));
             }
         }
 
         if (tags.Count > 0)
         {
-            _ = InvalidateFrontendAsync(tags, urls); // Fire and forget
+            _ = InvalidateFrontendAsync(tags, urls, umbracoHelper); // Fire and forget
         }
 
         return Task.CompletedTask;
     }
 
-    private async Task InvalidateFrontendAsync(IEnumerable<string> tags, IEnumerable<string> urls)
+    private async Task InvalidateFrontendAsync(IEnumerable<string> tags, IEnumerable<IPublishedContent> urls, UmbracoHelper umbracoHelper)
     {
         await InvalidateNuxtAsync(tags);
-        await InvalidateFrontDoorAsync(urls);
+        await InvalidateFrontDoorAsync(urls, umbracoHelper);
     }
 
     private async Task InvalidateNuxtAsync(IEnumerable<string> tags)
@@ -120,8 +124,10 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         }
     }
 
-    private async Task InvalidateFrontDoorAsync(IEnumerable<string> urls)
+    private async Task InvalidateFrontDoorAsync(IEnumerable<IPublishedContent> urls, UmbracoHelper umbracoHelper)
     {
+
+        
         try
         {
             var endpointResourceIdRaw = _configuration["Azure:FrontDoorEndpointResourceId"];
@@ -139,12 +145,28 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
 
             var endpoint = armClient.GetFrontDoorEndpointResource(resourceId);
 
-            var purgeOptions = new FrontDoorPurgeContent(urls);
+            List<string> urlStrings = new List<string>();
+
+            foreach (var url in urls)
+            {
+                if (url.ItemType == PublishedItemType.Content)
+                {
+                    urlStrings.Add(umbracoHelper.Content(url.Id)?.Url(mode: UrlMode.Relative) ?? string.Empty);
+                }
+                else if (url.ItemType == PublishedItemType.Media)
+                {
+                    urlStrings.Add("/api"+umbracoHelper.Media(url.Id)?.Url(mode: UrlMode.Relative) ?? string.Empty);
+                }
+            }
+
+            var purgeOptions = new FrontDoorPurgeContent(urlStrings);
             
             await endpoint.PurgeContentAsync(WaitUntil.Completed, purgeOptions);
 
-            foreach(var url in urls)
+            // poke website
+            foreach (var url in urlStrings)
             {
+               
                 try
                 {
                     await _httpClient.GetAsync($"{_nuxtHost}{url}");
@@ -155,7 +177,27 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
 
                 }
             }
-            
+
+
+            // update lastCdnPurge
+            var contentToUpdate = _contentService.GetByIds(urls.Select(x => x.Id));
+            contentToUpdate = contentToUpdate.Where(x => x.Properties.Where(p => p.Alias == "lastCdnPurge").Any()).ToList();
+
+            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            {
+                using (_ = scope.Notifications.Suppress())
+                {
+
+                    foreach (var content in contentToUpdate)
+                    {
+                        if (content != null)
+                        {
+                            content.SetValue("lastCdnPurge", DateTime.UtcNow);
+                            _contentService.Save(content);
+                        }
+                    }
+                }
+            }
 
             _logger.LogInformation("Azure Front Door CDN purge triggered for path: /*");
         }
