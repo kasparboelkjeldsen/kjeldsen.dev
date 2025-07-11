@@ -67,6 +67,7 @@ export default defineNuxtConfig({
   routeRules: {
     "/__blockpreview": {ssr: true, prerender: false}
   },
+  /*
   nitro: {
     prerender: {
       routes: (() => {
@@ -80,6 +81,6 @@ export default defineNuxtConfig({
         return JSON.parse(raw)
       })()
     }
-  }
+  }*/
 
 });
