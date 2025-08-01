@@ -3,8 +3,9 @@ using kjeldsen.backend.code.middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.
-    AddSecrets()
+builder
+    .AddSecrets()
+    .AddApplicationInsights()
     .AddCors()
     .CreateUmbracoBuilder()
     .AddBackOffice()

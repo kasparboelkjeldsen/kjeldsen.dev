@@ -13,7 +13,10 @@
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.10" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.CacheKeys" Version="1.0.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
     <PackageReference Include="Scrutor" Version="6.1.0" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.41" />
     <PackageReference Include="Umbraco.Cms" Version="16.0.0" />
     <PackageReference Include="Umbraco.Community.DeliveryApiExtensions" Version="16.0.1" />

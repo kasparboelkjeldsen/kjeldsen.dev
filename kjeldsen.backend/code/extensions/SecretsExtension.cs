@@ -17,7 +17,7 @@ public static class SecretsExtension
         var blob = secretClient.GetSecret("UmbracoPrimaryStorageKey").Value.Value;
         var storage = $"DefaultEndpointsProtocol=https;AccountName=kjdevstorage;AccountKey={blob};EndpointSuffix=core.windows.net";
         var frontdoor = secretClient.GetSecret("FrontDoorEndpointResourceId").Value.Value;
-
+        var applicationInsights = secretClient.GetSecret("ApplicationInsightsConnectionStringUmbraco").Value.Value;
         var deliveryKey = secretClient.GetSecret("UmbracoDeliveryKey").Value.Value;
 
         builder.Configuration["ConnectionStrings:umbracoDbDSN"] = sql;
@@ -27,6 +27,8 @@ public static class SecretsExtension
         builder.Configuration["Nuxt:ApiKey"] = deliveryKey;
         builder.Configuration["HeadlessBlockPreview:ApiKey"] = deliveryKey;
         builder.Configuration["Azure:FrontDoorEndpointResourceId"] = frontdoor;
+
+        builder.Configuration["ApplicationInsights:ConnectionString"] = applicationInsights;
 
         return builder;
     }
