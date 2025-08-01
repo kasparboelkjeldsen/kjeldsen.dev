@@ -65,7 +65,14 @@ const kjeldsenDevZone = createDns(resourceGroup.name, tags.project);
 const kjdevFrontdoor = createCdn(resourceGroup.name);
 
 // 🔹 Secrets
-createKeyVaultSecrets(keyVault, resourceGroup.name, storageAccount, sqlPassword.result, connectionString, applicationInsights.connectionString);
+createKeyVaultSecrets(
+    keyVault, 
+    resourceGroup.name, 
+    storageAccount, 
+    sqlPassword.result, 
+    connectionString, 
+    applicationInsights.connectionString, 
+    applicationInsights.appInsightsUmbraco.connectionString);
 
 // 🔹 Outputs
 export const resourceGroupName = resourceGroup.name;

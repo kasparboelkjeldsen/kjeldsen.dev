@@ -8,7 +8,8 @@ export function createKeyVaultSecrets(
   storageAccount: azureNative.storage.StorageAccount,
   sqlPassword: pulumi.Output<string>,
   sqlConnectionString: pulumi.Output<string>,
-  appInsightsConnectionString: pulumi.Output<string> // 🔹 new param
+  appInsightsConnectionString: pulumi.Output<string>,
+  appInsightsConnectionStringUmbraco: pulumi.Output<string>
 ) {
   const deliveryKey = new random.RandomPassword("UmbracoDeliveryKey", {
     length: 24,
@@ -47,8 +48,12 @@ export function createKeyVaultSecrets(
         "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/afdendpoints/kjeldsen-dev",
     },
     {
-      name: "ApplicationInsightsConnectionString", // 🔹 new secret
+      name: "ApplicationInsightsConnectionString",
       value: appInsightsConnectionString,
+    },
+    {
+      name: "ApplicationInsightsConnectionStringUmbraco",
+      value: appInsightsConnectionStringUmbraco,
     },
   ];
 

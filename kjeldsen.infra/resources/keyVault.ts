@@ -16,5 +16,7 @@ export function createKeyVault(rsv: ResourceVars, resourceGroupName: pulumi.Inpu
             enabledForDiskEncryption: true,
         },
         tags,
+    }, {
+        protect: true,
     });
 }

@@ -33,9 +33,20 @@ export function createAppInsights(
     workspaceResourceId: workspace.id,
   });
 
+    const appInsightsUmbraco = new azureNative.insights.Component(`${rsv.prefix}-appinsights-umbraco`, {
+    resourceGroupName,
+    location,
+    applicationType: "web",
+    kind: "web",
+    tags,
+    resourceName: `${rsv.prefix}-appinsights-umbraco`,
+    workspaceResourceId: workspace.id,
+  });
+
   return {
     appInsights,
     instrumentationKey: appInsights.instrumentationKey,
     connectionString: appInsights.connectionString,
+    appInsightsUmbraco,
   };
 }

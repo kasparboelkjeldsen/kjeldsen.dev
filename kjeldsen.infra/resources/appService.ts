@@ -9,7 +9,7 @@ export function createAppServicePlans(rsv: ResourceVars, resourceGroupName: pulu
         location,
         kind: "App",
         reserved: true,
-        sku: { tier: "Free", name: "F1" },
+        sku: { tier: "Basic", name: "B1" },
         tags,
     });
 

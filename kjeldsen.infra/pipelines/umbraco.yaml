@@ -159,8 +159,9 @@ stages:
               targetType: 'inline'
               script: |
                 $routesFile = "$(Pipeline.Workspace)/routes/.nuxt-prerender-routes.json"
+
                 if (!(Test-Path $routesFile)) {
-                  Write-Warning "⚠️ No prerender routes file found at $routesFile"
+                  Write-Warning "No prerender routes file found at $routesFile"
                   exit 0
                 }
 
@@ -177,7 +178,7 @@ stages:
                       $success = $true
                       break
                     } catch {
-                      Write-Warning "Attempt $i failed for $url: $($_.Exception.Message)"
+                      Write-Warning ("Attempt $i failed for " + $url + ": " + $_.Exception.Message)
                       Start-Sleep -Seconds 5
                     }
                   }
