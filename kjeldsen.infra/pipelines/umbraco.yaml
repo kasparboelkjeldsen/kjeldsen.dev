@@ -169,10 +169,20 @@ stages:
 
                 foreach ($route in $routes) {
                   $url = "$baseUrl$route"
-                  try {
-                    $res = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 10
-                    Write-Host "✅ Warmed: $url ($($res.StatusCode))"
-                  } catch {
-                    Write-Warning "❌ Failed: $url ($($_.Exception.Message))"
+                  $success = $false
+                  for ($i = 1; $i -le 3; $i++) {
+                    try {
+                      $res = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 30
+                      Write-Host "Warmed: $url ($($res.StatusCode))"
+                      $success = $true
+                      break
+                    } catch {
+                      Write-Warning "Attempt $i failed for $url: $($_.Exception.Message)"
+                      Start-Sleep -Seconds 5
+                    }
+                  }
+                  if (-not $success) {
+                    Write-Warning "Failed to warm: $url after 3 attempts"
                   }
                 }
+

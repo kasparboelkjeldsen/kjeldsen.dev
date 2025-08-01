@@ -12,10 +12,11 @@ export enum ResourceType {
     SqlDb = "sqldb",
     AppServicePlan = "asp",
     DnsZone = "dns",
+    AppInsights = "appinsights",
 }
 
 export class ResourceVars {
-    private readonly prefix: string;
+    public readonly prefix: string;
 
     constructor(projectPrefix: string) {
         this.prefix = projectPrefix.toLowerCase().replace(/[^a-z0-9]/g, "");

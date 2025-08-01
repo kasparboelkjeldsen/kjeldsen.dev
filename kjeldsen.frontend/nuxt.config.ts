@@ -55,6 +55,7 @@ export default defineNuxtConfig({
       useCache: process.env.USE_CACHE,
       murderClient: process.env.MURDER_CLIENT,
       cmsHost: process.env.CMSHOST || "https://localhost:44375",
+      appInsights: process.env.APP_INSIGHTS,
     },
   },
   mdc: {

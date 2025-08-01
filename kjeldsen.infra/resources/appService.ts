@@ -51,18 +51,29 @@ export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input
         resourceGroupName,
         location,
         serverFarmId: backofficePlanId,
-        kind: "app,linux", // make sure it’s treated as a Linux app
-        reserved: true, // explicitly says it's a Linux app
+        kind: "app,linux",
+        reserved: true, // marks it as a Linux app
+        identity: {
+            type: azureNative.web.ManagedServiceIdentityType.SystemAssigned,
+        },
+        httpsOnly: true,
+        clientAffinityEnabled: false,
+        clientCertEnabled: false,
+        clientCertMode: azureNative.web.ClientCertMode.Required,
         siteConfig: {
-            linuxFxVersion: "DOTNETCORE|9.0", // Linux runtime for .NET 9
+            linuxFxVersion: "DOTNETCORE|9.0",
+            minTlsVersion: azureNative.web.SupportedTlsVersions.SupportedTlsVersions_1_2,
             appSettings: [
                 { name: "WEBSITES_ENABLE_APP_SERVICE_STORAGE", value: "true" },
                 { name: "ASPNETCORE_ENVIRONMENT", value: "Production" },
             ],
+            scmIpSecurityRestrictionsUseMain: false,
         },
-        httpsOnly: true,
-        tags,
+        tags: {
+            ...tags,
+        },
     });
+
 
     return { frontendApp, backofficeApp };
 }

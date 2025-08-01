@@ -12,7 +12,7 @@ import { createDns } from "./resources/dns";
 import { createCdn } from "./resources/cdn";
 import { createKeyVaultSecrets } from "./resources/secrets";
 import { getStorageConnectionString } from "./resources/storageConnectionString";
-
+import { createAppInsights } from "./resources/appInsights";
 // 🔹 Config and Tags
 const config = new pulumi.Config("azure");
 const location = config.require("location");
@@ -25,6 +25,13 @@ const rsv = new ResourceVars(prefix);
 
 // 🔹 Resource Group
 const resourceGroup = createResourceGroup(rsv, location, tags);
+
+const applicationInsights = createAppInsights(
+  rsv,
+  resourceGroup.name,
+  location,
+  tags
+);
 
 // 🔹 Storage
 const { storageAccount, blobContainer } = createStorage(rsv, resourceGroup.name, location, tags);
@@ -58,7 +65,7 @@ const kjeldsenDevZone = createDns(resourceGroup.name, tags.project);
 const kjdevFrontdoor = createCdn(resourceGroup.name);
 
 // 🔹 Secrets
-createKeyVaultSecrets(keyVault, resourceGroup.name, storageAccount, sqlPassword.result, connectionString);
+createKeyVaultSecrets(keyVault, resourceGroup.name, storageAccount, sqlPassword.result, connectionString, applicationInsights.connectionString);
 
 // 🔹 Outputs
 export const resourceGroupName = resourceGroup.name;
