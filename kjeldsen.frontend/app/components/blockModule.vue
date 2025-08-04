@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ApiBlockListModel } from '~/server/delivery-api';
+import type { ApiBlockListModel } from '~/../server/delivery-api';
 
 const props = defineProps<{
   data: ApiBlockListModel;

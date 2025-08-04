@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { CodeBlockElementModel } from "~/server/delivery-api";
+import type { CodeBlockElementModel } from "~/../server/delivery-api";
 
 const props = defineProps<{
   data: CodeBlockElementModel;

@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { HeaderBlockElementModel } from '~/server/delivery-api';
+import type { HeaderBlockElementModel } from '~/../server/delivery-api';
 
 defineProps<{
   data: HeaderBlockElementModel;

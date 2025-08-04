@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ImageBlockElementModel } from '~/server/delivery-api';
+import type { ImageBlockElementModel } from '~/../server/delivery-api';
 import buildCropUrl from '~/utils/buildCropUrl';
 
 const props = defineProps<{

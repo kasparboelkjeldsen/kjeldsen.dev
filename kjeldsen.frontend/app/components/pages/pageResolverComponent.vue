@@ -1,5 +1,5 @@
 <template>
-  <div class="prose">
+  <div>
     <PagesHomePage v-if="props.data.contentType === 'homePage'" :data="data" />
     <PagesBlogPostContainerPage
       v-else-if="props.data.contentType === 'blogPostContainerPage'"
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { IApiContentResponseModel } from "~/server/delivery-api";
+import type { IApiContentResponseModel } from "~/../server/delivery-api";
 
 const props = defineProps<{ data: IApiContentResponseModel }>();
 </script>

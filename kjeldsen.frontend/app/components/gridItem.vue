@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { clsx } from 'clsx';
-import type { ApiBlockGridItemModel } from "~/server/delivery-api";
+import type { ApiBlockGridItemModel } from "~/../server/delivery-api";
 
 const props = defineProps<{
   item: ApiBlockGridItemModel;

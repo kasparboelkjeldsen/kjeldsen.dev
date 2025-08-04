@@ -38,7 +38,7 @@ import type {
   IApiContentModel,
   WriterContentModel,
   PagedIApiContentResponseModel
-} from "~/server/delivery-api";
+} from "~/../server/delivery-api";
 
 // ✅ Define props like before
 const props = defineProps<{

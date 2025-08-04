@@ -1,11 +1,11 @@
 <template>
   <div
-    class="text-white prose"
+    class="text-white"
     v-html="data.properties?.richText?.markup"
   />
 </template>
 <script lang="ts" setup>
-import type { RteBlockElementModel } from '~/server/delivery-api';
+import type { RteBlockElementModel } from '~/../server/delivery-api';
 
 defineProps<{
   data: RteBlockElementModel;

@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { BlocksResolverComponent } from '#components';
-import type { IApiElementModel } from '~/server/delivery-api'
+import type { IApiElementModel } from '~/../server/delivery-api'
 
 const event = useRequestEvent()
 

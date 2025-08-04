@@ -36,7 +36,7 @@ import type {
   SeoCompositionContentResponseModel,
   NavigationCompositionContentResponseModel,
   IApiContentResponseModel,
-} from "~/server/delivery-api";
+} from "~/../server/delivery-api";
 
 const route = useRoute();
 const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug];
@@ -51,7 +51,13 @@ if (!slugHasDot) {
     server: true,
     cache: "no-cache",
   });
-  data.value = result.data.value;
+  if (result.error.value) {
+    console.error(`Failed to fetch content for path: ${apiPath}`, result.error.value);
+    data.value = null;
+  } else if (result.data.value) {
+    data.value = result.data.value;
+  }
+  
 }
 
 if (data.value?.properties?.cacheKeys) {

@@ -5,6 +5,12 @@ import { resolve } from "path";
 
 // https://localhost:44375/api/slug
 export default defineNuxtConfig({
+  postcss:{
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
   css: ['~/assets/css/tailwind.css'],
   webpack: {
     extractCSS: true,

@@ -32,7 +32,7 @@ import type {
   SeoCompositionContentResponseModel,
   NavigationCompositionContentResponseModel,
   IApiContentResponseModel,
-} from "~/server/delivery-api";
+} from "~/../server/delivery-api";
 
 
 const route = useRoute();

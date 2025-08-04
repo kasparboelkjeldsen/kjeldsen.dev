@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ApiBlockGridModel } from '~/server/delivery-api';
+import type { ApiBlockGridModel } from '~/../server/delivery-api';
 
 defineProps<{
   data: ApiBlockGridModel;

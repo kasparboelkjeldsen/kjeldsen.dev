@@ -1,4 +1,4 @@
-import type { ImageCropModel } from "~/server/delivery-api";
+import type { ImageCropModel } from "~/../server/delivery-api";
 
 type FocalPoint = {
   left: number;

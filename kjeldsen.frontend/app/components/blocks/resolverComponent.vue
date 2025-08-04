@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
 import { BlocksCodeBlock, BlocksFunTimeWebMurderBlock, BlocksFunTimeWebEkg, BlocksRteBlock, BlocksImageBlock, BlocksTestBlock, BlocksHeaderBlock } from "#components";
-import type { IApiElementModel } from "~/server/delivery-api";
+import type { IApiElementModel } from "~/../server/delivery-api";
 
 const props = defineProps<{ data: IApiElementModel, columns: number }>();
 

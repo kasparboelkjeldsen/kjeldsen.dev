@@ -1,4 +1,4 @@
-import { DeliveryClient } from '@/server/delivery-api';
+import { DeliveryClient } from '@/../server/delivery-api';
 import { useRuntimeConfig } from '#imports';
 
 export default defineEventHandler(async () => {

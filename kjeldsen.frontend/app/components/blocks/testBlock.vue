@@ -37,7 +37,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { TestBlockElementModel} from '~/server/delivery-api';
+import type { TestBlockElementModel} from '~/../server/delivery-api';
 import BlockModule from '../blockModule.vue';
 
 defineProps<{
