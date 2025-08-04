@@ -1,6 +1,6 @@
 <template>
   <div class="font-mono">
-    <MDC :value="props.data.properties?.code" />
+    <MDC :value="props.data.properties?.code ?? ''" />
   </div>
 </template>
 <script lang="ts" setup>

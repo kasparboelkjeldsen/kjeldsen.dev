@@ -64,11 +64,6 @@ if (data.value?.properties?.cacheKeys) {
   const cacheKeys = data.value.properties.cacheKeys || [];
   const tags = ["reset", ...cacheKeys];
 
-  
-  useRouteCache((helper) => {
-    helper.setMaxAge(60).setCacheable().addTags(tags);
-  });
-
   if (import.meta.server) {
     console.table(cacheKeys.map((key, i) => ({ '#': i + 1, 'Cache Key': key })));
   }
