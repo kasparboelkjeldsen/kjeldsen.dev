@@ -27,163 +27,243 @@ variables:
     value: 'kjdev-app-frontend'
 
 stages:
-  - stage: BuildFrontend
-    displayName: 'Build Frontend (Nuxt)'
-    condition: |
-      or(
-        contains(variables['Build.TriggeredByChanges'], 'kjeldsen.frontend'),
-        eq(variables['Build.Reason'], 'Manual')
-      )
-    jobs:
-      - job: BuildAndPublishFrontend
-        displayName: 'Build and Publish Frontend'
-        steps:
-          - task: NodeTool@0
-            inputs:
-              versionSpec: '20.x'
-            displayName: 'Install Node.js'
+# -------------------------------
+# Stage 0: Detect changes once
+# -------------------------------
+- stage: DetectChanges
+  displayName: 'Detect Changed Areas'
+  jobs:
+    - job: Detect
+      displayName: 'Detect Frontend/Backend Changes'
+      steps:
+        - checkout: self
+          displayName: 'Checkout (fetchDepth=2 for diff)'
+          fetchDepth: 2
 
-          - task: PowerShell@2
-            displayName: 'Install dependencies and build Nuxt'
-            env:
-              AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
-              AZURE_TENANT_ID: $(AZURE_TENANT_ID)
-              AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
-            inputs:
-              targetType: 'inline'
-              script: |
-                cd "$(frontendDirectory)"
-                npm ci
-                npm run generate-env
-                npm run build
+        - powershell: |
+            Write-Host "Build.Reason: $(Build.Reason)"
+            Write-Host "Build.SourceVersion: $(Build.SourceVersion)"
 
+            # Manual runs: run everything
+            if ("$(Build.Reason)" -eq "Manual") {
+              Write-Host "Manual run detected -> setting both FrontendChanged and BackendChanged to true."
+              Write-Host "##vso[task.setvariable variable=FrontendChanged;isOutput=true]true"
+              Write-Host "##vso[task.setvariable variable=BackendChanged;isOutput=true]true"
+              exit 0
+            }
 
-          - task: PublishBuildArtifacts@1
-            inputs:
-              pathToPublish: '$(frontendDirectory)/.output'
-              artifactName: 'frontend'
-            displayName: 'Publish frontend artifact'
+            # Ensure git exists and repo has at least two commits to diff
+            $hasParent = $false
+            try {
+              $parent = git rev-parse "$(Build.SourceVersion)^" 2>$null
+              if ($LASTEXITCODE -eq 0 -and $parent) { $hasParent = $true }
+            } catch { $hasParent = $false }
 
-          - task: AzureWebApp@1
-            displayName: 'Deploy Frontend to Azure App Service'
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              appName: '$(webAppNameFrontend)'
-              package: '$(frontendDirectory)/.output'
-              appType: 'webApp'
-              deploymentMethod: 'zipDeploy'
-          
-          - task: PublishBuildArtifacts@1
-            inputs:
-              pathToPublish: '$(frontendDirectory)/.nuxt-prerender-routes.json'
-              artifactName: 'routes'
-            displayName: 'Publish prerender routes'
+            if (-not $hasParent) {
+              Write-Warning "No parent commit found (first commit or shallow). Defaulting to both true."
+              Write-Host "##vso[task.setvariable variable=FrontendChanged;isOutput=true]true"
+              Write-Host "##vso[task.setvariable variable=BackendChanged;isOutput=true]true"
+              exit 0
+            }
 
+            # Get changed files between HEAD^ and HEAD
+            $files = git diff --name-only "$(Build.SourceVersion)^" "$(Build.SourceVersion)"
+            Write-Host "Changed files:`n$files"
 
-  - stage: BuildBackend
-    displayName: 'Build and Deploy Umbraco Backend'
-    dependsOn: BuildFrontend
-    jobs:
-      - job: BuildAndPublishBackend
-        displayName: 'Build and Publish Umbraco Artifact'
-        steps:
-          - task: UseDotNet@2
-            displayName: 'Use .NET SDK'
-            inputs:
-              packageType: 'sdk'
-              version: '9.x'
-              includePreviewVersions: true
+            $frontendMatch = $false
+            $backendMatch  = $false
 
-          - task: DotNetCoreCLI@2
-            displayName: 'Publish Umbraco (Trimmed)'
-            inputs:
-              command: 'publish'
-              publishWebProjects: false
-              projects: '$(backendProject)'
-              arguments: >
-                --configuration $(configuration)
-                --output $(Build.ArtifactStagingDirectory)/umbraco
-                /p:SelfContained=false
-                /p:RuntimeIdentifier=linux-x64
-                /p:PublishReadyToRun=true
-                /p:EnableCompressionInSingleFile=true
-              zipAfterPublish: true
+            if ($files) {
+              foreach ($f in $files) {
+                if ($f -like 'kjeldsen.frontend/*' -or $f -like 'kjeldsen.frontend/**') { $frontendMatch = $true }
+                if ($f -like 'kjeldsen.backend/*'  -or $f -like 'kjeldsen.backend/**')  { $backendMatch  = $true }
+              }
+            }
 
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Umbraco Artifact'
-            inputs:
-              pathToPublish: '$(Build.ArtifactStagingDirectory)/umbraco'
-              artifactName: 'umbraco'
+            $frontendOut = if ($frontendMatch) { 'true' } else { 'false' }
+            $backendOut  = if ($backendMatch)  { 'true' } else { 'false' }
 
-      - job: DeployBackend
-        displayName: 'Deploy Umbraco to Azure App Service'
-        dependsOn: BuildAndPublishBackend
-        steps:
-          - download: current
-            artifact: umbraco
-            displayName: 'Download Umbraco Artifact'
+            Write-Host "FrontendChanged=$frontendOut"
+            Write-Host "BackendChanged=$backendOut"
 
-          - task: AzureRmWebAppDeployment@5
-            displayName: 'Deploy Umbraco CM to Azure App Service'
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: '$(azureSubscription)'
-              appType: 'webApp'
-              WebAppName: '$(webAppNameCm)'
-              packageForLinux: '$(Pipeline.Workspace)/umbraco/*.zip'
-              enableCustomDeployment: true
-              DeploymentType: 'zipDeploy'
-  - stage: Warmup
-    displayName: 'Warm Up Routes'
-    dependsOn: BuildBackend
-    condition: succeeded()
-    jobs:
-      - job: WarmupRoutes
-        displayName: 'Fetch all frontend routes to warm cache'
-        steps:
-          - task: NodeTool@0
-            inputs:
-              versionSpec: '20.x'
-            displayName: 'Install Node.js'
+            # Set output variables (cross-stage)
+            Write-Host "##vso[task.setvariable variable=FrontendChanged;isOutput=true]$frontendOut"
+            Write-Host "##vso[task.setvariable variable=BackendChanged;isOutput=true]$backendOut"
+          displayName: 'Compute change flags'
+          name: Changes
 
-          - checkout: self
-            displayName: 'Checkout source'
+# ---------------------------------------
+# Stage 1: Frontend (Nuxt) - run on need
+# ---------------------------------------
+- stage: BuildFrontend
+  displayName: 'Build Frontend (Nuxt)'
+  dependsOn: DetectChanges
+  condition: |
+    or(
+      eq(dependencies.DetectChanges.outputs['Detect.Changes.FrontendChanged'], 'true'),
+      eq(variables['Build.Reason'], 'Manual')
+    )
+  jobs:
+    - job: BuildAndPublishFrontend
+      displayName: 'Build and Publish Frontend'
+      steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '20.x'
+          displayName: 'Install Node.js'
 
-          - download: current
-            artifact: routes
-            displayName: 'Download prerender routes artifact'
+        - task: PowerShell@2
+          displayName: 'Install dependencies and build Nuxt'
+          env:
+            AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+            AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+            AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+          inputs:
+            targetType: 'inline'
+            script: |
+              cd "$(frontendDirectory)"
+              npm ci
+              npm run generate-env
+              npm run build
 
-          - task: PowerShell@2
-            displayName: 'Warm routes by fetching them from www.kjeldsen.dev'
-            inputs:
-              targetType: 'inline'
-              script: |
-                $routesFile = "$(Pipeline.Workspace)/routes/.nuxt-prerender-routes.json"
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: '$(frontendDirectory)/.output'
+            artifactName: 'frontend'
+          displayName: 'Publish frontend artifact'
 
-                if (!(Test-Path $routesFile)) {
-                  Write-Warning "No prerender routes file found at $routesFile"
-                  exit 0
-                }
+        - task: AzureWebApp@1
+          displayName: 'Deploy Frontend to Azure App Service'
+          inputs:
+            azureSubscription: '$(azureSubscription)'
+            appName: '$(webAppNameFrontend)'
+            package: '$(frontendDirectory)/.output'
+            appType: 'webApp'
+            deploymentMethod: 'zipDeploy'
 
-                $routes = Get-Content $routesFile | ConvertFrom-Json
-                $baseUrl = "https://www.kjeldsen.dev"
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: '$(frontendDirectory)/.nuxt-prerender-routes.json'
+            artifactName: 'routes'
+          displayName: 'Publish prerender routes'
 
-                foreach ($route in $routes) {
-                  $url = "$baseUrl$route"
-                  $success = $false
-                  for ($i = 1; $i -le 3; $i++) {
-                    try {
-                      $res = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 30
-                      Write-Host "Warmed: $url ($($res.StatusCode))"
-                      $success = $true
-                      break
-                    } catch {
-                      Write-Warning ("Attempt $i failed for " + $url + ": " + $_.Exception.Message)
-                      Start-Sleep -Seconds 5
-                    }
+# ----------------------------------------
+# Stage 2: Backend (Umbraco) - run on need
+# ----------------------------------------
+- stage: BuildBackend
+  displayName: 'Build and Deploy Umbraco Backend'
+  dependsOn:
+    - DetectChanges
+    - BuildFrontend
+  condition: |
+    or(
+      eq(dependencies.DetectChanges.outputs['Detect.Changes.BackendChanged'], 'true'),
+      eq(variables['Build.Reason'], 'Manual')
+    )
+  jobs:
+    - job: BuildAndPublishBackend
+      displayName: 'Build and Publish Umbraco Artifact'
+      steps:
+        - task: UseDotNet@2
+          displayName: 'Use .NET SDK'
+          inputs:
+            packageType: 'sdk'
+            version: '9.x'
+            includePreviewVersions: true
+
+        - task: DotNetCoreCLI@2
+          displayName: 'Publish Umbraco (Trimmed)'
+          inputs:
+            command: 'publish'
+            publishWebProjects: false
+            projects: '$(backendProject)'
+            arguments: >
+              --configuration $(configuration)
+              --output $(Build.ArtifactStagingDirectory)/umbraco
+              /p:SelfContained=false
+              /p:RuntimeIdentifier=linux-x64
+              /p:PublishReadyToRun=true
+              /p:EnableCompressionInSingleFile=true
+            zipAfterPublish: true
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Umbraco Artifact'
+          inputs:
+            pathToPublish: '$(Build.ArtifactStagingDirectory)/umbraco'
+            artifactName: 'umbraco'
+
+    - job: DeployBackend
+      displayName: 'Deploy Umbraco to Azure App Service'
+      dependsOn: BuildAndPublishBackend
+      steps:
+        - download: current
+          artifact: umbraco
+          displayName: 'Download Umbraco Artifact'
+
+        - task: AzureRmWebAppDeployment@5
+          displayName: 'Deploy Umbraco CM to Azure App Service'
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: '$(azureSubscription)'
+            appType: 'webApp'
+            WebAppName: '$(webAppNameCm)'
+            packageForLinux: '$(Pipeline.Workspace)/umbraco/*.zip'
+            enableCustomDeployment: true
+            DeploymentType: 'zipDeploy'
+
+# -------------------------------
+# Stage 3: Warmup (after backend)
+# -------------------------------
+- stage: Warmup
+  displayName: 'Warm Up Routes'
+  dependsOn: BuildBackend
+  condition: succeeded()
+  jobs:
+    - job: WarmupRoutes
+      displayName: 'Fetch all frontend routes to warm cache'
+      steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '20.x'
+          displayName: 'Install Node.js'
+
+        - checkout: self
+          displayName: 'Checkout source'
+
+        - download: current
+          artifact: routes
+          displayName: 'Download prerender routes artifact'
+
+        - task: PowerShell@2
+          displayName: 'Warm routes by fetching them from www.kjeldsen.dev'
+          inputs:
+            targetType: 'inline'
+            script: |
+              $routesFile = "$(Pipeline.Workspace)/routes/.nuxt-prerender-routes.json"
+
+              if (!(Test-Path $routesFile)) {
+                Write-Warning "No prerender routes file found at $routesFile"
+                exit 0
+              }
+
+              $routes = Get-Content $routesFile | ConvertFrom-Json
+              $baseUrl = "https://www.kjeldsen.dev"
+
+              foreach ($route in $routes) {
+                $url = "$baseUrl$route"
+                $success = $false
+                for ($i = 1; $i -le 3; $i++) {
+                  try {
+                    $res = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 30
+                    Write-Host "Warmed: $url ($($res.StatusCode))"
+                    $success = $true
+                    break
+                  } catch {
+                    Write-Warning ("Attempt $i failed for " + $url + ": " + $_.Exception.Message)
+                    Start-Sleep -Seconds 5
                   }
-                  if (-not $success) {
-                    Write-Warning "Failed to warm: $url after 3 attempts"
-                  }
                 }
-
+                if (-not $success) {
+                  Write-Warning "Failed to warm: $url after 3 attempts"
+                }
+              }
