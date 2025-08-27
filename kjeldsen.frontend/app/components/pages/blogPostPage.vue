@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h1>{{ data.properties.seoTitle ?? data.name }}</h1>
-    <h3>{{ data.properties.writer?.at(0)?.name }}</h3>
-    <GridModule v-if="data.properties.grid" :data="data.properties.grid" />
+    <h1>{{ data.properties?.seoTitle ?? data.name }}</h1>
+    <h3 class="text-base text-sky-300">{{ data.properties?.writer?.at(0)?.name }}</h3>
+    <GridModule v-if="data.properties?.grid" :data="data.properties.grid" />
   </div>
 </template>
 
@@ -14,9 +14,3 @@ defineProps<{
 }>();
 
 </script>
-
-<style scoped>
- h3 {
-  color: white;
- }
-</style>

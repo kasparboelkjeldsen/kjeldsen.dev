@@ -10,7 +10,7 @@
       <div
         v-for="(area, areaIndex) in item.areas"
         :key="areaIndex"
-        class="pt-4 mt-4 border-t"
+        class=""
       >
         <div class="mb-2 font-bold">Area: {{ area.alias }}</div>
         <div
@@ -39,7 +39,7 @@ const props = defineProps<{
 
 const itemClasses = clsx(
   'pt-2 pb-2',                   // Mobile
-  'sm:pt-4 sm:pb-4',             // sm and up
+  '',             // sm and up
   'col-span-full row-span-1',   // Mobile fallback grid
   props.item.columnSpan && `sm:col-span-${props.item.columnSpan}`,
   props.item.rowSpan && `sm:row-span-${props.item.rowSpan}`

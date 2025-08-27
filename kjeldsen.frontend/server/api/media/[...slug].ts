@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   // Rebuild query string
   const queryString = new URLSearchParams(query as Record<string, string>).toString();
   const imageUrl = `${cms}/media/${slug}${queryString ? `?${queryString}` : ''}`.replace(/([^:]\/)\/+/g, '$1');
-
+  console.log(`Fetching image from: ${imageUrl}`);
   const response = await fetch(imageUrl);
 
   if (!response.ok) {

@@ -18,12 +18,13 @@ builder
 
 var app = builder.Build();
 
-// Apply CORS middleware early
 app
     .UseCors("AllowLocalhostAndKjeldsenDev")
     .UseMiddleware<FreezeMiddleware>();
 
 await app.BootUmbracoAsync();
+
+app.AddStaticRedirects();
 
 app.UseUmbraco()
     .WithMiddleware(u =>

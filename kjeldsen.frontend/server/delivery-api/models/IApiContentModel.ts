@@ -4,11 +4,12 @@
 /* eslint-disable */
 import type { BlogPostContainerPageContentModel } from './BlogPostContainerPageContentModel';
 import type { BlogPostPageContentModel } from './BlogPostPageContentModel';
+import type { ContentPageContentModel } from './ContentPageContentModel';
 import type { HeadlessCompositionContentModel } from './HeadlessCompositionContentModel';
 import type { HomePageContentModel } from './HomePageContentModel';
 import type { NavigationCompositionContentModel } from './NavigationCompositionContentModel';
 import type { SeoCompositionContentModel } from './SeoCompositionContentModel';
 import type { WriterContainerPageContentModel } from './WriterContainerPageContentModel';
 import type { WriterContentModel } from './WriterContentModel';
-export type IApiContentModel = (BlogPostPageContentModel | HeadlessCompositionContentModel | HomePageContentModel | NavigationCompositionContentModel | SeoCompositionContentModel | BlogPostContainerPageContentModel | WriterContentModel | WriterContainerPageContentModel);
+export type IApiContentModel = (BlogPostPageContentModel | HeadlessCompositionContentModel | HomePageContentModel | NavigationCompositionContentModel | SeoCompositionContentModel | BlogPostContainerPageContentModel | WriterContentModel | WriterContainerPageContentModel | ContentPageContentModel);
 

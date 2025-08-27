@@ -1,6 +1,10 @@
 <template>
   <div>
     <PagesHomePage v-if="props.data.contentType === 'homePage'" :data="data" />
+    <PagesContentPage
+      v-else-if="props.data.contentType === 'contentPage'"
+      :data="data"
+    />
     <PagesBlogPostContainerPage
       v-else-if="props.data.contentType === 'blogPostContainerPage'"
       :data="data"

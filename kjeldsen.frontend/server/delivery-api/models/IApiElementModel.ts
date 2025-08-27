@@ -2,12 +2,14 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CacheKeyExampleBlockElementModel } from './CacheKeyExampleBlockElementModel';
 import type { CodeBlockElementModel } from './CodeBlockElementModel';
 import type { FunTimeWebEkgElementModel } from './FunTimeWebEkgElementModel';
 import type { FunTimeWebMurderBlockElementModel } from './FunTimeWebMurderBlockElementModel';
 import type { HeaderBlockElementModel } from './HeaderBlockElementModel';
 import type { ImageBlockElementModel } from './ImageBlockElementModel';
 import type { RteBlockElementModel } from './RteBlockElementModel';
+import type { SpotlightBlockElementModel } from './SpotlightBlockElementModel';
 import type { TestBlockElementModel } from './TestBlockElementModel';
-export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel);
+export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel);
 

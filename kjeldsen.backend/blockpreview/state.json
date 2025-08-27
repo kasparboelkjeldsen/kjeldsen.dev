@@ -38,5 +38,15 @@
     "EnabledRTE": true,
     "AdvancedSettings": null,
     "Alias": "headerBlock"
+  },
+  {
+    "Id": "a34c3bf8-3b46-4f88-9bb0-09b0ed11c963",
+    "Enabled": true,
+    "EnabledNested": true,
+    "EnabledList": true,
+    "EnabledGrid": true,
+    "EnabledRTE": true,
+    "AdvancedSettings": null,
+    "Alias": "spotligtBlock"
   }
 ]

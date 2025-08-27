@@ -1,6 +1,6 @@
 <template>
   <!-- ✅ Navigation -->
-  <header v-if="navigation?.properties.links" class="relative z-10 py-6">
+  <header v-if="navigation?.properties?.links" class="relative z-10 py-6">
     <nav>
       <ul class="flex justify-center gap-8 font-mono text-lg">
         <li v-for="link in navigation.properties.links" :key="link.title!">
@@ -16,7 +16,7 @@
   </header>
 
   <!-- ✅ Page content -->
-  <main class="relative z-10 max-w-4xl px-4 pb-24 mx-auto prose prose-invert">
+  <main class="relative z-10 max-w-4xl px-4 pt-12 pb-24 mx-auto prose prose-invert">
     <PagesPageResolverComponent
       v-if="data"
       :data="data"
@@ -79,7 +79,7 @@ watchEffect(() => {
   if (data.value) {
     const seo = data.value as SeoCompositionContentResponseModel;
     useHead({
-      title: seo.properties.seoTitle ?? data.value?.name,
+      title: seo?.properties?.seoTitle ?? data.value?.name,
     });
   }
 });

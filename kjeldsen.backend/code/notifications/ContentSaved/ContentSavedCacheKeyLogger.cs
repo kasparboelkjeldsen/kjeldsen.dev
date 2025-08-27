@@ -80,7 +80,12 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
                 var type = key.Split('-')[0];
                 var value = key.Replace(type + "-","");
 
-                 urls.Add(umbracoHelper.Content(value));
+                if(type == "content")
+                {
+                    var resolvedContent = umbracoHelper.Content(value);
+                    if (resolvedContent != null)
+                        urls.Add(resolvedContent);
+                }
             }
         }
 
@@ -94,7 +99,7 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
 
     private async Task InvalidateFrontendAsync(IEnumerable<string> tags, IEnumerable<IPublishedContent> urls, UmbracoHelper umbracoHelper)
     {
-        await InvalidateNuxtAsync(tags);
+        //await InvalidateNuxtAsync(tags);
         await InvalidateFrontDoorAsync(urls, umbracoHelper);
     }
 

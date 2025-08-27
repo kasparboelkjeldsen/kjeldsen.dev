@@ -4,9 +4,8 @@
 /* eslint-disable */
 import type { ApiBlockGridModel } from './ApiBlockGridModel';
 import type { HeadlessCompositionPropertiesModel } from './HeadlessCompositionPropertiesModel';
-import type { NavigationCompositionPropertiesModel } from './NavigationCompositionPropertiesModel';
 import type { SeoCompositionPropertiesModel } from './SeoCompositionPropertiesModel';
-export type HomePagePropertiesModel = (SeoCompositionPropertiesModel & NavigationCompositionPropertiesModel & HeadlessCompositionPropertiesModel & {
+export type ContentPagePropertiesModel = (HeadlessCompositionPropertiesModel & SeoCompositionPropertiesModel & {
     grid?: ApiBlockGridModel;
     cacheKeys?: Array<string>;
 });
