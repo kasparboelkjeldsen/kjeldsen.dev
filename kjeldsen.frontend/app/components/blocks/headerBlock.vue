@@ -25,7 +25,7 @@ defineProps<{
 }>();
 </script>
 <style lang="css">
-  p strong,  h2 {
+  p strong,  h2, h3, h4 {
     color: white !important;
 
   }

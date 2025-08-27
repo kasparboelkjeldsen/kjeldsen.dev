@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="(props.columns ?? 12) < 12 ? 'p-5' : ''">
     <picture v-if="!isBlockPreview && sources.length" class="m-0">
       <source
         v-for="(s, index) in sources"

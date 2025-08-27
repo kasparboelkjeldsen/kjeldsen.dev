@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-4" :style="`grid-template-columns: repeat(${data.gridColumns}, minmax(0, 1fr));`">
+  <div class="grid gap-0" :style="`grid-template-columns: repeat(${data.gridColumns}, minmax(0, 1fr));`">
     <GridItem
       v-for="(item, index) in data.items"
       :key="index"
