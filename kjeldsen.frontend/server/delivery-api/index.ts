@@ -74,6 +74,8 @@ export type { SpotlightBlockElementModel } from './models/SpotlightBlockElementM
 export type { SpotlightBlockPropertiesModel } from './models/SpotlightBlockPropertiesModel';
 export type { TestBlockElementModel } from './models/TestBlockElementModel';
 export type { TestBlockPropertiesModel } from './models/TestBlockPropertiesModel';
+export type { VimeoBlockElementModel } from './models/VimeoBlockElementModel';
+export type { VimeoBlockPropertiesModel } from './models/VimeoBlockPropertiesModel';
 export type { WriterContainerPageContentModel } from './models/WriterContainerPageContentModel';
 export type { WriterContainerPageContentResponseModel } from './models/WriterContainerPageContentResponseModel';
 export type { WriterContainerPagePropertiesModel } from './models/WriterContainerPagePropertiesModel';

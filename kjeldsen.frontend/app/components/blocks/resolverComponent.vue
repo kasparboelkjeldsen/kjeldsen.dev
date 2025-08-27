@@ -36,6 +36,10 @@
       v-else-if="props.data.contentType === 'cacheKeyExampleBlock'"
       :data="props.data"
     />
+    <BlocksVimeoBlock
+      v-else-if="props.data.contentType === 'vimeoBlock'"
+      :data="props.data"
+    />
     <div v-else>
       <h1>{{ props.data.contentType }}</h1>
       <pre>{{ props.data }}</pre>
@@ -45,6 +49,7 @@
 
 <script lang="ts" setup>
 import { BlocksSpotlightBlock, BlocksCodeBlock, BlocksFunTimeWebMurderBlock, BlocksFunTimeWebEkg, BlocksRteBlock, BlocksImageBlock, BlocksTestBlock, BlocksHeaderBlock } from "#components";
+import BlocksVimeoBlock from './vimeoBlock.vue'
 import type { IApiElementModel } from "~/../server/delivery-api";
 
 const props = defineProps<{ data: IApiElementModel, columns: number }>();

@@ -1,0 +1,16 @@
+{
+    "$schema": "./../umbraco-package-schema.json",
+    "id": "kraftvaerk.umbraco.blockfilter.Frontend",
+    "name": "kraftvaerk.umbraco.blockfilter.Frontend",
+    "allowPackageTelemetry": true,
+    "version": "0.0.0",
+    "extensions": [
+        {
+          "name": "knowit-kraftvaerk.umbraco.blockfilter.Frontend EntryPoint",
+          "alias": "knowit-kraftvaerk.umbraco.blockfilter.Frontend.entrypoint",
+          "type": "backofficeEntryPoint",
+          "js": "/app_plugins/kraftvaerk.umbraco.blockfilter.frontend/dist.js"
+        }
+      ]
+}
+

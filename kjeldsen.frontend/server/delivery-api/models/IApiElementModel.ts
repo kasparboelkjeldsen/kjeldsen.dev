@@ -11,5 +11,6 @@ import type { ImageBlockElementModel } from './ImageBlockElementModel';
 import type { RteBlockElementModel } from './RteBlockElementModel';
 import type { SpotlightBlockElementModel } from './SpotlightBlockElementModel';
 import type { TestBlockElementModel } from './TestBlockElementModel';
-export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel);
+import type { VimeoBlockElementModel } from './VimeoBlockElementModel';
+export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel | VimeoBlockElementModel);
 

@@ -20,15 +20,18 @@
 
     <!-- Header / icon -->
     <div class="flex items-center gap-3 mb-3">
-      <slot name="icon">
-        <span
-          class="inline-flex items-center justify-center rounded-md select-none size-7 ring-1 ring-inset"
-          :class="[variantMap[variant].iconBg, variantMap[variant].iconRing, variantMap[variant].iconText]"
-          aria-hidden="true"
-        >
-          {{ icon || variantMap[variant].icon }}
-        </span>
-      </slot>
+      <!-- Icon badge wrapper (always 32x32) -->
+      <span
+        class="inline-flex items-center justify-center rounded-md select-none size-8 ring-1 ring-inset shrink-0"
+        :class="[variantMap[variant].iconBg, variantMap[variant].iconRing]"
+        aria-hidden="true"
+      >
+        <slot name="icon">
+          <span class="text-base" :class="variantMap[variant].iconText">
+            {{ icon || variantMap[variant].icon }}
+          </span>
+        </slot>
+      </span>
       <slot name="title">
         <h3 v-if="title" class="text-base font-semibold tracking-tight" :class="variantMap[variant].accentText">
           {{ title }}
@@ -99,3 +102,16 @@ const ariaLabel = computed(() => {
   return 'Highlight'
 })
 </script>
+
+<style scoped>
+/* Ensure any slotted <img> is exactly 32x32 within the badge */
+.size-8 :deep(img) {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+  /* Rounded corners and subtle border without affecting layout size */
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.28) inset;
+}
+</style>

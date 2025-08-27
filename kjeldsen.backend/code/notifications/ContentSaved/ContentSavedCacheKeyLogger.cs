@@ -19,6 +19,7 @@ using Umbraco.Cms.Core.Services;
 using static Umbraco.Cms.Core.Constants.HttpContext;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Polly;
+using kjeldsen.backend.code.services.Background;
 
 namespace kjeldsen.backend.code.notifications.ContentSaved;
 
@@ -34,6 +35,7 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
     private readonly IContentService _contentService;
     private readonly IScopeProvider _scopeProvider;
     private readonly IUmbracoContextFactory _umbracoContextFactory;
+    private readonly IBackgroundTaskQueue _taskQueue;
 
     public ContentPublishedCacheKeyLogger(
         ICacheKeyDependencyResolver resolver,
@@ -44,7 +46,8 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         IUmbracoContextFactory umbracoContextFactory,
         IUmbracoHelperAccessor umbracoHelperAccessor,
         IContentService contentService,
-        IScopeProvider scopeProvider)
+    IScopeProvider scopeProvider,
+    IBackgroundTaskQueue taskQueue)
     {
         _resolver = resolver;
         _logger = logger;
@@ -55,13 +58,14 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         _umbracoHelperAccessor = umbracoHelperAccessor;
         _contentService = contentService;
         _scopeProvider = scopeProvider;
-        _umbracoContextFactory = umbracoContextFactory;
+    _umbracoContextFactory = umbracoContextFactory;
+    _taskQueue = taskQueue;
     }
 
     public Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken)
     {
-        var tags = new HashSet<string>();
-        var urls = new HashSet<IPublishedContent>();
+    var tags = new HashSet<string>();
+    var urls = new HashSet<IPublishedContent>();
         
         if (!_umbracoHelperAccessor.TryGetUmbracoHelper(out UmbracoHelper? umbracoHelper) || umbracoHelper == null)
         {
@@ -91,16 +95,36 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
 
         if (tags.Count > 0)
         {
-            _ = InvalidateFrontendAsync(tags, urls, umbracoHelper); // Fire and forget
+            // Pre-calculate URL paths and content IDs to avoid using disposed services later
+            var urlPaths = new List<string>();
+            var contentIdsForUpdate = new List<int>();
+
+            foreach (var item in urls)
+            {
+                if (item.ItemType == PublishedItemType.Content)
+                {
+                    var path = umbracoHelper.Content(item.Id)?.Url(mode: UrlMode.Relative) ?? string.Empty;
+                    if (!string.IsNullOrWhiteSpace(path)) urlPaths.Add(path);
+                }
+                else if (item.ItemType == PublishedItemType.Media)
+                {
+                    var path = "/api" + (umbracoHelper.Media(item.Id)?.Url(mode: UrlMode.Relative) ?? string.Empty);
+                    if (!string.IsNullOrWhiteSpace(path)) urlPaths.Add(path);
+                }
+                contentIdsForUpdate.Add(item.Id);
+            }
+
+            // Enqueue fire-and-forget purge and follow-up work
+            _taskQueue.QueueBackgroundWorkItem(ct => InvalidateFrontendAsync(tags.ToArray(), urlPaths.ToArray(), contentIdsForUpdate.ToArray(), ct));
         }
 
         return Task.CompletedTask;
     }
 
-    private async Task InvalidateFrontendAsync(IEnumerable<string> tags, IEnumerable<IPublishedContent> urls, UmbracoHelper umbracoHelper)
+    private async Task InvalidateFrontendAsync(IEnumerable<string> tags, IEnumerable<string> urlPaths, IEnumerable<int> contentIds, CancellationToken cancellationToken)
     {
         //await InvalidateNuxtAsync(tags);
-        await InvalidateFrontDoorAsync(urls, umbracoHelper);
+        await InvalidateFrontDoorAsync(urlPaths, contentIds, cancellationToken);
     }
 
     private async Task InvalidateNuxtAsync(IEnumerable<string> tags)
@@ -129,10 +153,8 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
         }
     }
 
-    private async Task InvalidateFrontDoorAsync(IEnumerable<IPublishedContent> urls, UmbracoHelper umbracoHelper)
+    private async Task InvalidateFrontDoorAsync(IEnumerable<string> urlPaths, IEnumerable<int> contentIds, CancellationToken cancellationToken)
     {
-
-        
         try
         {
             var endpointResourceIdRaw = _configuration["Azure:FrontDoorEndpointResourceId"];
@@ -150,31 +172,24 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
 
             var endpoint = armClient.GetFrontDoorEndpointResource(resourceId);
 
-            List<string> urlStrings = new List<string>();
-
-            foreach (var url in urls)
+            var urlStrings = urlPaths.Distinct().Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+            if (urlStrings.Count == 0)
             {
-                if (url.ItemType == PublishedItemType.Content)
-                {
-                    urlStrings.Add(umbracoHelper.Content(url.Id)?.Url(mode: UrlMode.Relative) ?? string.Empty);
-                }
-                else if (url.ItemType == PublishedItemType.Media)
-                {
-                    urlStrings.Add("/api"+umbracoHelper.Media(url.Id)?.Url(mode: UrlMode.Relative) ?? string.Empty);
-                }
+                _logger.LogInformation("No URL paths to purge.");
             }
-
-            var purgeOptions = new FrontDoorPurgeContent(urlStrings);
-            
-            await endpoint.PurgeContentAsync(WaitUntil.Completed, purgeOptions);
+            else
+            {
+                var purgeOptions = new FrontDoorPurgeContent(urlStrings);
+                await endpoint.PurgeContentAsync(WaitUntil.Completed, purgeOptions, cancellationToken);
+            }
 
             // poke website
             foreach (var url in urlStrings)
             {
-               
+
                 try
                 {
-                    await _httpClient.GetAsync($"{_nuxtHost}{url}");
+                    var resp = await _httpClient.GetAsync($"{_nuxtHost}{url}", cancellationToken);
                     _logger.LogInformation(url + " is available after purge.");
                 }
                 catch
@@ -185,8 +200,7 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
 
 
             // update lastCdnPurge
-            var contentToUpdate = _contentService.GetByIds(urls.Select(x => x.Id));
-            contentToUpdate = contentToUpdate.Where(x => x.Properties.Where(p => p.Alias == "lastCdnPurge").Any()).ToList();
+            var contentToUpdate = _contentService.GetByIds(contentIds).Where(x => x.Properties.Any(p => p.Alias == "lastCdnPurge")).ToList();
 
             using (var scope = _scopeProvider.CreateScope(autoComplete: true))
             {
@@ -204,7 +218,7 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
                 }
             }
 
-            _logger.LogInformation("Azure Front Door CDN purge triggered for path: /*");
+            _logger.LogInformation("Azure Front Door CDN purge triggered for {Count} paths.", urlStrings.Count);
         }
         catch (Exception ex)
         {

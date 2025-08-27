@@ -1,5 +1,6 @@
 using kjeldsen.backend.code.extensions;
 using kjeldsen.backend.code.middleware;
+using kjeldsen.backend.code.services.Background;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder
     .AddAzureBlobMediaFileSystem()
     .AddAzureBlobImageSharpCache()
     .Build();
+
+// background queue
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+builder.Services.AddHostedService<QueuedHostedService>();
 
 var app = builder.Build();
 
