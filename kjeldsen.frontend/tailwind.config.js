@@ -3,8 +3,8 @@ import typography from '@tailwindcss/typography'
 
 export default {
   content: [
-  './components/**/*.{vue,js,ts}',
-  './app/**/*.{vue,js,ts}',
+    './components/**/*.{vue,js,ts}',
+    './app/**/*.{vue,js,ts}',
     './layouts/**/*.{vue,js,ts}',
     './pages/**/*.{vue,js,ts}',
     './app.vue',
@@ -43,18 +43,19 @@ export default {
     },
   },
   safelist: [
-  {
-    pattern: /col-span-(\d+)/,
-    variants: ['sm'],
-  },
-  {
-    pattern: /row-span-(\d+)/,
-    variants: ['sm'],
-  },
-  {
-    pattern: /grid-cols-(\d+)/,
-    variants: ['sm'],
-  }
+    'text-red-300',
+    {
+      pattern: /col-span-(\d+)/,
+      variants: ['sm'],
+    },
+    {
+      pattern: /row-span-(\d+)/,
+      variants: ['sm'],
+    },
+    {
+      pattern: /grid-cols-(\d+)/,
+      variants: ['sm'],
+    },
   ],
 
   plugins: [typography],
