@@ -156,6 +156,7 @@
         title,
         meta,
         link,
+        htmlAttrs: { lang: 'en' },
       })
     }
   })
