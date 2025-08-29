@@ -41,6 +41,6 @@
     // Use a tasteful red accent (red-300)
     return raw
       .replace(/--([\s\S]+?)--/g, '<span class="text-red-300">$1</span>')
-      .replace(/\*\*([\s\S]+?)\*\*/g, '<span class="text-red-300">$1</span>')
+      .replace(/\*\*([\s\S]+?)\*\*/g, '<span class="text-sky-300">$1</span>')
   })
 </script>
