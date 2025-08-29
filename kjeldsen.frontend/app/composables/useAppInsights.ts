@@ -10,5 +10,4 @@ export const useAppInsights = () => {
     trackPageView: ai?.trackPageView?.bind(ai),
     raw: ai,
   }
-  
 }

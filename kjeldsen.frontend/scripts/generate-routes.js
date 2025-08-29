@@ -13,7 +13,7 @@ try {
   const res = await fetch(`${baseUrl}/api/slug`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const slugs = await res.json()
-  routes = slugs.map(slug => `${slug}`)
+  routes = slugs.map((slug) => `${slug}`)
 } catch (err) {
   console.warn(`⚠️ Could not fetch slugs from ${baseUrl}: ${err.message}`)
   routes = []

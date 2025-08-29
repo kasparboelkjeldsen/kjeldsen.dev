@@ -12,8 +12,8 @@ const deployPackage = {
   private: true,
   type: 'module',
   scripts: {
-    start: 'node server/index.mjs'
-  }
+    start: 'node server/index.mjs',
+  },
 }
 
 fs.writeFileSync(outputPackageJsonPath, JSON.stringify(deployPackage, null, 2))

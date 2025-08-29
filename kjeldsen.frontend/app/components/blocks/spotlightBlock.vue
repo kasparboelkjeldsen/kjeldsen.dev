@@ -26,27 +26,27 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import Glasslike from '../glasslike.vue'
-import type { SpotlightBlockElementModel } from "~/../server/delivery-api";
+  import { computed } from 'vue'
+  import Glasslike from '../glasslike.vue'
+  import type { SpotlightBlockElementModel } from '~/../server/delivery-api'
 
-const props = defineProps<{
-  data: SpotlightBlockElementModel;
-}>();
+  const props = defineProps<{
+    data: SpotlightBlockElementModel
+  }>()
 
-const header = computed(() => props.data.properties?.header ?? '')
-const markup = computed(() => props.data.properties?.text?.markup ?? '')
-const iconUrl = computed(() => props.data.properties?.iconImage?.[0]?.url || '')
+  const header = computed(() => props.data.properties?.header ?? '')
+  const markup = computed(() => props.data.properties?.text?.markup ?? '')
+  const iconUrl = computed(() => props.data.properties?.iconImage?.[0]?.url || '')
 
-// Lightweight heuristic to pick a tone without changing the model API
-type Variant = 'quote' | 'cta' | 'highlight'
-const variant = computed<Variant>(() => {
-  const h = (header.value || '').toLowerCase()
-  const m = (markup.value || '').toLowerCase()
-  if (m.includes('<blockquote') || h.includes('quote') || /“|”|"/.test(h)) return 'quote'
-  if (/(attention|warning|important|notice|alert|!)/.test(h)) return 'cta'
-  return 'highlight'
-})
+  // Lightweight heuristic to pick a tone without changing the model API
+  type Variant = 'quote' | 'cta' | 'highlight'
+  const variant = computed<Variant>(() => {
+    const h = (header.value || '').toLowerCase()
+    const m = (markup.value || '').toLowerCase()
+    if (m.includes('<blockquote') || h.includes('quote') || /“|”|"/.test(h)) return 'quote'
+    if (/(attention|warning|important|notice|alert|!)/.test(h)) return 'cta'
+    return 'highlight'
+  })
 
-// (variant styling now lives in the Glasslike component)
+  // (variant styling now lives in the Glasslike component)
 </script>

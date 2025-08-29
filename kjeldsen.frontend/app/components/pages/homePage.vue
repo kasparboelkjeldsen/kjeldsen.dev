@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { HomePageContentResponseModel } from "~/../server/delivery-api";
+  import type { HomePageContentResponseModel } from '~/../server/delivery-api'
 
-// Define props to accept data passed to the component
-const props = defineProps<{ data: HomePageContentResponseModel }>();
+  // Define props to accept data passed to the component
+  const props = defineProps<{ data: HomePageContentResponseModel }>()
 </script>
 
 <style></style>
