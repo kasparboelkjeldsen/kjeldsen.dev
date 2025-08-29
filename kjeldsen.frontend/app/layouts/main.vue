@@ -3,9 +3,23 @@
     <!-- Background image layer -->
     <div class="fixed inset-0 z-0 overflow-hidden">
       <div class="will-change-transform" :style="{ transform: `translateY(${parallaxOffset}px)` }">
-        <img src="/assets/img/bg.webp" alt="" class="object-cover w-full h-full fancy-background" />
-        <img src="/assets/img/bg.webp" alt="" class="object-cover w-full h-full fancy-background" />
-        <img src="/assets/img/bg.webp" alt="" class="object-cover w-full h-full fancy-background" />
+        <img
+          src="/assets/img/bgsmall.webp"
+          alt=""
+          class="object-cover w-full h-full fancy-background"
+        />
+        <img
+          src="/assets/img/bgsmall.webp"
+          alt=""
+          class="object-cover w-full h-full fancy-background"
+          loading="lazy"
+        />
+        <img
+          src="/assets/img/bgsmall.webp"
+          alt=""
+          class="object-cover w-full h-full fancy-background"
+          loading="lazy"
+        />
       </div>
       <div class="absolute inset-0 custom-vignette-gradient"></div>
     </div>
@@ -27,7 +41,7 @@
     if (scrollTimeout) clearTimeout(scrollTimeout)
     scrollTimeout = setTimeout(() => {
       bgElement?.style.setProperty('--blur', '0px')
-    }, 150)
+    }, 50)
   }
 
   onMounted(() => {
@@ -50,6 +64,13 @@
     transition: filter 1s ease;
   }
   .custom-vignette-gradient {
-    background-image: linear-gradient(to bottom, black 40px, rgba(0, 0, 0, 0.5) 500px, black 100%);
+    background-image: linear-gradient(to bottom, black 40px, rgba(0, 0, 0, 0.6) 500px, black 100%);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    word-wrap: break-word;
   }
 </style>

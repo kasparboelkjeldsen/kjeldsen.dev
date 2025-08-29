@@ -1,8 +1,8 @@
 <template>
   <!-- ✅ Navigation -->
   <header v-if="navigation?.properties?.links" class="relative z-10 py-6">
-    <nav>
-      <ul class="flex justify-center gap-8 font-mono text-lg">
+    <nav class="pl-5 pr-5">
+      <ul class="flex justify-center gap-8 pl-3 font-mono text-base md:text-lg">
         <li v-for="link in navigation.properties.links" :key="link.title!">
           <a
             :href="link.route?.path ?? '/'"

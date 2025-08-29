@@ -1,6 +1,6 @@
 // nuxt.config.ts
 import { visualizer } from 'rollup-plugin-visualizer'
-import type {  ConfigEnv } from 'vite'
+import type { ConfigEnv } from 'vite'
 import { inspectChunks } from './inspectChunks'
 
 const analyze = process.env.ANALYZE === 'true'
@@ -10,10 +10,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
-  css: [
-    '~/assets/css/tailwind.css',
-    'prismjs/themes/prism-okaidia.css'
-  ],
+  css: ['~/assets/css/tailwind.css', 'prismjs/themes/prism-okaidia.css'],
   postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
 
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', '@nuxtjs/mdc'],
@@ -21,7 +18,7 @@ export default defineNuxtConfig({
   googleFonts: {
     families: { 'Atkinson Hyperlegible': [400, 700], 'JetBrains Mono': [400, 700] },
     display: 'swap',
-    preconnect: true
+    preconnect: true,
   },
 
   experimental: { payloadExtraction: false },
@@ -34,21 +31,25 @@ export default defineNuxtConfig({
       useCache: process.env.USE_CACHE,
       murderClient: process.env.MURDER_CLIENT,
       cmsHost: process.env.CMSHOST || 'https://localhost:44375',
-      appInsights: process.env.APP_INSIGHTS
-    }
+      appInsights: process.env.APP_INSIGHTS,
+    },
   },
 
   mdc: {
     highlight: {
       theme: 'github-dark',
       langs: ['ts', 'js', 'csharp', 'vue-html', 'vue', 'json', 'mermaid'],
-      wrapperStyle: true
-    }
+      wrapperStyle: true,
+    },
   },
 
   routeRules: { '/__blockpreview': { ssr: true, prerender: false } },
 
   vite: {
+    build: {
+      minify: true,
+      sourcemap: true,
+    },
     plugins: [
       //shikiSsrOnly(),
       ...(analyze
@@ -59,32 +60,40 @@ export default defineNuxtConfig({
                 filename: 'stats-client.html',
                 template: 'treemap',
                 gzipSize: true,
-                brotliSize: true
+                brotliSize: true,
               }),
-              apply(_c: any, env: ConfigEnv) { return env.command === 'build' } // allow both; file name differs
+              apply(_c: any, env: ConfigEnv) {
+                return env.command === 'build'
+              }, // allow both; file name differs
             } as any,
             // print chunk → modules (client)
             {
               ...inspectChunks(12),
-              apply(_c: any, env: ConfigEnv) { return env.command === 'build' }
-            } as any
+              apply(_c: any, env: ConfigEnv) {
+                return env.command === 'build'
+              },
+            } as any,
           ]
-        : [])
-    ]
+        : []),
+    ],
   },
 
-  nitro: analyze
-    ? {
-        rollupConfig: {
-          plugins: [
-            visualizer({
-              filename: 'stats-nitro.html',
-              template: 'treemap',
-              gzipSize: true,
-              brotliSize: true
-            })
-          ]
+  nitro: {
+    minify: false,
+    sourceMap: true,
+    ...(analyze
+      ? {
+          rollupConfig: {
+            plugins: [
+              visualizer({
+                filename: 'stats-nitro.html',
+                template: 'treemap',
+                gzipSize: true,
+                brotliSize: true,
+              }),
+            ],
+          },
         }
-      }
-    : {}
+      : {}),
+  },
 })
