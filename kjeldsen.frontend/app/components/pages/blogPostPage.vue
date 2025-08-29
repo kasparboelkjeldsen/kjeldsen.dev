@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>{{ data.properties?.seoTitle ?? data.name }}</h1>
-    <h3 class="text-base text-sky-300">{{ data.properties?.writer?.at(0)?.name }}</h3>
+    <address class="text-base text-sky-300" itemprop="author">
+      {{ data.properties?.writer?.at(0)?.name }}
+    </address>
     <GridModule v-if="data.properties?.grid" :data="data.properties.grid" />
   </div>
 </template>

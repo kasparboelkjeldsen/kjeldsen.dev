@@ -13,7 +13,9 @@
     "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nuxi dev",
     "gen": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npx openapi-typescript-codegen --input https://localhost:44375/umbraco/swagger/delivery/swagger.json --output ./server/delivery-api --client fetch --name DeliveryClient --useOptions",
     "start": "node .output/server/index.mjs",
-    "analyze": "cross-env ANALYZE=true nuxi build && echo \"Open stats-client.html, stats-ssr.html, and (optional) stats-nitro.html\""
+    "analyze": "cross-env ANALYZE=true nuxi build && echo \"Open stats-client.html, stats-ssr.html, and (optional) stats-nitro.html\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.3.9",

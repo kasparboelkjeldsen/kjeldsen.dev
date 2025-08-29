@@ -1,36 +1,23 @@
-2<template>
+<template>
   <div class="prose text-white">
-    <h1 v-if="data.properties?.headerLevel === 'H1'" class="prose-h1">
-      {{ data.properties?.headerTitle }}
-    </h1>
-    <h2 v-else-if="data.properties?.headerLevel === 'H2'" class="prose-h2">
-      {{ data.properties?.headerTitle }}
-    </h2>
-    <h3 v-else-if="data.properties?.headerLevel === 'H3'" class="prose-h3">
-      {{ data.properties?.headerTitle }}
-    </h3>
-    <h4 v-else-if="data.properties?.headerLevel === 'H4'" class="prose-h4">
-      {{ data.properties?.headerTitle }}
-    </h4>
-    <h5 v-else-if="data.properties?.headerLevel === 'H5'" class="prose-h5">
-      {{ data.properties?.headerTitle }}  
-    </h5>
+    <h1 v-if="data.properties?.headerLevel === 'H1'" class="text-white prose-h1" v-html="styledHeader"></h1>
+    <h2 v-else-if="data.properties?.headerLevel === 'H2'" class="text-white prose-h2" v-html="styledHeader"></h2>
+    <h3 v-else-if="data.properties?.headerLevel === 'H3'" class="text-white prose-h3" v-html="styledHeader"></h3>
+    <h4 v-else-if="data.properties?.headerLevel === 'H4'" class="text-white prose-h4" v-html="styledHeader"></h4>
+    <h5 v-else-if="data.properties?.headerLevel === 'H5'" class="text-white prose-h5" v-html="styledHeader"></h5>
   </div>
 </template>
 <script lang="ts" setup>
+import { computed } from 'vue'
 import type { HeaderBlockElementModel } from '~/../server/delivery-api';
 
-defineProps<{
+const props = defineProps<{
   data: HeaderBlockElementModel;
 }>();
-</script>
-<style lang="css">
-  p strong,  h2, h3, h4 {
-    color: white !important;
 
-  }
-  p a {
-    color: white !important;
-    text-decoration: underline !important;
-  }
-</style>
+const styledHeader = computed(() => {
+  const raw = props.data.properties?.headerTitle ?? ''
+  // Convert **bold** (no spaces required) into a styled span; support multiple segments
+  return raw.replace(/\*\*([^*\n]+)\*\*/g, '<span class="text-sky-300">$1</span>')
+})
+</script>

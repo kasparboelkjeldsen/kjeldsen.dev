@@ -35,6 +35,8 @@ const altText = props.data.properties?.altText ?? '';
 type SourceEntry = { src: string; media?: string };
 const sources: SourceEntry[] = [];
 
+const MAX_WIDTH = 864;
+
 function matchesCropPref(crop: { width: number, height: number }) {
   const ratio = crop.width / crop.height;
   if (cropPref === 'Square') return Math.abs(ratio - 1) < 0.05;
@@ -49,33 +51,48 @@ function matchesColumnWidth(crop: { width: number }) {
   return crop.width < 800;
 }
 
-// Build a crop URL using only rxy (focal point), width and height
-function buildRxyUrl(baseUrl: string, crop: { width: number; height: number }, focalPoint?: any): string {
+// Clamp a width/height pair to MAX_WIDTH preserving aspect ratio
+function clampSize(dim: { width: number; height: number }): { width: number; height: number } {
+  if (!dim.width || !dim.height) return dim;
+  if (dim.width <= MAX_WIDTH) return dim;
+  const scale = MAX_WIDTH / dim.width;
+  return { width: Math.round(dim.width * scale), height: Math.round(dim.height * scale) };
+}
+
+// Build an image URL; include rxy if focal point provided. Only include height when passed in
+function buildRxyUrl(baseUrl: string, dim: { width: number; height?: number }, focalPoint?: any): string {
   const fx = focalPoint?.x ?? focalPoint?.left;
   const fy = focalPoint?.y ?? focalPoint?.top;
   const params: string[] = [];
   if (typeof fx === 'number' && typeof fy === 'number') {
     params.push(`rxy=${fx},${fy}`);
   }
-  params.push(`width=${crop.width}`);
-  params.push(`height=${crop.height}`);
+  if (typeof dim.width === 'number' && dim.width > 0) params.push(`width=${dim.width}`);
+  if (typeof dim.height === 'number' && dim.height > 0) params.push(`height=${dim.height}`);
+  params.push('format=webp');
+  params.push('quality=80');
   return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${params.join('&')}`;
 }
 
 if (image?.url) {
-  // If no crops or explicit 'None' preference, just use the raw image URL once
+  // If no crops or explicit 'None' preference, request at most MAX_WIDTH and let the server keep aspect ratio
   if (!image.crops?.length || cropPref === 'None') {
-    sources.push({ src: image.url });
+    const intrinsicW = typeof image.width === 'number' ? image.width : MAX_WIDTH;
+    const targetW = Math.min(intrinsicW, MAX_WIDTH);
+    const src = buildRxyUrl(image.url, { width: targetW }, image.focalPoint);
+    sources.push({ src });
   } else {
     const filteredCrops = image.crops
       .filter(crop => matchesCropPref(crop) && matchesColumnWidth(crop))
       .sort((a, b) => b.width - a.width); // largest first
 
-    // Map crops to sources, with media queries based on the next smaller crop width
+    // Map crops to sources, clamping to MAX_WIDTH and using media queries based on next clamped width
     filteredCrops.forEach((crop, i) => {
-      const src = buildRxyUrl(image.url, crop, image.focalPoint);
+      const clamped = clampSize({ width: crop.width, height: crop.height });
+      const src = buildRxyUrl(image.url, clamped, image.focalPoint);
       const next = filteredCrops[i + 1];
-      const media = next ? `(min-width: ${next.width}px)` : '';
+      const nextClampedW = next ? clampSize({ width: next.width, height: next.height }).width : undefined;
+      const media = nextClampedW ? `(min-width: ${nextClampedW}px)` : '';
       sources.push({ src, media });
     });
   }

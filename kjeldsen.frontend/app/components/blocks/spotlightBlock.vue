@@ -14,10 +14,10 @@
       <!-- When no image, let Glasslike default icon render by not supplying content -->
     </template>
     <template #title>
-      <h3 v-if="header" class="m-0 text-base font-semibold tracking-tight">
+      <h3 v-if="header" class="m-0 text-base font-semibold tracking-tight text-sky-300">
         {{ header }}
       </h3>
-      <span v-else class="text-sm font-medium opacity-80">Spotlight</span>
+      <span v-else class="text-sm font-medium opacity-80 text-sky-300">Spotlight</span>
     </template>
     <div class="prose prose-invert max-w-none">
       <div v-html="markup" />

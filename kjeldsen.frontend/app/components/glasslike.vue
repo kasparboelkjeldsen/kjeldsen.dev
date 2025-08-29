@@ -33,10 +33,10 @@
         </slot>
       </span>
       <slot name="title">
-        <h3 v-if="title" class="text-base font-semibold tracking-tight" :class="variantMap[variant].accentText">
+        <h3 v-if="title" class="text-base font-semibold tracking-tight text-sky-300" :class="variantMap[variant].accentText">
           {{ title }}
         </h3>
-        <span v-else class="text-sm font-medium opacity-80" :class="variantMap[variant].accentText">
+        <span v-else class="text-sm font-medium opacity-80 text-sky-300" :class="variantMap[variant].accentText">
           Spotlight
         </span>
       </slot>
