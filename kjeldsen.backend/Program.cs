@@ -1,6 +1,8 @@
+using kjeldsen.backend.code.controllers;
 using kjeldsen.backend.code.extensions;
 using kjeldsen.backend.code.middleware;
 using kjeldsen.backend.code.services.Background;
+using Umbraco.Cms.Web.Website.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,10 @@ builder
 // background queue
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
-
+builder.Services.Configure<UmbracoRenderingDefaultsOptions>(c =>
+{
+    c.DefaultControllerType = typeof(CustomRenderController);
+});
 var app = builder.Build();
 
 app

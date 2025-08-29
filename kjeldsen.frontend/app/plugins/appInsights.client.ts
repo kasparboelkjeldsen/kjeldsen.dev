@@ -12,7 +12,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       connectionString,
       enableAutoRouteTracking: true,
       enableUnhandledPromiseRejectionTracking: true,
-    },
+      // Avoid deprecated unload/beforeunload listeners
+      disablePageUnloadEvents: true,
+      disableFlushOnBeforeUnload: true,
+    } as any,
   })
 
   appInsights.loadAppInsights()

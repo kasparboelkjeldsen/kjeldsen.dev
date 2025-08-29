@@ -32,6 +32,7 @@ export default defineNuxtConfig({
       murderClient: process.env.MURDER_CLIENT,
       cmsHost: process.env.CMSHOST || 'https://localhost:44375',
       appInsights: process.env.APP_INSIGHTS,
+      debugUnloadListeners: process.env.DEBUG_UNLOAD_LISTENERS,
     },
   },
 
