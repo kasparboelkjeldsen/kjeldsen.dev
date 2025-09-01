@@ -1,21 +1,21 @@
 <template>
   <div>
-    <h2 class="text-white text-2xl font-bold">{{ status }}</h2>
+    <h2 class="text-2xl font-bold text-white">{{ status }}</h2>
     <div class="h-20 mb-8">
       <Line :data="chartData" :options="chartOptions" />
     </div>
 
-    <div v-if="murders.length" class="prose prose-invert mt-6">
+    <div v-if="murders.length" class="mt-6 prose prose-invert">
       <h3>💀 Crime Scene Log</h3>
       <ul>
         <li
           v-for="murder in murders"
           :key="murder.username"
-          class="flex justify-between items-center border-b border-gray-700 py-2"
+          class="flex items-center justify-between py-2 border-b border-gray-700"
         >
           <span class="font-semibold">
             {{ murder.username }}
-            <span v-if="murder.count > 1" class="text-sm text-pink-400 ml-2">
+            <span v-if="murder.count > 1" class="ml-2 text-sm text-pink-400">
               ({{ murder.count }} times — chill 😅)
             </span>
           </span>
@@ -23,29 +23,29 @@
         </li>
       </ul>
     </div>
-    <div v-else class="text-gray-400 mt-6 italic">
+    <div v-else class="mt-6 italic text-gray-400">
       🕊️ No murders on record. Peace reigns, or I'm dead.
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue'
+  import { ref, onMounted, onBeforeUnmount, shallowRef } from 'vue'
   import { useRuntimeConfig } from '#imports'
-  import { Line } from 'vue-chartjs'
-  import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    LineElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-  } from 'chart.js'
-  import type { Murder } from '~/types/murder'
+  import type { Murder } from '../../../types/murder'
 
-  ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement)
+  const Line = shallowRef<any>(null)
+  async function ensureChart() {
+    if (Line.value) return
+    const [{ Line: LineComp }, chart] = await Promise.all([
+      import('vue-chartjs'),
+      import('chart.js'),
+    ])
+    const { Chart, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } =
+      chart as any
+    Chart.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement)
+    Line.value = LineComp
+  }
 
   const status = ref("I'm alive! 😄")
   const murders = ref<Murder[]>([])
@@ -119,7 +119,15 @@
     const nextValue = spikeQueue.length ? spikeQueue.shift()! : 0
 
     const newLabels = [...chartData.value.labels.slice(1), '']
-    const newData = [...chartData.value.datasets[0].data.slice(1), nextValue]
+    const base = chartData.value.datasets[0] || {
+      label: 'Heartbeat',
+      data: [],
+      borderColor: 'rgb(0, 255, 0)',
+      borderWidth: 2,
+      tension: 0.3,
+      pointRadius: 0,
+    }
+    const newData = [...(base.data || []).slice(1), nextValue]
 
     chartData.value = {
       responsive: true,
@@ -127,7 +135,10 @@
       labels: newLabels,
       datasets: [
         {
-          ...chartData.value.datasets[0],
+          label: base.label,
+          borderWidth: base.borderWidth,
+          tension: base.tension,
+          pointRadius: base.pointRadius,
           data: newData,
           borderColor: noHeartbeat ? 'rgb(255, 0, 0)' : 'rgb(0, 255, 0)',
         },
@@ -145,6 +156,7 @@
   }
 
   onMounted(async () => {
+    await ensureChart()
     interval = setInterval(fetchHeartbeat, 1000)
     updateChart()
     await fetchMurders() // Initial murder log load

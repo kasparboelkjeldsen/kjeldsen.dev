@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
-  css: ['~/assets/css/tailwind.css', 'prismjs/themes/prism-okaidia.css'],
+  css: ['~/assets/css/tailwind.css'],
   postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
 
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', '@nuxtjs/mdc'],
@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     families: { 'Atkinson Hyperlegible': [400, 700], 'JetBrains Mono': [400, 700] },
     display: 'swap',
     preconnect: true,
+    preload: true,
   },
 
   experimental: { payloadExtraction: false },
@@ -50,6 +51,16 @@ export default defineNuxtConfig({
     build: {
       minify: true,
       sourcemap: true,
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('chart.js') || id.includes('vue-chartjs')) return 'vendor-chart'
+            if (id.includes('prismjs')) return 'vendor-prism'
+            if (id.includes('@microsoft/applicationinsights-web')) return 'vendor-appinsights'
+            return undefined
+          },
+        },
+      },
     },
     plugins: [
       //shikiSsrOnly(),
@@ -80,7 +91,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    minify: false,
+    minify: true,
     sourceMap: true,
     ...(analyze
       ? {

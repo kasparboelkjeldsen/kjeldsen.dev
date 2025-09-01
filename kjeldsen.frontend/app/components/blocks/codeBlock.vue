@@ -7,6 +7,7 @@
 </template>
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import 'prismjs/themes/prism-okaidia.css'
   import Glasslike from '../glasslike.vue'
   import type { CodeBlockElementModel } from '~/../server/delivery-api'
 

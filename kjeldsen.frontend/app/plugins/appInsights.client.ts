@@ -1,5 +1,4 @@
 import { defineNuxtPlugin, useRuntimeConfig } from '#app'
-import { ApplicationInsights } from '@microsoft/applicationinsights-web'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
@@ -7,27 +6,30 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   if (!connectionString) return
 
-  const appInsights = new ApplicationInsights({
-    config: {
-      connectionString,
-      enableAutoRouteTracking: true,
-      enableUnhandledPromiseRejectionTracking: true,
-      // Avoid deprecated unload/beforeunload listeners
-      disablePageUnloadEvents: true,
-      disableFlushOnBeforeUnload: true,
-    } as any,
-  })
+  const loadAI = async () => {
+    const { ApplicationInsights } = await import('@microsoft/applicationinsights-web')
+    const appInsights = new ApplicationInsights({
+      config: {
+        connectionString,
+        enableAutoRouteTracking: true,
+        enableUnhandledPromiseRejectionTracking: true,
+        // Avoid deprecated unload/beforeunload listeners
+        disablePageUnloadEvents: true,
+        disableFlushOnBeforeUnload: true,
+      } as any,
+    })
+    appInsights.loadAppInsights()
 
-  appInsights.loadAppInsights()
+    const userId = localStorage.getItem('userId') ?? crypto.randomUUID()
+    localStorage.setItem('userId', userId)
+    appInsights.setAuthenticatedUserContext(userId)
 
-  // 🔹 Set user/session context
-  const userId = localStorage.getItem('userId') ?? crypto.randomUUID()
-  localStorage.setItem('userId', userId)
+    nuxtApp.provide('appInsights', appInsights)
+  }
 
-  appInsights.setAuthenticatedUserContext(userId)
-
-  // Optional: Track custom session if needed (otherwise AI does this via cookies)
-  // appInsights.context?.telemetryTrace.traceID = crypto.randomUUID();
-
-  nuxtApp.provide('appInsights', appInsights)
+  if ('requestIdleCallback' in window) {
+    ;(window as any).requestIdleCallback(loadAI)
+  } else {
+    setTimeout(loadAI, 1500)
+  }
 })

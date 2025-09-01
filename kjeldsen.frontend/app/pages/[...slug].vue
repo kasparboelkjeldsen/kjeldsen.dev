@@ -31,49 +31,23 @@
 <script setup lang="ts">
   import { useRoute } from 'vue-router'
   import { watchEffect, ref, computed } from 'vue'
-  import type {
-    SeoCompositionContentResponseModel,
-    NavigationCompositionContentResponseModel,
-    IApiContentResponseModel,
-  } from '~/../server/delivery-api'
+  import { usePageContentFromRoute } from '~/composables/useContent'
+  import { useNavigation } from '~/composables/useNavigation'
+  import type { SeoCompositionContentResponseModel } from '~/../server/delivery-api'
 
   const route = useRoute()
-  const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug]
-  const cleanSlug = slugArray.filter(Boolean).join('/')
-  const slugHasDot = cleanSlug.includes('.')
-  const apiPath = '/api/content/' + cleanSlug + '/'
-
-  const data = ref<IApiContentResponseModel | null>(null)
-
-  if (!slugHasDot) {
-    const result = await useFetch<IApiContentResponseModel>(apiPath, {
-      server: true,
-      cache: 'no-cache',
-    })
-    if (result.error.value) {
-      console.error(`Failed to fetch content for path: ${apiPath}`, result.error.value)
-      data.value = null
-    } else if (result.data.value) {
-      data.value = result.data.value
-    }
-  }
+  const { apiPath, slugHasDot, data } = await usePageContentFromRoute()
 
   if (data.value?.properties?.cacheKeys) {
     const cacheKeys = data.value.properties.cacheKeys || []
     const tags = ['reset', ...cacheKeys]
 
     if (import.meta.server) {
-      console.table(cacheKeys.map((key, i) => ({ '#': i + 1, 'Cache Key': key })))
+      console.table(cacheKeys.map((key: string, i: number) => ({ '#': i + 1, 'Cache Key': key })))
     }
   }
 
-  const { data: navigation } = await useFetch<NavigationCompositionContentResponseModel>(
-    '/api/content/navigation',
-    {
-      server: true,
-      cache: 'no-cache',
-    }
-  )
+  const { data: navigation } = await useNavigation()
 
   // Active link highlighting helpers
   const trimSlashes = (p: string) => (p === '/' ? '/' : p.replace(/\/+$/, ''))
