@@ -6,7 +6,7 @@
         <!-- Use responsive <picture> fed by Umbraco media (?width=) -->
         <picture v-if="backgroundUrl">
           <!-- xl / 2xl screens -->
-          <source media="(min-width: 1536px)" :srcset="bgWithWidth(2560)" />
+          <source media="(min-width: 1536px)" :srcset="bgWithWidth(1920)" />
           <!-- large desktops -->
           <source media="(min-width: 1280px)" :srcset="bgWithWidth(1920)" />
           <!-- desktops -->
@@ -84,7 +84,7 @@
     const sep = base.includes('?') ? '&' : '?'
     const cropped = w < 1920
     const extra = cropped ? '&rmode=crop&rxy=0.5,0.5' : ''
-    return `${base}${sep}width=${w}&quality=80${extra}`
+    return `${base}${sep}width=${w}&quality=75${extra}`
   }
 </script>
 

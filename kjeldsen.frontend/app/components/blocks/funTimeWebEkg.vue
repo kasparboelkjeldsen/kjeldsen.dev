@@ -2,7 +2,9 @@
   <div>
     <h2 class="text-2xl font-bold text-white">{{ status }}</h2>
     <div class="h-20 mb-8">
-      <Line :data="chartData" :options="chartOptions" />
+      <ClientOnly>
+        <component v-if="Line" :is="Line" :data="chartData" :options="chartOptions" />
+      </ClientOnly>
     </div>
 
     <div v-if="murders.length" class="mt-6 prose prose-invert">

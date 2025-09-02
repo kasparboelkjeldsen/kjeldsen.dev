@@ -8,12 +8,19 @@ const analyze = process.env.ANALYZE === 'true'
 export default defineNuxtConfig({
   ssr: true,
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV !== 'production' },
 
   css: ['~/assets/css/tailwind.css'],
   postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
 
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', '@nuxtjs/mdc'],
+  mdc: {
+    highlight: {
+      theme: 'github-dark',
+      langs: ['ts', 'js', 'csharp', 'vue-html', 'vue', 'json', 'mermaid'],
+      wrapperStyle: true,
+    },
+  },
 
   googleFonts: {
     families: { 'Atkinson Hyperlegible': [400, 700], 'JetBrains Mono': [400, 700] },
@@ -22,7 +29,10 @@ export default defineNuxtConfig({
     preload: true,
   },
 
-  experimental: { payloadExtraction: false },
+  experimental: {
+    payloadExtraction: false,
+    componentIslands: true,
+  },
 
   runtimeConfig: {
     murderKey: process.env.MURDER_KEY,
@@ -37,20 +47,14 @@ export default defineNuxtConfig({
     },
   },
 
-  mdc: {
-    highlight: {
-      theme: 'github-dark',
-      langs: ['ts', 'js', 'csharp', 'vue-html', 'vue', 'json', 'mermaid'],
-      wrapperStyle: true,
-    },
-  },
-
   routeRules: { '/__blockpreview': { ssr: true, prerender: false } },
 
   vite: {
     build: {
       minify: true,
-      sourcemap: true,
+      sourcemap: analyze,
+      target: 'es2022',
+      cssCodeSplit: true,
       rollupOptions: {
         output: {
           manualChunks(id: string) {
@@ -92,7 +96,8 @@ export default defineNuxtConfig({
 
   nitro: {
     minify: true,
-    sourceMap: true,
+    sourceMap: analyze,
+    compressPublicAssets: true,
     ...(analyze
       ? {
           rollupConfig: {
