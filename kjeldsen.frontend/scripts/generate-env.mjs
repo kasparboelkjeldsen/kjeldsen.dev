@@ -44,56 +44,46 @@ const run = async () => {
   console.log('📦 .env written to', outputEnvPath)
 }
 
-run().catch((err) => {
-  console.error('💥 Failed to generate .env:', err)
-  process.exit(1)
-})(
-  // --- Azure Front Door (Standard/Premium) cache purge -------------------------------------------
-  // This runs independently after the env generation starts. It fetches the secret
-  // 'FrontDoorEndpointResourceId' (expected to be a full resource ID like
-  // /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Cdn/profiles/<profile>/afdendpoints/<endpoint>)
-  // and issues a purge for all paths (/*) to invalidate cached assets across all mapped domains.
-  // Failures are logged but do NOT fail the overall script.
-  async () => {
-    const secretName = 'FrontDoorEndpointResourceId'
-    try {
-      console.log('🚀 Attempting Front Door purge via secret', secretName)
-      const fdSecret = await client.getSecret(secretName)
-      const resourceId = fdSecret.value
-      if (!resourceId) {
-        console.warn('⚠️ Front Door secret value empty; skipping purge')
-        return
-      }
-
-      const trimmed = resourceId.startsWith('/') ? resourceId : '/' + resourceId
-      const apiVersion = '2024-02-01'
-      const url = `https://management.azure.com${trimmed}/purge?api-version=${apiVersion}`
-
-      const token = await credential.getToken('https://management.azure.com/.default')
-      if (!token || !token.token) {
-        console.warn('⚠️ Failed to acquire Azure AD token for management API; skipping purge')
-        return
-      }
-
-      const body = { contentPaths: ['/*'] }
-      const resp = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      })
-
-      if (!resp.ok) {
-        const text = await resp.text().catch(() => '')
-        console.warn(`⚠️ Front Door purge request failed ${resp.status}: ${text}`)
-        return
-      }
-
-      console.log('🧹 Front Door purge accepted (/*). Invalidation in progress.')
-    } catch (e) {
-      console.warn('⚠️ Front Door purge failed:', e.message || e)
+const purgeFrontDoor = async () => {
+  const secretName = 'FrontDoorEndpointResourceId'
+  try {
+    console.log('🚀 Attempting Front Door purge via secret', secretName)
+    const fdSecret = await client.getSecret(secretName)
+    const resourceId = fdSecret.value
+    if (!resourceId) {
+      console.warn('⚠️ Front Door secret value empty; skipping purge')
+      return
     }
+    const trimmed = resourceId.startsWith('/') ? resourceId : '/' + resourceId
+    const apiVersion = '2024-02-01'
+    const url = `https://management.azure.com${trimmed}/purge?api-version=${apiVersion}`
+    const token = await credential.getToken('https://management.azure.com/.default')
+    if (!token?.token) {
+      console.warn('⚠️ Failed to acquire Azure AD token for management API; skipping purge')
+      return
+    }
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token.token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contentPaths: ['/*'] }),
+    })
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => '')
+      console.warn(`⚠️ Front Door purge request failed ${resp.status}: ${text}`)
+      return
+    }
+    console.log('🧹 Front Door purge accepted (/*). Invalidation in progress.')
+  } catch (e) {
+    console.warn('⚠️ Front Door purge failed:', e?.message || e)
   }
-)()
+}
+
+;(async () => {
+  try {
+    await run()
+  } catch (err) {
+    console.error('💥 Failed to generate .env:', err)
+    process.exit(1)
+  }
+  await purgeFrontDoor()
+})()
