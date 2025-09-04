@@ -1,6 +1,6 @@
 <template>
   <!-- ✅ Navigation -->
-  <header v-if="navigation?.properties?.links" class="relative z-10 py-6">
+  <header v-if="navigation?.properties?.links" class="relative z-10 py-6 md:min-h-0 min-h-24">
     <nav class="pl-5 pr-5">
       <ul class="flex justify-center gap-8 pl-3 font-mono text-base md:text-lg">
         <li v-for="link in navigation.properties.links" :key="link.title!">
