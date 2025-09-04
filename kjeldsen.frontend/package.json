@@ -15,7 +15,8 @@
     "start": "node .output/server/index.mjs",
     "analyze": "cross-env ANALYZE=true nuxi build && echo \"Open stats-client.html, stats-ssr.html, and (optional) stats-nitro.html\"",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "loadtest": "autocannon -c 200 -d 45 -p 20 -W 3 --renderStatusCodes --latency https://www.kjeldsen.dev/"
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.3.9",
@@ -36,7 +37,7 @@
     "@azure/keyvault-secrets": "^4.10.0",
     "@eslint/js": "^9.24.0",
     "@nuxt/eslint-config": "^1.4.0",
-    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxt/fonts": "^0.11.4",
     "@types/markdown-it": "^14.1.2",
     "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",

@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/tailwind.css'],
   postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', '@nuxtjs/mdc'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/fonts', '@nuxtjs/mdc'],
   mdc: {
     highlight: {
       theme: 'github-dark',
@@ -24,11 +24,13 @@ export default defineNuxtConfig({
   features: {
     inlineStyles: true,
   },
-  googleFonts: {
-    families: { 'Atkinson Hyperlegible': [400, 700], 'JetBrains Mono': [400, 700] },
-    display: 'swap',
-    preconnect: true,
-    preload: true,
+  fonts: {
+    // default config applies to all families unless overridden
+    defaults: { subsets: ['latin'] },
+    families: [
+      { name: 'Atkinson Hyperlegible', weights: [400, 700] },
+      { name: 'JetBrains Mono', weights: [400, 700] },
+    ],
   },
 
   experimental: {
