@@ -15,7 +15,7 @@
           <source media="(min-width: 640px)" :srcset="bgWithWidth(768)" />
           <!-- fallback for small phones -->
           <img
-            :src="bgWithWidth(480)"
+            :src="bgWithWidth(320, 10)"
             alt=""
             class="object-cover w-full h-full fancy-background"
             fetchpriority="high"
@@ -78,13 +78,13 @@
   })
 
   // Ensure we append width correctly even if the URL already has query params
-  const bgWithWidth = (w: number) => {
+  const bgWithWidth = (w: number, quality: number = 75) => {
     const base = backgroundUrl.value
     if (!base) return ''
     const sep = base.includes('?') ? '&' : '?'
     const cropped = w < 1920
     const extra = cropped ? '&rmode=crop&rxy=0.5,0.5' : ''
-    return `${base}${sep}width=${w}&quality=75${extra}`
+    return `${base}${sep}width=${w}&quality=${quality}${extra}`
   }
 </script>
 
