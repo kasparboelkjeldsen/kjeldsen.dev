@@ -30,7 +30,7 @@
     funTimeWebEkg: defineAsyncComponent(() => import('./funTimeWebEkg.vue')),
     rteBlock: defineAsyncComponent(() => import('./rteBlock.vue')),
     funTimeWebMurderBlock: defineAsyncComponent(() => import('./funTimeWebMurderBlock.vue')),
-    //codeBlock: defineAsyncComponent(() => import('./codeBlock.island.vue')),
+    codeBlock: defineAsyncComponent(() => import('./codeBlock.island.vue')),
     imageBlock: defineAsyncComponent(() => import('./imageBlock.vue')),
     testBlock: defineAsyncComponent(() => import('./testBlock.vue')),
     headerBlock: defineAsyncComponent(() => import('./headerBlock.vue')),
