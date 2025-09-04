@@ -115,7 +115,4 @@ export default defineNuxtConfig({
         }
       : {}),
   },
-  webpack: {
-    extractCSS: false,
-  },
 })
