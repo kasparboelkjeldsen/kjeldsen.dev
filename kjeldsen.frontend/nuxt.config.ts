@@ -21,7 +21,9 @@ export default defineNuxtConfig({
       wrapperStyle: true,
     },
   },
-
+  features: {
+    inlineStyles: true,
+  },
   googleFonts: {
     families: { 'Atkinson Hyperlegible': [400, 700], 'JetBrains Mono': [400, 700] },
     display: 'swap',
@@ -112,5 +114,8 @@ export default defineNuxtConfig({
           },
         }
       : {}),
+  },
+  webpack: {
+    extractCSS: false,
   },
 })
