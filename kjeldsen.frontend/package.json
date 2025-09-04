@@ -19,6 +19,7 @@
     "loadtest": "autocannon -c 200 -d 45 -p 20 -W 3 --renderStatusCodes --latency https://www.kjeldsen.dev/"
   },
   "dependencies": {
+    "@microsoft/applicationinsights-web": "^3.3.9",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/mdc": "^0.17.2",
     "@nuxtjs/tailwindcss": "^6.13.2",
