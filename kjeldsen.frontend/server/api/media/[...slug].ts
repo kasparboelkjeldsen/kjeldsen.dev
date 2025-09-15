@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     /([^:]\/)\/+/g,
     '$1'
   )
-  console.log(`Fetching image from: ${imageUrl}`)
+
   const response = await fetch(imageUrl)
 
   if (!response.ok) {

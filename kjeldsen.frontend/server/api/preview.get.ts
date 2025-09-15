@@ -1,6 +1,6 @@
 import { DeliveryClient } from '@/../server/delivery-api'
 import { useRuntimeConfig } from '#imports'
-import { getQuery } from 'h3'
+import { getQuery, getCookie } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -11,8 +11,19 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Missing id' })
   }
 
+  // 👇 Read the cookie we set earlier
+  const previewToken = getCookie(event, 'umb_preview')
+
+  if (!previewToken) {
+    throw createError({ statusCode: 401, statusMessage: 'Missing preview cookie' })
+  }
+
   const api = new DeliveryClient({
     BASE: config.public.cmsHost,
+    HEADERS: {
+      'X-UMB-PREVIEW': previewToken,
+      'cache-control': 'no-cache',
+    },
   })
 
   try {

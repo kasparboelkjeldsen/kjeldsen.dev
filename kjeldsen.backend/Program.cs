@@ -22,10 +22,6 @@ builder
 // background queue
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
-builder.Services.Configure<UmbracoRenderingDefaultsOptions>(c =>
-{
-    c.DefaultControllerType = typeof(CustomRenderController);
-});
 var app = builder.Build();
 
 app

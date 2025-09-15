@@ -11,9 +11,10 @@
     <PackageReference Include="Azure.Identity" Version="1.14.2" />
     <PackageReference Include="Azure.ResourceManager.Cdn" Version="1.4.0" />
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
-    <PackageReference Include="kraftvaerk.umbraco.blockfilter" Version="1.1.2" />
-    <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.10" />
+    <PackageReference Include="kraftvaerk.umbraco.blockfilter" Version="1.1.3" />
+    <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.11" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.CacheKeys" Version="1.0.2" />
+    <PackageReference Include="Kraftvaerk.Umbraco.Headless.Preview" Version="1.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
     <PackageReference Include="Scrutor" Version="6.1.0" />

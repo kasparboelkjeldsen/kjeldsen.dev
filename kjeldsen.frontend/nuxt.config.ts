@@ -26,7 +26,8 @@ export default defineNuxtConfig({
   },
   fonts: {
     // default config applies to all families unless overridden
-    defaults: { subsets: ['latin'] },
+    defaults: { subsets: ['latin'], preload: true },
+    provider: 'google',
     families: [
       { name: 'Atkinson Hyperlegible', weights: [400, 700] },
       { name: 'JetBrains Mono', weights: [400, 700] },
