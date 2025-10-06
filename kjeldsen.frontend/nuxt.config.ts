@@ -9,11 +9,21 @@ export default defineNuxtConfig({
   ssr: true,
   compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV !== 'production' },
-
+  multiCache: {
+    route: {
+      enabled: process.env.USE_CACHE === 'true',
+    },
+    api: {
+      enabled: process.env.USE_CACHE === 'true',
+      prefix: '/__nuxt_multi_cache',
+      authorization: process.env.DELIVERY_KEY!,
+      cacheTagInvalidationDelay: 1000,
+    },
+  },
   css: ['~/assets/css/tailwind.css'],
   postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/fonts', '@nuxtjs/mdc'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/fonts', '@nuxtjs/mdc', 'nuxt-multi-cache'],
   mdc: {
     highlight: {
       theme: 'github-dark',

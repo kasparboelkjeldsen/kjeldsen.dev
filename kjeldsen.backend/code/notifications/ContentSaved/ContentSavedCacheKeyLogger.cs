@@ -123,8 +123,8 @@ public class ContentPublishedCacheKeyLogger : INotificationAsyncHandler<ContentP
 
     private async Task InvalidateFrontendAsync(IEnumerable<string> tags, IEnumerable<string> urlPaths, IEnumerable<int> contentIds, CancellationToken cancellationToken)
     {
-        //await InvalidateNuxtAsync(tags);
-        await InvalidateFrontDoorAsync(urlPaths, contentIds, cancellationToken);
+        await InvalidateNuxtAsync(tags);
+        await InvalidateFrontDoorAsync(urlPaths, contentIds, cancellationToken); 
     }
 
     private async Task InvalidateNuxtAsync(IEnumerable<string> tags)
