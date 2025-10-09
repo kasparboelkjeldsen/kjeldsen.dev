@@ -4,17 +4,17 @@ import type { ConfigEnv } from 'vite'
 import { inspectChunks } from './inspectChunks'
 
 const analyze = process.env.ANALYZE === 'true'
+// Cache on by default in production, opt-in during local dev unless USE_CACHE=true
+const resolvedUseCache = process.env.NODE_ENV === 'production' || process.env.USE_CACHE === 'true'
 
 export default defineNuxtConfig({
   ssr: true,
   compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV !== 'production' },
   multiCache: {
-    route: {
-      enabled: process.env.USE_CACHE === 'true',
-    },
+    route: { enabled: resolvedUseCache },
     api: {
-      enabled: process.env.USE_CACHE === 'true',
+      enabled: resolvedUseCache,
       prefix: '/__nuxt_multi_cache',
       authorization: process.env.DELIVERY_KEY!,
       cacheTagInvalidationDelay: 1000,
@@ -54,7 +54,7 @@ export default defineNuxtConfig({
     deliveryKey: process.env.DELIVERY_KEY,
     public: {
       siteUrl: 'https://www.kjeldsen.dev',
-      useCache: process.env.USE_CACHE,
+      useCache: String(resolvedUseCache),
       murderClient: process.env.MURDER_CLIENT,
       cmsHost: process.env.CMSHOST || 'https://localhost:44375',
       appInsights: process.env.APP_INSIGHTS,

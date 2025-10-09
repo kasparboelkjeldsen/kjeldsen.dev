@@ -40,20 +40,21 @@
   const runtimeConfig = useRuntimeConfig()
   const useCache = runtimeConfig.public.useCache === 'true'
 
-  if (useCache && data.value?.properties?.cacheKeys) {
+  // Always expose cache key debug comment (example site requirement), even if actual caching is disabled.
+  if (data.value?.properties?.cacheKeys) {
     const cacheKeys = data.value.properties.cacheKeys || []
     const tags = ['reset', ...cacheKeys]
 
     if (import.meta.server) {
+      // Console table (still helpful in prod logs for demonstration)
       console.table(cacheKeys.map((key: string, i: number) => ({ '#': i + 1, 'Cache Key': key })))
 
-      // Build HTML comment & attach to event context for server plugin to inject
       if (cacheKeys.length) {
         const iso = new Date().toISOString()
         const utc = new Date().toUTCString()
         const safe = (s: string) => s.replace(/-->/g, '--&gt;')
         const tableLines = cacheKeys.map((k: string, i: number) => `#${i + 1} ${safe(k)}`)
-        const comment = `<!-- Cache Keys (${cacheKeys.length}) | ISO: ${iso} | UTC: ${utc}\n${tableLines.join('\n')}\n-->`
+        const comment = `<!-- Cache Keys (${cacheKeys.length}) | ISO: ${iso} | UTC: ${utc} | CacheEnabled: ${useCache}\n${tableLines.join('\n')}\n-->`
         const event = useRequestEvent()
         if (event) {
           ;(event.context as any).cacheDebugComment = comment
