@@ -58,6 +58,18 @@
         const event = useRequestEvent()
         if (event) {
           ;(event.context as any).cacheDebugComment = comment
+          // Expose engage pageview id to client bootstrap (if present from middleware)
+          const pv = (event.context as any).engagePageviewId
+          if (pv) {
+            useHead({
+              script: [
+                {
+                  key: 'engage-server-pv',
+                  innerHTML: `window.__serverPageviewId = ${JSON.stringify(pv)};`,
+                },
+              ],
+            })
+          }
         }
       }
     }

@@ -62,9 +62,36 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: { '/__blockpreview': { ssr: true, prerender: false } },
+  routeRules: {
+    '/__blockpreview': { ssr: true, prerender: false },
+    // Allow embedding assets and nuxt build output (CSS/JS) from any origin (for Engage iframe usage)
+    '/_nuxt/**': {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+        Vary: 'Origin',
+      },
+    },
+    '/assets/**': {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+        Vary: 'Origin',
+      },
+    },
+  },
 
   vite: {
+    server: {
+      cors: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+        'Access-Control-Allow-Headers': '*',
+      },
+    },
     build: {
       minify: true,
       sourcemap: analyze,

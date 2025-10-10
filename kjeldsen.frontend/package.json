@@ -13,6 +13,7 @@
     "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 USE_CACHE=false nuxi dev",
     "cache": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 USE_CACHE=true nuxi dev",
     "gen": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npx openapi-typescript-codegen --input https://localhost:44375/umbraco/swagger/delivery/swagger.json --output ./server/delivery-api --client fetch --name DeliveryClient --useOptions",
+    "gen-engage": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 npx openapi-typescript-codegen --input https://localhost:44375/umbraco/swagger/delivery/swagger.json --output ./server/engage-api --client fetch --name EngageClient --useOptions",
     "start": "node .output/server/index.mjs",
     "analyze": "cross-env ANALYZE=true nuxi build && echo \"Open stats-client.html, stats-ssr.html, and (optional) stats-nitro.html\"",
     "format": "prettier --write .",

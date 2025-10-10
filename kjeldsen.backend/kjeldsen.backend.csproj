@@ -15,6 +15,7 @@
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.11" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.CacheKeys" Version="1.0.2" />
     <PackageReference Include="Kraftvaerk.Umbraco.Headless.Preview" Version="1.0.1" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
     <PackageReference Include="Scrutor" Version="6.1.0" />
@@ -22,6 +23,8 @@
     <PackageReference Include="StackExchange.Redis" Version="2.8.58" />
     <PackageReference Include="Umbraco.Cms" Version="16.1.1" />
     <PackageReference Include="Umbraco.Community.DeliveryApiExtensions" Version="16.0.1" />
+    <PackageReference Include="Umbraco.Engage" Version="16.0.1" />
+    <PackageReference Include="Umbraco.Engage.Headless" Version="16.0.1" />
     <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="16.0.0" />
     <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="16.0.0" />
     <PackageReference Include="uSync" Version="16.0.2" />
