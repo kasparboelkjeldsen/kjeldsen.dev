@@ -34,6 +34,7 @@
   import { usePageContentFromRoute } from '~/composables/useContent'
   import { useNavigation } from '~/composables/useNavigation'
   import { useSeoForContent } from '~/composables/useSeo'
+  import { useEngage } from '~/composables/useEngage'
 
   const { apiPath, slugHasDot, data } = await usePageContentFromRoute()
 
@@ -91,4 +92,22 @@
 
   // SEO head handling extracted to composable
   useSeoForContent(data, { origin: 'https://kjeldsen.dev', lang: 'en' })
+
+  // Client-side engage bootstrap (runs only in browser)
+  if (process.client) {
+    const { bootstrap } = useEngage()
+    // Defer to next tick to ensure router state stable
+    queueMicrotask(() => {
+      bootstrap().then((s) => {
+        if (s.ready) {
+          console.debug('[engage] bootstrap complete (page)', {
+            pageviewId: s.pageviewId,
+            externalVisitorId: s.externalVisitorId,
+          })
+        } else if (s.error) {
+          console.warn('[engage] bootstrap error', s.error)
+        }
+      })
+    })
+  }
 </script>

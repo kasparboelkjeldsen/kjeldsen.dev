@@ -304,15 +304,40 @@ export default defineNuxtPlugin(() => {
     }
   }
 
-  function bootstrap() {
+  function bootstrapFromLegacyCookies() {
     if (window.__engageBootstrapped) return
     const serverGuid = window.__serverPageviewId
     const cookiePv = readCookie(PAGEVIEW_COOKIE) || readCookie('umbraco__engage_pv')
     const guid = serverGuid || cookiePv
-    dbg('bootstrap', { serverGuid, cookiePv, chosen: guid })
+    dbg('bootstrap (legacy)', { serverGuid, cookiePv, chosen: guid })
     if (guid) init(guid)
   }
 
+  function handleEngageReady(evt?: Event) {
+    try {
+      const detail: any = (evt as CustomEvent)?.detail || (window as any).__engage
+      if (!detail) return
+      const { pageviewId } = detail
+      if (pageviewId) {
+        dbg('engage:ready received', { pageviewId })
+        init(pageviewId)
+      }
+    } catch (e) {
+      dbg('engage:ready handler error', e)
+    }
+  }
+
+  // Listen for the new client bootstrap event dispatched by useEngage composable.
+  window.addEventListener('engage:ready', handleEngageReady, { once: true })
+
+  // Fallback timer: if after a short delay we still have not bootstrapped via composable
+  // (e.g., composable not used on a page) we fall back to legacy cookie bootstrap.
+  setTimeout(() => {
+    if (!window.__engageBootstrapped) {
+      dbg('fallback to legacy bootstrap (no engage:ready event)')
+      bootstrapFromLegacyCookies()
+    }
+  }, 1500)
   ;(function ensureConsistency(attempt = 0) {
     if (attempt > 40) return
     const serverGuid = window.__serverPageviewId
@@ -346,6 +371,6 @@ export default defineNuxtPlugin(() => {
   document.dispatchEvent(new Event('umbracoEngageAnalyticsReady'))
   dbg('dispatched umbracoEngageAnalyticsReady')
 
-  bootstrap()
-  dbg('after bootstrap', { pageviewGuid: state.pageviewGuid })
+  // We no longer immediately bootstrap; we rely on engage:ready event or fallback
+  dbg('awaiting engage:ready or fallback', { pageviewGuid: state.pageviewGuid })
 })
