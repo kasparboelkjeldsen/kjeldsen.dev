@@ -35,55 +35,12 @@
   import { useNavigation } from '~/composables/useNavigation'
   import { useSeoForContent } from '~/composables/useSeo'
   import { useEngage } from '~/composables/useEngage'
+  import { useCustomCache } from '~/composables/useCustomCache'
 
   const { apiPath, slugHasDot, data } = await usePageContentFromRoute()
 
-  const runtimeConfig = useRuntimeConfig()
-  const useCache = runtimeConfig.public.useCache === 'true'
-
-  // Always expose cache key debug comment (example site requirement), even if actual caching is disabled.
-  if (data.value?.properties?.cacheKeys) {
-    const cacheKeys = data.value.properties.cacheKeys || []
-    const tags = ['reset', ...cacheKeys]
-
-    if (import.meta.server) {
-      // Console table (still helpful in prod logs for demonstration)
-      console.table(cacheKeys.map((key: string, i: number) => ({ '#': i + 1, 'Cache Key': key })))
-
-      if (cacheKeys.length) {
-        const iso = new Date().toISOString()
-        const utc = new Date().toUTCString()
-        const safe = (s: string) => s.replace(/-->/g, '--&gt;')
-        const tableLines = cacheKeys.map((k: string, i: number) => `#${i + 1} ${safe(k)}`)
-        const comment = `<!-- Cache Keys (${cacheKeys.length}) | ISO: ${iso} | UTC: ${utc} | CacheEnabled: ${useCache}\n${tableLines.join('\n')}\n-->`
-        const event = useRequestEvent()
-        if (event) {
-          ;(event.context as any).cacheDebugComment = comment
-          // Expose engage pageview id to client bootstrap (if present from middleware)
-          const pv = (event.context as any).engagePageviewId
-          if (pv) {
-            useHead({
-              script: [
-                {
-                  key: 'engage-server-pv',
-                  innerHTML: `window.__serverPageviewId = ${JSON.stringify(pv)};`,
-                },
-              ],
-            })
-          }
-        }
-      }
-    }
-
-    if (useCache) {
-      useRouteCache((helper) => {
-        helper
-          .setMaxAge(3600 * 24)
-          .setCacheable()
-          .addTags(tags)
-      })
-    }
-  }
+  // Apply custom cache handling & debug comment
+  const cacheResult = useCustomCache(data)
 
   const { data: navigation } = await useNavigation()
 
@@ -94,7 +51,7 @@
   useSeoForContent(data, { origin: 'https://kjeldsen.dev', lang: 'en' })
 
   // Client-side engage bootstrap (runs only in browser)
-  if (process.client) {
+  if (import.meta.client) {
     const { bootstrap } = useEngage()
     // Defer to next tick to ensure router state stable
     queueMicrotask(() => {
