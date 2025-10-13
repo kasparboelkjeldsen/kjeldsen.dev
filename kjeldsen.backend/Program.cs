@@ -22,7 +22,9 @@ builder
     .AddComposers()
     .AddAzureBlobMediaFileSystem()
     .AddAzureBlobImageSharpCache()
-    .Build();
+    .Build()
+
+;
 
 // background queue
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
@@ -36,6 +38,7 @@ app
 await app.BootUmbracoAsync();
 
 app.AddStaticRedirects();
+app.AddEngageTrackingRewrite();
 
 app.UseUmbraco()
     .WithMiddleware(u =>

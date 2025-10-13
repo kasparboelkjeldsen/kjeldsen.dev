@@ -69,6 +69,7 @@ export async function handleEngage(event: H3Event) {
   let pageviewId: string | undefined
   let newVisitorId: string | undefined
   let firstError: any | undefined
+  let segmentAlias: string | undefined
   // First attempt with existing visitor id (if any)
   try {
     const response: any = await extendedAnalytics.postPageviewServer(
@@ -82,6 +83,7 @@ export async function handleEngage(event: H3Event) {
       }
     )
     pageviewId = response?.pageviewId
+    segmentAlias = response?.activeSegmentAlias
     if (response?.externalVisitorId && response.externalVisitorId !== existingVisitorId) {
       newVisitorId = response.externalVisitorId
     }
@@ -112,6 +114,7 @@ export async function handleEngage(event: H3Event) {
         'X-Retry-No-Visitor': '1',
       })
       pageviewId = response?.pageviewId
+      segmentAlias = response?.activeSegmentAlias
       if (response?.externalVisitorId && response.externalVisitorId !== existingVisitorId) {
         newVisitorId = response.externalVisitorId
       }

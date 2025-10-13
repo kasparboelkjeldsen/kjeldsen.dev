@@ -27,7 +27,7 @@ public class HeadlessContentFinder : IContentFinder
         if (endpoint == null || endpoint.DisplayName == null) 
             return Task.FromResult(false);
 
-        if(!endpoint.DisplayName.EndsWith("(Umbraco.Engage.Headless)"))
+        if(!endpoint.DisplayName.EndsWith("(Umbraco.Engage.Headless)") && endpoint.DisplayName != "kjeldsen.backend.code.engage.Api.CustomPageViewApiController.TrackPageView (kjeldsen.backend)")
         {
             return Task.FromResult(false);
         }
