@@ -5,8 +5,23 @@ import { encryptSeg, sanitizeSegment } from '~~/server/utils/seg-crypto'
 const VISITOR_COOKIE = 'engage_visitor'
 const PAGEVIEW_COOKIE = 'engage_pv'
 const SEGMENT_COOKIE = 'segTok'
-// Single shared client
-const engageClient = new EngageClient({ BASE: process.env.CMSHOST! })
+// Single shared client - ensure BASE URL is properly formatted
+let baseUrl = process.env.CMSHOST!
+// Ensure the BASE URL has a protocol
+if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
+  baseUrl = `https://${baseUrl}`
+}
+// Remove trailing slash to avoid double slashes in the final URL
+if (baseUrl.endsWith('/')) {
+  baseUrl = baseUrl.slice(0, -1)
+}
+
+console.debug('[engage/bootstrap] initializing client', {
+  originalCmsHost: process.env.CMSHOST,
+  processedBaseUrl: baseUrl,
+})
+
+const engageClient = new EngageClient({ BASE: baseUrl })
 
 export default defineEventHandler(async (event) => {
   try {
@@ -58,11 +73,16 @@ export default defineEventHandler(async (event) => {
     console.debug('[engage/bootstrap] making analytics call', {
       hasVisitorId: !!existingVisitorId,
       requestUrl: fullUrl,
-      baseUrl: process.env.CMSHOST,
+      baseUrl: baseUrl,
+      originalCmsHost: process.env.CMSHOST,
     })
 
     let response: any
     try {
+      // Test if we can construct a valid URL first
+      const testUrl = `${baseUrl}/umbraco/engage/api/v1/analytics/pageview/trackpageview/server`
+      new URL(testUrl) // This will throw if the URL is invalid
+
       response = await engageClient.analytics.postAnalyticsPageviewTrackpageviewServer({
         apiKey: process.env.DELIVERY_KEY,
         externalVisitorId: existingVisitorId,
@@ -75,7 +95,11 @@ export default defineEventHandler(async (event) => {
         responseKeys: Object.keys(response || {}),
       })
     } catch (err) {
-      console.warn('[engage/bootstrap] first attempt failed', err)
+      console.warn('[engage/bootstrap] first attempt failed', {
+        error: err,
+        baseUrl,
+        testUrl: `${baseUrl}/umbraco/engage/api/v1/analytics/pageview/trackpageview/server`,
+      })
       // Retry without externalVisitorId
       try {
         response = await engageClient.analytics.postAnalyticsPageviewTrackpageviewServer({
@@ -93,7 +117,9 @@ export default defineEventHandler(async (event) => {
         console.error('[engage/bootstrap] both attempts failed', {
           firstError: err,
           secondError: err2,
+          baseUrl,
           requestBody,
+          constructedUrl: `${baseUrl}/umbraco/engage/api/v1/analytics/pageview/trackpageview/server`,
         })
         return { ok: false, error: 'api-failed' }
       }
