@@ -18,6 +18,13 @@ export default defineEventHandler(async (event) => {
     const existingVisitorId = cookies[VISITOR_COOKIE]
     const segment = cookies[SEGMENT_COOKIE]
 
+    console.debug('[engage/bootstrap] request received', {
+      clientUrl,
+      hasExistingVisitorId: !!existingVisitorId,
+      hasSegmentCookie: !!segment,
+      userAgent: req.headers['user-agent'],
+    })
+
     // Build server-side request body similar to previous middleware
     const host = req.headers.host || ''
     const proto = (req.headers['x-forwarded-proto'] as string) || 'https'
@@ -48,6 +55,12 @@ export default defineEventHandler(async (event) => {
       userIdentifier: '',
     }
 
+    console.debug('[engage/bootstrap] making analytics call', {
+      hasVisitorId: !!existingVisitorId,
+      requestUrl: fullUrl,
+      baseUrl: process.env.CMSHOST,
+    })
+
     let response: any
     try {
       response = await engageClient.analytics.postAnalyticsPageviewTrackpageviewServer({
@@ -55,7 +68,14 @@ export default defineEventHandler(async (event) => {
         externalVisitorId: existingVisitorId,
         requestBody,
       })
+      console.debug('[engage/bootstrap] first attempt succeeded', {
+        hasPageviewId: !!response?.pageviewId,
+        hasExternalVisitorId: !!response?.externalVisitorId,
+        activeSegmentAlias: response?.activeSegmentAlias,
+        responseKeys: Object.keys(response || {}),
+      })
     } catch (err) {
+      console.warn('[engage/bootstrap] first attempt failed', err)
       // Retry without externalVisitorId
       try {
         response = await engageClient.analytics.postAnalyticsPageviewTrackpageviewServer({
@@ -63,15 +83,36 @@ export default defineEventHandler(async (event) => {
           externalVisitorId: undefined,
           requestBody,
         })
+        console.debug('[engage/bootstrap] second attempt succeeded', {
+          hasPageviewId: !!response?.pageviewId,
+          hasExternalVisitorId: !!response?.externalVisitorId,
+          activeSegmentAlias: response?.activeSegmentAlias,
+          responseKeys: Object.keys(response || {}),
+        })
       } catch (err2) {
-        console.warn('[engage/bootstrap] failed', err2)
-        return { ok: false }
+        console.error('[engage/bootstrap] both attempts failed', {
+          firstError: err,
+          secondError: err2,
+          requestBody,
+        })
+        return { ok: false, error: 'api-failed' }
       }
     }
 
     const pageviewId = response?.pageviewId
     const externalVisitorId = response?.externalVisitorId || existingVisitorId
-    const activeSegmentAlias = sanitizeSegment(response?.activeSegmentAlias || 'anon')
+
+    // Note: The pageview API doesn't return segment information
+    // For now, we'll default to 'anon' and might need to implement
+    // a separate segmentation call if personalization is needed
+    const activeSegmentAlias = sanitizeSegment('anon')
+
+    console.debug('[engage/bootstrap] processed response', {
+      pageviewId,
+      externalVisitorId,
+      activeSegmentAlias,
+      originalResponse: response,
+    })
 
     if (externalVisitorId && externalVisitorId !== existingVisitorId) {
       setCookie(event, VISITOR_COOKIE, externalVisitorId, {
@@ -108,15 +149,22 @@ export default defineEventHandler(async (event) => {
       console.warn('[engage/bootstrap] segment encryption failed', e)
     }
 
-    return {
+    const finalResponse = {
       ok: true,
       pageviewId,
       externalVisitorId,
       segment: activeSegmentAlias,
       segmentEmptyBeforeParsing: segment == null || segment == undefined,
     }
+
+    console.debug('[engage/bootstrap] returning response', finalResponse)
+    return finalResponse
   } catch (e) {
-    console.warn('[engage/bootstrap] unexpected error', e)
-    return { ok: false }
+    console.error('[engage/bootstrap] unexpected error', {
+      error: e,
+      cmsHost: process.env.CMSHOST,
+      hasDeliveryKey: !!process.env.DELIVERY_KEY,
+    })
+    return { ok: false, error: 'unexpected-error' }
   }
 })

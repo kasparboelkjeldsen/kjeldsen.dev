@@ -7,7 +7,8 @@ interface EngageBootstrapResponse {
   externalVisitorId?: string
   /** "anon" means no personalization; any other value = personalized segment */
   segment?: string
-  segmentEmptyBeforeParsing: boolean
+  segmentEmptyBeforeParsing?: boolean
+  error?: string
 }
 
 export interface EngageState {
@@ -87,6 +88,10 @@ export function useEngage() {
       })
 
       if (!res?.ok) {
+        console.warn('[engage] bootstrap failed - API returned not ok', {
+          response: res,
+          serverError: res?.error,
+        })
         state.value.error = 'bootstrap-failed'
         return state.value
       }
@@ -113,14 +118,15 @@ export function useEngage() {
         res.segment !== 'anon' &&
         !reloadedOnce &&
         typeof window !== 'undefined' &&
-        res.segmentEmptyBeforeParsing
+        res.segmentEmptyBeforeParsing === true
       ) {
         // Optional: small delay so logs/UX can show something before transition
         requestAnimationFrame(() => reloadWithViewTransition())
       }
 
       return state.value
-    } catch {
+    } catch (error) {
+      console.warn('[engage] bootstrap exception', error)
       state.value.error = 'exception'
       return state.value
     }

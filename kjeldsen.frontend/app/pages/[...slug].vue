@@ -62,7 +62,9 @@
             externalVisitorId: s.externalVisitorId,
           })
         } else if (s.error) {
-          console.warn('[engage] bootstrap error', s.error)
+          console.warn('[engage] bootstrap error', s.error, { fullState: s })
+        } else {
+          console.warn('[engage] bootstrap not ready and no error', { fullState: s })
         }
       })
     })
