@@ -4,7 +4,7 @@ import { encryptSeg, sanitizeSegment } from '~~/server/utils/seg-crypto'
 
 const VISITOR_COOKIE = 'engage_visitor'
 const PAGEVIEW_COOKIE = 'engage_pv'
-
+const SEGMENT_COOKIE = 'segTok'
 // Single shared client
 const engageClient = new EngageClient({ BASE: process.env.CMSHOST! })
 
@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
     const rawCookie = req.headers.cookie || ''
     const cookies = rawCookie ? parse(rawCookie) : {}
     const existingVisitorId = cookies[VISITOR_COOKIE]
+    const segment = cookies[SEGMENT_COOKIE]
 
     // Build server-side request body similar to previous middleware
     const host = req.headers.host || ''
@@ -93,19 +94,27 @@ export default defineEventHandler(async (event) => {
 
     // Encrypt segment alias into segTok cookie (stateless segment token)
     try {
-      const segTok = await encryptSeg(activeSegmentAlias)
-      setCookie(event, 'segTok', segTok, {
-        path: '/',
-        sameSite: 'lax',
-        httpOnly: false, // accessible by client if needed, but opaque
-        secure: proto === 'https',
-        maxAge: 7 * 24 * 3600, // 7 days
-      })
+      if (activeSegmentAlias != 'anon') {
+        const segTok = await encryptSeg(activeSegmentAlias)
+        setCookie(event, SEGMENT_COOKIE, segTok, {
+          path: '/',
+          sameSite: 'lax',
+          httpOnly: false, // accessible by client if needed, but opaque
+          secure: proto === 'https',
+          maxAge: 7 * 24 * 3600, // 7 days
+        })
+      }
     } catch (e) {
       console.warn('[engage/bootstrap] segment encryption failed', e)
     }
 
-    return { ok: true, pageviewId, externalVisitorId, segment: activeSegmentAlias }
+    return {
+      ok: true,
+      pageviewId,
+      externalVisitorId,
+      segment: activeSegmentAlias,
+      segmentEmptyBeforeParsing: segment == null || segment == undefined,
+    }
   } catch (e) {
     console.warn('[engage/bootstrap] unexpected error', e)
     return { ok: false }

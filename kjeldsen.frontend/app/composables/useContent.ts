@@ -8,6 +8,12 @@ export async function usePageContentFromRoute() {
   const cleanSlug = slugArray.filter(Boolean).join('/')
   const slugHasDot = cleanSlug.includes('.')
   const apiPath = `/api/content/${cleanSlug}/`
+  const externalVisitorId = useCookie<string | null>('engage_visitor').value || null
+  const segTok = useCookie<string | null>('segTok').value || null
+  if (segTok) {
+    // const decryptedSegTok = await decryptSeg(segTok)
+    //console.log('segtok', decryptedSegTok)
+  }
 
   if (slugHasDot) {
     // Disallow dot paths, mirror server logic
@@ -20,10 +26,15 @@ export async function usePageContentFromRoute() {
       pending: ref(false),
     }
   }
-
+  const headers: Record<string, string> = {}
+  if (segTok && externalVisitorId) {
+    headers['Forced-Segment'] = segTok
+    headers['External-Visitor-Id'] = externalVisitorId
+  }
   const result = await useFetch<IApiContentResponseModel>(apiPath, {
     server: true,
     cache: 'no-cache',
+    headers,
   })
 
   // Normalize null when missing

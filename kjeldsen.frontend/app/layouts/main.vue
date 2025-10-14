@@ -43,6 +43,16 @@
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { computed } from 'vue'
 
+  // Add view transitions CSS to head
+  useHead({
+    link: [
+      {
+        rel: 'stylesheet',
+        href: '/view-transitions.css',
+      },
+    ],
+  })
+
   const parallaxOffset = ref(0)
   let bgElement: HTMLElement | null = null
   let scrollTimeout: ReturnType<typeof setTimeout> | null = null

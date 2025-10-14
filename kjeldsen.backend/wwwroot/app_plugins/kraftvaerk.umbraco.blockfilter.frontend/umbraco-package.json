@@ -9,7 +9,7 @@
           "name": "knowit-kraftvaerk.umbraco.blockfilter.Frontend EntryPoint",
           "alias": "knowit-kraftvaerk.umbraco.blockfilter.Frontend.entrypoint",
           "type": "backofficeEntryPoint",
-          "js": "/app_plugins/kraftvaerk.umbraco.blockfilter.frontend/dist.js"
+          "js": "/App_Plugins/kraftvaerk.umbraco.blockfilter.frontend/dist.js"
         }
       ]
 }

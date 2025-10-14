@@ -1,0 +1,50 @@
+/* View Transition API for cross-document navigation (MPA/SSR) */
+/* Enable automatic view transitions on regular link navigation */
+@view-transition {
+  navigation: auto;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* Style the transition animations */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+  animation-timing-function: ease-out;
+}
+
+::view-transition-old(root) {
+  animation-name: gentle-fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: gentle-fade-in;
+}
+
+/* Gentle fade transition - no movement or scaling */
+@keyframes gentle-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes gentle-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+body {
+  background-color: black;
+}
