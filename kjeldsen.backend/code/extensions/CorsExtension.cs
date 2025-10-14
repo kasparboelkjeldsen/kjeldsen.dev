@@ -24,7 +24,7 @@ public static class CorsExtension
                     .SetIsOriginAllowed(origin =>
                         origin.StartsWith("http://localhost") ||
                         origin.StartsWith("https://localhost") ||
-                        origin.EndsWith(".kjeldsen.dev"))
+                        origin.EndsWith("kjeldsen.dev"))
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();

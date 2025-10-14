@@ -5,26 +5,20 @@ import { encryptSeg, sanitizeSegment } from '~~/server/utils/seg-crypto'
 const VISITOR_COOKIE = 'engage_visitor'
 const PAGEVIEW_COOKIE = 'engage_pv'
 const SEGMENT_COOKIE = 'segTok'
-// Single shared client - ensure BASE URL is properly formatted
-let baseUrl = process.env.CMSHOST!
-// Ensure the BASE URL has a protocol
-if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
-  baseUrl = `https://${baseUrl}`
-}
-// Remove trailing slash to avoid double slashes in the final URL
-if (baseUrl.endsWith('/')) {
-  baseUrl = baseUrl.slice(0, -1)
-}
-
-console.debug('[engage/bootstrap] initializing client', {
-  originalCmsHost: process.env.CMSHOST,
-  processedBaseUrl: baseUrl,
-})
-
-const engageClient = new EngageClient({ BASE: baseUrl })
 
 export default defineEventHandler(async (event) => {
   try {
+    const started = Date.now()
+    const config = useRuntimeConfig()
+    const deliveryKey: string | undefined = config.deliveryKey
+    let baseUrl = (config.public.cmsHost || '').replace(/\/$/, '')
+    if (baseUrl && !/^https?:\/\//i.test(baseUrl)) baseUrl = `https://${baseUrl}`
+    if (!baseUrl) {
+      console.error('[engage/bootstrap] missing cmsHost runtime config')
+      return { ok: false, error: 'missing-host' }
+    }
+    const engageClient = new EngageClient({ BASE: baseUrl })
+
     const body = await readBody<any>(event).catch(() => ({}))
     const { url: clientUrl } = body || {}
     const req = event.node.req
@@ -33,28 +27,61 @@ export default defineEventHandler(async (event) => {
     const existingVisitorId = cookies[VISITOR_COOKIE]
     const segment = cookies[SEGMENT_COOKIE]
 
-    console.debug('[engage/bootstrap] request received', {
-      clientUrl,
-      hasExistingVisitorId: !!existingVisitorId,
-      hasSegmentCookie: !!segment,
-      userAgent: req.headers['user-agent'],
-    })
+    // Debug flag via query (?engageDebug=1) or header
+    const debugFlag =
+      /[?&]engageDebug=1/.test(req.url || '') || req.headers['x-engage-debug'] === '1'
 
     // Build server-side request body similar to previous middleware
     const host = req.headers.host || ''
     const proto = (req.headers['x-forwarded-proto'] as string) || 'https'
     // clientUrl may be a path or full URL; ensure query string retained.
     const rawPath = clientUrl || req.url || '/'
-    const fullUrl = rawPath.startsWith('http') ? rawPath : `${proto}://${host}${rawPath}`
+    let fullUrl = rawPath.startsWith('http') ? rawPath : `${proto}://${host}${rawPath}`
+    // If running locally (dev or prod start on localhost) but we want consistent analytics domain, swap to public siteUrl
+    const publicSiteRaw = (config.public.siteUrl || '').replace(/\/$/, '')
+    const fallbackCanonical = 'https://www.kjeldsen.dev'
+    const localhostRegex = /^https?:\/\/localhost(?::\d+)?\/?/i
+    if (localhostRegex.test(fullUrl)) {
+      const targetHost = publicSiteRaw || fallbackCanonical
+      try {
+        const u = new URL(fullUrl)
+        const target = new URL(targetHost)
+        u.host = target.host
+        u.protocol = target.protocol
+        fullUrl = u.toString()
+        if (!publicSiteRaw) {
+          console.warn(
+            '[engage/bootstrap] siteUrl not configured; used fallback canonical host for analytics URL'
+          )
+        }
+      } catch (errSwap) {
+        console.warn(
+          '[engage/bootstrap] failed to remap localhost URL, using fallback root',
+          serializeError(errSwap)
+        )
+        fullUrl = targetHost + '/'
+      }
+    } else if (!publicSiteRaw) {
+      // Not localhost but still missing siteUrl; optional info for diagnostics
+      console.warn(
+        '[engage/bootstrap] siteUrl not configured; consider setting runtimeConfig.public.siteUrl'
+      )
+    }
+
+    // Remote client address fallback chain
+    const remoteClientAddress =
+      ((req.headers['x-forwarded-for'] as string) || '').split(',')[0].trim() ||
+      // @ts-ignore node types
+      req.socket?.remoteAddress ||
+      '' ||
+      '0.0.0.0'
 
     const baseForwardHeaders: Record<string, string> = {
       'X-Original-Url': fullUrl,
       'X-Referrer': req.headers.referer || '',
       'X-Browser-UserAgent': (req.headers['user-agent'] as string) || 'nuxt-app',
       'User-Agent': (req.headers['user-agent'] as string) || 'nuxt-app',
-      'X-Remote-Client-Address': ((req.headers['x-forwarded-for'] as string) || '')
-        .split(',')[0]
-        .trim(),
+      'X-Remote-Client-Address': remoteClientAddress,
     }
     // Flatten headers object into key=value&key2=value2 format (same pattern as other endpoints)
     const serializedHeaders = Object.entries(baseForwardHeaders)
@@ -66,62 +93,42 @@ export default defineEventHandler(async (event) => {
       referrerUrl: req.headers.referer || '',
       headers: serializedHeaders,
       browserUserAgent: req.headers['user-agent'] || 'nuxt-app',
-      remoteClientAddress: ((req.headers['x-forwarded-for'] as string) || '').split(',')[0].trim(),
+      remoteClientAddress,
       userIdentifier: '',
     }
 
-    console.debug('[engage/bootstrap] making analytics call', {
-      hasVisitorId: !!existingVisitorId,
-      requestUrl: fullUrl,
-      baseUrl: baseUrl,
-      originalCmsHost: process.env.CMSHOST,
-    })
-
     let response: any
     try {
-      // Test if we can construct a valid URL first
-      const testUrl = `${baseUrl}/umbraco/engage/api/v1/analytics/pageview/trackpageview/server`
-      new URL(testUrl) // This will throw if the URL is invalid
-
       response = await engageClient.analytics.postAnalyticsPageviewTrackpageviewServer({
-        apiKey: process.env.DELIVERY_KEY,
+        apiKey: deliveryKey,
         externalVisitorId: existingVisitorId,
         requestBody,
       })
-      console.debug('[engage/bootstrap] first attempt succeeded', {
-        hasPageviewId: !!response?.pageviewId,
-        hasExternalVisitorId: !!response?.externalVisitorId,
-        activeSegmentAlias: response?.activeSegmentAlias,
-        responseKeys: Object.keys(response || {}),
-      })
-    } catch (err) {
-      console.warn('[engage/bootstrap] first attempt failed', {
-        error: err,
-        baseUrl,
-        testUrl: `${baseUrl}/umbraco/engage/api/v1/analytics/pageview/trackpageview/server`,
-      })
-      // Retry without externalVisitorId
+    } catch (firstErr) {
       try {
         response = await engageClient.analytics.postAnalyticsPageviewTrackpageviewServer({
-          apiKey: process.env.DELIVERY_KEY,
+          apiKey: deliveryKey,
           externalVisitorId: undefined,
           requestBody,
         })
-        console.debug('[engage/bootstrap] second attempt succeeded', {
-          hasPageviewId: !!response?.pageviewId,
-          hasExternalVisitorId: !!response?.externalVisitorId,
-          activeSegmentAlias: response?.activeSegmentAlias,
-          responseKeys: Object.keys(response || {}),
-        })
-      } catch (err2) {
-        console.error('[engage/bootstrap] both attempts failed', {
-          firstError: err,
-          secondError: err2,
+      } catch (secondErr) {
+        const errPayload: any = {
+          durationMs: Date.now() - started,
+          url: requestBody.url,
           baseUrl,
-          requestBody,
-          constructedUrl: `${baseUrl}/umbraco/engage/api/v1/analytics/pageview/trackpageview/server`,
-        })
-        return { ok: false, error: 'api-failed' }
+          hasVisitor: !!existingVisitorId,
+          hasApiKey: !!deliveryKey,
+          apiKeyLength: deliveryKey?.length,
+          remoteClientAddress,
+          firstError: serializeError(firstErr),
+          secondError: serializeError(secondErr),
+        }
+        if (debugFlag) {
+          errPayload.requestBody = requestBody
+          errPayload.headersSample = Object.fromEntries(Object.entries(req.headers).slice(0, 12))
+        }
+        console.error('[engage/bootstrap] analytics request failed', errPayload)
+        return { ok: false, error: 'analytics-failed' }
       }
     }
 
@@ -132,13 +139,6 @@ export default defineEventHandler(async (event) => {
     // For now, we'll default to 'anon' and might need to implement
     // a separate segmentation call if personalization is needed
     const activeSegmentAlias = sanitizeSegment('anon')
-
-    console.debug('[engage/bootstrap] processed response', {
-      pageviewId,
-      externalVisitorId,
-      activeSegmentAlias,
-      originalResponse: response,
-    })
 
     if (externalVisitorId && externalVisitorId !== existingVisitorId) {
       setCookie(event, VISITOR_COOKIE, externalVisitorId, {
@@ -175,22 +175,37 @@ export default defineEventHandler(async (event) => {
       console.warn('[engage/bootstrap] segment encryption failed', e)
     }
 
-    const finalResponse = {
+    return {
       ok: true,
       pageviewId,
       externalVisitorId,
       segment: activeSegmentAlias,
       segmentEmptyBeforeParsing: segment == null || segment == undefined,
     }
-
-    console.debug('[engage/bootstrap] returning response', finalResponse)
-    return finalResponse
   } catch (e) {
-    console.error('[engage/bootstrap] unexpected error', {
-      error: e,
-      cmsHost: process.env.CMSHOST,
-      hasDeliveryKey: !!process.env.DELIVERY_KEY,
-    })
+    console.error('[engage/bootstrap] unexpected error', serializeError(e))
     return { ok: false, error: 'unexpected-error' }
   }
 })
+
+function serializeError(err: any) {
+  if (!err) return { message: 'Unknown error' }
+  const base: any = {
+    message: err.message || String(err),
+    name: err.name,
+  }
+  if (typeof err.status === 'number') base.status = err.status
+  if (err.statusText) base.statusText = err.statusText
+  if (err.body) {
+    if (typeof err.body === 'object') {
+      base.bodyKeys = Object.keys(err.body).slice(0, 8)
+      if (err.body.error) base.bodyError = err.body.error
+      if (err.body.message) base.bodyMessage = err.body.message
+    } else if (typeof err.body === 'string') {
+      base.bodyPreview = err.body.substring(0, 180)
+      base.bodyLength = err.body.length
+    }
+  }
+  if (err.stack) base.stack = err.stack.split('\n').slice(0, 5).join('\n')
+  return base
+}
