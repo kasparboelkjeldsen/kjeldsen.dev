@@ -37,7 +37,9 @@ export default defineEventHandler(async (event) => {
     // clientUrl may be a path or full URL; ensure query string retained.
     const rawPath = clientUrl || req.url || '/'
     let fullUrl = rawPath.startsWith('http') ? rawPath : `${proto}://${host}${rawPath}`
-    // If running locally (dev or prod start on localhost) but we want consistent analytics domain, swap to public siteUrl
+    // Normalize URL domain for analytics licensing:
+    // 1. If localhost -> optionally remap to configured siteUrl / fallback (existing logic below)
+    // 2. If NOT localhost -> force host to licensed domain kjeldsen.dev (retain path & query) over https
     const publicSiteRaw = (config.public.siteUrl || '').replace(/\/$/, '')
     const fallbackCanonical = 'https://www.kjeldsen.dev'
     const localhostRegex = /^https?:\/\/localhost(?::\d+)?\/?/i
@@ -66,6 +68,29 @@ export default defineEventHandler(async (event) => {
       console.warn(
         '[engage/bootstrap] siteUrl not configured; consider setting runtimeConfig.public.siteUrl'
       )
+    }
+
+    // Force non-localhost hosts to the licensed domain
+    try {
+      if (!localhostRegex.test(fullUrl)) {
+        const u = new URL(fullUrl)
+        if (u.hostname !== 'kjeldsen.dev') {
+          const prevHost = u.hostname
+          u.hostname = 'kjeldsen.dev'
+          u.protocol = 'https:'
+          u.port = '' // remove any explicit port
+          fullUrl = u.toString()
+          // Minimal log only if host changed (avoid leaking paths)
+          if (process.env.NODE_ENV !== 'production') {
+            console.info('[engage/bootstrap] normalized analytics host', {
+              from: prevHost,
+              to: 'kjeldsen.dev',
+            })
+          }
+        }
+      }
+    } catch {
+      /* ignore URL normalization errors */
     }
 
     // Remote client address fallback chain
