@@ -4,7 +4,7 @@
 
     <ul class="grid pl-0 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
       <li
-        v-for="child in blogPosts"
+        v-for="child in sortedPosts"
         :key="child.id"
         class="overflow-hidden transition-shadow shadow bg-zinc-900 rounded-xl hover:shadow-xl"
       >
@@ -16,9 +16,15 @@
               class="object-cover w-full h-48 transition-transform duration-300 group-hover:scale-105"
             />
           </div>
-          <div class="p-6">
-            <p v-if="child.properties?.writer" class="text-white">
+          <div class="px-6 pt-4 pb-6">
+            <p
+              v-if="child.properties?.writer"
+              class="text-xs font-medium leading-tight text-white/80"
+            >
               {{ GetWriter(child.properties.writer) }}
+            </p>
+            <p v-if="child.properties?.seoPublishingDate" class="mt-1 text-xs text-sky-300">
+              {{ formatDate(child.properties.seoPublishingDate) }}
             </p>
             <h2 class="mb-2 text-xl font-semibold text-white">
               {{ child.properties?.seoTitle }}
@@ -62,7 +68,28 @@
   )
 
   // ✅ Fully typed!
-  const blogPosts = children.value?.items as BlogPostPageContentResponseModel[]
+  const blogPosts = (children.value?.items as BlogPostPageContentResponseModel[]) ?? []
+
+  function parseDate(post: BlogPostPageContentResponseModel): number {
+    const raw = post.properties?.seoPublishingDate
+    if (!raw) return 0
+    const d = new Date(raw)
+    return isNaN(d.getTime()) ? 0 : d.getTime()
+  }
+
+  const sortedPosts = computed(() => {
+    return [...blogPosts].sort((a, b) => parseDate(b) - parseDate(a))
+  })
+
+  function formatDate(raw: string) {
+    const d = new Date(raw)
+    if (isNaN(d.getTime())) return ''
+    return d.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    })
+  }
 </script>
 
 <style></style>
