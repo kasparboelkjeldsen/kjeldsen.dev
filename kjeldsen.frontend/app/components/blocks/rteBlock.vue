@@ -1,12 +1,21 @@
 <template>
-  <div class="text-white" v-html="data.properties?.richText?.markup" />
+  <div class="text-white" v-html="processedMarkup" />
 </template>
 <script lang="ts" setup>
+  import { computed } from 'vue'
   import type { RteBlockElementModel } from '~/../server/delivery-api'
 
-  defineProps<{
+  const props = defineProps<{
     data: RteBlockElementModel
   }>()
+
+  // Apply same custom marker logic as headerBlock: --highlight-- & **bold**
+  const processedMarkup = computed(() => {
+    const raw = props.data.properties?.richText?.markup || ''
+    return raw
+      .replace(/--([\s\S]+?)--/g, '<span class="text-red-300">$1<\/span>')
+      .replace(/\*\*([\s\S]+?)\*\*/g, '<span class="text-sky-300">$1<\/span>')
+  })
 </script>
 <style lang="css">
   /* Headings stay white, but strong/b/bold should be sky-300 */
