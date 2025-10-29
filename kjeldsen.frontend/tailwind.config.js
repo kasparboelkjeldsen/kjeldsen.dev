@@ -44,6 +44,7 @@ export default {
   },
   safelist: [
     'text-red-300',
+    'text-sky-300',
     {
       pattern: /col-span-(\d+)/,
       variants: ['sm'],
