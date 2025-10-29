@@ -12,6 +12,7 @@
       :data-guid="image?.id"
       class="w-full"
     />
+    <span v-if="bottomText" class="block mt-2 text-sm text-white/70" v-html="bottomText"></span>
   </div>
 </template>
 
@@ -26,6 +27,7 @@
   const cropPref = props.data.properties?.cropPreference ?? 'Ratio'
 
   const altText = props.data.properties?.altText ?? ''
+  const bottomText = props.data.properties?.bottomText ?? ''
 
   type SourceEntry = { src: string; media?: string }
   const sources: SourceEntry[] = []

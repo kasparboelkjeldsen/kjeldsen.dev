@@ -25,6 +25,8 @@ export class ContentService {
         apiKey,
         preview,
         startItem,
+        forcedSegment,
+        externalVisitorId,
     }: {
         /**
          * Specifies the content items to fetch. Refer to [the documentation](https://docs.umbraco.com/umbraco-cms/reference/content-delivery-api#query-parameters) for more details on this.
@@ -74,6 +76,14 @@ export class ContentService {
          * URL segment or GUID of a root content item.
          */
         startItem?: string,
+        /**
+         * Use this to override the default visitor segmenting behavior (i.e. Personalization and/or A/B Testing) when querying segment variant content items
+         */
+        forcedSegment?: string,
+        /**
+         * Use this to override the default (cookie-based) visitor ID when making requests on behalf of a visitor.<br> This will impact API behaviour like querying Segmented Content, Pageview Tracking, etc.
+         */
+        externalVisitorId?: string,
     }): CancelablePromise<PagedIApiContentResponseModel> {
         return this.httpRequest.request({
             method: 'GET',
@@ -84,6 +94,8 @@ export class ContentService {
                 'Api-Key': apiKey,
                 'Preview': preview,
                 'Start-Item': startItem,
+                'Forced-Segment': forcedSegment,
+                'External-Visitor-Id': externalVisitorId,
             },
             query: {
                 'fetch': fetch,
@@ -113,6 +125,8 @@ export class ContentService {
         apiKey,
         preview,
         startItem,
+        forcedSegment,
+        externalVisitorId,
     }: {
         path?: string,
         /**
@@ -143,6 +157,14 @@ export class ContentService {
          * URL segment or GUID of a root content item.
          */
         startItem?: string,
+        /**
+         * Use this to override the default visitor segmenting behavior (i.e. Personalization and/or A/B Testing) when querying segment variant content items
+         */
+        forcedSegment?: string,
+        /**
+         * Use this to override the default (cookie-based) visitor ID when making requests on behalf of a visitor.<br> This will impact API behaviour like querying Segmented Content, Pageview Tracking, etc.
+         */
+        externalVisitorId?: string,
     }): CancelablePromise<IApiContentResponseModel> {
         return this.httpRequest.request({
             method: 'GET',
@@ -156,6 +178,8 @@ export class ContentService {
                 'Api-Key': apiKey,
                 'Preview': preview,
                 'Start-Item': startItem,
+                'Forced-Segment': forcedSegment,
+                'External-Visitor-Id': externalVisitorId,
             },
             query: {
                 'expand': expand,
@@ -181,6 +205,8 @@ export class ContentService {
         apiKey,
         preview,
         startItem,
+        forcedSegment,
+        externalVisitorId,
     }: {
         id: string,
         /**
@@ -211,6 +237,14 @@ export class ContentService {
          * URL segment or GUID of a root content item.
          */
         startItem?: string,
+        /**
+         * Use this to override the default visitor segmenting behavior (i.e. Personalization and/or A/B Testing) when querying segment variant content items
+         */
+        forcedSegment?: string,
+        /**
+         * Use this to override the default (cookie-based) visitor ID when making requests on behalf of a visitor.<br> This will impact API behaviour like querying Segmented Content, Pageview Tracking, etc.
+         */
+        externalVisitorId?: string,
     }): CancelablePromise<IApiContentResponseModel> {
         return this.httpRequest.request({
             method: 'GET',
@@ -224,6 +258,8 @@ export class ContentService {
                 'Api-Key': apiKey,
                 'Preview': preview,
                 'Start-Item': startItem,
+                'Forced-Segment': forcedSegment,
+                'External-Visitor-Id': externalVisitorId,
             },
             query: {
                 'expand': expand,
@@ -249,6 +285,8 @@ export class ContentService {
         apiKey,
         preview,
         startItem,
+        forcedSegment,
+        externalVisitorId,
     }: {
         id?: Array<string>,
         /**
@@ -279,6 +317,14 @@ export class ContentService {
          * URL segment or GUID of a root content item.
          */
         startItem?: string,
+        /**
+         * Use this to override the default visitor segmenting behavior (i.e. Personalization and/or A/B Testing) when querying segment variant content items
+         */
+        forcedSegment?: string,
+        /**
+         * Use this to override the default (cookie-based) visitor ID when making requests on behalf of a visitor.<br> This will impact API behaviour like querying Segmented Content, Pageview Tracking, etc.
+         */
+        externalVisitorId?: string,
     }): CancelablePromise<Array<IApiContentResponseModel>> {
         return this.httpRequest.request({
             method: 'GET',
@@ -289,6 +335,8 @@ export class ContentService {
                 'Api-Key': apiKey,
                 'Preview': preview,
                 'Start-Item': startItem,
+                'Forced-Segment': forcedSegment,
+                'External-Visitor-Id': externalVisitorId,
             },
             query: {
                 'id': id,

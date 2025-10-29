@@ -7,6 +7,7 @@ export type ImageBlockPropertiesModel = {
     image?: Array<IApiMediaWithCropsModel> | null;
     altText?: string | null;
     cropPreference?: string | null;
+    bottomText?: string | null;
     cacheKeys?: Array<string>;
 };
 
