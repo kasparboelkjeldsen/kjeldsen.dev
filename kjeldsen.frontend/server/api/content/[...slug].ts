@@ -28,9 +28,10 @@ export default defineEventHandler(async (event) => {
   }
 
   const headers: Record<string, string> = {}
-  if (externalVisitorId) headers['External-Visitor-Id'] = externalVisitorId
-  if (finalSegment) headers['Forced-Segment'] = finalSegment
+  //if (externalVisitorId) headers['External-Visitor-Id'] = externalVisitorId
+  //if (finalSegment) headers['Forced-Segment'] = finalSegment
 
+  console.log('final forced segment', headers['Forced-Segment'])
   const api = new DeliveryClient({
     BASE: config.public.cmsHost,
     HEADERS: headers,
@@ -41,6 +42,7 @@ export default defineEventHandler(async (event) => {
       apiKey: config.deliveryKey,
       path: '/' + slug,
       forcedSegment: finalSegment || undefined,
+      externalVisitorId: externalVisitorId || undefined,
     })
 
     if (!response) {

@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router'
 import type { IApiContentResponseModel } from '~/../server/delivery-api'
 
 export async function usePageContentFromRoute(forcedSegment?: string) {
+  const nuxtApp = useNuxtApp()
   const route = useRoute()
   const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug]
   const cleanSlug = slugArray.filter(Boolean).join('/')
@@ -19,8 +20,17 @@ export async function usePageContentFromRoute(forcedSegment?: string) {
   }
 
   console.log('frontend manual segment', manualSegment)
+  let decryptedSegTok: string | null = null
   if (segTok) {
-    const decryptedSegTok = await decryptSeg(segTok)
+    try {
+      const res = await $fetch<{ segment: string | null }>('/api/engage/decrypt', {
+        method: 'POST',
+        body: { token: segTok },
+      })
+      decryptedSegTok = res.segment
+    } catch (e) {
+      console.error('Failed to decrypt segment token', e)
+    }
   }
 
   if (slugHasDot) {
@@ -40,16 +50,18 @@ export async function usePageContentFromRoute(forcedSegment?: string) {
     headers['Forced-Segment'] = forcedSegment
   } else if (manualSegment) {
     headers['Forced-Segment'] = manualSegment
-  } else if (segTok && externalVisitorId) {
-    headers['Forced-Segment'] = segTok
+  } else if (decryptedSegTok && externalVisitorId) {
+    headers['Forced-Segment'] = decryptedSegTok
     headers['External-Visitor-Id'] = externalVisitorId
   }
 
-  const result = await useFetch<IApiContentResponseModel>(apiPath, {
-    server: true,
-    cache: 'no-cache',
-    headers,
-  })
+  const result = await nuxtApp.runWithContext(() =>
+    useFetch<IApiContentResponseModel>(apiPath, {
+      server: true,
+      cache: 'no-cache',
+      headers,
+    })
+  )
 
   // Normalize null when missing
   if (result.error.value) {

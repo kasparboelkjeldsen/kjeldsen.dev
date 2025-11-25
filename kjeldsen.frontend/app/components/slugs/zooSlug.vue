@@ -34,6 +34,7 @@
           console.debug('[engage] bootstrap complete (page)', {
             pageviewId: s.pageviewId,
             externalVisitorId: s.externalVisitorId,
+            segment: s.segment,
           })
         } else if (s.error) {
           console.warn('[engage] bootstrap error', s.error, { fullState: s })

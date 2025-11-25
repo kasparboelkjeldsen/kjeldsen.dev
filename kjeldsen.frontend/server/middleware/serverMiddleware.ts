@@ -11,8 +11,8 @@ export default defineEventHandler(async (event) => {
 
   // Engage Rules Check
   const url = getRequestURL(event)
-  // Check if there are any query parameters
-  if (Array.from(url.searchParams.keys()).length > 0) {
+  // Check if there are any query parameters and if we are in the zoo section
+  if (url.pathname.startsWith('/zoo') && Array.from(url.searchParams.keys()).length > 0) {
     const path = url.pathname
     const config = useRuntimeConfig()
 

@@ -163,7 +163,7 @@ export default defineEventHandler(async (event) => {
     // Note: The pageview API doesn't return segment information
     // For now, we'll default to 'anon' and might need to implement
     // a separate segmentation call if personalization is needed
-    const activeSegmentAlias = sanitizeSegment('anon')
+    const activeSegmentAlias = sanitizeSegment(response.activeSegmentAlias || 'anon')
 
     if (externalVisitorId && externalVisitorId !== existingVisitorId) {
       setCookie(event, VISITOR_COOKIE, externalVisitorId, {
