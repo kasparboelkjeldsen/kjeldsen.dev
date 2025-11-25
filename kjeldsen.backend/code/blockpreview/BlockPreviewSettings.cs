@@ -56,7 +56,8 @@ public class BlockPreviewSettings : IBlockPreviewSettings
         // If specific page condition (example zoo path) override background but keep text color
         if (url.Contains("/zoo", StringComparison.OrdinalIgnoreCase))
         {
-            var template = $"<link rel=\"stylesheet\" href=\"/css/cms.css\" /><style>p {{color: {text} !important}} .__block-preview {{ background: {background}; color: {text}; pointer-events: none; padding:10px; }}</style><div class=\"__block-preview\">{{{{html}}}}</div>";
+            var cssVars = $"--zoo-primary-1: {palette.primary[0]}; --zoo-primary-2: {palette.primary[1]}; --zoo-primary-3: {palette.primary[2]}; --zoo-primary-4: {palette.primary[3]}; --zoo-secondary-1: {palette.secondary[0]}; --zoo-secondary-2: {palette.secondary[1]}; --zoo-secondary-3: {palette.secondary[2]};";
+            var template = $"<link rel=\"stylesheet\" href=\"/css/cms.css\" /><style>:root {{ {cssVars} }} p, h1, h2, h3 {{color: {text} !important}} .__block-preview {{ background: {background}; color: {text}; pointer-events: none; padding:10px; }}</style><div class=\"__block-preview\">{{{{html}}}}</div>";
             _default.Template = template;
         }
         

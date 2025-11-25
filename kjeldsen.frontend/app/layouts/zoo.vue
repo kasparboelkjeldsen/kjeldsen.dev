@@ -13,18 +13,19 @@
         ]"
       >
         <!-- Logo -->
-        <div class="bg-[var(--zoo-primary-1)] rounded-full px-4 py-1 mr-8">
+        <a href="/zoo" class="bg-[var(--zoo-primary-1)] rounded-full px-4 py-1 mr-8">
           <div class="text-2xl font-black tracking-tighter">ZOO</div>
-        </div>
+        </a>
 
         <!-- Main Menu -->
         <ul class="items-center justify-center flex-1 hidden space-x-8 md:flex">
           <li class="relative cursor-pointer group">
-            <div
+            <a
+              href="/zoo/dyr"
               class="flex items-center gap-1 text-sm font-bold tracking-wide uppercase transition-colors duration-300 hover:text-gray-300"
             >
               Oplev ZOO <i class="fas fa-chevron-down text-[10px] ml-1"></i>
-            </div>
+            </a>
           </li>
           <li class="relative cursor-pointer group">
             <div
@@ -54,7 +55,7 @@
             <i class="text-lg far fa-user"></i>
           </a>
           <a
-            href="#"
+            href="/zoo/aarskort"
             class="bg-[var(--zoo-primary-2)] hover:bg-[#d1491e] text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 uppercase text-sm tracking-wider"
           >
             Køb billet og kort
@@ -172,11 +173,15 @@
         <p>&copy; 2025 ZOO STORE. All rights reserved.</p>
       </div>
     </footer>
+
+    <ZooEngageAdminBar />
   </div>
 </template>
 
 <script lang="ts" setup>
   import type { ZooHomepageContentResponseModel } from '~~/server/delivery-api'
+  import { useZooHeader } from '~/composables/useZooHeader'
+  import ZooEngageAdminBar from '~/components/ZooEngageAdminBar.vue'
 
   const { hasSplash } = useZooHeader()
   const { apiPath, slugHasDot, data } = await usePageContentFromRoute()

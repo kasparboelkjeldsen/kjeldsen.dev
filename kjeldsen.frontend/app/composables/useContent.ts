@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type { IApiContentResponseModel } from '~/../server/delivery-api'
 
-export async function usePageContentFromRoute() {
+export async function usePageContentFromRoute(forcedSegment?: string) {
   const route = useRoute()
   const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug]
   const cleanSlug = slugArray.filter(Boolean).join('/')
@@ -10,9 +10,17 @@ export async function usePageContentFromRoute() {
   const apiPath = `/api/content/${cleanSlug}/`
   const externalVisitorId = useCookie<string | null>('engage_visitor').value || null
   const segTok = useCookie<string | null>('segTok').value || null
+
+  // Try to get manual segment from cookie, or fallback to request header if we just set it in middleware
+  let manualSegment = useCookie<string | null>('manual-segment').value || null
+  if (!manualSegment && import.meta.server) {
+    const headers = useRequestHeaders(['manual-segment'])
+    manualSegment = headers['manual-segment'] || null
+  }
+
+  console.log('frontend manual segment', manualSegment)
   if (segTok) {
     const decryptedSegTok = await decryptSeg(segTok)
-    console.log('segtok', decryptedSegTok)
   }
 
   if (slugHasDot) {
@@ -27,10 +35,16 @@ export async function usePageContentFromRoute() {
     }
   }
   const headers: Record<string, string> = {}
-  if (segTok && externalVisitorId) {
+
+  if (forcedSegment) {
+    headers['Forced-Segment'] = forcedSegment
+  } else if (manualSegment) {
+    headers['Forced-Segment'] = manualSegment
+  } else if (segTok && externalVisitorId) {
     headers['Forced-Segment'] = segTok
     headers['External-Visitor-Id'] = externalVisitorId
   }
+
   const result = await useFetch<IApiContentResponseModel>(apiPath, {
     server: true,
     cache: 'no-cache',

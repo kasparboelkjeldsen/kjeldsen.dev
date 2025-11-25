@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   devtools: { enabled: process.env.NODE_ENV !== 'production' },
   multiCache: {
     route: { enabled: resolvedUseCache },
+    data: { enabled: true },
     api: {
       enabled: resolvedUseCache,
       prefix: '/__nuxt_multi_cache',
