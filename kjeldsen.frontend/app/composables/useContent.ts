@@ -11,8 +11,8 @@ export async function usePageContentFromRoute() {
   const externalVisitorId = useCookie<string | null>('engage_visitor').value || null
   const segTok = useCookie<string | null>('segTok').value || null
   if (segTok) {
-    // const decryptedSegTok = await decryptSeg(segTok)
-    //console.log('segtok', decryptedSegTok)
+    const decryptedSegTok = await decryptSeg(segTok)
+    console.log('segtok', decryptedSegTok)
   }
 
   if (slugHasDot) {

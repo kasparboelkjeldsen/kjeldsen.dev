@@ -13,7 +13,8 @@ import type { NavigationCompositionContentResponseModel } from './NavigationComp
 import type { SeoCompositionContentResponseModel } from './SeoCompositionContentResponseModel';
 import type { WriterContainerPageContentResponseModel } from './WriterContainerPageContentResponseModel';
 import type { WriterContentResponseModel } from './WriterContentResponseModel';
+import type { ZooContentContentResponseModel } from './ZooContentContentResponseModel';
 import type { ZooCtaPageContentResponseModel } from './ZooCtaPageContentResponseModel';
 import type { ZooHomepageContentResponseModel } from './ZooHomepageContentResponseModel';
-export type IApiContentResponseModel = (BlogPostPageContentResponseModel | HeadlessCompositionContentResponseModel | HomePageContentResponseModel | NavigationCompositionContentResponseModel | SeoCompositionContentResponseModel | BlogPostContainerPageContentResponseModel | WriterContentResponseModel | WriterContainerPageContentResponseModel | ContentPageContentResponseModel | ZooHomepageContentResponseModel | AnimalsContentResponseModel | AnimalContentResponseModel | ZooCtaPageContentResponseModel);
+export type IApiContentResponseModel = (BlogPostPageContentResponseModel | HeadlessCompositionContentResponseModel | HomePageContentResponseModel | NavigationCompositionContentResponseModel | SeoCompositionContentResponseModel | BlogPostContainerPageContentResponseModel | WriterContentResponseModel | WriterContainerPageContentResponseModel | ContentPageContentResponseModel | ZooHomepageContentResponseModel | AnimalsContentResponseModel | AnimalContentResponseModel | ZooCtaPageContentResponseModel | ZooContentContentResponseModel);
 

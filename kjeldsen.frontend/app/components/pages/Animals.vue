@@ -114,7 +114,7 @@
     // Sort animals by name first
     const sorted = [...animals.value]
       .filter((a) => a.name)
-      .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+      .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'da'))
 
     sorted.forEach((animal) => {
       const name = animal.name || ''

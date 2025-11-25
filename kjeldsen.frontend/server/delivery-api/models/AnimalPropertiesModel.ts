@@ -8,7 +8,6 @@ export type AnimalPropertiesModel = {
     habitat?: string | null;
     diet?: string | null;
     lifespan?: string | null;
-    tags?: Array<string> | null;
     colors?: string | null;
     description?: string | null;
     image?: Array<IApiMediaWithCropsModel> | null;

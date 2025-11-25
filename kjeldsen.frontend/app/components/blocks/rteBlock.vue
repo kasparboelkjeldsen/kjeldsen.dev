@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white" v-html="processedMarkup" />
+  <div v-html="processedMarkup" />
 </template>
 <script lang="ts" setup>
   import { computed } from 'vue'

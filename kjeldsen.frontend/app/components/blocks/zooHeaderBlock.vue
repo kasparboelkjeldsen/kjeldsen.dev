@@ -2,27 +2,32 @@
   <div class="prose">
     <h1
       v-if="data.properties?.headerLevel === 'H1'"
-      class="text-white prose-h1"
+      class="prose-h1"
+      :style="{ color: 'var(--zoo-primary-1)' }"
       v-html="styledHeader"
     ></h1>
     <h2
       v-else-if="data.properties?.headerLevel === 'H2'"
-      class="text-white prose-h2"
+      class="prose-h2"
+      :style="{ color: 'var(--zoo-primary-1)' }"
       v-html="styledHeader"
     ></h2>
     <h3
       v-else-if="data.properties?.headerLevel === 'H3'"
-      class="text-white prose-h3"
+      class="prose-h3"
+      :style="{ color: 'var(--zoo-primary-1)' }"
       v-html="styledHeader"
     ></h3>
     <h4
       v-else-if="data.properties?.headerLevel === 'H4'"
-      class="text-white prose-h4"
+      class="prose-h4"
+      :style="{ color: 'var(--zoo-primary-1)' }"
       v-html="styledHeader"
     ></h4>
     <h5
       v-else-if="data.properties?.headerLevel === 'H5'"
-      class="text-white prose-h5"
+      class="prose-h5"
+      :style="{ color: 'var(--zoo-primary-1)' }"
       v-html="styledHeader"
     ></h5>
   </div>
@@ -38,9 +43,9 @@
   const styledHeader = computed(() => {
     const raw = props.data.properties?.headerTitle ?? ''
     // Convert custom --highlight-- markers and **bold** markers into styled spans
-    // Use a tasteful red accent (red-300)
+    // Using Zoo theme variables
     return raw
-      .replace(/--([\s\S]+?)--/g, '<span class="text-red-300">$1</span>')
-      .replace(/\*\*([\s\S]+?)\*\*/g, '<span class="text-sky-300">$1</span>')
+      .replace(/--([\s\S]+?)--/g, '<span style="color: var(--zoo-primary-2)">$1</span>')
+      .replace(/\*\*([\s\S]+?)\*\*/g, '<span style="color: var(--zoo-secondary-2)">$1</span>')
   })
 </script>

@@ -7,11 +7,10 @@
     <nav class="absolute left-0 right-0 z-50 flex justify-center top-6">
       <div
         class="backdrop-blur-sm rounded-full px-8 py-3 flex items-center justify-between max-w-[1400px] w-full mx-4 shadow-lg transition-colors duration-300"
-        :class="
-          hasSplash
-            ? 'bg-[var(--zoo-primary-1)]/90 text-white'
-            : 'bg-[var(--zoo-secondary-3)] text-white'
-        "
+        :class="[
+          hasSplash ? 'bg-[var(--zoo-primary-1)]/90' : 'bg-[var(--zoo-secondary-3)]',
+          !hasSplash || currentTheme === 'autumn' ? 'text-white' : 'text-[var(--zoo-secondary-3)]',
+        ]"
       >
         <!-- Logo -->
         <div class="bg-[var(--zoo-primary-1)] rounded-full px-4 py-1 mr-8">
@@ -196,7 +195,7 @@
       secondary: ['#BF9474', '#FED613', '#0F403D'],
     },
     winter: {
-      primary: ['#233270', '#2F68AB', '#A6D1F0', '#E4F4FE'],
+      primary: ['#233270', '#A6D1F0', '#2F68AB', '#E4F4FE'],
       secondary: ['#FFFFFF', '#4E008E', '#4E008E'],
     },
     spring: {

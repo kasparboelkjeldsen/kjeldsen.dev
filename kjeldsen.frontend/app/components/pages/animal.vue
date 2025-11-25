@@ -11,18 +11,18 @@
           v-if="image"
           :src="image"
           :alt="data.name || ''"
-          class="absolute inset-0 w-full h-full object-cover"
+          class="absolute inset-0 object-cover w-full h-full"
         />
         <div
           v-else
-          class="absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-400"
+          class="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-200"
         >
-          <i class="fas fa-paw text-6xl"></i>
+          <i class="text-6xl fas fa-paw"></i>
         </div>
       </div>
 
       <!-- Right Column: Details -->
-      <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+      <div class="flex flex-col justify-center w-full p-8 md:w-1/2 md:p-12">
         <!-- Header -->
         <div class="mb-6">
           <span
@@ -37,7 +37,7 @@
         </div>
 
         <!-- Description -->
-        <div class="mb-8 prose prose-lg text-gray-600 leading-relaxed">
+        <div class="mb-8 leading-relaxed prose prose-lg text-gray-600">
           <p class="font-serif italic text-xl text-[var(--zoo-primary-3)] opacity-80">
             "{{ data.properties?.description }}"
           </p>
@@ -81,17 +81,6 @@
               {{ data.properties?.lifespan || '-' }}
             </div>
           </div>
-        </div>
-
-        <!-- Tags -->
-        <div v-if="data.properties?.tags?.length" class="flex flex-wrap gap-2 mt-auto">
-          <span
-            v-for="tag in data.properties.tags"
-            :key="tag"
-            class="px-3 py-1 text-xs font-bold uppercase border rounded-full text-[var(--zoo-secondary-2)] border-[var(--zoo-secondary-2)] opacity-70"
-          >
-            #{{ tag }}
-          </span>
         </div>
       </div>
     </div>

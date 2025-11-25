@@ -3,7 +3,6 @@ import { handleCacheControlMedia } from '../utils/middleware/cacheControlMedia'
 import { handleSitemap } from '../utils/middleware/sitemap'
 
 export default defineEventHandler(async (event) => {
-  console.log('middleware', event.path)
   // Order matters: handlers may short-circuit by returning a value.
   await handleBlockPreview(event)
   handleCacheControlMedia(event)

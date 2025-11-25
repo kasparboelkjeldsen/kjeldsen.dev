@@ -92,6 +92,9 @@ export type { WriterContainerPagePropertiesModel } from './models/WriterContaine
 export type { WriterContentModel } from './models/WriterContentModel';
 export type { WriterContentResponseModel } from './models/WriterContentResponseModel';
 export type { WriterPropertiesModel } from './models/WriterPropertiesModel';
+export type { ZooContentContentModel } from './models/ZooContentContentModel';
+export type { ZooContentContentResponseModel } from './models/ZooContentContentResponseModel';
+export type { ZooContentPropertiesModel } from './models/ZooContentPropertiesModel';
 export type { ZooCtaPageContentModel } from './models/ZooCtaPageContentModel';
 export type { ZooCtaPageContentResponseModel } from './models/ZooCtaPageContentResponseModel';
 export type { ZooCtaPagePropertiesModel } from './models/ZooCtaPagePropertiesModel';
