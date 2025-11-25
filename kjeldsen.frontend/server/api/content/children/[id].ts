@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
       fetch: `children:${id}`,
       apiKey: config.deliveryKey,
       expand: 'properties[$all]',
+      take: 1000,
     })
 
     return response

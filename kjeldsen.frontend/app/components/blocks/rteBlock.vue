@@ -20,7 +20,7 @@
 <style lang="css">
   /* Headings stay white, but strong/b/bold should be sky-300 */
   h2 {
-    color: white !important;
+    color: white;
   }
   p strong,
   p b,

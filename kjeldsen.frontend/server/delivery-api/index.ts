@@ -10,6 +10,12 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { AnimalContentModel } from './models/AnimalContentModel';
+export type { AnimalContentResponseModel } from './models/AnimalContentResponseModel';
+export type { AnimalPropertiesModel } from './models/AnimalPropertiesModel';
+export type { AnimalsContentModel } from './models/AnimalsContentModel';
+export type { AnimalsContentResponseModel } from './models/AnimalsContentResponseModel';
+export type { AnimalsPropertiesModel } from './models/AnimalsPropertiesModel';
 export type { ApiBlockGridAreaModel } from './models/ApiBlockGridAreaModel';
 export type { ApiBlockGridItemModel } from './models/ApiBlockGridItemModel';
 export type { ApiBlockGridModel } from './models/ApiBlockGridModel';
@@ -26,6 +32,10 @@ export type { BlogPostPageContentResponseModel } from './models/BlogPostPageCont
 export type { BlogPostPagePropertiesModel } from './models/BlogPostPagePropertiesModel';
 export type { CacheKeyExampleBlockElementModel } from './models/CacheKeyExampleBlockElementModel';
 export type { CacheKeyExampleBlockPropertiesModel } from './models/CacheKeyExampleBlockPropertiesModel';
+export type { CardBlockElementModel } from './models/CardBlockElementModel';
+export type { CardBlockPropertiesModel } from './models/CardBlockPropertiesModel';
+export type { CardElementModel } from './models/CardElementModel';
+export type { CardPropertiesModel } from './models/CardPropertiesModel';
 export type { CodeBlockElementModel } from './models/CodeBlockElementModel';
 export type { CodeBlockPropertiesModel } from './models/CodeBlockPropertiesModel';
 export type { ContentPageContentModel } from './models/ContentPageContentModel';
@@ -82,6 +92,12 @@ export type { WriterContainerPagePropertiesModel } from './models/WriterContaine
 export type { WriterContentModel } from './models/WriterContentModel';
 export type { WriterContentResponseModel } from './models/WriterContentResponseModel';
 export type { WriterPropertiesModel } from './models/WriterPropertiesModel';
+export type { ZooCtaPageContentModel } from './models/ZooCtaPageContentModel';
+export type { ZooCtaPageContentResponseModel } from './models/ZooCtaPageContentResponseModel';
+export type { ZooCtaPagePropertiesModel } from './models/ZooCtaPagePropertiesModel';
+export type { ZooHomepageContentModel } from './models/ZooHomepageContentModel';
+export type { ZooHomepageContentResponseModel } from './models/ZooHomepageContentResponseModel';
+export type { ZooHomepagePropertiesModel } from './models/ZooHomepagePropertiesModel';
 
 export { ContentService } from './services/ContentService';
 export { MediaService } from './services/MediaService';

@@ -37,6 +37,7 @@
     spotlightBlock: defineAsyncComponent(() => import('./spotlightBlock.vue')),
     cacheKeyExampleBlock: defineAsyncComponent(() => import('./cacheKeyExampleBlock.vue')),
     vimeoBlock: defineAsyncComponent(() => import('./vimeoBlock.vue')),
+    cardBlock: defineAsyncComponent(() => import('./cardBlock.vue')),
   }
   const islandList = [{ contentType: 'codeBlock', toRender: 'BlocksCodeBlock' }]
 

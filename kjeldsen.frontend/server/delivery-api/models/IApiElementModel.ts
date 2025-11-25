@@ -3,6 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { CacheKeyExampleBlockElementModel } from './CacheKeyExampleBlockElementModel';
+import type { CardBlockElementModel } from './CardBlockElementModel';
+import type { CardElementModel } from './CardElementModel';
 import type { CodeBlockElementModel } from './CodeBlockElementModel';
 import type { FunTimeWebEkgElementModel } from './FunTimeWebEkgElementModel';
 import type { FunTimeWebMurderBlockElementModel } from './FunTimeWebMurderBlockElementModel';
@@ -12,5 +14,5 @@ import type { RteBlockElementModel } from './RteBlockElementModel';
 import type { SpotlightBlockElementModel } from './SpotlightBlockElementModel';
 import type { TestBlockElementModel } from './TestBlockElementModel';
 import type { VimeoBlockElementModel } from './VimeoBlockElementModel';
-export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel | VimeoBlockElementModel);
+export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel | VimeoBlockElementModel | CardBlockElementModel | CardElementModel);
 

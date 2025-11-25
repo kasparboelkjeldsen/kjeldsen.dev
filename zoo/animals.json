@@ -1,0 +1,1887 @@
+{
+  "da": [
+    {
+      "alligator": {
+        "type": "Krybdyr",
+        "habitat": "Søer, floder og sumpe",
+        "diet": "Kødædende",
+        "lifespan": "Op til 50 år",
+        "tags": [
+          "farlig",
+          "stor",
+          "vild"
+        ],
+        "color-scheme": {
+          "primary": "darkgreen",
+          "secondary": "brown"
+        },
+        "description100words": "Alligatorer er store krybdyr, der findes i søer, floder og sumpe. De er kødædende og kan leve op til 50 år. Alligatorer er kendt for deres stærke kæber og skarpe tænder.",
+        "image": "https://images.unsplash.com/photo-ozJ_4I8qGk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "alpaka": {
+        "type": "Pattedyr",
+        "habitat": "Bjerge i Sydamerika",
+        "diet": "Planteædende",
+        "lifespan": "15-20 år",
+        "tags": [
+          "uld",
+          "blød",
+          "husdyr"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "wheat"
+        },
+        "description100words": "Alpakaen er et tæmmet kameldyr fra Sydamerika. Den er kendt for sin utroligt bløde uld og sit rolige sind.",
+        "image": "https://images.unsplash.com/photo-GkX3_7H55wE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "bjørn": {
+        "type": "Pattedyr",
+        "habitat": "Skove og bjerge",
+        "diet": "Altædende",
+        "lifespan": "20-30 år",
+        "tags": [
+          "stærk",
+          "pels",
+          "vild"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "black"
+        },
+        "description100words": "Bjørne er store, kraftige pattedyr med tyk pels. De findes i mange forskellige klimaer og er kendt for at gå i hi om vinteren.",
+        "image": "https://images.unsplash.com/photo-8LITuYkTjXk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "bæver": {
+        "type": "Pattedyr",
+        "habitat": "Floder og søer",
+        "diet": "Planteædende",
+        "lifespan": "10-15 år",
+        "tags": [
+          "bygger",
+          "vand",
+          "tænder"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "darkslategray"
+        },
+        "description100words": "Bævere er kendt for at bygge dæmninger og hytter af træ og mudder. De har store fortænder, der vokser hele livet.",
+        "image": "https://images.unsplash.com/photo-K_b41GaWC5Y?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "chimpanse": {
+        "type": "Pattedyr",
+        "habitat": "Regnskove",
+        "diet": "Altædende",
+        "lifespan": "40-50 år",
+        "tags": [
+          "klog",
+          "social",
+          "abe"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "darksalmon"
+        },
+        "description100words": "Chimpanser er vores nærmeste nulevende slægtninge i dyreriget. De bruger redskaber og lever i komplekse sociale grupper.",
+        "image": "https://images.unsplash.com/photo-Z05GiksmqYU?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "cikade": {
+        "type": "Insekt",
+        "habitat": "Træer i varme klimaer",
+        "diet": "Plantesaft",
+        "lifespan": "Få uger (efter år under jorden)",
+        "tags": [
+          "larmende",
+          "vinger",
+          "sommer"
+        ],
+        "color-scheme": {
+          "primary": "olivedrab",
+          "secondary": "gold"
+        },
+        "description100words": "Cikader er kendt for deres høje sang på varme sommerdage. Nogle arter lever under jorden i op til 17 år før de kommer frem.",
+        "image": "https://images.unsplash.com/photo-yJg-1Y0s1Yk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "delfin": {
+        "type": "Pattedyr",
+        "habitat": "Have og oceaner",
+        "diet": "Kødædende",
+        "lifespan": "20-40 år",
+        "tags": [
+          "klog",
+          "legende",
+          "svømmer"
+        ],
+        "color-scheme": {
+          "primary": "deepskyblue",
+          "secondary": "lightgray"
+        },
+        "description100words": "Delfiner er intelligente havpattedyr, der lever i sociale grupper. De kommunikerer med klik og fløjtelyde.",
+        "image": "https://images.unsplash.com/photo-2zDw14yCYqk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "dådyr": {
+        "type": "Pattedyr",
+        "habitat": "Skove og parker",
+        "diet": "Planteædende",
+        "lifespan": "12-16 år",
+        "tags": [
+          "prikket",
+          "gevir",
+          "hurtig"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "white"
+        },
+        "description100words": "Dådyret er en mellemstor hjorteart, der er kendt for sin plettede sommerpels og hannernes skovlformede gevir.",
+        "image": "https://images.unsplash.com/photo-e616t35Vbeg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "elefant": {
+        "type": "Pattedyr",
+        "habitat": "Savanner og skove",
+        "diet": "Planteædende",
+        "lifespan": "60-70 år",
+        "tags": [
+          "kæmpe",
+          "snabel",
+          "klog"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "darkgray"
+        },
+        "description100words": "Elefanter er verdens største landdyr og har en utrolig hukommelse. De bruger deres snabel til at spise, drikke og hilse på hinanden.",
+        "image": "https://images.unsplash.com/photo-L7en7Lb-Ovc?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "egern": {
+        "type": "Pattedyr",
+        "habitat": "Skove og haver",
+        "diet": "Planteædende",
+        "lifespan": "3-7 år",
+        "tags": [
+          "lille",
+          "hurtig",
+          "hale"
+        ],
+        "color-scheme": {
+          "primary": "chocolate",
+          "secondary": "tan"
+        },
+        "description100words": "Egernet er en lille gnaver med en stor busket hale, der elsker nødder. De gemmer ofte mad til vinteren.",
+        "image": "https://images.unsplash.com/photo-ucUB9wxkPgY?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "flamingo": {
+        "type": "Fugl",
+        "habitat": "Søer og laguner",
+        "diet": "Altædende",
+        "lifespan": "20-30 år",
+        "tags": [
+          "lyserød",
+          "lang",
+          "flok"
+        ],
+        "color-scheme": {
+          "primary": "hotpink",
+          "secondary": "pink"
+        },
+        "description100words": "Flamingoer er kendt for deres lyserøde fjerdragt og lange ben. De får deres farve fra de små krebsdyr, de spiser.",
+        "image": "https://images.unsplash.com/photo-f77Bh3inUpE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "flagermus": {
+        "type": "Pattedyr",
+        "habitat": "Huler og skove",
+        "diet": "Insektædende/Frugtædende",
+        "lifespan": "10-30 år",
+        "tags": [
+          "nat",
+          "flyvende",
+          "radar"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "dimgray"
+        },
+        "description100words": "Flagermus er de eneste pattedyr, der virkelig kan flyve. De bruger ekkolokalisering til at finde vej og fange insekter i mørket.",
+        "image": "https://images.unsplash.com/photo-01_igFr7hd4?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "giraf": {
+        "type": "Pattedyr",
+        "habitat": "Savanner",
+        "diet": "Planteædende",
+        "lifespan": "20-25 år",
+        "tags": [
+          "høj",
+          "hals",
+          "pletter"
+        ],
+        "color-scheme": {
+          "primary": "gold",
+          "secondary": "saddlebrown"
+        },
+        "description100words": "Giraffen er verdens højeste landdyr og spiser blade fra toppen af træerne. Hver giraf har et unikt pletmønster.",
+        "image": "https://images.unsplash.com/photo-o54RjF-C7go?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "grævling": {
+        "type": "Pattedyr",
+        "habitat": "Skove og åbne landskaber",
+        "diet": "Altædende",
+        "lifespan": "10-15 år",
+        "tags": [
+          "striber",
+          "nat",
+          "hule"
+        ],
+        "color-scheme": {
+          "primary": "darkslategray",
+          "secondary": "lightgray"
+        },
+        "description100words": "Grævlingen er et kraftigt bygget mårdyr med karakteristiske sorte og hvide striber i hovedet. Den bor i store underjordiske hulesystemer.",
+        "image": "https://images.unsplash.com/photo-8qEB0f_GF7k?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "hest": {
+        "type": "Pattedyr",
+        "habitat": "Sletter og gårde",
+        "diet": "Planteædende",
+        "lifespan": "25-30 år",
+        "tags": [
+          "hurtig",
+          "ride",
+          "man"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "black"
+        },
+        "description100words": "Heste har været menneskets ledsager i årtusinder til transport og arbejde. Der findes mange forskellige racer i alle størrelser.",
+        "image": "https://images.unsplash.com/photo-p-I9w-rDq4s?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "hyæne": {
+        "type": "Pattedyr",
+        "habitat": "Savanner",
+        "diet": "Kødædende",
+        "lifespan": "12-20 år",
+        "tags": [
+          "latter",
+          "jæger",
+          "flok"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "darkkhaki"
+        },
+        "description100words": "Hyæner er dygtige jægere og ådselædere, kendt for deres 'latter'. De lever i klaner styret af en dominerende hun.",
+        "image": "https://images.unsplash.com/photo-cxoR55-bels?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "isbjørn": {
+        "type": "Pattedyr",
+        "habitat": "Arktis",
+        "diet": "Kødædende",
+        "lifespan": "20-25 år",
+        "tags": [
+          "hvid",
+          "kulde",
+          "stærk"
+        ],
+        "color-scheme": {
+          "primary": "white",
+          "secondary": "lightcyan"
+        },
+        "description100words": "Isbjørnen er verdens største landlevende rovdyr og lever på havisen. Den er perfekt tilpasset det kolde arktiske klima.",
+        "image": "https://images.unsplash.com/photo-B_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "iguan": {
+        "type": "Krybdyr",
+        "habitat": "Tropiske skove",
+        "diet": "Planteædende",
+        "lifespan": "15-20 år",
+        "tags": [
+          "grøn",
+          "skæl",
+          "kam"
+        ],
+        "color-scheme": {
+          "primary": "limegreen",
+          "secondary": "forestgreen"
+        },
+        "description100words": "Iguaner er store øgler, der ofte lever i træer i tropiske områder. De har en lang hale og en kam af pigge ned ad ryggen.",
+        "image": "https://images.unsplash.com/photo-F_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "jaguar": {
+        "type": "Pattedyr",
+        "habitat": "Regnskove",
+        "diet": "Kødædende",
+        "lifespan": "12-15 år",
+        "tags": [
+          "pletter",
+          "jæger",
+          "kat"
+        ],
+        "color-scheme": {
+          "primary": "goldenrod",
+          "secondary": "black"
+        },
+        "description100words": "Jaguaren er den største kat i Amerika og en fremragende svømmer. Den har et utroligt kraftigt bid.",
+        "image": "https://images.unsplash.com/photo-Xn4L310D-q?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "jordegern": {
+        "type": "Pattedyr",
+        "habitat": "Skove og huler",
+        "diet": "Altædende",
+        "lifespan": "2-3 år",
+        "tags": [
+          "striber",
+          "nødder",
+          "lille"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "wheat"
+        },
+        "description100words": "Jordegern er små gnavere med striber på ryggen, der samler forråd i deres kindposer.",
+        "image": "https://images.unsplash.com/photo-ucUB9wxkPgY?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "kænguru": {
+        "type": "Pattedyr",
+        "habitat": "Australiens sletter",
+        "diet": "Planteædende",
+        "lifespan": "6-20 år",
+        "tags": [
+          "hop",
+          "pung",
+          "australien"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "burlywood"
+        },
+        "description100words": "Kænguruer er pungdyr, der bevæger sig ved at hoppe på deres kraftige bagben. Hunnerne bærer deres unger i en pung på maven.",
+        "image": "https://images.unsplash.com/photo-364fWlWEVqI?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "koala": {
+        "type": "Pattedyr",
+        "habitat": "Eukalyptusskove",
+        "diet": "Planteædende",
+        "lifespan": "13-18 år",
+        "tags": [
+          "træ",
+          "sover",
+          "australien"
+        ],
+        "color-scheme": {
+          "primary": "silver",
+          "secondary": "gray"
+        },
+        "description100words": "Koalaen er et pungdyr, der lever af eukalyptusblade og sover meget. Den har skarpe kløer til at klatre i træer.",
+        "image": "https://images.unsplash.com/photo-S_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "løve": {
+        "type": "Pattedyr",
+        "habitat": "Savanner",
+        "diet": "Kødædende",
+        "lifespan": "10-14 år",
+        "tags": [
+          "konge",
+          "brøl",
+          "manke"
+        ],
+        "color-scheme": {
+          "primary": "gold",
+          "secondary": "darkorange"
+        },
+        "description100words": "Løven kaldes dyrenes konge og lever i flokke på den afrikanske savanne. Hannen har en stor manke.",
+        "image": "https://images.unsplash.com/photo-O0R5vg8VW0c?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "lemur": {
+        "type": "Pattedyr",
+        "habitat": "Madagaskar",
+        "diet": "Altædende",
+        "lifespan": "15-20 år",
+        "tags": [
+          "hale",
+          "øjne",
+          "madagaskar"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "black"
+        },
+        "description100words": "Lemurer findes kun på Madagaskar og er kendt for deres store øjne og lange haler.",
+        "image": "https://images.unsplash.com/photo-L_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "mus": {
+        "type": "Pattedyr",
+        "habitat": "Overalt",
+        "diet": "Altædende",
+        "lifespan": "1-2 år",
+        "tags": [
+          "lille",
+          "ost",
+          "hurtig"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "pink"
+        },
+        "description100words": "Mus er små gnavere, der findes næsten overalt i verden. De er meget tilpasningsdygtige og formerer sig hurtigt.",
+        "image": "https://images.unsplash.com/photo-U6s5g5b5j5U?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "muldvarp": {
+        "type": "Pattedyr",
+        "habitat": "Under jorden",
+        "diet": "Insektædende",
+        "lifespan": "3-6 år",
+        "tags": [
+          "graver",
+          "blind",
+          "jord"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "dimgray"
+        },
+        "description100words": "Muldvarpen lever det meste af sit liv under jorden, hvor den graver gange og spiser regnorme.",
+        "image": "https://images.unsplash.com/photo-M_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "næsehorn": {
+        "type": "Pattedyr",
+        "habitat": "Savanner og skove",
+        "diet": "Planteædende",
+        "lifespan": "35-50 år",
+        "tags": [
+          "horn",
+          "tung",
+          "panser"
+        ],
+        "color-scheme": {
+          "primary": "darkgray",
+          "secondary": "gray"
+        },
+        "description100words": "Næsehorn er store, tunge dyr kendt for deres horn på snuden. De har tyk hud, der ligner panser.",
+        "image": "https://images.unsplash.com/photo-R_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "narhval": {
+        "type": "Pattedyr",
+        "habitat": "Arktiske have",
+        "diet": "Kødædende",
+        "lifespan": "30-50 år",
+        "tags": [
+          "horn",
+          "hval",
+          "vand"
+        ],
+        "color-scheme": {
+          "primary": "lightgray",
+          "secondary": "darkslategray"
+        },
+        "description100words": "Narhvalen er kendt som 'havets enhjørning' på grund af sin lange stødtand, som faktisk er en tand.",
+        "image": "https://images.unsplash.com/photo-N_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "odder": {
+        "type": "Pattedyr",
+        "habitat": "Vandløb og kyster",
+        "diet": "Kødædende",
+        "lifespan": "10-15 år",
+        "tags": [
+          "vand",
+          "leg",
+          "pels"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "saddlebrown"
+        },
+        "description100words": "Oddere er legesyge dyr, der er fremragende svømmere. De har tæt pels, der holder dem varme i vandet.",
+        "image": "https://images.unsplash.com/photo-O_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "okapi": {
+        "type": "Pattedyr",
+        "habitat": "Regnskove i Congo",
+        "diet": "Planteædende",
+        "lifespan": "20-30 år",
+        "tags": [
+          "striber",
+          "sjælden",
+          "skov"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "white"
+        },
+        "description100words": "Okapien ligner en blanding af en hest og en zebra, men er i familie med giraffen. Den er meget sky.",
+        "image": "https://images.unsplash.com/photo-K_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "pingvin": {
+        "type": "Fugl",
+        "habitat": "Antarktis og sydlige have",
+        "diet": "Kødædende",
+        "lifespan": "15-20 år",
+        "tags": [
+          "is",
+          "svømmer",
+          "kjole"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "white"
+        },
+        "description100words": "Pingviner er fugle, der ikke kan flyve, men er mestre til at svømme. De lever ofte i store kolonier.",
+        "image": "https://images.unsplash.com/photo-5-GNa303REg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "panda": {
+        "type": "Pattedyr",
+        "habitat": "Bambusskove",
+        "diet": "Planteædende",
+        "lifespan": "20 år",
+        "tags": [
+          "sort-hvid",
+          "bambus",
+          "kina"
+        ],
+        "color-scheme": {
+          "primary": "white",
+          "secondary": "black"
+        },
+        "description100words": "Kæmpepandaen er kendt for sin sorte og hvide pels og sin appetit på bambus. Den er et symbol på naturbevarelse.",
+        "image": "https://images.unsplash.com/photo-4vwv2cfpTg8?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "quokka": {
+        "type": "Pattedyr",
+        "habitat": "Øer i Australien",
+        "diet": "Planteædende",
+        "lifespan": "10 år",
+        "tags": [
+          "smil",
+          "lille",
+          "pungdyr"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "saddlebrown"
+        },
+        "description100words": "Quokkaen er kendt som verdens gladeste dyr på grund af sit smilende udtryk. Den er et lille pungdyr.",
+        "image": "https://images.unsplash.com/photo-Q_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "quetzal": {
+        "type": "Fugl",
+        "habitat": "Mellemamerikas skove",
+        "diet": "Altædende",
+        "lifespan": "20-25 år",
+        "tags": [
+          "farverig",
+          "hale",
+          "hellig"
+        ],
+        "color-scheme": {
+          "primary": "springgreen",
+          "secondary": "red"
+        },
+        "description100words": "Quetzalen er en utrolig farverig fugl med en meget lang hale. Den blev betragtet som hellig af mayaerne.",
+        "image": "https://images.unsplash.com/photo-Z_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "ræv": {
+        "type": "Pattedyr",
+        "habitat": "Skove og byer",
+        "diet": "Altædende",
+        "lifespan": "2-5 år",
+        "tags": [
+          "snedig",
+          "rød",
+          "hale"
+        ],
+        "color-scheme": {
+          "primary": "orangered",
+          "secondary": "white"
+        },
+        "description100words": "Ræven er et klogt og tilpasningsdygtigt rovdyr med en flot rød pels og en stor busket hale.",
+        "image": "https://images.unsplash.com/photo-wTzR8e0P8eU?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "rensdyr": {
+        "type": "Pattedyr",
+        "habitat": "Tundra og bjerge",
+        "diet": "Planteædende",
+        "lifespan": "15 år",
+        "tags": [
+          "gevir",
+          "jul",
+          "flok"
+        ],
+        "color-scheme": {
+          "primary": "rosybrown",
+          "secondary": "white"
+        },
+        "description100words": "Rensdyr lever i kolde nordlige egne og vandrer ofte i store flokke. Både hanner og hunner har gevir.",
+        "image": "https://images.unsplash.com/photo-e616t35Vbeg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "slange": {
+        "type": "Krybdyr",
+        "habitat": "Overalt undtagen polerne",
+        "diet": "Kødædende",
+        "lifespan": "10-30 år",
+        "tags": [
+          "lang",
+          "gift",
+          "kryb"
+        ],
+        "color-scheme": {
+          "primary": "olivedrab",
+          "secondary": "yellowgreen"
+        },
+        "description100words": "Slanger er benløse krybdyr, der findes i mange størrelser og farver. Nogle er giftige, men de fleste er ufarlige.",
+        "image": "https://images.unsplash.com/photo-9-GNa303REg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "sæl": {
+        "type": "Pattedyr",
+        "habitat": "Have og kyster",
+        "diet": "Kødædende",
+        "lifespan": "25-30 år",
+        "tags": [
+          "vand",
+          "luffer",
+          "sød"
+        ],
+        "color-scheme": {
+          "primary": "silver",
+          "secondary": "darkgray"
+        },
+        "description100words": "Sæler er havpattedyr, der er kluntede på land men elegante i vand. De har et tykt lag spæk mod kulden.",
+        "image": "https://images.unsplash.com/photo-S_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "tiger": {
+        "type": "Pattedyr",
+        "habitat": "Asiens skove",
+        "diet": "Kødædende",
+        "lifespan": "10-15 år",
+        "tags": [
+          "striber",
+          "farlig",
+          "kat"
+        ],
+        "color-scheme": {
+          "primary": "orange",
+          "secondary": "black"
+        },
+        "description100words": "Tigeren er verdens største kat og kendes på sine sorte striber. Den er en enspænder og en dygtig jæger.",
+        "image": "https://images.unsplash.com/photo-T_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "tukan": {
+        "type": "Fugl",
+        "habitat": "Regnskove",
+        "diet": "Altædende",
+        "lifespan": "20 år",
+        "tags": [
+          "næb",
+          "farver",
+          "træ"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "orange"
+        },
+        "description100words": "Tukanen er kendt for sit enorme og farverige næb, som den bruger til at plukke frugt og skræmme rivaler.",
+        "image": "https://images.unsplash.com/photo-U_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "ugle": {
+        "type": "Fugl",
+        "habitat": "Skove",
+        "diet": "Kødædende",
+        "lifespan": "10-20 år",
+        "tags": [
+          "nat",
+          "klog",
+          "øjne"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "tan"
+        },
+        "description100words": "Ugler er nataktive rovfugle med fantastisk syn og hørelse. De kan dreje hovedet næsten hele vejen rundt.",
+        "image": "https://images.unsplash.com/photo-1-GNa303REg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "ulv": {
+        "type": "Pattedyr",
+        "habitat": "Skove og tundra",
+        "diet": "Kødædende",
+        "lifespan": "6-8 år",
+        "tags": [
+          "flok",
+          "hyl",
+          "vild"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "lightgray"
+        },
+        "description100words": "Ulven er stamfaderen til alle tamhunde og lever i tætte familiegrupper. De kommunikerer ved at hyle.",
+        "image": "https://images.unsplash.com/photo-m88-7GkC5wE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "vaskebjørn": {
+        "type": "Pattedyr",
+        "habitat": "Skove og byer",
+        "diet": "Altædende",
+        "lifespan": "2-3 år",
+        "tags": [
+          "maske",
+          "hænder",
+          "nat"
+        ],
+        "color-scheme": {
+          "primary": "dimgray",
+          "secondary": "black"
+        },
+        "description100words": "Vaskebjørne er nysgerrige dyr med en sort maske og fingerfærdige poter. De er kendt for at rode i skraldespande.",
+        "image": "https://images.unsplash.com/photo-V_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "vildsvin": {
+        "type": "Pattedyr",
+        "habitat": "Skove",
+        "diet": "Altædende",
+        "lifespan": "15-20 år",
+        "tags": [
+          "tænder",
+          "børster",
+          "stærk"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "black"
+        },
+        "description100words": "Vildsvinet er forfaderen til tamsvinet og har store hjørnetænder. De lever i flokke i skoven.",
+        "image": "https://images.unsplash.com/photo-W_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "wombat": {
+        "type": "Pattedyr",
+        "habitat": "Australien",
+        "diet": "Planteædende",
+        "lifespan": "15 år",
+        "tags": [
+          "grave",
+          "tyk",
+          "nat"
+        ],
+        "color-scheme": {
+          "primary": "rosybrown",
+          "secondary": "sienna"
+        },
+        "description100words": "Wombatten er et kraftigt pungdyr, der graver store hulesystemer. Den har en meget hård bagdel til forsvar.",
+        "image": "https://images.unsplash.com/photo-X_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "wallaby": {
+        "type": "Pattedyr",
+        "habitat": "Australien",
+        "diet": "Planteædende",
+        "lifespan": "9-15 år",
+        "tags": [
+          "hop",
+          "lille",
+          "pung"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "wheat"
+        },
+        "description100words": "En wallaby ligner en kænguru, men er typisk mindre. De er også pungdyr og lever i Australien.",
+        "image": "https://images.unsplash.com/photo-364fWlWEVqI?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "xenopus": {
+        "type": "Padde",
+        "habitat": "Vand i Afrika",
+        "diet": "Kødædende",
+        "lifespan": "5-15 år",
+        "tags": [
+          "frø",
+          "vand",
+          "glat"
+        ],
+        "color-scheme": {
+          "primary": "olive",
+          "secondary": "darkolivegreen"
+        },
+        "description100words": "Xenopus er en slægt af frøer, der lever hele deres liv under vandet. De bruges ofte i forskning.",
+        "image": "https://images.unsplash.com/photo-Y_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "yakokse": {
+        "type": "Pattedyr",
+        "habitat": "Himalaya",
+        "diet": "Planteædende",
+        "lifespan": "20 år",
+        "tags": [
+          "bjerge",
+          "uld",
+          "horn"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "darkslategray"
+        },
+        "description100words": "Yakoksen er tilpasset livet i de høje bjerge med sin tykke pels. Den bruges som lastdyr i Himalaya.",
+        "image": "https://images.unsplash.com/photo-GkX3_7H55wE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "zebra": {
+        "type": "Pattedyr",
+        "habitat": "Savanner",
+        "diet": "Planteædende",
+        "lifespan": "25 år",
+        "tags": [
+          "striber",
+          "sort-hvid",
+          "hest"
+        ],
+        "color-scheme": {
+          "primary": "white",
+          "secondary": "black"
+        },
+        "description100words": "Zebraen er kendt for sine sorte og hvide striber, som forvirrer rovdyr. Ingen to zebraer har ens striber.",
+        "image": "https://images.unsplash.com/photo-o54RjF-C7go?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    }
+  ],
+  "en": [
+    {
+      "alligator": {
+        "type": "Reptile",
+        "habitat": "Swamps and rivers",
+        "diet": "Carnivore",
+        "lifespan": "30-50 years",
+        "tags": [
+          "dangerous",
+          "teeth",
+          "swamp"
+        ],
+        "color-scheme": {
+          "primary": "darkgreen",
+          "secondary": "olive"
+        },
+        "description100words": "Alligators are large reptiles native to the Americas and China. They have powerful jaws and armored skin.",
+        "image": "https://images.unsplash.com/photo-ozJ_4I8qGk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "antelope": {
+        "type": "Mammal",
+        "habitat": "Grasslands",
+        "diet": "Herbivore",
+        "lifespan": "10-25 years",
+        "tags": [
+          "fast",
+          "horns",
+          "herd"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "wheat"
+        },
+        "description100words": "Antelopes are elegant runners found mainly in Africa and Asia. They live in herds for protection.",
+        "image": "https://images.unsplash.com/photo-f77Bh3inUpE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "bear": {
+        "type": "Mammal",
+        "habitat": "Forests and mountains",
+        "diet": "Omnivore",
+        "lifespan": "20-30 years",
+        "tags": [
+          "strong",
+          "fur",
+          "hibernation"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "black"
+        },
+        "description100words": "Bears are large mammals found in many habitats throughout the Northern Hemisphere. They are known for their strength.",
+        "image": "https://images.unsplash.com/photo-8LITuYkTjXk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "beaver": {
+        "type": "Mammal",
+        "habitat": "Rivers and ponds",
+        "diet": "Herbivore",
+        "lifespan": "10-15 years",
+        "tags": [
+          "dam",
+          "teeth",
+          "tail"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "darkslategray"
+        },
+        "description100words": "Beavers are famous for building dams and lodges using trees and mud. They are nature's engineers.",
+        "image": "https://images.unsplash.com/photo-K_b41GaWC5Y?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "cat": {
+        "type": "Mammal",
+        "habitat": "Homes",
+        "diet": "Carnivore",
+        "lifespan": "12-18 years",
+        "tags": [
+          "pet",
+          "soft",
+          "meow"
+        ],
+        "color-scheme": {
+          "primary": "lightgray",
+          "secondary": "darkgray"
+        },
+        "description100words": "Cats are popular pets known for their agility and independence. They have been companions to humans for thousands of years.",
+        "image": "https://images.unsplash.com/photo-gKXKBY-C-Dk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "camel": {
+        "type": "Mammal",
+        "habitat": "Deserts",
+        "diet": "Herbivore",
+        "lifespan": "40-50 years",
+        "tags": [
+          "hump",
+          "desert",
+          "sand"
+        ],
+        "color-scheme": {
+          "primary": "tan",
+          "secondary": "burlywood"
+        },
+        "description100words": "Camels are adapted to desert life and can go for long periods without water. Their humps store fat.",
+        "image": "https://images.unsplash.com/photo-C_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "dolphin": {
+        "type": "Mammal",
+        "habitat": "Oceans",
+        "diet": "Carnivore",
+        "lifespan": "20-40 years",
+        "tags": [
+          "smart",
+          "playful",
+          "swim"
+        ],
+        "color-scheme": {
+          "primary": "deepskyblue",
+          "secondary": "lightgray"
+        },
+        "description100words": "Dolphins are highly intelligent marine mammals known for their acrobatics and social behavior.",
+        "image": "https://images.unsplash.com/photo-2zDw14yCYqk?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "deer": {
+        "type": "Mammal",
+        "habitat": "Forests",
+        "diet": "Herbivore",
+        "lifespan": "10-20 years",
+        "tags": [
+          "antlers",
+          "gentle",
+          "forest"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "white"
+        },
+        "description100words": "Deer are common forest animals; males often grow antlers annually. They are swift runners.",
+        "image": "https://images.unsplash.com/photo-e616t35Vbeg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "elephant": {
+        "type": "Mammal",
+        "habitat": "Savannas and forests",
+        "diet": "Herbivore",
+        "lifespan": "60-70 years",
+        "tags": [
+          "huge",
+          "trunk",
+          "tusks"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "darkgray"
+        },
+        "description100words": "Elephants are the largest land animals and have complex social structures. Their trunks are very versatile tools.",
+        "image": "https://images.unsplash.com/photo-L7en7Lb-Ovc?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "eagle": {
+        "type": "Bird",
+        "habitat": "Mountains and skies",
+        "diet": "Carnivore",
+        "lifespan": "20-30 years",
+        "tags": [
+          "fly",
+          "predator",
+          "vision"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "white"
+        },
+        "description100words": "Eagles are large birds of prey with excellent eyesight. They build large nests in high places.",
+        "image": "https://images.unsplash.com/photo-E_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "flamingo": {
+        "type": "Bird",
+        "habitat": "Lakes",
+        "diet": "Omnivore",
+        "lifespan": "20-30 years",
+        "tags": [
+          "pink",
+          "tall",
+          "water"
+        ],
+        "color-scheme": {
+          "primary": "hotpink",
+          "secondary": "pink"
+        },
+        "description100words": "Flamingos are famous for their bright pink feathers and standing on one leg. They live in large flocks.",
+        "image": "https://images.unsplash.com/photo-f77Bh3inUpE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "fox": {
+        "type": "Mammal",
+        "habitat": "Forests and cities",
+        "diet": "Omnivore",
+        "lifespan": "2-5 years",
+        "tags": [
+          "cunning",
+          "red",
+          "tail"
+        ],
+        "color-scheme": {
+          "primary": "orangered",
+          "secondary": "white"
+        },
+        "description100words": "Foxes are small to medium-sized omnivorous mammals belonging to the dog family. They are very adaptable.",
+        "image": "https://images.unsplash.com/photo-wTzR8e0P8eU?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "giraffe": {
+        "type": "Mammal",
+        "habitat": "Savannas",
+        "diet": "Herbivore",
+        "lifespan": "20-25 years",
+        "tags": [
+          "tall",
+          "neck",
+          "spots"
+        ],
+        "color-scheme": {
+          "primary": "gold",
+          "secondary": "saddlebrown"
+        },
+        "description100words": "Giraffes are the tallest mammals on Earth, browsing on high tree branches. They have long blue tongues.",
+        "image": "https://images.unsplash.com/photo-o54RjF-C7go?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "gorilla": {
+        "type": "Mammal",
+        "habitat": "Rainforests",
+        "diet": "Herbivore",
+        "lifespan": "35-40 years",
+        "tags": [
+          "strong",
+          "ape",
+          "forest"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "dimgray"
+        },
+        "description100words": "Gorillas are the largest living primates and live in family groups. They are gentle giants.",
+        "image": "https://images.unsplash.com/photo-Z05GiksmqYU?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "hippo": {
+        "type": "Mammal",
+        "habitat": "Rivers",
+        "diet": "Herbivore",
+        "lifespan": "40-50 years",
+        "tags": [
+          "heavy",
+          "water",
+          "dangerous"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "lightpink"
+        },
+        "description100words": "Hippos spend most of their time in water to keep their massive bodies cool. They are very territorial.",
+        "image": "https://images.unsplash.com/photo-H_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "horse": {
+        "type": "Mammal",
+        "habitat": "Plains and farms",
+        "diet": "Herbivore",
+        "lifespan": "25-30 years",
+        "tags": [
+          "fast",
+          "ride",
+          "mane"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "black"
+        },
+        "description100words": "Horses have been domesticated for thousands of years for transport and work. They are strong and fast.",
+        "image": "https://images.unsplash.com/photo-p-I9w-rDq4s?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "iguana": {
+        "type": "Reptile",
+        "habitat": "Tropical forests",
+        "diet": "Herbivore",
+        "lifespan": "15-20 years",
+        "tags": [
+          "green",
+          "lizard",
+          "scales"
+        ],
+        "color-scheme": {
+          "primary": "limegreen",
+          "secondary": "forestgreen"
+        },
+        "description100words": "Iguanas are large lizards native to tropical areas of Central and South America. They are often kept as pets.",
+        "image": "https://images.unsplash.com/photo-F_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "impala": {
+        "type": "Mammal",
+        "habitat": "Savannas",
+        "diet": "Herbivore",
+        "lifespan": "12-15 years",
+        "tags": [
+          "jump",
+          "fast",
+          "antelope"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "wheat"
+        },
+        "description100words": "Impalas are medium-sized antelopes known for their incredible leaping ability to escape predators.",
+        "image": "https://images.unsplash.com/photo-I_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "jaguar": {
+        "type": "Mammal",
+        "habitat": "Rainforests",
+        "diet": "Carnivore",
+        "lifespan": "12-15 years",
+        "tags": [
+          "spots",
+          "hunter",
+          "cat"
+        ],
+        "color-scheme": {
+          "primary": "goldenrod",
+          "secondary": "black"
+        },
+        "description100words": "Jaguars are powerful big cats that are excellent swimmers and climbers. They have a distinctive coat pattern.",
+        "image": "https://images.unsplash.com/photo-Xn4L310D-q?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "jellyfish": {
+        "type": "Invertebrate",
+        "habitat": "Oceans",
+        "diet": "Carnivore",
+        "lifespan": "1 year",
+        "tags": [
+          "sting",
+          "ocean",
+          "transparent"
+        ],
+        "color-scheme": {
+          "primary": "plum",
+          "secondary": "violet"
+        },
+        "description100words": "Jellyfish are gelatinous sea creatures that drift through the ocean currents. Some have stinging tentacles.",
+        "image": "https://images.unsplash.com/photo-J_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "kangaroo": {
+        "type": "Mammal",
+        "habitat": "Australia",
+        "diet": "Herbivore",
+        "lifespan": "6-20 years",
+        "tags": [
+          "hop",
+          "pouch",
+          "australia"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "burlywood"
+        },
+        "description100words": "Kangaroos are marsupials famous for hopping on their powerful hind legs. They are an icon of Australia.",
+        "image": "https://images.unsplash.com/photo-364fWlWEVqI?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "koala": {
+        "type": "Mammal",
+        "habitat": "Eucalyptus forests",
+        "diet": "Herbivore",
+        "lifespan": "13-18 years",
+        "tags": [
+          "cute",
+          "sleepy",
+          "tree"
+        ],
+        "color-scheme": {
+          "primary": "silver",
+          "secondary": "gray"
+        },
+        "description100words": "Koalas are tree-dwelling marsupials that feed almost exclusively on eucalyptus. They sleep up to 20 hours a day.",
+        "image": "https://images.unsplash.com/photo-S_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "lion": {
+        "type": "Mammal",
+        "habitat": "Savannas",
+        "diet": "Carnivore",
+        "lifespan": "10-14 years",
+        "tags": [
+          "king",
+          "roar",
+          "mane"
+        ],
+        "color-scheme": {
+          "primary": "gold",
+          "secondary": "darkorange"
+        },
+        "description100words": "Lions are social big cats that live in groups called prides. They are apex predators on the savanna.",
+        "image": "https://images.unsplash.com/photo-O0R5vg8VW0c?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "lemur": {
+        "type": "Mammal",
+        "habitat": "Madagascar",
+        "diet": "Omnivore",
+        "lifespan": "15-20 years",
+        "tags": [
+          "tail",
+          "eyes",
+          "island"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "black"
+        },
+        "description100words": "Lemurs are primates found only on the island of Madagascar. They are known for their vocalizations.",
+        "image": "https://images.unsplash.com/photo-L_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "monkey": {
+        "type": "Mammal",
+        "habitat": "Forests",
+        "diet": "Omnivore",
+        "lifespan": "10-40 years",
+        "tags": [
+          "climb",
+          "tail",
+          "smart"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "tan"
+        },
+        "description100words": "Monkeys are intelligent primates that are often arboreal and active. There are many species worldwide.",
+        "image": "https://images.unsplash.com/photo-Z05GiksmqYU?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "moose": {
+        "type": "Mammal",
+        "habitat": "Northern forests",
+        "diet": "Herbivore",
+        "lifespan": "15-25 years",
+        "tags": [
+          "antlers",
+          "huge",
+          "forest"
+        ],
+        "color-scheme": {
+          "primary": "darkslategray",
+          "secondary": "black"
+        },
+        "description100words": "Moose are the largest members of the deer family, found in northern climates. Males have massive antlers.",
+        "image": "https://images.unsplash.com/photo-M_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "narwhal": {
+        "type": "Mammal",
+        "habitat": "Arctic Ocean",
+        "diet": "Carnivore",
+        "lifespan": "30-50 years",
+        "tags": [
+          "tusk",
+          "whale",
+          "arctic"
+        ],
+        "color-scheme": {
+          "primary": "lightgray",
+          "secondary": "darkslategray"
+        },
+        "description100words": "Narwhals are medium-sized whales known for the long tusk on males, which is actually a tooth.",
+        "image": "https://images.unsplash.com/photo-N_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "newt": {
+        "type": "Amphibian",
+        "habitat": "Ponds and streams",
+        "diet": "Carnivore",
+        "lifespan": "10-15 years",
+        "tags": [
+          "small",
+          "water",
+          "lizard-like"
+        ],
+        "color-scheme": {
+          "primary": "orange",
+          "secondary": "brown"
+        },
+        "description100words": "Newts are small amphibians that spend part of their lives in water. They can regenerate lost limbs.",
+        "image": "https://images.unsplash.com/photo-N_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "otter": {
+        "type": "Mammal",
+        "habitat": "Waterways",
+        "diet": "Carnivore",
+        "lifespan": "10-15 years",
+        "tags": [
+          "swim",
+          "playful",
+          "fur"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "saddlebrown"
+        },
+        "description100words": "Otters are semi-aquatic mammals known for their playful nature. They have dense fur to keep them warm.",
+        "image": "https://images.unsplash.com/photo-O_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "owl": {
+        "type": "Bird",
+        "habitat": "Forests",
+        "diet": "Carnivore",
+        "lifespan": "10-20 years",
+        "tags": [
+          "night",
+          "wise",
+          "fly"
+        ],
+        "color-scheme": {
+          "primary": "saddlebrown",
+          "secondary": "tan"
+        },
+        "description100words": "Owls are nocturnal birds of prey with silent flight and keen senses. They hunt small mammals.",
+        "image": "https://images.unsplash.com/photo-1-GNa303REg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "penguin": {
+        "type": "Bird",
+        "habitat": "Antarctica",
+        "diet": "Carnivore",
+        "lifespan": "15-20 years",
+        "tags": [
+          "ice",
+          "swim",
+          "tuxedo"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "white"
+        },
+        "description100words": "Penguins are flightless birds adapted for life in the water and cold. They are excellent swimmers.",
+        "image": "https://images.unsplash.com/photo-5-GNa303REg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "panda": {
+        "type": "Mammal",
+        "habitat": "Bamboo forests",
+        "diet": "Herbivore",
+        "lifespan": "20 years",
+        "tags": [
+          "black-white",
+          "bamboo",
+          "bear"
+        ],
+        "color-scheme": {
+          "primary": "white",
+          "secondary": "black"
+        },
+        "description100words": "Giant pandas are bears native to China that eat almost exclusively bamboo. They are an endangered species.",
+        "image": "https://images.unsplash.com/photo-4vwv2cfpTg8?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "quokka": {
+        "type": "Mammal",
+        "habitat": "Australia",
+        "diet": "Herbivore",
+        "lifespan": "10 years",
+        "tags": [
+          "smile",
+          "small",
+          "marsupial"
+        ],
+        "color-scheme": {
+          "primary": "peru",
+          "secondary": "saddlebrown"
+        },
+        "description100words": "Quokkas are small marsupials known for their friendly appearance. They are found on Rottnest Island.",
+        "image": "https://images.unsplash.com/photo-Q_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "quail": {
+        "type": "Bird",
+        "habitat": "Fields",
+        "diet": "Omnivore",
+        "lifespan": "2-3 years",
+        "tags": [
+          "small",
+          "bird",
+          "ground"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "wheat"
+        },
+        "description100words": "Quails are small ground-nesting birds often found in flocks. They are known for their distinctive calls.",
+        "image": "https://images.unsplash.com/photo-Q_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "rabbit": {
+        "type": "Mammal",
+        "habitat": "Fields and burrows",
+        "diet": "Herbivore",
+        "lifespan": "8-12 years",
+        "tags": [
+          "ears",
+          "hop",
+          "cute"
+        ],
+        "color-scheme": {
+          "primary": "lightgray",
+          "secondary": "white"
+        },
+        "description100words": "Rabbits are small mammals with long ears and powerful hind legs. They live in burrows called warrens.",
+        "image": "https://images.unsplash.com/photo-364fWlWEVqI?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "raccoon": {
+        "type": "Mammal",
+        "habitat": "Forests and cities",
+        "diet": "Omnivore",
+        "lifespan": "2-3 years",
+        "tags": [
+          "mask",
+          "hands",
+          "night"
+        ],
+        "color-scheme": {
+          "primary": "dimgray",
+          "secondary": "black"
+        },
+        "description100words": "Raccoons are adaptable mammals known for their dexterity and mask-like markings. They are often nocturnal.",
+        "image": "https://images.unsplash.com/photo-V_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "snake": {
+        "type": "Reptile",
+        "habitat": "Worldwide",
+        "diet": "Carnivore",
+        "lifespan": "10-30 years",
+        "tags": [
+          "slither",
+          "scales",
+          "reptile"
+        ],
+        "color-scheme": {
+          "primary": "olivedrab",
+          "secondary": "yellowgreen"
+        },
+        "description100words": "Snakes are elongated, legless reptiles found on every continent except Antarctica. They swallow their prey whole.",
+        "image": "https://images.unsplash.com/photo-9-GNa303REg?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "shark": {
+        "type": "Fish",
+        "habitat": "Oceans",
+        "diet": "Carnivore",
+        "lifespan": "20-30 years",
+        "tags": [
+          "teeth",
+          "predator",
+          "swim"
+        ],
+        "color-scheme": {
+          "primary": "slategray",
+          "secondary": "white"
+        },
+        "description100words": "Sharks are cartilaginous fish and apex predators of the ocean. They have multiple rows of teeth.",
+        "image": "https://images.unsplash.com/photo-S_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "tiger": {
+        "type": "Mammal",
+        "habitat": "Asian forests",
+        "diet": "Carnivore",
+        "lifespan": "10-15 years",
+        "tags": [
+          "stripes",
+          "big cat",
+          "hunter"
+        ],
+        "color-scheme": {
+          "primary": "orange",
+          "secondary": "black"
+        },
+        "description100words": "Tigers are the largest cat species, recognizable by their dark vertical stripes. They are solitary hunters.",
+        "image": "https://images.unsplash.com/photo-T_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "toucan": {
+        "type": "Bird",
+        "habitat": "Rainforests",
+        "diet": "Omnivore",
+        "lifespan": "20 years",
+        "tags": [
+          "beak",
+          "colorful",
+          "bird"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "orange"
+        },
+        "description100words": "Toucans are tropical birds famous for their large, colorful bills. They eat fruit, insects, and small lizards.",
+        "image": "https://images.unsplash.com/photo-U_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "urchin": {
+        "type": "Invertebrate",
+        "habitat": "Oceans",
+        "diet": "Omnivore",
+        "lifespan": "30+ years",
+        "tags": [
+          "spiky",
+          "round",
+          "sea"
+        ],
+        "color-scheme": {
+          "primary": "purple",
+          "secondary": "black"
+        },
+        "description100words": "Sea urchins are spiny sea creatures found on ocean floors. They move slowly using tube feet.",
+        "image": "https://images.unsplash.com/photo-U_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "urial": {
+        "type": "Mammal",
+        "habitat": "Mountains",
+        "diet": "Herbivore",
+        "lifespan": "10-12 years",
+        "tags": [
+          "sheep",
+          "horns",
+          "wild"
+        ],
+        "color-scheme": {
+          "primary": "tan",
+          "secondary": "saddlebrown"
+        },
+        "description100words": "Urials are wild sheep found in central Asia with large curling horns. They live in steep terrain.",
+        "image": "https://images.unsplash.com/photo-GkX3_7H55wE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "vulture": {
+        "type": "Bird",
+        "habitat": "Open country",
+        "diet": "Carnivore",
+        "lifespan": "10-30 years",
+        "tags": [
+          "scavenger",
+          "wings",
+          "bald"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "darkgray"
+        },
+        "description100words": "Vultures are scavenging birds that play a key role in cleaning up ecosystems by eating carrion.",
+        "image": "https://images.unsplash.com/photo-V_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "vole": {
+        "type": "Mammal",
+        "habitat": "Fields",
+        "diet": "Herbivore",
+        "lifespan": "3-6 months",
+        "tags": [
+          "small",
+          "mouse-like",
+          "burrow"
+        ],
+        "color-scheme": {
+          "primary": "sienna",
+          "secondary": "gray"
+        },
+        "description100words": "Voles are small rodents that look similar to mice but with shorter tails. They create paths in the grass.",
+        "image": "https://images.unsplash.com/photo-V_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "whale": {
+        "type": "Mammal",
+        "habitat": "Oceans",
+        "diet": "Carnivore",
+        "lifespan": "40-90 years",
+        "tags": [
+          "huge",
+          "ocean",
+          "song"
+        ],
+        "color-scheme": {
+          "primary": "steelblue",
+          "secondary": "white"
+        },
+        "description100words": "Whales are the largest animals on Earth, roaming the world's oceans. Some species sing complex songs.",
+        "image": "https://images.unsplash.com/photo-W_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "wolf": {
+        "type": "Mammal",
+        "habitat": "Wilderness",
+        "diet": "Carnivore",
+        "lifespan": "6-8 years",
+        "tags": [
+          "pack",
+          "howl",
+          "wild"
+        ],
+        "color-scheme": {
+          "primary": "gray",
+          "secondary": "lightgray"
+        },
+        "description100words": "Wolves are social predators that live and hunt in packs. They are highly intelligent and communicative.",
+        "image": "https://images.unsplash.com/photo-m88-7GkC5wE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "xenopus": {
+        "type": "Amphibian",
+        "habitat": "Water",
+        "diet": "Carnivore",
+        "lifespan": "5-15 years",
+        "tags": [
+          "frog",
+          "water",
+          "smooth"
+        ],
+        "color-scheme": {
+          "primary": "olive",
+          "secondary": "darkolivegreen"
+        },
+        "description100words": "Xenopus frogs are aquatic amphibians often used in scientific research. They have clawed feet.",
+        "image": "https://images.unsplash.com/photo-Y_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "x-ray fish": {
+        "type": "Fish",
+        "habitat": "Rivers",
+        "diet": "Omnivore",
+        "lifespan": "3-4 years",
+        "tags": [
+          "transparent",
+          "small",
+          "school"
+        ],
+        "color-scheme": {
+          "primary": "lightcyan",
+          "secondary": "silver"
+        },
+        "description100words": "X-ray fish have translucent bodies that make their backbones visible. They are popular aquarium fish.",
+        "image": "https://images.unsplash.com/photo-X_M88-7GkC5?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "yak": {
+        "type": "Mammal",
+        "habitat": "Himalayas",
+        "diet": "Herbivore",
+        "lifespan": "20 years",
+        "tags": [
+          "furry",
+          "mountain",
+          "strong"
+        ],
+        "color-scheme": {
+          "primary": "black",
+          "secondary": "darkslategray"
+        },
+        "description100words": "Yaks are long-haired cattle adapted to living in high altitudes. They provide milk, meat, and fiber.",
+        "image": "https://images.unsplash.com/photo-GkX3_7H55wE?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    },
+    {
+      "zebra": {
+        "type": "Mammal",
+        "habitat": "Savannas",
+        "diet": "Herbivore",
+        "lifespan": "25 years",
+        "tags": [
+          "stripes",
+          "black-white",
+          "herd"
+        ],
+        "color-scheme": {
+          "primary": "white",
+          "secondary": "black"
+        },
+        "description100words": "Zebras are African equids with distinctive black-and-white striped coats. They live in large herds.",
+        "image": "https://images.unsplash.com/photo-o54RjF-C7go?auto=format&fit=crop&w=600&h=800&q=80"
+      }
+    }
+  ]
+}
