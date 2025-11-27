@@ -13,11 +13,16 @@ export default defineMultiCacheOptions(() => {
         const url = getRequestURL(event)
         const path = url.pathname || '/'
         // Access cookie header manually (avoid allocating cookie parser for perf)
-        const cookieHeader = getHeader(event, 'cookie') || ''
         let segment = 'default'
-        if (cookieHeader) {
-          const match = cookieHeader.match(/(?:^|; )engageSegment=([^;]+)/)
-          match && match[1] && (segment = decodeURIComponent(match[1]))
+        try {
+          const cookieHeader = getHeader(event, 'cookie') || ''
+          if (cookieHeader) {
+            const match = cookieHeader.match(/(?:^|; )engageSegment=([^;]+)/)
+            match && match[1] && (segment = decodeURIComponent(match[1]))
+          }
+        } catch (e) {
+          // Fallback to default if cookie access fails (e.g. cross-origin iframe restrictions)
+          segment = 'default'
         }
         // Normalize segment alias to safe subset
         if (!/^[A-Za-z0-9_-]{1,64}$/.test(segment)) segment = 'default'

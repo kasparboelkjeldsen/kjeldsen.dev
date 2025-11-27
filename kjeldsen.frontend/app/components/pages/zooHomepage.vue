@@ -90,6 +90,8 @@
         </div>
       </div>
     </div>
+
+    <GridModule v-if="data?.properties?.grid" :data="data.properties.grid" />
   </div>
 </template>
 

@@ -42,6 +42,7 @@ export default defineEventHandler(async (event) => {
       apiKey: config.deliveryKey,
       path: '/' + slug,
       forcedSegment: finalSegment || undefined,
+      acceptSegment: finalSegment || undefined,
       externalVisitorId: externalVisitorId || undefined,
     })
 
