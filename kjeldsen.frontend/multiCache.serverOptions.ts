@@ -12,6 +12,12 @@ export default defineMultiCacheOptions(() => {
       buildCacheKey(event) {
         const url = getRequestURL(event)
         const path = url.pathname || '/'
+
+        // Skip cookie logic if in preview mode
+        if (url.searchParams.has('engagePreviewAbTestVariantId')) {
+          return `${path}::seg:default`
+        }
+
         // Access cookie header manually (avoid allocating cookie parser for perf)
         let segment = 'default'
         try {

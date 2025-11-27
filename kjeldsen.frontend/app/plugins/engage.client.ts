@@ -73,6 +73,9 @@ function dbg(...args: any[]) {
 
 function readCookie(name: string): string | undefined {
   if (typeof document === 'undefined') return undefined
+  // Skip cookie access if in preview mode (iframe)
+  if (window.location.search.includes('engagePreviewAbTestVariantId')) return undefined
+
   try {
     const match = document.cookie.match(
       new RegExp('(?:^|; )' + name.replace(/[-.$?*|{}()\[\]\\/+^]/g, '\\$&') + '=([^;]*)')
@@ -86,6 +89,9 @@ function readCookie(name: string): string | undefined {
 
 function writeCookie(name: string, value: string, opts: { maxAge?: number; path?: string } = {}) {
   if (typeof document === 'undefined') return
+  // Skip cookie access if in preview mode (iframe)
+  if (window.location.search.includes('engagePreviewAbTestVariantId')) return
+
   const parts = [
     `${encodeURIComponent(name)}=${encodeURIComponent(value)}`,
     `Path=${opts.path || '/'}`,

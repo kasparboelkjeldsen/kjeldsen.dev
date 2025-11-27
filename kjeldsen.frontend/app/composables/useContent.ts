@@ -9,11 +9,17 @@ export async function usePageContentFromRoute(forcedSegment?: string) {
   const cleanSlug = slugArray.filter(Boolean).join('/')
   const slugHasDot = cleanSlug.includes('.')
   const apiPath = `/api/content/${cleanSlug}/`
-  const externalVisitorId = useCookie<string | null>('engage_visitor').value || null
-  const segTok = useCookie<string | null>('segTok').value || null
+
+  // Skip cookie access if in preview mode
+  const isPreview = route.query.engagePreviewAbTestVariantId !== undefined
+
+  const externalVisitorId = !isPreview
+    ? useCookie<string | null>('engage_visitor').value || null
+    : null
+  const segTok = !isPreview ? useCookie<string | null>('segTok').value || null : null
 
   // Try to get manual segment from cookie, or fallback to request header if we just set it in middleware
-  let manualSegment = useCookie<string | null>('manual-segment').value || null
+  let manualSegment = !isPreview ? useCookie<string | null>('manual-segment').value || null : null
   if (!manualSegment && import.meta.server) {
     const headers = useRequestHeaders(['manual-segment'])
     manualSegment = headers['manual-segment'] || null
