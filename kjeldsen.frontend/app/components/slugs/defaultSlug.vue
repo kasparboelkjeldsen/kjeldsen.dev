@@ -55,6 +55,10 @@
     const { bootstrap } = useEngage()
     // Defer to next tick to ensure router state stable
     queueMicrotask(() => {
+      // Skip engage bootstrap if in preview mode (iframe)
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('engagePreviewAbTestVariantId')) return
+
       bootstrap().then((s) => {
         if (s.ready) {
           console.debug('[engage] bootstrap complete (page)', {
