@@ -232,6 +232,12 @@ function buildApi(_base: string, state: EngageState) {
 
 export default defineNuxtPlugin(() => {
   if (typeof window === 'undefined') return
+
+  // Skip engage plugin entirely if in preview mode (iframe)
+  if (window.location.search.includes('engagePreviewAbTestVariantId')) {
+    return
+  }
+
   const config = useRuntimeConfig()
   const baseHost = (config.public.cmsHost || '').replace(/\/$/, '')
   if (!baseHost) {
