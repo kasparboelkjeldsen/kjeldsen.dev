@@ -102,8 +102,9 @@
   const selectedSegment = ref<string | null>(null)
 
   // Cookie
-  const manualSegmentCookie = useCookie<string | null>('manual-segment')
-  const visitorCookie = useCookie<string | null>('engage_visitor')
+  const isPreview = route.query.engagePreviewAbTestVariantId !== undefined
+  const manualSegmentCookie = !isPreview ? useCookie<string | null>('manual-segment') : ref(null)
+  const visitorCookie = !isPreview ? useCookie<string | null>('engage_visitor') : ref(null)
   const activeCookie = computed(() => manualSegmentCookie.value)
 
   // Initialize selection from cookie
