@@ -11,10 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.UseEngageNoColumnStorePatch();
 
 builder
-    .AddSecrets()
-    .AddApplicationInsights()
-    .AddCors()
-    .CreateUmbracoBuilder()
+.AddSecrets()
+.AddOpenIdDictRedirectUris()
+.AddApplicationInsights()
+.AddCors()
+.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
     .AddDeliveryApi()
@@ -30,6 +31,9 @@ builder
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
 var app = builder.Build();
+
+// OpenIdDict redirect URI check – runs early before Umbraco/OpenIdDict handle login
+app.UseOpenIdDictRedirectUriCheck();
 
 app
     .UseCors("AllowLocalhostAndKjeldsenDev")
