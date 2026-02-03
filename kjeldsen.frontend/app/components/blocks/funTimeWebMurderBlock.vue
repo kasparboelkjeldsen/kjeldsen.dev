@@ -21,8 +21,10 @@
 </template>
 <script lang="ts" setup>
   const config = useRuntimeConfig()
+  const route = useRoute()
   const clientId = config.public.murderClient
-  const usernameCookie = useCookie<string | null>('pushed-by')
+  const isPreview = route.query.engagePreviewAbTestVariantId !== undefined
+  const usernameCookie = !isPreview ? useCookie<string | null>('pushed-by') : ref(null)
 
   const username = usernameCookie.value
 

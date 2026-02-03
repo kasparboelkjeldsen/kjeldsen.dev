@@ -168,7 +168,7 @@ stages:
           displayName: 'Use .NET SDK'
           inputs:
             packageType: 'sdk'
-            version: '9.x'
+            version: '10.x'
             includePreviewVersions: true
 
         - task: DotNetCoreCLI@2

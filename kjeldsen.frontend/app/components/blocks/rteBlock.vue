@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white" v-html="processedMarkup" />
+  <div v-html="processedMarkup" />
 </template>
 <script lang="ts" setup>
   import { computed } from 'vue'
@@ -20,7 +20,7 @@
 <style lang="css">
   /* Headings stay white, but strong/b/bold should be sky-300 */
   h2 {
-    color: white !important;
+    color: white;
   }
   p strong,
   p b,

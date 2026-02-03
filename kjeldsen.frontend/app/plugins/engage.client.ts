@@ -73,14 +73,25 @@ function dbg(...args: any[]) {
 
 function readCookie(name: string): string | undefined {
   if (typeof document === 'undefined') return undefined
-  const match = document.cookie.match(
-    new RegExp('(?:^|; )' + name.replace(/[-.$?*|{}()\[\]\\/+^]/g, '\\$&') + '=([^;]*)')
-  )
-  return match ? decodeURIComponent(match[1] || '') : undefined
+  // Skip cookie access if in preview mode (iframe)
+  if (window.location.search.includes('engagePreviewAbTestVariantId')) return undefined
+
+  try {
+    const match = document.cookie.match(
+      new RegExp('(?:^|; )' + name.replace(/[-.$?*|{}()\[\]\\/+^]/g, '\\$&') + '=([^;]*)')
+    )
+    return match ? decodeURIComponent(match[1] || '') : undefined
+  } catch (e) {
+    // Accessing document.cookie might fail in cross-origin iframes
+    return undefined
+  }
 }
 
 function writeCookie(name: string, value: string, opts: { maxAge?: number; path?: string } = {}) {
   if (typeof document === 'undefined') return
+  // Skip cookie access if in preview mode (iframe)
+  if (window.location.search.includes('engagePreviewAbTestVariantId')) return
+
   const parts = [
     `${encodeURIComponent(name)}=${encodeURIComponent(value)}`,
     `Path=${opts.path || '/'}`,
@@ -221,6 +232,12 @@ function buildApi(_base: string, state: EngageState) {
 
 export default defineNuxtPlugin(() => {
   if (typeof window === 'undefined') return
+
+  // Skip engage plugin entirely if in preview mode (iframe)
+  if (window.location.search.includes('engagePreviewAbTestVariantId')) {
+    return
+  }
+
   const config = useRuntimeConfig()
   const baseHost = (config.public.cmsHost || '').replace(/\/$/, '')
   if (!baseHost) {

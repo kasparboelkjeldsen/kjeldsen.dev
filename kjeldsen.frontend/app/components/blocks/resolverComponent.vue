@@ -24,6 +24,7 @@
   import type { IApiElementModel } from '~/../server/delivery-api'
 
   const props = defineProps<{ data: IApiElementModel; columns: number }>()
+  const route = useRoute()
 
   // Lazy-load all blocks to avoid pulling them into the main chunk
   const mapping: Record<string, any> = {
@@ -37,13 +38,17 @@
     spotlightBlock: defineAsyncComponent(() => import('./spotlightBlock.vue')),
     cacheKeyExampleBlock: defineAsyncComponent(() => import('./cacheKeyExampleBlock.vue')),
     vimeoBlock: defineAsyncComponent(() => import('./vimeoBlock.vue')),
+    cardBlock: defineAsyncComponent(() => import('./cardBlock.vue')),
   }
   const islandList = [{ contentType: 'codeBlock', toRender: 'BlocksCodeBlock' }]
 
   const isIsland = computed(() =>
     islandList.some((island) => island.contentType === props.data.contentType)
   )
-  const Resolved = computed(() => mapping[props.data.contentType as string] || null)
+  const Resolved = computed(() => {
+    const type = props.data.contentType as string
+    return mapping[type] || null
+  })
 </script>
 
 <style></style>

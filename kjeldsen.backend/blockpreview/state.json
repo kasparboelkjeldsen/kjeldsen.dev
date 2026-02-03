@@ -68,5 +68,15 @@
     "EnabledRTE": true,
     "AdvancedSettings": null,
     "Alias": "vimeoBlock"
+  },
+  {
+    "Id": "bfe8a0c1-fb50-4924-8a72-f358d4148358",
+    "Enabled": true,
+    "EnabledNested": true,
+    "EnabledList": true,
+    "EnabledGrid": true,
+    "EnabledRTE": true,
+    "AdvancedSettings": null,
+    "Alias": "cardBlock"
   }
 ]

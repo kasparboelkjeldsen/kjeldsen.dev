@@ -40,8 +40,11 @@ export function useCustomCache(
         if (cookie && /[A-Za-z0-9_-]{1,32}/.test(cookie)) segmentAlias = cookie
       }
     } else if (typeof document !== 'undefined') {
-      const m = document.cookie.match(/(?:^|; )engageSegment=([^;]+)/)
-      if (m && m[1]) segmentAlias = decodeURIComponent(m[1])
+      // Skip cookie access if in preview mode (iframe)
+      if (!window.location.search.includes('engagePreviewAbTestVariantId')) {
+        const m = document.cookie.match(/(?:^|; )engageSegment=([^;]+)/)
+        if (m && m[1]) segmentAlias = decodeURIComponent(m[1])
+      }
     }
   } catch {}
 

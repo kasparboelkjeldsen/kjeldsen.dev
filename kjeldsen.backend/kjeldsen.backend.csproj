@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <CompressionEnabled>false</CompressionEnabled> <!-- Disable compression. E.g. for umbraco backoffice files. These files should be precompressed by node and not let dotnet handle it -->
@@ -8,26 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.17.0" />
-    <PackageReference Include="Azure.ResourceManager.Cdn" Version="1.5.0" />
+    <PackageReference Include="Azure.Identity" Version="1.17.1" />
+    <PackageReference Include="Azure.ResourceManager.Cdn" Version="1.5.1" />
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
-    <PackageReference Include="kraftvaerk.umbraco.blockfilter" Version="1.1.4" />
-    <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.0.12" />
-    <PackageReference Include="Kraftvaerk.Umbraco.Headless.CacheKeys" Version="1.0.3" />
-    <PackageReference Include="Kraftvaerk.Umbraco.Headless.Preview" Version="1.0.2" />
-    <PackageReference Include="Lib.Harmony" Version="2.4.1" />
+    <PackageReference Include="kraftvaerk.umbraco.blockfilter" Version="1.2.2" />
+    <PackageReference Include="Kraftvaerk.Umbraco.Headless.BlockPreview" Version="1.2.3" />
+    <PackageReference Include="Kraftvaerk.Umbraco.Headless.CacheKeys" Version="1.1.2" />
+    <PackageReference Include="Kraftvaerk.Umbraco.Headless.Preview" Version="1.1.2" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
-    <PackageReference Include="Scrutor" Version="6.1.0" />
-    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
-    <PackageReference Include="StackExchange.Redis" Version="2.9.32" />
-    <PackageReference Include="Umbraco.Cms" Version="16.2.0" />
-    <PackageReference Include="Umbraco.Community.DeliveryApiExtensions" Version="16.0.1" />
-    <PackageReference Include="Umbraco.Engage" Version="16.0.1" />
-    <PackageReference Include="Umbraco.Engage.Headless" Version="16.0.1" />
-    <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="16.0.0" />
-    <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="16.0.0" />
-    <PackageReference Include="uSync" Version="16.0.8" />
+    <PackageReference Include="Scrutor" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="5.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.10.1" />
+    <PackageReference Include="Umbraco.Cms" Version="17.1.0" />
+    <PackageReference Include="Umbraco.Community.DeliveryApiExtensions" Version="17.0.0" />
+    <PackageReference Include="Umbraco.Engage" Version="17.0.4" />
+    <PackageReference Include="Umbraco.Engage.Headless" Version="17.0.4" />
+    <PackageReference Include="Umbraco.StorageProviders.AzureBlob" Version="17.0.0" />
+    <PackageReference Include="Umbraco.StorageProviders.AzureBlob.ImageSharp" Version="17.0.0" />
+    <PackageReference Include="uSync" Version="17.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,18 +39,13 @@
   <ItemGroup>
     <Folder Include="blockpreview\" />
     <Folder Include="umbraco\" />
+    <Folder Include="uSync\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
   <PropertyGroup>
     <!-- Razor files are needed for the backoffice to work correctly -->
     <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- Remove RazorCompileOnBuild and RazorCompileOnPublish when not using ModelsMode InMemoryAuto -->
-    <RazorCompileOnBuild>false</RazorCompileOnBuild>
-    <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
 
 </Project>

@@ -10,6 +10,9 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { AnimalsContentModel } from './models/AnimalsContentModel';
+export type { AnimalsContentResponseModel } from './models/AnimalsContentResponseModel';
+export type { AnimalsPropertiesModel } from './models/AnimalsPropertiesModel';
 export type { ApiBlockGridAreaModel } from './models/ApiBlockGridAreaModel';
 export type { ApiBlockGridItemModel } from './models/ApiBlockGridItemModel';
 export type { ApiBlockGridModel } from './models/ApiBlockGridModel';
@@ -26,6 +29,10 @@ export type { BlogPostPageContentResponseModel } from './models/BlogPostPageCont
 export type { BlogPostPagePropertiesModel } from './models/BlogPostPagePropertiesModel';
 export type { CacheKeyExampleBlockElementModel } from './models/CacheKeyExampleBlockElementModel';
 export type { CacheKeyExampleBlockPropertiesModel } from './models/CacheKeyExampleBlockPropertiesModel';
+export type { CardBlockElementModel } from './models/CardBlockElementModel';
+export type { CardBlockPropertiesModel } from './models/CardBlockPropertiesModel';
+export type { CardElementModel } from './models/CardElementModel';
+export type { CardPropertiesModel } from './models/CardPropertiesModel';
 export type { CodeBlockElementModel } from './models/CodeBlockElementModel';
 export type { CodeBlockPropertiesModel } from './models/CodeBlockPropertiesModel';
 export type { ContentPageContentModel } from './models/ContentPageContentModel';
@@ -63,6 +70,7 @@ export type { NavigationCompositionContentResponseModel } from './models/Navigat
 export type { NavigationCompositionPropertiesModel } from './models/NavigationCompositionPropertiesModel';
 export type { PagedIApiContentResponseModel } from './models/PagedIApiContentResponseModel';
 export type { PagedIApiMediaWithCropsResponseModel } from './models/PagedIApiMediaWithCropsResponseModel';
+export type { PickedColorModel } from './models/PickedColorModel';
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { RichTextModel } from './models/RichTextModel';
 export type { RteBlockElementModel } from './models/RteBlockElementModel';

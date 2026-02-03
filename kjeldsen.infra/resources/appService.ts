@@ -61,7 +61,7 @@ export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input
         clientCertEnabled: false,
         clientCertMode: azureNative.web.ClientCertMode.Required,
         siteConfig: {
-            linuxFxVersion: "DOTNETCORE|9.0",
+            linuxFxVersion: "DOTNETCORE|10.0",
             minTlsVersion: azureNative.web.SupportedTlsVersions.SupportedTlsVersions_1_2,
             appSettings: [
                 { name: "WEBSITES_ENABLE_APP_SERVICE_STORAGE", value: "true" },

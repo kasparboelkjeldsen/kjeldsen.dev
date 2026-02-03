@@ -1,10 +1,13 @@
 ﻿using kjeldsen.backend.code.engage.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json.Linq;
 using Umbraco.Cms.Core.DeliveryApi;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Services.Navigation;
 using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Engage.Data.Personalization.AppliedPersonalizations;
 using Umbraco.Engage.Headless.Api.v1;
 using Umbraco.Engage.Headless.Api.v1.Analytics;
@@ -17,6 +20,7 @@ using Umbraco.Engage.Infrastructure.Permissions.ModulePermissions;
 using Umbraco.Engage.Infrastructure.Personalization;
 using Umbraco.Engage.Infrastructure.Personalization.AppliedPersonalizations;
 using Umbraco.Engage.Infrastructure.Personalization.ControlGroups;
+using Umbraco.Engage.Infrastructure.Personalization.Personas;
 using Umbraco.Engage.Infrastructure.Personalization.Segments;
 
 namespace kjeldsen.backend.code.engage.Api;
@@ -35,6 +39,9 @@ public class CustomPageViewApiController : MarketingApiControllerBase
     private readonly IPersonalizationSegmentNameProvider _personalizationSegmentNameProvider;
     private readonly IAppliedPersonalizationRepository _appliedPersonalizationRepository;
     private readonly IPersonalizationControlGroupService _personalizationControlGroupService;
+    private readonly IUmbracoDatabaseFactory _umbracoDatabaseFactory;
+    private readonly IMemoryCache _cache;
+    private readonly IPersonaGroupRepository _personaGroupRepository;
 
     public CustomPageViewApiController(
         IApiPublishedContentCache apiPublishedContentCache, 
@@ -49,7 +56,10 @@ public class CustomPageViewApiController : MarketingApiControllerBase
         IPersonalizationSegmentNameProvider personalizationSegmentNameProvider,
         IAppliedPersonalizationRepository appliedPersonalizationRepository,
         IPersonalizationControlGroupService personalizationControlGroupService,
-        Umbraco.Engage.Infrastructure.Personalization.Segments.ISegmentService segmentService) : base(apiPublishedContentCache, publicAccessService, requestRoutingService)
+        IUmbracoDatabaseFactory umbracoDatabaseFactory,
+        IPersonaGroupRepository personaGroupRepository,
+        Umbraco.Engage.Infrastructure.Personalization.Segments.ISegmentService segmentService,
+        IMemoryCache cache) : base(apiPublishedContentCache, publicAccessService, requestRoutingService)
     {
         _headlessPageViewService = headlessPageViewService;
         _segmentService = segmentService;
@@ -61,7 +71,94 @@ public class CustomPageViewApiController : MarketingApiControllerBase
         _personalizationSegmentNameProvider = personalizationSegmentNameProvider;
         _appliedPersonalizationRepository = appliedPersonalizationRepository;
         _personalizationControlGroupService = personalizationControlGroupService;
+        _umbracoDatabaseFactory = umbracoDatabaseFactory;
+        _personaGroupRepository = personaGroupRepository;
+        _cache = cache;
+    }
 
+    [HttpGet]
+    [Route("scores")]
+    public async Task<IActionResult> GetPersonaScores(Guid externalVisitorId)
+    {
+        var scores = _personaGroupRepository.GetPersonaScoresByVisitor(externalVisitorId);
+        return Ok(scores);
+    }
+
+
+    [HttpGet]
+    [Route("rules")]
+    public async Task<IActionResult> GetRulesFromPageId(string path)
+    {
+        // Clean incoming path: strip domain + query string, ensure leading '/'
+        string CleanPath(string? raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw)) return "/";
+            if (Uri.TryCreate(raw, UriKind.Absolute, out var abs))
+            {
+                return string.IsNullOrWhiteSpace(abs.AbsolutePath) ? "/" : abs.AbsolutePath;
+            }
+            var qIndex = raw.IndexOf('?', StringComparison.Ordinal);
+            if (qIndex >= 0) raw = raw[..qIndex];
+            if (!raw.StartsWith('/')) raw = "/" + raw;
+            return raw;
+        }
+        var cleanedPath = CleanPath(path);
+
+        // Cache key based on cleaned path
+        var cacheKey = $"rules::{cleanedPath}";
+        if (_cache.TryGetValue(cacheKey, out string cachedJson))
+        {
+            return Ok(cachedJson); // return cached serialized JSON
+        }
+
+        _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
+        if (umbracoContext == null)
+            return NotFound("Umbraco context unavailable");
+
+        _documentNavigationQueryService.TryGetRootKeys(out var rootKeys);
+        Guid? pageId = null;
+        foreach (var key in rootKeys)
+        {
+            var root = umbracoContext.Content.GetById(key);
+            if (root == null) continue;
+            var docKey = _documentUrlService.GetDocumentKeyByRoute(cleanedPath, null, root.Id, false);
+            if (docKey == null) continue;
+            pageId = docKey.Value;
+            break;
+        }
+        if (!pageId.HasValue)
+            return NotFound("No document found for path");
+
+        using var db = _umbracoDatabaseFactory.CreateDatabase();
+
+        var sql = @"select top 1 rules.config, personal.id as personalizationId from 
+	umbracoEngagePersonalizationAppliedPersonalizationUmbracoPageVariant variant, 
+	umbracoEngagePersonalizationAppliedPersonalization personal,
+	umbracoEngagePersonalizationSegment segment,
+	umbracoEngagePersonalizationSegmentRule rules
+where variant.[key] = @key
+and personal.id = variant.personalizationId
+and segment.id = personal.segmentId
+and rules.segmentId = segment.id";
+
+        var row = db.Query<(string Config, int PersonalizationId)>(sql, new { key = pageId.Value }).FirstOrDefault();
+        if (row.Config == null)
+        {
+            _cache.Set(cacheKey, "{}", TimeSpan.FromMinutes(1));
+            return Ok("{}");
+        }
+
+        var obj = JObject.Parse(row.Config);
+        obj["personalizationId"] = row.PersonalizationId;
+        var resultJson = obj.ToString();
+
+        // Cache for 1 minute
+        _cache.Set(cacheKey, resultJson, new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1)
+        });
+
+        return Ok(resultJson);
     }
 
     [HttpPost]
@@ -143,7 +240,7 @@ public class CustomPageViewApiController : MarketingApiControllerBase
                 if(permissions.Personalization)
                 {
                     if(pageview.PageviewSegments.Any())
-                        activeSegment = GetActivePersonalizationSegment(request, content.Id, "en-US", content.ContentType.Id, pageview);
+                        activeSegment = GetActivePersonalizationSegment(request, content.Id, string.Empty, content.ContentType.Id, pageview);
                 }
             }
         }

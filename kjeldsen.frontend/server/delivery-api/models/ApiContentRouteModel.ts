@@ -5,6 +5,7 @@
 import type { ApiContentStartItemModel } from './ApiContentStartItemModel';
 export type ApiContentRouteModel = {
     path: string;
+    queryString?: string | null;
     startItem: ApiContentStartItemModel;
 };
 

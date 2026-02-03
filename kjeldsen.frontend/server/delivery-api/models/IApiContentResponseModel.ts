@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AnimalsContentResponseModel } from './AnimalsContentResponseModel';
 import type { BlogPostContainerPageContentResponseModel } from './BlogPostContainerPageContentResponseModel';
 import type { BlogPostPageContentResponseModel } from './BlogPostPageContentResponseModel';
 import type { ContentPageContentResponseModel } from './ContentPageContentResponseModel';
@@ -11,5 +12,5 @@ import type { NavigationCompositionContentResponseModel } from './NavigationComp
 import type { SeoCompositionContentResponseModel } from './SeoCompositionContentResponseModel';
 import type { WriterContainerPageContentResponseModel } from './WriterContainerPageContentResponseModel';
 import type { WriterContentResponseModel } from './WriterContentResponseModel';
-export type IApiContentResponseModel = (BlogPostPageContentResponseModel | HeadlessCompositionContentResponseModel | HomePageContentResponseModel | NavigationCompositionContentResponseModel | SeoCompositionContentResponseModel | BlogPostContainerPageContentResponseModel | WriterContentResponseModel | WriterContainerPageContentResponseModel | ContentPageContentResponseModel);
+export type IApiContentResponseModel = (BlogPostPageContentResponseModel | HeadlessCompositionContentResponseModel | HomePageContentResponseModel | NavigationCompositionContentResponseModel | SeoCompositionContentResponseModel | BlogPostContainerPageContentResponseModel | WriterContentResponseModel | WriterContainerPageContentResponseModel | ContentPageContentResponseModel | AnimalsContentResponseModel);
 

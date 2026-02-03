@@ -2,17 +2,41 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type { IApiContentResponseModel } from '~/../server/delivery-api'
 
-export async function usePageContentFromRoute() {
+export async function usePageContentFromRoute(forcedSegment?: string) {
+  const nuxtApp = useNuxtApp()
   const route = useRoute()
   const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug]
   const cleanSlug = slugArray.filter(Boolean).join('/')
   const slugHasDot = cleanSlug.includes('.')
   const apiPath = `/api/content/${cleanSlug}/`
-  const externalVisitorId = useCookie<string | null>('engage_visitor').value || null
-  const segTok = useCookie<string | null>('segTok').value || null
+
+  // Skip cookie access if in preview mode
+  const isPreview = route.query.engagePreviewAbTestVariantId !== undefined
+
+  const externalVisitorId = !isPreview
+    ? useCookie<string | null>('engage_visitor').value || null
+    : null
+  const segTok = !isPreview ? useCookie<string | null>('segTok').value || null : null
+
+  // Try to get manual segment from cookie, or fallback to request header if we just set it in middleware
+  let manualSegment = !isPreview ? useCookie<string | null>('manual-segment').value || null : null
+  if (!manualSegment && import.meta.server) {
+    const headers = useRequestHeaders(['manual-segment'])
+    manualSegment = headers['manual-segment'] || null
+  }
+
+  console.log('frontend manual segment', manualSegment)
+  let decryptedSegTok: string | null = null
   if (segTok) {
-    // const decryptedSegTok = await decryptSeg(segTok)
-    //console.log('segtok', decryptedSegTok)
+    try {
+      const res = await $fetch<{ segment: string | null }>('/api/engage/decrypt', {
+        method: 'POST',
+        body: { token: segTok },
+      })
+      decryptedSegTok = res.segment
+    } catch (e) {
+      console.error('Failed to decrypt segment token', e)
+    }
   }
 
   if (slugHasDot) {
@@ -27,15 +51,23 @@ export async function usePageContentFromRoute() {
     }
   }
   const headers: Record<string, string> = {}
-  if (segTok && externalVisitorId) {
-    headers['Forced-Segment'] = segTok
+
+  if (forcedSegment) {
+    headers['Forced-Segment'] = forcedSegment
+  } else if (manualSegment) {
+    headers['Forced-Segment'] = manualSegment
+  } else if (decryptedSegTok && externalVisitorId) {
+    headers['Forced-Segment'] = decryptedSegTok
     headers['External-Visitor-Id'] = externalVisitorId
   }
-  const result = await useFetch<IApiContentResponseModel>(apiPath, {
-    server: true,
-    cache: 'no-cache',
-    headers,
-  })
+
+  const result = await nuxtApp.runWithContext(() =>
+    useFetch<IApiContentResponseModel>(apiPath, {
+      server: true,
+      cache: 'no-cache',
+      headers,
+    })
+  )
 
   // Normalize null when missing
   if (result.error.value) {

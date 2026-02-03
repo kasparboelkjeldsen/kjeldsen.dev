@@ -57,9 +57,9 @@ public class CustomRawPageviewBotVisitorExtractor : IRawPageviewBotVisitorExtrac
                 existing.Visitor.Id,
                 existing.Visitor.ExternalId,
                 existing.Visitor.Timestamp,
-                existing.Bot.Name,
-                existing.Version,
-                existing.CreatedBy,
+                existing.Bot.Name ?? "",
+                existing.Version ?? "",
+                existing.CreatedByUmbracoUserKey,
                 existing.Bot.Label);
         }
 

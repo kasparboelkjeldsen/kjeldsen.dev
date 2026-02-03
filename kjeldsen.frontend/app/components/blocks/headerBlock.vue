@@ -1,5 +1,5 @@
 <template>
-  <div class="prose text-white">
+  <div class="prose">
     <h1
       v-if="data.properties?.headerLevel === 'H1'"
       class="text-white prose-h1"
