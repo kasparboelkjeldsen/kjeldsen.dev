@@ -73,6 +73,11 @@ public class BlockPreviewSettings : IBlockPreviewSettings
         return _default;
 
     }
+
+    public string FinalHtmlManipulation(string html, Guid? pageId, string? culture, string? resolvedDomain)
+    {
+        return html;
+    }
 }
 
 public class CustomBlockPreviewSettings : IComposer

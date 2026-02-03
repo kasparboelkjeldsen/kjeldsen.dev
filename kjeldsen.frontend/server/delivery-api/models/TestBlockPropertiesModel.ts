@@ -7,6 +7,7 @@ import type { ApiBlockListModel } from './ApiBlockListModel';
 import type { ApiLinkModel } from './ApiLinkModel';
 import type { IApiContentModel } from './IApiContentModel';
 import type { IApiMediaWithCropsModel } from './IApiMediaWithCropsModel';
+import type { PickedColorModel } from './PickedColorModel';
 import type { RichTextModel } from './RichTextModel';
 export type TestBlockPropertiesModel = {
     decimal?: number | null;
@@ -26,7 +27,7 @@ export type TestBlockPropertiesModel = {
     mediaPicker?: Array<IApiMediaWithCropsModel> | null;
     multipleMediaPicker?: Array<IApiMediaWithCropsModel> | null;
     userPicker?: number | null;
-    colorPicker?: string | null;
+    colorPicker?: PickedColorModel;
     contentPicker?: Array<IApiContentModel> | null;
     datePicker?: string | null;
     dateAndTimePicker?: string | null;

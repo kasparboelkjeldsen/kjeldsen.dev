@@ -27,8 +27,6 @@
   const route = useRoute()
 
   // Lazy-load all blocks to avoid pulling them into the main chunk
-  const ZooHeaderBlock = defineAsyncComponent(() => import('./zooHeaderBlock.vue'))
-
   const mapping: Record<string, any> = {
     funTimeWebEkg: defineAsyncComponent(() => import('./funTimeWebEkg.vue')),
     rteBlock: defineAsyncComponent(() => import('./rteBlock.vue')),
@@ -49,9 +47,6 @@
   )
   const Resolved = computed(() => {
     const type = props.data.contentType as string
-    if (type === 'headerBlock' && route.path.startsWith('/zoo')) {
-      return ZooHeaderBlock
-    }
     return mapping[type] || null
   })
 </script>

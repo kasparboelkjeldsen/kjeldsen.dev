@@ -10,9 +10,6 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
-export type { AnimalContentModel } from './models/AnimalContentModel';
-export type { AnimalContentResponseModel } from './models/AnimalContentResponseModel';
-export type { AnimalPropertiesModel } from './models/AnimalPropertiesModel';
 export type { AnimalsContentModel } from './models/AnimalsContentModel';
 export type { AnimalsContentResponseModel } from './models/AnimalsContentResponseModel';
 export type { AnimalsPropertiesModel } from './models/AnimalsPropertiesModel';
@@ -73,6 +70,7 @@ export type { NavigationCompositionContentResponseModel } from './models/Navigat
 export type { NavigationCompositionPropertiesModel } from './models/NavigationCompositionPropertiesModel';
 export type { PagedIApiContentResponseModel } from './models/PagedIApiContentResponseModel';
 export type { PagedIApiMediaWithCropsResponseModel } from './models/PagedIApiMediaWithCropsResponseModel';
+export type { PickedColorModel } from './models/PickedColorModel';
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { RichTextModel } from './models/RichTextModel';
 export type { RteBlockElementModel } from './models/RteBlockElementModel';
@@ -92,15 +90,6 @@ export type { WriterContainerPagePropertiesModel } from './models/WriterContaine
 export type { WriterContentModel } from './models/WriterContentModel';
 export type { WriterContentResponseModel } from './models/WriterContentResponseModel';
 export type { WriterPropertiesModel } from './models/WriterPropertiesModel';
-export type { ZooContentContentModel } from './models/ZooContentContentModel';
-export type { ZooContentContentResponseModel } from './models/ZooContentContentResponseModel';
-export type { ZooContentPropertiesModel } from './models/ZooContentPropertiesModel';
-export type { ZooCtaPageContentModel } from './models/ZooCtaPageContentModel';
-export type { ZooCtaPageContentResponseModel } from './models/ZooCtaPageContentResponseModel';
-export type { ZooCtaPagePropertiesModel } from './models/ZooCtaPagePropertiesModel';
-export type { ZooHomepageContentModel } from './models/ZooHomepageContentModel';
-export type { ZooHomepageContentResponseModel } from './models/ZooHomepageContentResponseModel';
-export type { ZooHomepagePropertiesModel } from './models/ZooHomepagePropertiesModel';
 
 export { ContentService } from './services/ContentService';
 export { MediaService } from './services/MediaService';

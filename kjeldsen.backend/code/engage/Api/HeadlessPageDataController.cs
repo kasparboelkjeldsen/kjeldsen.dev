@@ -51,7 +51,7 @@ public class HeadlessPageDataController : PageDataControllerBase
                 if (personalizationVisitorProfile != null && personalizationVisitorProfile.VisitorType == VisitorType.Person)
                 {
                     string json = JsonConvert.SerializeObject(collection);
-                    RawClientSideData data = new RawClientSideData(DateTime.UtcNow, json, version, pageViewId);
+                    RawClientSideData data = new RawClientSideData(DateTime.UtcNow, json, version, pageViewId, null);
                     _rawClientSideDataRepository.Insert(data);
                     SendClientSideDataReceivedEvent(HttpContext, json, version);
                 }

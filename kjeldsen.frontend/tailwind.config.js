@@ -40,17 +40,6 @@ export default {
         sans: ['Atkinson Hyperlegible', 'ui-sans-serif', 'system-ui'],
         mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
-      colors: {
-        zoo: {
-          primary: '#EA5B34',
-          secondary: '#0F6B57',
-          black: '#000000',
-          beige: '#EBD9C6',
-          brown: '#BF9474',
-          white: '#FFFFFF',
-          gold: '#E39624',
-        },
-      },
       animation: {
         shine: 'shine 3s infinite',
         fadeInUp: 'fadeInUp 0.8s forwards',
