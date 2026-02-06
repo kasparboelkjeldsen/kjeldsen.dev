@@ -28,7 +28,7 @@ export default defineNuxtConfig({
   mdc: {
     highlight: {
       theme: 'github-dark',
-      langs: ['ts', 'js', 'csharp', 'vue-html', 'vue', 'json', 'mermaid'],
+      langs: ['ts', 'js', 'csharp', 'vue-html', 'vue', 'json', 'mermaid', 'html'],
       wrapperStyle: true,
     },
   },

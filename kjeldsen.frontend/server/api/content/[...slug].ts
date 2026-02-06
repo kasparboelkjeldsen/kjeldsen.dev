@@ -6,6 +6,8 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const { slug } = event.context.params!
 
+  const slugPath = Array.isArray(slug) ? slug.join('/') : slug
+
   const manualSegment = getHeader(event, 'Manual-Segment')
   const forcedSegmentEncrypted = getHeader(event, 'Forced-Segment')
   const externalVisitorId = getHeader(event, 'External-Visitor-Id')
@@ -22,8 +24,13 @@ export default defineEventHandler(async (event) => {
     console.log('External Visitor Id', externalVisitorId)
   }
 
+  // Short-circuit internal multi-cache purge calls so they don't hit CMS
+  if (slugPath.startsWith('__nuxt_multi_cache/')) {
+    return { ok: true }
+  }
+
   // Disallow any path segment with a dot
-  if (slug.includes('.')) {
+  if (slugPath.includes('.')) {
     return null
   }
 
@@ -40,7 +47,7 @@ export default defineEventHandler(async (event) => {
   try {
     const response = await api.content.getContentItemByPath20({
       apiKey: config.deliveryKey,
-      path: '/' + slug,
+      path: '/' + slugPath,
       forcedSegment: finalSegment || undefined,
       acceptSegment: finalSegment || undefined,
       externalVisitorId: externalVisitorId || undefined,
@@ -55,7 +62,16 @@ export default defineEventHandler(async (event) => {
 
     return response
   } catch (e) {
-    console.error(`Failed to fetch content for slug "${slug}"`, e)
+    console.error(`Failed to fetch content for slug "${slugPath}"`, e)
+
+    // Treat not-found from CMS as a proper 404 instead of 500
+    if (e instanceof Error && e.message.includes('Not Found')) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Content not found',
+      })
+    }
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch content',

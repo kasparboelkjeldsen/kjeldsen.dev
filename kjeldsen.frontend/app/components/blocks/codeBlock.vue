@@ -1,7 +1,7 @@
 <template>
   <Glasslike :title="displayTitle" variant="highlight" class="-mx-4 sm:mx-0">
     <div class="code-wrap">
-      <MDCRenderer v-if="ast?.body" :body="ast.body" :data="ast.data" class="mdc-root" />
+      <MDC :value="rawMarkdown" class="mdc-root" />
     </div>
   </Glasslike>
 </template>
@@ -9,7 +9,6 @@
   import { computed } from 'vue'
   import 'prismjs/themes/prism-okaidia.css'
   import Glasslike from '../glasslike.vue'
-  import { parseMarkdown } from '@nuxtjs/mdc/runtime'
   import type { CodeBlockElementModel } from '~/../server/delivery-api'
 
   const props = defineProps<{
@@ -17,22 +16,6 @@
   }>()
 
   const rawMarkdown = computed(() => props.data.properties?.code ?? '')
-
-  // Pre-parse markdown on the server - this ensures proper SSR in island components
-  const { data: ast } = await useAsyncData(
-    `mdc-code-${props.data.id || hashCode(rawMarkdown.value)}`,
-    () => parseMarkdown(rawMarkdown.value)
-  )
-
-  function hashCode(str: string): string {
-    let hash = 0
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i)
-      hash = (hash << 5) - hash + char
-      hash = hash | 0
-    }
-    return hash.toString(36)
-  }
 
   const langRaw = computed(() => {
     const m = rawMarkdown.value.match(/```\s*([a-zA-Z0-9_+-]+)/)

@@ -31,7 +31,7 @@
     funTimeWebEkg: defineAsyncComponent(() => import('./funTimeWebEkg.vue')),
     rteBlock: defineAsyncComponent(() => import('./rteBlock.vue')),
     funTimeWebMurderBlock: defineAsyncComponent(() => import('./funTimeWebMurderBlock.vue')),
-    codeBlock: defineAsyncComponent(() => import('./codeBlock.island.vue')),
+    codeBlock: defineAsyncComponent(() => import('./codeBlock.vue')),
     imageBlock: defineAsyncComponent(() => import('./imageBlock.vue')),
     testBlock: defineAsyncComponent(() => import('./testBlock.vue')),
     headerBlock: defineAsyncComponent(() => import('./headerBlock.vue')),
@@ -40,7 +40,7 @@
     vimeoBlock: defineAsyncComponent(() => import('./vimeoBlock.vue')),
     cardBlock: defineAsyncComponent(() => import('./cardBlock.vue')),
   }
-  const islandList = [{ contentType: 'codeBlock', toRender: 'BlocksCodeBlock' }]
+  const islandList: { contentType: string; toRender: string }[] = []
 
   const isIsland = computed(() =>
     islandList.some((island) => island.contentType === props.data.contentType)

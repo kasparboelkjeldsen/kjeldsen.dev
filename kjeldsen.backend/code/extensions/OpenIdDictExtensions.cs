@@ -34,7 +34,7 @@ public static class OpenIdDictExtensions
         if (!reader.Read())
             return;
 
-        // Id is stored as VARCHAR containing a GUID string
+        // Id is stored as VARCHAR containing a GUID string in this schema
         var idString = reader.GetString(0);
         var id = Guid.Parse(idString);
         var currentUris = reader.IsDBNull(1) ? "[]" : reader.GetString(1);
