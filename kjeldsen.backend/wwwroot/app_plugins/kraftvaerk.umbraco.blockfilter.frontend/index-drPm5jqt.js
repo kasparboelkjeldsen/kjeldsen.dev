@@ -12,12 +12,12 @@ const s = {
 }, l = "Umb.Modal.BlockCatalogue", n = [
   {
     type: "modal",
-    // This alias is the key. We’re overriding the core catalogue by reusing its alias.
+    // This alias is the key. We're overriding the core catalogue by reusing its alias.
     // If the alias ever changes upstream, update this to match.
     alias: l,
     name: "Block Catalogue Modal Extension",
     elementName: "umb-block-catalogue-modal-extend",
-    js: () => import("./UmbBlockCatalogueModalElementExtension-Bo9p454t.js"),
+    js: () => import("./UmbBlockCatalogueModalElementExtension-KM0ORrnp.js"),
     // Make sure we win registration ordering if both exist:
     weight: -1e4
   }
@@ -37,4 +37,4 @@ export {
   s as O,
   A as o
 };
-//# sourceMappingURL=index-NbhkfHUE.js.map
+//# sourceMappingURL=index-drPm5jqt.js.map

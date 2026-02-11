@@ -34,7 +34,6 @@
   import { usePageContentFromRoute } from '~/composables/useContent'
   import { useNavigation } from '~/composables/useNavigation'
   import { useSeoForContent } from '~/composables/useSeo'
-  import { useEngage } from '~/composables/useEngage'
   import { useCustomCache } from '~/composables/useCustomCache'
 
   const { apiPath, slugHasDot, data } = await usePageContentFromRoute()
@@ -50,27 +49,6 @@
   // SEO head handling extracted to composable
   useSeoForContent(data, { origin: 'https://kjeldsen.dev', lang: 'en' })
 
-  // Client-side engage bootstrap (runs only in browser)
-  if (import.meta.client) {
-    const { bootstrap } = useEngage()
-    // Defer to next tick to ensure router state stable
-    queueMicrotask(() => {
-      // Skip engage bootstrap if in preview mode (iframe)
-      const params = new URLSearchParams(window.location.search)
-      if (params.has('engagePreviewAbTestVariantId')) return
-
-      bootstrap().then((s) => {
-        if (s.ready) {
-          console.debug('[engage] bootstrap complete (page)', {
-            pageviewId: s.pageviewId,
-            externalVisitorId: s.externalVisitorId,
-          })
-        } else if (s.error) {
-          console.warn('[engage] bootstrap error', s.error, { fullState: s })
-        } else {
-          console.warn('[engage] bootstrap not ready and no error', { fullState: s })
-        }
-      })
-    })
-  }
+  // Note: Engage bootstrap (pageview tracking) is handled by server middleware
+  // (server/middleware/engageBootstrap.ts) - no client-side call needed
 </script>

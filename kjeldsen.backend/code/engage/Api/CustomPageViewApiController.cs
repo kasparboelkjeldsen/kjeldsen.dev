@@ -240,7 +240,7 @@ and rules.segmentId = segment.id";
                 if(permissions.Personalization)
                 {
                     if(pageview.PageviewSegments.Any())
-                        activeSegment = GetActivePersonalizationSegment(request, content.Id, string.Empty, content.ContentType.Id, pageview);
+                        activeSegment = GetActivePersonalizationSegment(request, content.Id, "en-US", content.ContentType.Id, pageview);
                 }
             }
         }

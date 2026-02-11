@@ -2,42 +2,13 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type { IApiContentResponseModel } from '~/../server/delivery-api'
 
-export async function usePageContentFromRoute(forcedSegment?: string) {
+export async function usePageContentFromRoute() {
   const nuxtApp = useNuxtApp()
   const route = useRoute()
   const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug]
   const cleanSlug = slugArray.filter(Boolean).join('/')
   const slugHasDot = cleanSlug.includes('.')
   const apiPath = `/api/content/${cleanSlug}/`
-
-  // Skip cookie access if in preview mode
-  const isPreview = route.query.engagePreviewAbTestVariantId !== undefined
-
-  const externalVisitorId = !isPreview
-    ? useCookie<string | null>('engage_visitor').value || null
-    : null
-  const segTok = !isPreview ? useCookie<string | null>('segTok').value || null : null
-
-  // Try to get manual segment from cookie, or fallback to request header if we just set it in middleware
-  let manualSegment = !isPreview ? useCookie<string | null>('manual-segment').value || null : null
-  if (!manualSegment && import.meta.server) {
-    const headers = useRequestHeaders(['manual-segment'])
-    manualSegment = headers['manual-segment'] || null
-  }
-
-  console.log('frontend manual segment', manualSegment)
-  let decryptedSegTok: string | null = null
-  if (segTok) {
-    try {
-      const res = await $fetch<{ segment: string | null }>('/api/engage/decrypt', {
-        method: 'POST',
-        body: { token: segTok },
-      })
-      decryptedSegTok = res.segment
-    } catch (e) {
-      console.error('Failed to decrypt segment token', e)
-    }
-  }
 
   if (slugHasDot) {
     // Disallow dot paths, mirror server logic
@@ -50,15 +21,19 @@ export async function usePageContentFromRoute(forcedSegment?: string) {
       pending: ref(false),
     }
   }
-  const headers: Record<string, string> = {}
 
-  if (forcedSegment) {
-    headers['Forced-Segment'] = forcedSegment
-  } else if (manualSegment) {
-    headers['Forced-Segment'] = manualSegment
-  } else if (decryptedSegTok && externalVisitorId) {
-    headers['Forced-Segment'] = decryptedSegTok
-    headers['External-Visitor-Id'] = externalVisitorId
+  // During SSR, read segment from original request's event.context (set by middleware)
+  // and pass it as a header since the internal API call is a different event
+  const headers: Record<string, string> = {}
+  if (import.meta.server) {
+    const event = useRequestEvent()
+    if (event?.context?.engageSegment) {
+      headers['X-Engage-Segment'] = event.context.engageSegment
+    }
+    // Also forward visitor ID if middleware set it
+    if (event?.context?.engageVisitorId) {
+      headers['X-Engage-Visitor'] = event.context.engageVisitorId
+    }
   }
 
   const result = await nuxtApp.runWithContext(() =>

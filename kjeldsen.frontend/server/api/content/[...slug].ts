@@ -1,6 +1,5 @@
 import { DeliveryClient } from '@/../server/delivery-api'
 import { useRuntimeConfig } from '#imports'
-import { decryptSeg } from '#imports'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -8,48 +7,48 @@ export default defineEventHandler(async (event) => {
 
   const slugPath = Array.isArray(slug) ? slug.join('/') : slug
 
-  const manualSegment = getHeader(event, 'Manual-Segment')
-  const forcedSegmentEncrypted = getHeader(event, 'Forced-Segment')
-  const externalVisitorId = getHeader(event, 'External-Visitor-Id')
-
-  let finalSegment: string | null = null
-  console.log(manualSegment, forcedSegmentEncrypted)
-  if (manualSegment) {
-    finalSegment = manualSegment
-  } else if (forcedSegmentEncrypted) {
-    finalSegment = forcedSegmentEncrypted
+  // Priority for segment:
+  // 1. X-Engage-Segment header (passed from useContent during SSR for first-time visitors)
+  // 2. engageSegment cookie (subsequent requests)
+  // 3. event.context.engageSegment (fallback)
+  let segment: string | null = getHeader(event, 'X-Engage-Segment') || null
+  if (!segment) {
+    const cookie = getCookie(event, 'engageSegment')
+    if (cookie && /^[A-Za-z0-9_-]{1,64}$/.test(cookie) && cookie !== 'default') {
+      segment = cookie
+    }
+  }
+  if (!segment && event.context.engageSegment && event.context.engageSegment !== 'default') {
+    segment = event.context.engageSegment
   }
 
-  if (externalVisitorId) {
-    console.log('External Visitor Id', externalVisitorId)
+  // Same for visitor ID
+  let externalVisitorId: string | null = getHeader(event, 'X-Engage-Visitor') || null
+  if (!externalVisitorId) {
+    externalVisitorId = getCookie(event, 'engage_visitor') || null
   }
+
+  console.log('content api segment:', segment, 'visitor:', externalVisitorId)
 
   // Short-circuit internal multi-cache purge calls so they don't hit CMS
-  if (slugPath.startsWith('__nuxt_multi_cache/')) {
+  if (slugPath?.startsWith('__nuxt_multi_cache/')) {
     return { ok: true }
   }
 
   // Disallow any path segment with a dot
-  if (slugPath.includes('.')) {
+  if (slugPath?.includes('.')) {
     return null
   }
 
-  const headers: Record<string, string> = {}
-  //if (externalVisitorId) headers['External-Visitor-Id'] = externalVisitorId
-  //if (finalSegment) headers['Forced-Segment'] = finalSegment
-
-  console.log('final forced segment', headers['Forced-Segment'])
   const api = new DeliveryClient({
     BASE: config.public.cmsHost,
-    HEADERS: headers,
   })
 
   try {
     const response = await api.content.getContentItemByPath20({
       apiKey: config.deliveryKey,
       path: '/' + slugPath,
-      forcedSegment: finalSegment || undefined,
-      acceptSegment: finalSegment || undefined,
+      acceptSegment: segment || undefined,
       externalVisitorId: externalVisitorId || undefined,
     })
 

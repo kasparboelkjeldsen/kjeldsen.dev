@@ -78,5 +78,15 @@
     "EnabledRTE": true,
     "AdvancedSettings": null,
     "Alias": "cardBlock"
+  },
+  {
+    "Id": "d5c2bc6a-ccca-43af-b5a6-8b4fa6f40b4d",
+    "Enabled": true,
+    "EnabledNested": false,
+    "EnabledList": true,
+    "EnabledGrid": true,
+    "EnabledRTE": true,
+    "AdvancedSettings": null,
+    "Alias": "imageBlockPersonalized"
   }
 ]

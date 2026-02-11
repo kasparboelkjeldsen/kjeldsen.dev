@@ -33,6 +33,8 @@
     funTimeWebMurderBlock: defineAsyncComponent(() => import('./funTimeWebMurderBlock.vue')),
     codeBlock: defineAsyncComponent(() => import('./codeBlock.vue')),
     imageBlock: defineAsyncComponent(() => import('./imageBlock.vue')),
+    // reuse imageblock
+    imageBlockPersonalized: defineAsyncComponent(() => import('./imageBlock.vue')),
     testBlock: defineAsyncComponent(() => import('./testBlock.vue')),
     headerBlock: defineAsyncComponent(() => import('./headerBlock.vue')),
     spotlightBlock: defineAsyncComponent(() => import('./spotlightBlock.vue')),
