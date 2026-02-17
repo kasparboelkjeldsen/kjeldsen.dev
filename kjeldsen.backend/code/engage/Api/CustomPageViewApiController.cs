@@ -16,6 +16,7 @@ using Umbraco.Engage.Headless.Common.Requests;
 using Umbraco.Engage.Headless.Common.Responses;
 using Umbraco.Engage.Headless.Services;
 using Umbraco.Engage.Infrastructure.Analytics.Processed;
+using Umbraco.Engage.Infrastructure.Analytics.Processing.Extractors;
 using Umbraco.Engage.Infrastructure.Permissions.ModulePermissions;
 using Umbraco.Engage.Infrastructure.Personalization;
 using Umbraco.Engage.Infrastructure.Personalization.AppliedPersonalizations;
@@ -42,6 +43,7 @@ public class CustomPageViewApiController : MarketingApiControllerBase
     private readonly IUmbracoDatabaseFactory _umbracoDatabaseFactory;
     private readonly IMemoryCache _cache;
     private readonly IPersonaGroupRepository _personaGroupRepository;
+    private readonly IRawPageviewPageviewExtractor _pageviewExtractor;
 
     public CustomPageViewApiController(
         IApiPublishedContentCache apiPublishedContentCache, 
@@ -58,6 +60,7 @@ public class CustomPageViewApiController : MarketingApiControllerBase
         IPersonalizationControlGroupService personalizationControlGroupService,
         IUmbracoDatabaseFactory umbracoDatabaseFactory,
         IPersonaGroupRepository personaGroupRepository,
+        IRawPageviewPageviewExtractor pageviewExtractor,
         Umbraco.Engage.Infrastructure.Personalization.Segments.ISegmentService segmentService,
         IMemoryCache cache) : base(apiPublishedContentCache, publicAccessService, requestRoutingService)
     {
@@ -73,8 +76,69 @@ public class CustomPageViewApiController : MarketingApiControllerBase
         _personalizationControlGroupService = personalizationControlGroupService;
         _umbracoDatabaseFactory = umbracoDatabaseFactory;
         _personaGroupRepository = personaGroupRepository;
+        _pageviewExtractor = pageviewExtractor;
         _cache = cache;
     }
+
+    [HttpPost]
+    [Route("sneaky-segment-check")]
+    public async Task<IActionResult> SneakySegmentCheck([FromBody] SneakySegmentCheck sneaky)
+    {
+        var request = new HeadlessHttpContext(
+            HttpContext,
+            Request,
+            sneaky.Url,
+            sneaky.ReferrerUrl,
+            sneaky.Headers,
+            sneaky.RemoteClientAddress,
+            sneaky.BrowserUserAgent,
+            sneaky.ExternalVisitorId);
+
+        
+
+        _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
+        IPublishedContent? content = null;
+        if(umbracoContext != null)
+        {
+            _documentNavigationQueryService.TryGetRootKeys(out var rootKeys);
+            // Clean the incoming URL: strip domain + query string, ensure leading '/'
+            string CleanPath(string? raw)
+            {
+                if (string.IsNullOrWhiteSpace(raw)) return "/";
+                // Try absolute first
+                if (Uri.TryCreate(raw, UriKind.Absolute, out var abs))
+                {
+                    return string.IsNullOrWhiteSpace(abs.AbsolutePath) ? "/" : abs.AbsolutePath;
+                }
+                // Remove query part manually for relative input
+                var qIndex = raw.IndexOf('?', StringComparison.Ordinal);
+                if (qIndex >= 0) raw = raw[..qIndex];
+                if (!raw.StartsWith('/')) raw = "/" + raw;
+                return raw;
+            }
+            var cleanedPath = CleanPath(sneaky.Url);
+            foreach (var key in rootKeys)
+            {
+                var root = umbracoContext.Content.GetById(key);
+                if (root == null) continue;
+                var docKey = _documentUrlService.GetDocumentKeyByRoute(cleanedPath, null, root.Id, false);
+                if (docKey == null) continue;
+                content = umbracoContext.Content.GetById(docKey.Value);
+                if (content != null) break;
+            }
+        }
+        if (sneaky.Url.Contains("caching"))
+        {
+
+        }
+        var pageview = await _pageviewExtractor.Extract(request);
+        var activeSegment = GetActivePersonalizationSegment(request, content.Id, "en-US", content.ContentType.Id, pageview);
+        return Ok(activeSegment);
+    }
+
+
+
+
 
     [HttpGet]
     [Route("scores")]
@@ -256,5 +320,17 @@ and rules.segmentId = segment.id";
         return appliedPersonalization != null ? appliedPersonalization.UmbracoSegmentAlias : string.Empty;
     }
 
+
+}
+
+public class SneakySegmentCheck
+{
+    public string ExternalVisitorId { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
+
+    public string ReferrerUrl { get; set; } = string.Empty;
+    public string Headers { get; set; } = string.Empty;
+    public string RemoteClientAddress { get; set; } = string.Empty;
+    public string BrowserUserAgent { get; set; } = string.Empty;
 
 }

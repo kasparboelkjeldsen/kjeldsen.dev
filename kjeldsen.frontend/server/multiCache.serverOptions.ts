@@ -24,6 +24,11 @@ export default defineMultiCacheOptions(() => {
           return `${path}::seg:default`
         }
 
+        // If segmentbreak is present, skip cache to allow middleware to re-run
+        if (url.searchParams.has('segmentbreak')) {
+          return null
+        }
+
         // Access cookie header manually (avoid allocating cookie parser for perf)
         let segment: string | null = null
         try {
