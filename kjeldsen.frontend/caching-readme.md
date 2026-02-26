@@ -35,63 +35,46 @@ We cache pages heavily. However, a user's segment might change mid-session (e.g.
 
 ---
 
-## DEBUG NOTE (2025-02-26) - ACTIVE INVESTIGATION
+## 4. Early Visitor Identification (Cache Key Generation)
 
-### Problem Being Debugged
-Cache gets busted incorrectly - incognito visits invalidate cache for normal browser visits on personalized pages.
+**File:** `server/multiCache.serverOptions.ts` & `server/utils/engage/identify.ts`
 
-### Root Cause Identified
-**Cache key mismatch between LOOKUP and STORE phases:**
+The key insight: `buildCacheKey()` runs **before** middleware during cache lookup. If we can identify the visitor's segment during key generation, first-time visitors can hit existing segment caches immediately.
 
-`buildCacheKey()` in `server/multiCache.serverOptions.ts` is called TWICE per request:
-1. **LOOKUP** (before middleware runs): Only has access to cookies
-2. **STORE** (after middleware runs): Has access to `event.context.engageSegment` set by middleware
+### How It Works
 
-**The mismatch:**
-- First-time visitor (no cookie): LOOKUP returns `path::seg:default`
-- Middleware bootstraps visitor, sets `event.context.engageSegment = 'engage_personalization_13'`
-- STORE returns `path::seg:engage_personalization_13`
-- **Result:** Cache stored under key that LOOKUP will never use for that visitor!
-
-### Test Results (from server logs)
 ```
-Normal browser (with cookie):
-  LOOKUP: /blog/an-image-centric-page::seg:engage_personalization_13
-  STORE:  /blog/an-image-centric-page::seg:engage_personalization_13  ✓ Match
-
-Incognito (no cookie):
-  LOOKUP: /blog/an-image-centric-page::seg:default                   <- No cookie
-  STORE:  /blog/an-image-centric-page::seg:engage_personalization_13  <- Middleware set context
-  ✗ MISMATCH - cache stored under wrong key!
-
-Normal browser refresh (cookies somehow cleared):
-  LOOKUP: /blog/an-image-centric-page::seg:default
-  STORE:  /blog/an-image-centric-page::seg:engage_personalization_13
-  ✗ MISMATCH
+Request Flow:
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. buildCacheKey (LOOKUP)                                       │
+│    ├── Has cookie? → Use segment from cookie (fast)             │
+│    └── No cookie?  → Call Engage API → Get segment              │
+│                                                                  │
+│ 2. Cache Lookup                                                  │
+│    ├── HIT  → Return cached page (skip middleware)              │
+│    └── MISS → Continue to middleware + SSR                      │
+│                                                                  │
+│ 3. Middleware (only on cache miss)                              │
+│    ├── If identified in step 1: Reuse response, set cookies     │
+│    └── If not: Make API call, set cookies                       │
+│                                                                  │
+│ 4. buildCacheKey (STORE)                                        │
+│    └── Use segment from event.context (set in step 1)           │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Current Debug Logging
-`server/multiCache.serverOptions.ts` has logging that shows:
-- `[CACHE-DEBUG] buildCacheKey called` with phase, path, and resolved segment
-- Cookie value vs context value comparison
+### Key Files
 
-### Potential Fix Approaches
-1. **During STORE, use the same segment that LOOKUP would have used** (from cookie, not context)
-2. **Track the LOOKUP key in event.context** and reuse it for STORE
-3. **Accept that first-time visitors always miss cache** but ensure returning visitors with cookies work correctly
+- `server/utils/engage/identify.ts` - Lightweight visitor identification
+- `server/utils/engage/constants.ts` - Shared cookie names and patterns
+- `server/multiCache.serverOptions.ts` - Cache key generation with early identification
+- `server/middleware/serverMiddleware.ts` - Cookie management, reuses identification if available
 
-### Files to Review
-- `server/multiCache.serverOptions.ts` - cache key generation (has debug logging)
-- `server/middleware/serverMiddleware.ts` - sets `event.context.engageSegment`
-- `server/api/content/[...slug].ts` - has retry logic for invalid visitor IDs (recently added)
+### Benefits
 
-### Commands Used
-```bash
-npm run cache  # Runs Nuxt with caching enabled
-```
+1. **First-time visitors hit existing caches** - No cookie required for cache hit
+2. **Returning visitors skip API calls** - Cookie provides instant segment lookup
+3. **No double API calls** - Middleware reuses identification response from cache key generation
+4. **Consistent keys** - LOOKUP and STORE always produce the same key
 
-### Recent Fix Applied
-Added retry logic in `server/api/content/[...slug].ts` to handle "Provided External Visitor Id does not exist" errors by clearing cookies and retrying.
-
----
 

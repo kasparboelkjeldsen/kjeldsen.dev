@@ -1,14 +1,18 @@
 import { handleBlockPreview } from '../utils/middleware/blockPreview'
 import { handleCacheControlMedia } from '../utils/middleware/cacheControlMedia'
 import { handleSitemap } from '../utils/middleware/sitemap'
-import { parse, serialize } from 'cookie'
+import { parse } from 'cookie'
 import { encryptSeg, sanitizeSegment } from '~~/server/utils/seg-crypto'
 import { normalizeAnalyticsUrl, serializeHeaders } from '~~/server/utils/middleware/engageRules'
-
-const VISITOR_COOKIE = 'engage_visitor'
-const PAGEVIEW_COOKIE = 'engage_pv'
-const SEGMENT_TOKEN_COOKIE = 'segTok'
-const SEGMENT_ALIAS_COOKIE = 'engageSegment' // Plain alias for cache key
+import {
+  VISITOR_COOKIE,
+  PAGEVIEW_COOKIE,
+  SEGMENT_TOKEN_COOKIE,
+  SEGMENT_ALIAS_COOKIE,
+  SEGMENT_ALIAS_PATTERN,
+  DEFAULT_SEGMENT,
+  type EngageIdentifyResponse,
+} from '../utils/engage'
 
 export default defineEventHandler(async (event) => {
   // Order matters: handlers may short-circuit by returning a value.
@@ -47,8 +51,17 @@ export default defineEventHandler(async (event) => {
 
   // If engageSegment cookie exists AND we are not forcing a break, visitor is already identified
   const existingSegmentAlias = cookies[SEGMENT_ALIAS_COOKIE]
-  if (!segmentBreak && existingSegmentAlias && /^[A-Za-z0-9_-]{1,64}$/.test(existingSegmentAlias)) {
+  if (!segmentBreak && existingSegmentAlias && SEGMENT_ALIAS_PATTERN.test(existingSegmentAlias)) {
     event.context.engageSegment = existingSegmentAlias
+    return
+  }
+
+  // Check if buildCacheKey already identified this visitor (avoids double API call)
+  // When caching is enabled, identification happens in buildCacheKey before this middleware runs.
+  // We reuse that response to set cookies without making another API call.
+  if (event.context._engageIdentified && event.context._engageResponse) {
+    const response = event.context._engageResponse as EngageIdentifyResponse
+    await setEngageCookiesFromResponse(event, response)
     return
   }
 
@@ -155,78 +168,97 @@ export default defineEventHandler(async (event) => {
 
     const pageviewId = response?.pageviewId
     const externalVisitorId = response?.externalVisitorId || existingVisitorId
-    const activeSegmentAlias = sanitizeSegment(response?.activeSegmentAlias)
     const secure = proto === 'https'
 
-    // Set visitor cookie
-    if (externalVisitorId && externalVisitorId !== existingVisitorId) {
-      setCookie(event, VISITOR_COOKIE, externalVisitorId, {
-        path: '/',
-        sameSite: 'lax',
-        httpOnly: false,
-        secure,
-        maxAge: 60 * 60 * 24 * 365,
-      })
-    }
+    // Set all cookies from the response
+    await setEngageCookiesFromResponse(event, response, existingVisitorId)
 
-    // Set pageview cookie
-    if (pageviewId) {
-      setCookie(event, PAGEVIEW_COOKIE, pageviewId, {
-        path: '/',
-        sameSite: 'lax',
-        httpOnly: false,
-        secure,
-        maxAge: 60 * 30,
-      })
-    }
-
-    // Set encrypted segment token (for content API)
-    if (activeSegmentAlias !== 'anon') {
-      try {
-        const segTok = await encryptSeg(activeSegmentAlias)
-        setCookie(event, SEGMENT_TOKEN_COOKIE, segTok, {
-          path: '/',
-          sameSite: 'lax',
-          httpOnly: false,
-          secure,
-          maxAge: 7 * 24 * 3600,
-        })
-      } catch (e) {
-        console.warn('[engage/middleware] segment encryption failed', e)
-      }
-    }
-
-    // Set plain segment alias cookie for cache key (THE KEY NEW COOKIE)
-    const cacheableSegment = activeSegmentAlias === 'anon' ? 'default' : activeSegmentAlias
-    setSegmentCookieAndContext(event, cacheableSegment, secure)
-
-    // Also store visitor ID in context for SSR forwarding
+    // Store visitor ID in context for SSR forwarding
     if (externalVisitorId) {
       event.context.engageVisitorId = externalVisitorId
     }
 
     console.debug('[engage/middleware] bootstrap complete', {
       durationMs: Date.now() - started,
-      segment: cacheableSegment,
+      segment: event.context.engageSegment,
       hasVisitor: !!externalVisitorId,
       path,
     })
   } catch (e) {
     console.error('[engage/middleware] unexpected error', e)
-    setSegmentCookieAndContext(event, 'default')
+    setSegmentCookieAndContext(event, DEFAULT_SEGMENT)
   }
 })
 
+/**
+ * Sets all Engage cookies from an identification response.
+ * Called both when buildCacheKey has pre-identified the visitor and during normal middleware flow.
+ */
+async function setEngageCookiesFromResponse(
+  event: any,
+  response: EngageIdentifyResponse,
+  existingVisitorId?: string
+) {
+  const req = event.node.req
+  const proto = (req.headers['x-forwarded-proto'] as string) || 'https'
+  const secure = proto === 'https'
+
+  const activeSegmentAlias = sanitizeSegment(response?.activeSegmentAlias)
+  const cacheableSegment = activeSegmentAlias === 'anon' ? DEFAULT_SEGMENT : activeSegmentAlias
+
+  // Set visitor cookie
+  const externalVisitorId = response?.externalVisitorId
+  if (externalVisitorId && externalVisitorId !== existingVisitorId) {
+    setCookie(event, VISITOR_COOKIE, externalVisitorId, {
+      path: '/',
+      sameSite: 'lax',
+      httpOnly: false,
+      secure,
+      maxAge: 60 * 60 * 24 * 365,
+    })
+    event.context.engageVisitorId = externalVisitorId
+  }
+
+  // Set pageview cookie
+  const pageviewId = response?.pageviewId
+  if (pageviewId) {
+    setCookie(event, PAGEVIEW_COOKIE, pageviewId, {
+      path: '/',
+      sameSite: 'lax',
+      httpOnly: false,
+      secure,
+      maxAge: 60 * 30,
+    })
+  }
+
+  // Set encrypted segment token (for content API)
+  if (activeSegmentAlias !== 'anon' && activeSegmentAlias !== DEFAULT_SEGMENT) {
+    try {
+      const segTok = await encryptSeg(activeSegmentAlias)
+      setCookie(event, SEGMENT_TOKEN_COOKIE, segTok, {
+        path: '/',
+        sameSite: 'lax',
+        httpOnly: false,
+        secure,
+        maxAge: 7 * 24 * 3600,
+      })
+    } catch (e) {
+      console.warn('[engage/middleware] segment encryption failed', e)
+    }
+  }
+
+  // Set segment alias cookie for cache key
+  setSegmentCookieAndContext(event, cacheableSegment, secure)
+}
+
 function setSegmentCookieAndContext(event: any, segment: string, secure = true) {
-  // Store in context for immediate use by content fetching
   event.context.engageSegment = segment
 
-  // Set cookie for future requests (cache key will use this)
   setCookie(event, SEGMENT_ALIAS_COOKIE, segment, {
     path: '/',
     sameSite: 'lax',
     httpOnly: false,
     secure,
-    maxAge: 7 * 24 * 3600, // 7 days
+    maxAge: 7 * 24 * 3600,
   })
 }
