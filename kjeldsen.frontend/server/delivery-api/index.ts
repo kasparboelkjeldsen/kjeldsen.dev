@@ -10,9 +10,6 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
-export type { AnimalsContentModel } from './models/AnimalsContentModel';
-export type { AnimalsContentResponseModel } from './models/AnimalsContentResponseModel';
-export type { AnimalsPropertiesModel } from './models/AnimalsPropertiesModel';
 export type { ApiBlockGridAreaModel } from './models/ApiBlockGridAreaModel';
 export type { ApiBlockGridItemModel } from './models/ApiBlockGridItemModel';
 export type { ApiBlockGridModel } from './models/ApiBlockGridModel';
@@ -60,6 +57,8 @@ export type { IApiElementModelBase } from './models/IApiElementModelBase';
 export type { IApiMediaWithCropsModel } from './models/IApiMediaWithCropsModel';
 export type { IApiMediaWithCropsResponseModel } from './models/IApiMediaWithCropsResponseModel';
 export type { ImageBlockElementModel } from './models/ImageBlockElementModel';
+export type { ImageBlockPersonalizedElementModel } from './models/ImageBlockPersonalizedElementModel';
+export type { ImageBlockPersonalizedPropertiesModel } from './models/ImageBlockPersonalizedPropertiesModel';
 export type { ImageBlockPropertiesModel } from './models/ImageBlockPropertiesModel';
 export type { ImageCropCoordinatesModel } from './models/ImageCropCoordinatesModel';
 export type { ImageCropModel } from './models/ImageCropModel';

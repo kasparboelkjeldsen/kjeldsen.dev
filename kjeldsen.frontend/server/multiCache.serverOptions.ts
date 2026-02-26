@@ -32,64 +32,77 @@ export default defineMultiCacheOptions(() => {
           return `${path}::seg:default`
         }
 
-        // Resolve segment from two sources (in priority order):
-        //  1. event.context.engageSegment — set by serverMiddleware during this
-        //     request; available in the afterResponse call (call #2).
-        //  2. Cookie header — sent by the browser from a previous response;
-        //     available in both calls.
-        let segment: string | null = null
-
-        // Context segment (set by middleware — only present in call #2)
-        if (event.context?.engageSegment) {
-          segment = event.context.engageSegment as string
-        }
-
-        // Fall back to cookie header
-        if (!segment) {
-          try {
-            const cookieHeader = getHeader(event, 'cookie') || ''
-            if (cookieHeader) {
-              const match = cookieHeader.match(/(?:^|; )engageSegment=([^;]+)/)
-              if (match && match[1]) {
-                segment = decodeURIComponent(match[1])
-              }
+        // CRITICAL FIX: Consistent LOOKUP/STORE keys to prevent cache interference.
+        //
+        // Key insight: Cookie in request header = segment visitor ALREADY had.
+        // Context.engageSegment = segment middleware assigned (may be new).
+        //
+        // Rules:
+        //   - LOOKUP always uses cookie (or 'default' if none)
+        //   - STORE for RETURNING visitor (had cookie): use cookie segment
+        //   - STORE for NEW visitor (no cookie): use 'default' (NOT context segment!)
+        //
+        // Why: If new visitor stores under context segment, they overwrite cache
+        // that returning visitors depend on. By storing under 'default', new visitors
+        // share a cache pool without affecting segment-specific caches.
+        
+        // Parse segment from cookie header (what browser actually sent)
+        const cookieHeader = getHeader(event, 'cookie') || ''
+        let cookieSegment: string | null = null
+        try {
+          if (cookieHeader) {
+            const match = cookieHeader.match(/(?:^|; )engageSegment=([^;]+)/)
+            if (match && match[1]) {
+              cookieSegment = decodeURIComponent(match[1])
             }
-          } catch {
-            segment = null
           }
+        } catch {
+          cookieSegment = null
         }
+        
+        // Normalize cookie segment
+        if (cookieSegment && !/^[A-Za-z0-9_-]{1,64}$/.test(cookieSegment)) {
+          cookieSegment = null
+        }
+
+        // Determine if this is STORE phase (context set by middleware)
+        const isStorePhase = !!event.context?.engageSegment
 
         // --- segmentbreak handling ---
         // ?segmentbreak=true forces a cache miss so middleware can re-evaluate
-        // the visitor's segment.  We distinguish the two calls:
-        //   Call #1 (serveCachedRoute, before middleware): context is NOT set
-        //     → return a unique timestamped key that will never match a stored
-        //       entry, guaranteeing a cache miss.
-        //   Call #2 (afterResponse, after middleware): context IS set
-        //     → return the proper segment key so the freshly rendered page is
-        //       stored under the correct (possibly new) segment.
+        // the visitor's segment. This is the ONE exception where we use context
+        // segment for STORE - the segment intentionally CHANGED.
         if (url.searchParams.has('segmentbreak')) {
-          if (event.context?.engageSegment) {
+          if (isStorePhase) {
+            // STORE: Use new segment from context so updated cookie will find it
             const seg = event.context.engageSegment as string
-            return `${path}::seg:${/^[A-Za-z0-9_-]{1,64}$/.test(seg) ? seg : 'default'}`
+            const key = `${path}::seg:${/^[A-Za-z0-9_-]{1,64}$/.test(seg) ? seg : 'default'}`
+            console.log(`[Cache] STORE segmentbreak key=${key}`)
+            return key
           }
-          // Before middleware — unique key ensures cache miss
-          return `${path}::seg:__break_${Date.now()}`
+          // LOOKUP: Force cache miss with unique key
+          const breakKey = `${path}::seg:__break_${Date.now()}`
+          console.log(`[Cache] LOOKUP segmentbreak bypass key=${breakKey}`)
+          return breakKey
         }
 
-        // No segment at all (first-time visitor, no cookie, call #1).
-        // Return a path-scoped 'default' key instead of null so each page gets
-        // its own cache slot.  This key will almost always miss on lookup
-        // (afterResponse stores under the real segment), which is the desired
-        // behaviour: first-time visitors always get a fresh SSR + middleware
-        // bootstrap.
-        if (!segment) {
-          return `${path}::seg:default`
+        // Standard cache key resolution
+        if (isStorePhase) {
+          // STORE phase: Use cookie segment if visitor had one, else 'default'
+          // This prevents new visitors from overwriting segment-specific caches
+          const key = cookieSegment 
+            ? `${path}::seg:${cookieSegment}`
+            : `${path}::seg:default`
+          console.log(`[Cache] STORE key=${key} (cookie=${cookieSegment || 'none'})`)
+          return key
         }
-
-        // Normalize segment alias to safe subset
-        if (!/^[A-Za-z0-9_-]{1,64}$/.test(segment)) segment = 'default'
-        return `${path}::seg:${segment}`
+        
+        // LOOKUP phase: Use cookie segment if available, else 'default'
+        const key = cookieSegment 
+          ? `${path}::seg:${cookieSegment}`
+          : `${path}::seg:default`
+        console.log(`[Cache] LOOKUP key=${key}`)
+        return key
       },
     },
   }

@@ -10,9 +10,10 @@ import type { FunTimeWebEkgElementModel } from './FunTimeWebEkgElementModel';
 import type { FunTimeWebMurderBlockElementModel } from './FunTimeWebMurderBlockElementModel';
 import type { HeaderBlockElementModel } from './HeaderBlockElementModel';
 import type { ImageBlockElementModel } from './ImageBlockElementModel';
+import type { ImageBlockPersonalizedElementModel } from './ImageBlockPersonalizedElementModel';
 import type { RteBlockElementModel } from './RteBlockElementModel';
 import type { SpotlightBlockElementModel } from './SpotlightBlockElementModel';
 import type { TestBlockElementModel } from './TestBlockElementModel';
 import type { VimeoBlockElementModel } from './VimeoBlockElementModel';
-export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel | VimeoBlockElementModel | CardBlockElementModel | CardElementModel);
+export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel | VimeoBlockElementModel | CardBlockElementModel | CardElementModel | ImageBlockPersonalizedElementModel);
 

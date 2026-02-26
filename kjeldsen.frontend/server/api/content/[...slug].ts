@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const { slug } = event.context.params!
 
   const slugPath = Array.isArray(slug) ? slug.join('/') : slug
-
+  
   // Priority for segment:
   // 1. X-Engage-Segment header (passed from useContent during SSR for first-time visitors)
   // 2. engageSegment cookie (subsequent requests)
@@ -28,8 +28,6 @@ export default defineEventHandler(async (event) => {
     externalVisitorId = getCookie(event, 'engage_visitor') || null
   }
 
-  console.log('content api segment:', segment, 'visitor:', externalVisitorId)
-
   // Short-circuit internal multi-cache purge calls so they don't hit CMS
   if (slugPath?.startsWith('__nuxt_multi_cache/')) {
     return { ok: true }
@@ -44,13 +42,18 @@ export default defineEventHandler(async (event) => {
     BASE: config.public.cmsHost,
   })
 
-  try {
-    const response = await api.content.getContentItemByPath20({
+  // Helper to make the actual request
+  const fetchContent = async (visitorId: string | null) => {
+    return api.content.getContentItemByPath20({
       apiKey: config.deliveryKey,
-      path: '/' + slugPath,
+      path: slugPath,
       acceptSegment: segment || undefined,
-      externalVisitorId: externalVisitorId || undefined,
+      externalVisitorId: visitorId || undefined,
     })
+  }
+
+  try {
+    const response = await fetchContent(externalVisitorId)
 
     if (!response) {
       throw createError({
@@ -60,7 +63,31 @@ export default defineEventHandler(async (event) => {
     }
 
     return response
-  } catch (e) {
+  } catch (e: any) {
+    // Check if this is an invalid visitor ID error from Umbraco Engage
+    const errorBody = e?.body || e?.message || ''
+    const isInvalidVisitorError = 
+      typeof errorBody === 'string' && errorBody.includes('External Visitor Id does not exist') ||
+      typeof errorBody === 'object' && errorBody?.detail?.includes('External Visitor Id does not exist')
+
+    if (isInvalidVisitorError && externalVisitorId) {
+      console.warn(`[content API] Invalid visitor ID "${externalVisitorId}", clearing cookie and retrying without it`)
+      
+      // Clear the invalid cookies
+      deleteCookie(event, 'engage_visitor')
+      deleteCookie(event, 'engageSegment')
+      
+      // Retry without visitor ID
+      try {
+        const retryResponse = await fetchContent(null)
+        if (retryResponse) {
+          return retryResponse
+        }
+      } catch (retryError) {
+        console.error(`Retry also failed for slug "${slugPath}"`, retryError)
+      }
+    }
+
     console.error(`Failed to fetch content for slug "${slugPath}"`, e)
 
     // Treat not-found from CMS as a proper 404 instead of 500
