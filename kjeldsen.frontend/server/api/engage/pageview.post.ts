@@ -1,6 +1,7 @@
 import { parse } from 'cookie'
 import { encryptSeg, sanitizeSegment } from '~~/server/utils/seg-crypto'
 import { normalizeAnalyticsUrl, serializeHeaders } from '../../utils/middleware/engageRules'
+import { normalizeClientIp } from '../../utils/engage/ip'
 
 const VISITOR_COOKIE = 'engage_visitor'
 const PAGEVIEW_COOKIE = 'engage_pv'
@@ -37,7 +38,7 @@ export default defineEventHandler(async (event) => {
   const forwardedIp = Array.isArray(forwardedFor)
     ? forwardedFor[0]
     : forwardedFor?.split(',')[0]?.trim()
-  const remoteClientAddress = forwardedIp || req.socket?.remoteAddress || '0.0.0.0'
+  const remoteClientAddress = normalizeClientIp(forwardedIp || req.socket?.remoteAddress)
 
   const userAgent = (req.headers['user-agent'] as string) || 'nuxt-app'
 

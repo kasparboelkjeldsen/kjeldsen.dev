@@ -1,6 +1,8 @@
 import { EngageClient } from '~~/server/api/engage/EngageClient'
 import { parse } from 'cookie'
 import { encryptSeg, sanitizeSegment } from '~~/server/utils/seg-crypto'
+import { normalizeAnalyticsUrl } from '~~/server/utils/middleware/engageRules'
+import { normalizeClientIp } from '~~/server/utils/engage/ip'
 
 const VISITOR_COOKIE = 'engage_visitor'
 const PAGEVIEW_COOKIE = 'engage_pv'
@@ -36,70 +38,16 @@ export default defineEventHandler(async (event) => {
     const proto = (req.headers['x-forwarded-proto'] as string) || 'https'
     // clientUrl may be a path or full URL; ensure query string retained.
     const rawPath = clientUrl || req.url || '/'
-    let fullUrl = rawPath.startsWith('http') ? rawPath : `${proto}://${host}${rawPath}`
-    // Normalize URL domain for analytics licensing:
-    // 1. If localhost -> optionally remap to configured siteUrl / fallback (existing logic below)
-    // 2. If NOT localhost -> force host to licensed domain kjeldsen.dev (retain path & query) over https
-    const publicSiteRaw = (config.public.siteUrl || '').replace(/\/$/, '')
-    const fallbackCanonical = 'https://www.kjeldsen.dev'
-    const localhostRegex = /^https?:\/\/localhost(?::\d+)?\/?/i
-    if (localhostRegex.test(fullUrl)) {
-      const targetHost = publicSiteRaw || fallbackCanonical
-      try {
-        const u = new URL(fullUrl)
-        const target = new URL(targetHost)
-        u.host = target.host
-        u.protocol = target.protocol
-        fullUrl = u.toString()
-        if (!publicSiteRaw) {
-          console.warn(
-            '[engage/bootstrap] siteUrl not configured; used fallback canonical host for analytics URL'
-          )
-        }
-      } catch (errSwap) {
-        console.warn(
-          '[engage/bootstrap] failed to remap localhost URL, using fallback root',
-          serializeError(errSwap)
-        )
-        fullUrl = targetHost + '/'
-      }
-    } else if (!publicSiteRaw) {
-      // Not localhost but still missing siteUrl; optional info for diagnostics
-      console.warn(
-        '[engage/bootstrap] siteUrl not configured; consider setting runtimeConfig.public.siteUrl'
-      )
-    }
-
-    // Force non-localhost hosts to the licensed domain
-    try {
-      if (!localhostRegex.test(fullUrl)) {
-        const u = new URL(fullUrl)
-        if (u.hostname !== 'kjeldsen.dev') {
-          const prevHost = u.hostname
-          u.hostname = 'kjeldsen.dev'
-          u.protocol = 'https:'
-          u.port = '' // remove any explicit port
-          fullUrl = u.toString()
-          // Minimal log only if host changed (avoid leaking paths)
-          if (process.env.NODE_ENV !== 'production') {
-            console.info('[engage/bootstrap] normalized analytics host', {
-              from: prevHost,
-              to: 'kjeldsen.dev',
-            })
-          }
-        }
-      }
-    } catch {
-      /* ignore URL normalization errors */
-    }
+    const rawUrl = rawPath.startsWith('http') ? rawPath : `${proto}://${host}${rawPath}`
+    // Normalize URL domain for analytics licensing using shared logic
+    const fullUrl = normalizeAnalyticsUrl(rawUrl, config)
 
     // Remote client address fallback chain
-    const remoteClientAddress =
+    const remoteClientAddress = normalizeClientIp(
       ((req.headers['x-forwarded-for'] as string) || '').split(',')[0].trim() ||
       // @ts-ignore node types
-      req.socket?.remoteAddress ||
-      '' ||
-      '0.0.0.0'
+      req.socket?.remoteAddress
+    )
 
     const baseForwardHeaders: Record<string, string> = {
       'X-Original-Url': fullUrl,

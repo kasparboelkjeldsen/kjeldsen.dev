@@ -1,5 +1,7 @@
 import { getRequestURL, getHeader, type H3Event } from 'h3'
 import { VISITOR_COOKIE, SEGMENT_ALIAS_PATTERN, DEFAULT_SEGMENT } from './constants'
+import { normalizeClientIp } from './ip'
+import { normalizeAnalyticsUrl } from '../middleware/engageRules'
 
 export interface EngageIdentifyResponse {
   pageviewId?: string
@@ -33,7 +35,8 @@ export async function identifyVisitor(event: H3Event): Promise<string> {
     const path = url.pathname || '/'
     const host = getHeader(event, 'host') || ''
     const proto = (getHeader(event, 'x-forwarded-proto') as string) || 'https'
-    const fullUrl = `${proto}://${host}${path}${url.search}`
+    const rawUrl = `${proto}://${host}${path}${url.search}`
+    const fullUrl = normalizeAnalyticsUrl(rawUrl, config)
     
     // Get existing visitor ID from cookie
     const existingVisitorId = getVisitorIdFromCookie(event)
@@ -115,5 +118,5 @@ function getClientAddress(event: H3Event): string {
   const forwardedIp = Array.isArray(forwardedFor)
     ? forwardedFor[0]
     : forwardedFor?.split(',')[0]?.trim()
-  return forwardedIp || event.node?.req?.socket?.remoteAddress || '0.0.0.0'
+  return normalizeClientIp(forwardedIp || event.node?.req?.socket?.remoteAddress)
 }
