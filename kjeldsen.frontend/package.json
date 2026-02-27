@@ -39,6 +39,9 @@
     "vue-chartjs": "^5.3.2",
     "vue-router": "^4.5.0"
   },
+  "overrides": {
+    "property-information": "^6.0.0"
+  },
   "devDependencies": {
     "@azure/identity": "^4.10.1",
     "@azure/keyvault-secrets": "^4.10.0",
