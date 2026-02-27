@@ -1,9 +1,18 @@
 <template>
   <component
     :is="asTag"
+    ref="rootEl"
     :aria-label="ariaLabel"
     class="relative p-6 overflow-hidden text-white border shadow-lg group isolate rounded-2xl border-white/10 bg-white/5 sm:p-8 ring-1 ring-white/10"
   >
+    <!-- Sunray shine effect -->
+    <div
+      ref="shineEl"
+      class="absolute inset-0 pointer-events-none -z-5 shine-base"
+      :class="{ 'shine-animate': isVisible }"
+      aria-hidden="true"
+    />
+
     <!-- Accent bar -->
     <div
       class="absolute inset-y-0 left-0 w-1 pointer-events-none bg-gradient-to-b"
@@ -58,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue'
+  import { computed, ref, onMounted, onUnmounted } from 'vue'
 
   const props = withDefaults(
     defineProps<{
@@ -74,6 +83,38 @@
   )
 
   const asTag = computed(() => props.as)
+  const rootEl = ref<HTMLElement | null>(null)
+  const shineEl = ref<HTMLElement | null>(null)
+  const isVisible = ref(false)
+  let observer: IntersectionObserver | null = null
+
+  onMounted(() => {
+    if (typeof window === 'undefined') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    
+    observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (entry?.isIntersecting && !isVisible.value) {
+          // Small delay before triggering
+          setTimeout(() => {
+            isVisible.value = true
+          }, 150)
+          // Only animate once
+          observer?.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    
+    if (rootEl.value) {
+      observer.observe(rootEl.value)
+    }
+  })
+
+  onUnmounted(() => {
+    observer?.disconnect()
+  })
 
   const variantMap: Record<
     NonNullable<typeof props.variant>,
@@ -124,6 +165,44 @@
 </script>
 
 <style scoped>
+  /* Sunray shine base (no animation by default) */
+  .shine-base {
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.03) 45%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.03) 55%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    background-position: 200% 0;
+  }
+
+  /* Animate when visible */
+  .shine-animate {
+    animation: shine 1.2s ease-out forwards;
+  }
+
+  @keyframes shine {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .shine-animate {
+      animation: none;
+    }
+    .shine-base {
+      background: transparent;
+    }
+  }
+
   /* Ensure any slotted <img> is exactly 32x32 within the badge */
   .size-8 :deep(img) {
     width: 32px;
