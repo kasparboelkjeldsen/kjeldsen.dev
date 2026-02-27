@@ -37,7 +37,16 @@ export function useCustomCache(
     if (import.meta.server) {
       if (event) {
         const cookie = getCookie(event, 'engageSegment')
-        if (cookie && /[A-Za-z0-9_-]{1,32}/.test(cookie)) segmentAlias = cookie
+        if (cookie && /[A-Za-z0-9_-]{1,32}/.test(cookie)) {
+          segmentAlias = cookie
+        } else if (
+          // On the first request Cookie is only in the *response* (just set by middleware/buildCacheKey),
+          // so fall back to event.context.engageSegment which is always populated.
+          (event.context as any)?.engageSegment &&
+          (event.context as any).engageSegment !== 'default'
+        ) {
+          segmentAlias = (event.context as any).engageSegment
+        }
       }
     } else if (typeof document !== 'undefined') {
       // Skip cookie access if in preview mode (iframe)

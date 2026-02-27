@@ -3,6 +3,7 @@
  * 
  * Handles:
  * - IPv6-mapped IPv4 addresses (::ffff:192.168.1.1 → 192.168.1.1)
+ * - IPv4 with port numbers (192.168.1.1:8080 → 192.168.1.1)
  * - IPv6 localhost (::1 → 127.0.0.1)
  * - Empty/invalid fallback (uses 127.0.0.1 instead of 0.0.0.0)
  * - Trims whitespace and validates format
@@ -31,6 +32,16 @@ export function normalizeClientIp(ip: string | undefined | null): string {
   // Handle IPv6-mapped IPv4 (::ffff:192.168.1.1 → 192.168.1.1)
   if (normalized.toLowerCase().startsWith(IPV4_MAPPED_PREFIX)) {
     normalized = normalized.substring(IPV4_MAPPED_PREFIX.length)
+  }
+
+  // Strip port number if present (e.g., 192.168.1.1:8080 → 192.168.1.1)
+  const portIndex = normalized.lastIndexOf(':')
+  if (portIndex > 0 && !normalized.includes('[')) {
+    // Only strip if it looks like a port (after the last colon is digits)
+    const potentialPort = normalized.substring(portIndex + 1)
+    if (/^\d+$/.test(potentialPort)) {
+      normalized = normalized.substring(0, portIndex)
+    }
   }
 
   // Handle IPv6 localhost
