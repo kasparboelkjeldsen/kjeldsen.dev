@@ -24,7 +24,7 @@ public class YourNotificationHandler : INotificationAsyncHandler<RemodelBlockCat
 
         var name = _contentService.GetById(Guid.Parse(id)).Name;
         
-        if(!name.Equals("umbraco packages", StringComparison.OrdinalIgnoreCase))
+        if(!name.Equals("umbraco packages", StringComparison.OrdinalIgnoreCase) || !name.Contains("caching"))
         {
             notification.Model.Blocks = notification.Model.Blocks.Where(x => x.Alias != "cacheKeyExampleBlock").ToList();
         }

@@ -24,14 +24,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/tailwind.css'],
   postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/fonts', '@nuxtjs/mdc', 'nuxt-multi-cache'],
-  mdc: {
-    highlight: {
-      theme: 'github-dark',
-      langs: ['ts', 'js', 'csharp', 'vue-html', 'vue', 'json', 'mermaid', 'html'],
-      wrapperStyle: true,
-    },
-  },
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/fonts', 'nuxt-multi-cache'],
   features: {
     inlineStyles: true,
   },

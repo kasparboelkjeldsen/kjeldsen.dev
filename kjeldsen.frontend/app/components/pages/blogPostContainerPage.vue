@@ -1,37 +1,52 @@
 <template>
   <section class="max-w-6xl px-4 pb-24 mx-auto">
-    <h1 class="mb-10 text-4xl font-bold leading-tight tracking-tight">Blog</h1>
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold leading-tight tracking-tight">Blog</h1>
+      <p class="mt-2 text-lg text-gray-400">Thoughts, tutorials, and insights</p>
+    </header>
 
-    <ul class="grid pl-0 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+    <ul class="grid gap-6 pl-0 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
       <li
         v-for="child in sortedPosts"
         :key="child.id"
-        class="overflow-hidden transition-shadow shadow bg-zinc-900 rounded-xl hover:shadow-xl"
+        class="pl-0 overflow-hidden transition-all duration-300 border bg-zinc-900/70 rounded-2xl border-white/10 hover:border-white/20 hover:bg-zinc-900 group"
       >
-        <a :href="child.route?.path ?? '#'" class="block h-full no-underline group">
-          <div v-if="child.properties?.seoListImage?.[0]?.url">
+        <a :href="child.route?.path ?? '#'" class="flex flex-col h-full no-underline">
+          <div v-if="child.properties?.seoListImage?.[0]?.url" class="relative overflow-hidden">
             <img
               :src="child.properties.seoListImage[0].url"
               alt=""
-              class="object-cover w-full h-48 transition-transform duration-300 group-hover:scale-105"
+              class="object-cover w-full transition-transform duration-500 h-52 group-hover:scale-105"
+            />
+            <div
+              class="absolute inset-0 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-zinc-900/60 to-transparent group-hover:opacity-100"
             />
           </div>
-          <div class="px-6 pt-4 pb-6">
-            <p
-              v-if="child.properties?.writer"
-              class="text-xs font-medium leading-tight text-white/80"
-            >
-              {{ GetWriter(child.properties.writer) }}
-            </p>
-            <p v-if="child.properties?.seoPublishingDate" class="mt-1 text-xs text-sky-300">
-              {{ formatDate(child.properties.seoPublishingDate) }}
-            </p>
-            <h2 class="mb-2 text-xl font-semibold text-white">
+          <div class="flex flex-col flex-1 p-6">
+            <div class="flex items-center gap-3 mb-3 text-xs">
+              <span
+                v-if="child.properties?.writer"
+                class="font-medium text-white/70"
+              >
+                {{ GetWriter(child.properties.writer) }}
+              </span>
+              <span v-if="child.properties?.writer && child.properties?.seoPublishingDate" class="text-white/30">·</span>
+              <time v-if="child.properties?.seoPublishingDate" class="text-sky-400/80">
+                {{ formatDate(child.properties.seoPublishingDate) }}
+              </time>
+            </div>
+            <h2 class="mb-2 text-xl font-semibold leading-snug text-white transition-colors duration-200 group-hover:text-sky-300">
               {{ child.properties?.seoTitle }}
             </h2>
-            <p class="text-sm text-gray-400">
+            <p class="flex-1 text-sm leading-relaxed text-gray-400 line-clamp-3">
               {{ child.properties?.seoDescription }}
             </p>
+            <div class="flex items-center gap-1 mt-4 text-sm font-medium transition-colors duration-200 text-sky-400 group-hover:text-sky-300">
+              Read more
+              <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </div>
           </div>
         </a>
       </li>

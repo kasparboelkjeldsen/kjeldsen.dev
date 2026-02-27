@@ -1,9 +1,21 @@
 <template>
   <div :class="(props.columns ?? 12) < 12 ? 'p-5' : ''">
-    <picture v-if="!isBlockPreview && sources.length" class="m-0">
-      <source v-for="(s, index) in sources" :key="index" :srcset="s.src" :media="s.media" />
-      <img :src="sources.at(-1)?.src" :alt="altText" class="rounded-lg" :data-guid="image?.id" />
-    </picture>
+    <figure v-if="!isBlockPreview && sources.length" class="relative m-0 overflow-hidden rounded-lg group">
+      <picture class="block">
+        <source v-for="(s, index) in sources" :key="index" :srcset="s.src" :media="s.media" />
+        <img
+          :src="sources.at(-1)?.src"
+          :alt="altText"
+          class="w-full transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.02]"
+          :data-guid="image?.id"
+        />
+      </picture>
+      <!-- Subtle gradient overlay on hover -->
+      <div
+        class="absolute inset-0 transition-opacity duration-500 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-white/5 opacity-0 group-hover:opacity-100"
+        aria-hidden="true"
+      />
+    </figure>
 
     <img
       v-if="isBlockPreview && sources.length"

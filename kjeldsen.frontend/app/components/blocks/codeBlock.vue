@@ -1,13 +1,14 @@
 <template>
   <Glasslike :title="displayTitle" variant="highlight" class="-mx-4 sm:mx-0">
     <div class="code-wrap">
-      <MDC :value="rawMarkdown" class="mdc-root" />
+      <div v-if="highlighted" v-html="highlighted.html" class="shiki-root" />
+      <pre v-else class="text-sm text-slate-400">Loading...</pre>
     </div>
   </Glasslike>
 </template>
+
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import 'prismjs/themes/prism-okaidia.css'
   import Glasslike from '../glasslike.vue'
   import type { CodeBlockElementModel } from '~/../server/delivery-api'
 
@@ -16,6 +17,25 @@
   }>()
 
   const rawMarkdown = computed(() => props.data.properties?.code ?? '')
+
+  // Generate a stable key for caching based on content hash
+  const cacheKey = computed(() => {
+    const content = rawMarkdown.value
+    let hash = 0
+    for (let i = 0; i < content.length; i++) {
+      hash = ((hash << 5) - hash + content.charCodeAt(i)) | 0
+    }
+    return `highlight-${hash}`
+  })
+
+  // Fetch highlighted HTML from server (SSR preferred, cached on client)
+  const { data: highlighted } = await useAsyncData<{ html: string; language: string }>(
+    cacheKey.value,
+    () => $fetch('/api/highlight', {
+      method: 'POST',
+      body: { markdown: rawMarkdown.value },
+    })
+  )
 
   const langRaw = computed(() => {
     const m = rawMarkdown.value.match(/```\s*([a-zA-Z0-9_+-]+)/)
@@ -66,20 +86,21 @@
 </script>
 
 <style>
-  /* Tweak code font-size and scrollbars inside the rendered markdown */
-  .code-wrap :deep(pre) {
+  /* Shiki generates a pre > code structure with inline styles */
+  .shiki-root :deep(pre) {
     font-size: 0.85rem;
-    line-height: 1.45;
-    overflow: auto;
+    line-height: 1.6;
+    overflow-x: auto;
     border-radius: 8px;
+    padding: 1rem;
+    margin: 0;
   }
-  .mdc-root pre {
-    background: #24292e !important;
+
+  .shiki-root :deep(code) {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
-  .mdc-root .line {
-    font-size: 14px;
-  }
-  /* Make horizontal scrollbar subtler/prettier */
+
+  /* Horizontal scrollbar styling */
   .code-wrap :deep(pre)::-webkit-scrollbar {
     height: 8px;
   }
@@ -87,16 +108,15 @@
     background: transparent;
   }
   .code-wrap :deep(pre)::-webkit-scrollbar-thumb {
-    background-color: rgba(148, 163, 184, 0.45); /* slate-300/45 */
+    background-color: rgba(148, 163, 184, 0.45);
     border-radius: 9999px;
-    border: 2px solid transparent; /* creates padding effect */
+    border: 2px solid transparent;
     background-clip: padding-box;
   }
-  /* Firefox */
+
+  /* Firefox scrollbar */
   .code-wrap :deep(pre) {
     scrollbar-width: thin;
     scrollbar-color: rgba(148, 163, 184, 0.6) transparent;
   }
-
-  /* MDC root has inline background via :style on component */
 </style>
