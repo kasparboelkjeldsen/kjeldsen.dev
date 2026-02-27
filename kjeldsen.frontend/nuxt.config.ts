@@ -134,6 +134,11 @@ export default defineNuxtConfig({
     minify: true,
     sourceMap: analyze,
     compressPublicAssets: true,
+    externals: {
+      // Force these to be bundled inline rather than externalized to avoid
+      // nested node_modules path resolution failures in the server output.
+      inline: ['property-information', 'hast-util-to-html'],
+    },
     ...(analyze
       ? {
           rollupConfig: {
