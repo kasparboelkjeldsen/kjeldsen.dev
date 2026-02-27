@@ -40,6 +40,9 @@ export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input
             appSettings: [
                 { name: "WEBSITES_ENABLE_APP_SERVICE_STORAGE", value: "false" },
                 { name: "WEBSITES_PORT", value: "3000" },
+                // Prevent Azure Oryx from running 'npm install' during deployment.
+                // The pre-built server/node_modules/ is deployed as-is.
+                { name: "SCM_DO_BUILD_DURING_DEPLOYMENT", value: "false" },
             ],
         },
         httpsOnly: true,
