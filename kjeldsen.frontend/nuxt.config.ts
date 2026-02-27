@@ -137,7 +137,21 @@ export default defineNuxtConfig({
     externals: {
       // Force these to be bundled inline rather than externalized to avoid
       // nested node_modules path resolution failures in the server output.
-      inline: ['property-information', 'hast-util-to-html'],
+      // Shiki and its transitive ESM dependencies need to be fully inlined.
+      inline: [
+        /shiki/,
+        /^hast-/,
+        /^unist-/,
+        /^property-information/,
+        /^stringify-entities/,
+        /^character-entities/,
+        /^space-separated-tokens/,
+        /^comma-separated-tokens/,
+        /^html-void-elements/,
+        /^zwitch/,
+        /^hastscript/,
+        /^vfile/,
+      ],
     },
     ...(analyze
       ? {
