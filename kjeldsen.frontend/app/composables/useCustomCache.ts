@@ -77,7 +77,9 @@ export function useCustomCache(
     const utc = new Date().toUTCString()
     const safe = (s: string) => s.replace(/-->/g, '--&gt;')
     const tableLines = cacheKeys.map((k: string, i: number) => `#${i + 1} ${safe(k)}`)
-    const comment = `<!-- Cache Keys (${cacheKeys.length}) | ISO: ${iso} | UTC: ${utc} | CacheEnabled: ${useCache} | MaxAge: ${maxAge} | Segment: ${segmentAlias} | DerivedKeyPart: ${segmentKeyComponent}\n${tableLines.join('\n')}\n-->`
+    const engageTaxMs = (event?.context as any)?._engageTaxMs
+    const taxLabel = engageTaxMs != null ? `${engageTaxMs} ms` : 'none (cookie hit)'
+    const comment = `<!-- Cache Keys (${cacheKeys.length}) | ISO: ${iso} | UTC: ${utc} | CacheEnabled: ${useCache} | MaxAge: ${maxAge} | Segment: ${segmentAlias} | DerivedKeyPart: ${segmentKeyComponent} | Engage Tax: ${taxLabel}\n${tableLines.join('\n')}\n-->`
     if (event) {
       ;(event.context as any).cacheDebugComment = comment
     }

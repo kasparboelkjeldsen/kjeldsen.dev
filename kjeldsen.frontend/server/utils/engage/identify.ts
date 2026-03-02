@@ -60,7 +60,7 @@ export async function identifyVisitor(event: H3Event): Promise<string> {
     }
 
     const targetUrl = `${baseUrl}/umbraco/engageextensions/pageview/register`
-    
+    const _taxStart = Date.now()
     const res = await fetch(targetUrl, {
       method: 'POST',
       headers: {
@@ -73,6 +73,7 @@ export async function identifyVisitor(event: H3Event): Promise<string> {
 
     if (!res.ok) {
       console.warn(`[engage/identify] HTTP ${res.status}`)
+      event.context._engageTaxMs = Date.now() - _taxStart
       return DEFAULT_SEGMENT
     }
 
@@ -81,6 +82,7 @@ export async function identifyVisitor(event: H3Event): Promise<string> {
     // Store response in context for middleware to use (avoids double API call)
     event.context._engageResponse = response
     event.context._engageIdentified = true
+    event.context._engageTaxMs = Date.now() - _taxStart
     
     const activeSegmentAlias = response?.activeSegmentAlias
     if (!activeSegmentAlias || activeSegmentAlias === 'anon') {
