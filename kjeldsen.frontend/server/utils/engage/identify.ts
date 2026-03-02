@@ -1,4 +1,4 @@
-import { getRequestURL, getHeader, type H3Event } from 'h3'
+import { getRequestURL, getHeader, setCookie, type H3Event } from 'h3'
 import { VISITOR_COOKIE, SEGMENT_ALIAS_PATTERN, DEFAULT_SEGMENT } from './constants'
 import { normalizeClientIp } from './ip'
 import { normalizeAnalyticsUrl } from '../middleware/engageRules'
@@ -74,6 +74,12 @@ export async function identifyVisitor(event: H3Event): Promise<string> {
     if (!res.ok) {
       console.warn(`[engage/identify] HTTP ${res.status}`)
       event.context._engageTaxMs = Date.now() - _taxStart
+      setCookie(event, 'engage-tax', `err:${event.context._engageTaxMs}`, {
+        httpOnly: false,
+        maxAge: 60,
+        sameSite: 'lax',
+        path: '/',
+      })
       return DEFAULT_SEGMENT
     }
 
@@ -83,6 +89,16 @@ export async function identifyVisitor(event: H3Event): Promise<string> {
     event.context._engageResponse = response
     event.context._engageIdentified = true
     event.context._engageTaxMs = Date.now() - _taxStart
+
+    // Set a short-lived JS-readable cookie so the client plugin can surface the
+    // personalization tax in the debug HTML comment (the SSR comment is cached
+    // and would always show a stale value).
+    setCookie(event, 'engage-tax', String(event.context._engageTaxMs), {
+      httpOnly: false,
+      maxAge: 60,
+      sameSite: 'lax',
+      path: '/',
+    })
     
     const activeSegmentAlias = response?.activeSegmentAlias
     if (!activeSegmentAlias || activeSegmentAlias === 'anon') {
