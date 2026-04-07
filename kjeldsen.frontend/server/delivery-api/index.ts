@@ -18,6 +18,8 @@ export type { ApiBlockListModel } from './models/ApiBlockListModel';
 export type { ApiContentRouteModel } from './models/ApiContentRouteModel';
 export type { ApiContentStartItemModel } from './models/ApiContentStartItemModel';
 export type { ApiLinkModel } from './models/ApiLinkModel';
+export type { ApiUserTestElementModel } from './models/ApiUserTestElementModel';
+export type { ApiUserTestPropertiesModel } from './models/ApiUserTestPropertiesModel';
 export type { BlogPostContainerPageContentModel } from './models/BlogPostContainerPageContentModel';
 export type { BlogPostContainerPageContentResponseModel } from './models/BlogPostContainerPageContentResponseModel';
 export type { BlogPostContainerPagePropertiesModel } from './models/BlogPostContainerPagePropertiesModel';

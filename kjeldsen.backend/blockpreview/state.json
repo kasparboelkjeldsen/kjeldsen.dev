@@ -88,5 +88,15 @@
     "EnabledRTE": true,
     "AdvancedSettings": null,
     "Alias": "imageBlockPersonalized"
+  },
+  {
+    "Id": "569c6ba9-0dd0-4974-8e82-b2103a5b0aed",
+    "Enabled": true,
+    "EnabledNested": false,
+    "EnabledList": true,
+    "EnabledGrid": true,
+    "EnabledRTE": true,
+    "AdvancedSettings": null,
+    "Alias": "apiUserTest"
   }
 ]

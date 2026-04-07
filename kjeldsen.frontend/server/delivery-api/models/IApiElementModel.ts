@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApiUserTestElementModel } from './ApiUserTestElementModel';
 import type { CacheKeyExampleBlockElementModel } from './CacheKeyExampleBlockElementModel';
 import type { CardBlockElementModel } from './CardBlockElementModel';
 import type { CardElementModel } from './CardElementModel';
@@ -15,5 +16,5 @@ import type { RteBlockElementModel } from './RteBlockElementModel';
 import type { SpotlightBlockElementModel } from './SpotlightBlockElementModel';
 import type { TestBlockElementModel } from './TestBlockElementModel';
 import type { VimeoBlockElementModel } from './VimeoBlockElementModel';
-export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel | VimeoBlockElementModel | CardBlockElementModel | CardElementModel | ImageBlockPersonalizedElementModel);
+export type IApiElementModel = (CodeBlockElementModel | FunTimeWebEkgElementModel | FunTimeWebMurderBlockElementModel | ImageBlockElementModel | RteBlockElementModel | TestBlockElementModel | HeaderBlockElementModel | SpotlightBlockElementModel | CacheKeyExampleBlockElementModel | VimeoBlockElementModel | CardBlockElementModel | CardElementModel | ImageBlockPersonalizedElementModel | ApiUserTestElementModel);
 

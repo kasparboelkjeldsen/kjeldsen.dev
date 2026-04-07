@@ -41,6 +41,7 @@
     cacheKeyExampleBlock: defineAsyncComponent(() => import('./cacheKeyExampleBlock.vue')),
     vimeoBlock: defineAsyncComponent(() => import('./vimeoBlock.vue')),
     cardBlock: defineAsyncComponent(() => import('./cardBlock.vue')),
+    apiUserTest: defineAsyncComponent(() => import('./apiUserTestBlock.vue')),
   }
   const islandList: { contentType: string; toRender: string }[] = []
 
