@@ -29,6 +29,8 @@ public static class SecretsExtension
         builder.Configuration["Azure:FrontDoorEndpointResourceId"] = frontdoor;
         builder.Configuration["ApplicationInsights:ConnectionString"] = applicationInsights;
         builder.Configuration["Umbraco:Licenses:Products:Umbraco.Engage"] = engageLicense;
+        builder.Configuration["NoteCaptureService:BlobConnectionString"] = storage;
+        builder.Configuration["NoteCaptureService:BearerToken"] = deliveryKey;
 
 
         return builder;

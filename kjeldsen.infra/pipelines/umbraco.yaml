@@ -7,7 +7,8 @@ trigger:
       - kjeldsen.backend/**
       - kjeldsen.frontend/**
 
-pool: Default
+pool:
+  vmImage: 'ubuntu-latest'
 
 variables:
   - group: site
@@ -40,7 +41,7 @@ stages:
           displayName: 'Checkout (fetchDepth=2 for diff)'
           fetchDepth: 2
 
-        - powershell: |
+        - pwsh: |
             Write-Host "Build.Reason: $(Build.Reason)"
             Write-Host "Build.SourceVersion: $(Build.SourceVersion)"
 

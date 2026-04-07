@@ -1,6 +1,7 @@
 using kjeldsen.backend.code.controllers;
 using kjeldsen.backend.code.engage.Setup;
 using kjeldsen.backend.code.extensions;
+using kjeldsen.backend.code.mcp;
 using kjeldsen.backend.code.middleware;
 using kjeldsen.backend.code.services.Background;
 using Umbraco.Cms.Web.Website.Controllers;
@@ -15,6 +16,7 @@ builder
 .AddOpenIdDictRedirectUris()
 .AddApplicationInsights()
 .AddCors()
+.AddNoteCaptureService()
 .CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
@@ -27,12 +29,18 @@ builder
 
 ;
 
+// MCP server â€” SSE transport with capture_note tool
+builder.Services
+    .AddMcpServer()
+    .WithHttpTransport()
+    .WithTools<NoteTools>();
+
 // background queue
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 builder.Services.AddHostedService<QueuedHostedService>();
 var app = builder.Build();
 
-// OpenIdDict redirect URI check – runs early before Umbraco/OpenIdDict handle login
+// OpenIdDict redirect URI check ï¿½ runs early before Umbraco/OpenIdDict handle login
 app.UseOpenIdDictRedirectUriCheck();
 
 app
@@ -40,6 +48,13 @@ app
     .UseMiddleware<FreezeMiddleware>();
 
 await app.BootUmbracoAsync();
+
+// /mcp must be mapped before UseUmbraco so it isn't swallowed by Umbraco routing.
+// UseAuthentication/UseAuthorization are also called by Umbraco internally; these calls
+// are idempotent and ensure the middleware is present before MapMcp's policy check.
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapMcp("/mcp").RequireAuthorization("McpAccess");
 
 app.AddStaticRedirects();
 app.AddEngageTrackingRewrite();
