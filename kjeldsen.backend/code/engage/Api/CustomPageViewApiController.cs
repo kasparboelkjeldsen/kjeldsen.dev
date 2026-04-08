@@ -248,6 +248,10 @@ and rules.segmentId = segment.id";
         if (!_headlessPageViewService.IsAllowedToRegisterPageview(request))
             return new NotPermittedDueToLicenseResult();
 
+        // only register pageview if it has a user-agent (seeing a lot of bots right now)
+        if (string.IsNullOrWhiteSpace(remotePageViewServer.BrowserUserAgent) || remotePageViewServer.BrowserUserAgent.Length < 20)
+            return Ok();
+
         IPageview? pageview = await _headlessPageViewService.RegisterRemotePageView(request);
         string? activeSegment = null;
         if (pageview != null && pageview.ExternalId != null)
