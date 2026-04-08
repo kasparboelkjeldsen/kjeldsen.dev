@@ -3,7 +3,7 @@
     "id": "kraftvaerk.umbraco.blockfilter.Frontend",
     "name": "kraftvaerk.umbraco.blockfilter.Frontend",
     "allowPackageTelemetry": true,
-    "version": "0.0.0",
+    "version": "1.2.8",
     "extensions": [
         {
           "name": "knowit-kraftvaerk.umbraco.blockfilter.Frontend EntryPoint",

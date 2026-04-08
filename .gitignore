@@ -496,3 +496,5 @@ kjeldsen.frontend/.output/
 kjeldsen.frontend/.env.local
 
 kjeldsen.frontend/.env copy
+
+.claude/settings.local.json

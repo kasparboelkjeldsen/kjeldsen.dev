@@ -144,7 +144,8 @@ public class CustomPageViewApiController : MarketingApiControllerBase
     [Route("scores")]
     public async Task<IActionResult> GetPersonaScores(Guid externalVisitorId)
     {
-        var scores = _personaGroupRepository.GetPersonaScoresByVisitor(externalVisitorId);
+        
+        var scores = _personaGroupRepository.GetScoresByVisitor(externalVisitorId);
         return Ok(scores);
     }
 
