@@ -38,20 +38,49 @@ if (fs.existsSync(serverPackageJsonPath)) {
 }
 
 // Remove any nested node_modules directories inside externalized packages.
-// Nitro's dependency tracer (or Oryx's npm install) can create partial nested
-// node_modules structures (e.g. hast-util-to-html/node_modules/property-information/)
-// where the directory exists but files like index.js are missing. Removing the
-// nested dir lets Node.js fall back to the correct top-level package.
+// Nitro's dependency tracer can create partial nested node_modules structures
+// (e.g. hast-util-to-html/node_modules/property-information/) where the
+// directory exists but files like index.js are missing. Removing the nested dir
+// lets Node.js fall back to the correct top-level package.
 const serverNodeModules = path.resolve('.output/server/node_modules')
-if (fs.existsSync(serverNodeModules)) {
-  const entries = fs.readdirSync(serverNodeModules)
+console.log(`🔍 Checking for nested node_modules in: ${serverNodeModules}`)
+console.log(`   exists: ${fs.existsSync(serverNodeModules)}`)
+
+function removeNestedNodeModules(dir, depth = 0) {
+  if (!fs.existsSync(dir)) return
+  let entries
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true })
+  } catch (e) {
+    console.warn(`⚠️  Could not read ${dir}: ${e.message}`)
+    return
+  }
   for (const entry of entries) {
-    const nested = path.join(serverNodeModules, entry, 'node_modules')
+    if (!entry.isDirectory()) continue
+    // Handle scoped packages (@scope/pkg)
+    if (entry.name.startsWith('@') && depth === 0) {
+      removeNestedNodeModules(path.join(dir, entry.name), 1)
+      continue
+    }
+    const nested = path.join(dir, entry.name, 'node_modules')
     if (fs.existsSync(nested)) {
+      console.log(`🗑️  Removing nested node_modules: ${nested}`)
       fs.rmSync(nested, { recursive: true, force: true })
-      console.log(`✅ Removed nested node_modules from ${entry}/`)
+      console.log(`✅ Removed nested node_modules from ${entry.name}/`)
     }
   }
+}
+
+removeNestedNodeModules(serverNodeModules)
+
+// Also remove server/package-lock.json if present — Oryx/Kudu may use it to
+// reinstall packages, recreating broken nested node_modules directories.
+const serverPkgLock = path.resolve('.output/server/package-lock.json')
+if (fs.existsSync(serverPkgLock)) {
+  fs.rmSync(serverPkgLock)
+  console.log('✅ Removed server/package-lock.json to prevent Oryx reinstall')
+} else {
+  console.log('ℹ️  No server/package-lock.json found (ok)')
 }
 
 // Copy .env.production to .output/.env
