@@ -37,6 +37,23 @@ if (fs.existsSync(serverPackageJsonPath)) {
   console.log(`✅ Replaced server/package.json with deps-free version to prevent Oryx reinstall`)
 }
 
+// Remove any nested node_modules directories inside externalized packages.
+// Nitro's dependency tracer (or Oryx's npm install) can create partial nested
+// node_modules structures (e.g. hast-util-to-html/node_modules/property-information/)
+// where the directory exists but files like index.js are missing. Removing the
+// nested dir lets Node.js fall back to the correct top-level package.
+const serverNodeModules = path.resolve('.output/server/node_modules')
+if (fs.existsSync(serverNodeModules)) {
+  const entries = fs.readdirSync(serverNodeModules)
+  for (const entry of entries) {
+    const nested = path.join(serverNodeModules, entry, 'node_modules')
+    if (fs.existsSync(nested)) {
+      fs.rmSync(nested, { recursive: true, force: true })
+      console.log(`✅ Removed nested node_modules from ${entry}/`)
+    }
+  }
+}
+
 // Copy .env.production to .output/.env
 if (fs.existsSync(inputEnvPath)) {
   const envContent = fs.readFileSync(inputEnvPath, 'utf-8')
