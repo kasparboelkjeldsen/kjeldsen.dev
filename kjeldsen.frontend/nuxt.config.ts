@@ -138,18 +138,26 @@ export default defineNuxtConfig({
       // Force these to be bundled inline rather than externalized to avoid
       // nested node_modules path resolution failures in the server output.
       // Shiki and its transitive ESM dependencies need to be fully inlined.
+      // Use both explicit names and regexes for reliability.
       inline: [
+        // Explicit package names (most reliable — matched against import specifiers)
+        'shiki',
+        '@shikijs/core',
+        'hast-util-to-html',
+        'hast-util-whitespace',
+        'property-information',
+        'stringify-entities',
+        'character-entities',
+        'character-entities-legacy',
+        'character-reference-invalid',
+        'space-separated-tokens',
+        'comma-separated-tokens',
+        'html-void-elements',
+        'zwitch',
+        // Regex fallbacks for any other transitive deps
         /shiki/,
         /^hast-/,
         /^unist-/,
-        /^property-information/,
-        /^stringify-entities/,
-        /^character-entities/,
-        /^space-separated-tokens/,
-        /^comma-separated-tokens/,
-        /^html-void-elements/,
-        /^zwitch/,
-        /^hastscript/,
         /^vfile/,
       ],
     },
