@@ -159,8 +159,8 @@ stages:
             azureSubscription: '$(azureSubscription)'
             appName: '$(webAppNameFrontend)'
             package: '$(Build.ArtifactStagingDirectory)/frontend-output.zip'
-            appType: 'webApp'
-            deploymentMethod: 'zipDeploy'
+            appType: 'webAppLinux'
+            deploymentMethod: 'runFromPackage'
 
         - task: PublishBuildArtifacts@1
           inputs:
