@@ -132,12 +132,33 @@ stages:
             artifactName: 'frontend'
           displayName: 'Publish frontend artifact'
 
+        - task: ArchiveFiles@2
+          displayName: 'Archive frontend output'
+          inputs:
+            rootFolderOrFile: '$(frontendDirectory)/.output'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/frontend-output.zip'
+            replaceExistingArchive: true
+
+        - task: AzureAppServiceSettings@1
+          displayName: 'Set frontend app settings for package deploy'
+          inputs:
+            azureSubscription: '$(azureSubscription)'
+            resourceGroupName: '$(resourceGroup)'
+            appName: '$(webAppNameFrontend)'
+            appSettings: |
+              [
+                {"name":"SCM_DO_BUILD_DURING_DEPLOYMENT","value":"false","slotSetting":false},
+                {"name":"WEBSITE_RUN_FROM_PACKAGE","value":"1","slotSetting":false}
+              ]
+
         - task: AzureWebApp@1
           displayName: 'Deploy Frontend to Azure App Service'
           inputs:
             azureSubscription: '$(azureSubscription)'
             appName: '$(webAppNameFrontend)'
-            package: '$(frontendDirectory)/.output'
+            package: '$(Build.ArtifactStagingDirectory)/frontend-output.zip'
             appType: 'webApp'
             deploymentMethod: 'zipDeploy'
 

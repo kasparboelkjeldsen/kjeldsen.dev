@@ -46,6 +46,8 @@ const serverNodeModules = path.resolve('.output/server/node_modules')
 console.log(`🔍 Checking for nested node_modules in: ${serverNodeModules}`)
 console.log(`   exists: ${fs.existsSync(serverNodeModules)}`)
 
+let nestedNodeModulesRemoved = 0
+
 function removeNestedNodeModules(dir, depth = 0) {
   if (!fs.existsSync(dir)) return
   let entries
@@ -67,11 +69,60 @@ function removeNestedNodeModules(dir, depth = 0) {
       console.log(`🗑️  Removing nested node_modules: ${nested}`)
       fs.rmSync(nested, { recursive: true, force: true })
       console.log(`✅ Removed nested node_modules from ${entry.name}/`)
+      nestedNodeModulesRemoved += 1
     }
   }
 }
 
 removeNestedNodeModules(serverNodeModules)
+console.log(`ℹ️  Nested node_modules folders removed: ${nestedNodeModulesRemoved}`)
+
+// Defensive fix for the exact runtime error seen in Azure:
+// "Cannot find .../hast-util-to-html/node_modules/property-information/index.js"
+// If hast-util-to-html is present in the Nitro output, ensure the nested
+// property-information package exists and is complete.
+const hastPkgDir = path.resolve('.output/server/node_modules/hast-util-to-html')
+const nestedPropertyInfoDir = path.resolve('.output/server/node_modules/hast-util-to-html/node_modules/property-information')
+const nestedPropertyInfoIndex = path.resolve('.output/server/node_modules/hast-util-to-html/node_modules/property-information/index.js')
+const topLevelPropertyInfoDir = path.resolve('.output/server/node_modules/property-information')
+const workspacePropertyInfoDir = path.resolve('node_modules/property-information')
+
+function copyDirRecursive(src, dest) {
+  fs.mkdirSync(dest, { recursive: true })
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const srcPath = path.join(src, entry.name)
+    const destPath = path.join(dest, entry.name)
+    if (entry.isDirectory()) {
+      copyDirRecursive(srcPath, destPath)
+    } else {
+      fs.copyFileSync(srcPath, destPath)
+    }
+  }
+}
+
+if (fs.existsSync(hastPkgDir)) {
+  console.log('ℹ️  hast-util-to-html exists in server output; validating nested property-information')
+  if (!fs.existsSync(nestedPropertyInfoIndex)) {
+    const sourceDir = fs.existsSync(topLevelPropertyInfoDir)
+      ? topLevelPropertyInfoDir
+      : fs.existsSync(workspacePropertyInfoDir)
+        ? workspacePropertyInfoDir
+        : null
+
+    if (sourceDir) {
+      console.log(`🛠️  Restoring nested property-information from ${sourceDir}`)
+      copyDirRecursive(sourceDir, nestedPropertyInfoDir)
+    }
+  }
+
+  if (fs.existsSync(nestedPropertyInfoIndex)) {
+    console.log('✅ Verified nested property-information/index.js is present')
+  } else {
+    console.warn('⚠️  Nested property-information/index.js is still missing after remediation')
+  }
+} else {
+  console.log('ℹ️  hast-util-to-html not present in server output (nothing to patch)')
+}
 
 // Also remove server/package-lock.json if present — Oryx/Kudu may use it to
 // reinstall packages, recreating broken nested node_modules directories.

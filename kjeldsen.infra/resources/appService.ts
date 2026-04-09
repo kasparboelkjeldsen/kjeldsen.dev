@@ -43,6 +43,9 @@ export function createWebApps(rsv: ResourceVars, resourceGroupName: pulumi.Input
                 // Prevent Azure Oryx from running 'npm install' during deployment.
                 // The pre-built server/node_modules/ is deployed as-is.
                 { name: "SCM_DO_BUILD_DURING_DEPLOYMENT", value: "false" },
+                // Mount the deployed package read-only to avoid stale files from
+                // previous deployments persisting in /home/site/wwwroot.
+                { name: "WEBSITE_RUN_FROM_PACKAGE", value: "1" },
             ],
         },
         httpsOnly: true,
