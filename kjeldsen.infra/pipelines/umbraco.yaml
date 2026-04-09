@@ -110,7 +110,7 @@ stages:
       steps:
         - task: NodeTool@0
           inputs:
-            versionSpec: '20.x'
+            versionSpec: '22.x'
           displayName: 'Install Node.js'
 
         - task: PowerShell@2
@@ -124,7 +124,6 @@ stages:
             script: |
               cd "$(frontendDirectory)"
               npm ci
-              npm run generate-env
               npm run build
 
         - task: PublishBuildArtifacts@1
