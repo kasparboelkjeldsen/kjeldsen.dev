@@ -86,11 +86,10 @@ public class CustomPageViewApiController : MarketingApiControllerBase
     {
         var request = new HeadlessHttpContext(
             HttpContext,
-            Request,
             sneaky.Url,
+            sneaky.RemoteClientAddress,
             sneaky.ReferrerUrl,
             sneaky.Headers,
-            sneaky.RemoteClientAddress,
             sneaky.BrowserUserAgent,
             sneaky.ExternalVisitorId);
 
@@ -236,14 +235,14 @@ and rules.segmentId = segment.id";
     [FromBody] RemotePageViewServerRequestModel remotePageViewServer)
     {  
 
+        
         var request = new HeadlessHttpContext(
-            HttpContext, 
-            Request, 
-            remotePageViewServer.Url, 
-            remotePageViewServer.ReferrerUrl, 
-            remotePageViewServer.Headers, 
-            remotePageViewServer.RemoteClientAddress, 
-            remotePageViewServer.BrowserUserAgent, 
+            HttpContext,
+            remotePageViewServer.Url,
+            remotePageViewServer.RemoteClientAddress,
+            remotePageViewServer.ReferrerUrl,
+            remotePageViewServer.Headers,
+            remotePageViewServer.BrowserUserAgent,
             remotePageViewServer.UserIdentifier);
 
         if (!_headlessPageViewService.IsAllowedToRegisterPageview(request))
@@ -251,6 +250,16 @@ and rules.segmentId = segment.id";
 
         // only register pageview if it has a user-agent (seeing a lot of bots right now)
         if (string.IsNullOrWhiteSpace(remotePageViewServer.BrowserUserAgent) || remotePageViewServer.BrowserUserAgent.Length < 20)
+            return Ok();
+
+        // discard bot/garbage requests targeting static assets or known bot paths
+        var url = remotePageViewServer.Url ?? string.Empty;
+        if (url.EndsWith(".css", StringComparison.OrdinalIgnoreCase) ||
+            url.EndsWith(".php", StringComparison.OrdinalIgnoreCase) ||
+            url.EndsWith(".xml", StringComparison.OrdinalIgnoreCase) ||
+            url.Contains("/assets", StringComparison.OrdinalIgnoreCase) ||
+            url.Contains("/_fonts", StringComparison.OrdinalIgnoreCase) ||
+            url.Contains("/modules", StringComparison.OrdinalIgnoreCase))
             return Ok();
 
         IPageview? pageview = await _headlessPageViewService.RegisterRemotePageView(request);
