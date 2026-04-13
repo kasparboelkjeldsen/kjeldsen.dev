@@ -14,7 +14,7 @@
         <a :href="child.route?.path ?? '#'" class="flex flex-col h-full no-underline">
           <div v-if="child.properties?.seoListImage?.[0]?.url" class="relative overflow-hidden">
             <img
-              :src="child.properties.seoListImage[0].url"
+              :src="listImageUrl(child.properties.seoListImage[0].url)"
               alt=""
               class="object-cover w-full transition-transform duration-500 h-52 group-hover:scale-105"
             />
@@ -62,6 +62,11 @@
     WriterContentModel,
     PagedIApiContentResponseModel,
   } from '~/../server/delivery-api'
+
+  function listImageUrl(url: string): string {
+    const sep = url.includes('?') ? '&' : '?'
+    return `${url}${sep}width=700&format=webp&quality=80`
+  }
 
   // ✅ Define props like before
   const props = defineProps<{
