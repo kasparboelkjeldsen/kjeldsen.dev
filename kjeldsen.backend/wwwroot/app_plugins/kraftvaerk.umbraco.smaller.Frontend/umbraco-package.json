@@ -1,0 +1,16 @@
+{
+    "$schema": "./../umbraco-package-schema.json",
+    "id": "kraftvaerk.umbraco.smaller.Frontend",
+    "name": "kraftvaerk.umbraco.smaller.Frontend",
+    "allowPackageTelemetry": true,
+    "version": "1.2.8",
+    "extensions": [
+        {
+          "name": "knowit-kraftvaerk.umbraco.smaller.Frontend EntryPoint",
+          "alias": "knowit-kraftvaerk.umbraco.smaller.Frontend.entrypoint",
+          "type": "backofficeEntryPoint",
+          "js": "/App_Plugins/kraftvaerk.umbraco.smaller.frontend/dist.js"
+        }
+      ]
+}
+
