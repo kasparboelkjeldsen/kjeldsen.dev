@@ -1,5 +1,4 @@
+encryptionsalt: v1:2tWYoAJypoU=:v1:aAYnNWt+EQox5gAW:APL0vGnR0mHj45q7uO+XsFwmDt0piw==
 config:
   azure-native:location: westeurope
-  azure:location: westeurope
-  azure:subscriptionId: e544652d-b079-448d-b112-5e46db72c8f7
-  azure:tenantId: 10a49740-5b2d-41c8-aff0-a9acb8ad414a
+  azure-native:subscriptionId: e544652d-b079-448d-b112-5e46db72c8f7

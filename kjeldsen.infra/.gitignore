@@ -1,2 +1,11 @@
-/bin/
-/node_modules/
+bin/
+obj/
+
+# Pulumi state lives in a local file backend outside this repository - see README.md.
+# Nothing stateful should ever land here, but belt and braces: the repo is public.
+.pulumi/
+*.pulumi-state
+Pulumi.*.yaml.bak
+
+# Service principal credentials for the old TypeScript program. `az login` is used instead now.
+.env.infra

@@ -1,13 +1,10 @@
 name: kjeldsen.dev
-description: A minimal Azure Native TypeScript Pulumi program
-runtime:
-  name: nodejs
-  options:
-    packagemanager: npm
+description: Infrastructure for kjeldsen.dev
+runtime: dotnet
 config:
-  pulumi:tags:
-    value:
-      pulumi:template: azure-typescript
   pulumi:autonaming:
     value:
+      # Every resource in this program has an explicit, stable Azure name, because the stack was
+      # adopted from resources that already existed. Auto-naming would append random suffixes and
+      # propose replacing live resources.
       mode: disabled
