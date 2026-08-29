@@ -1,61 +1,38 @@
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import type { IApiContentResponseModel } from '~/../server/delivery-api'
+import type { PageContent, HomePage, LinkItem } from '~~/types/content'
 
-export async function usePageContentFromRoute() {
-  const nuxtApp = useNuxtApp()
-  const route = useRoute()
-  const slugArray = Array.isArray(route.params.slug) ? route.params.slug : [route.params.slug]
-  const cleanSlug = slugArray.filter(Boolean).join('/')
-  const slugHasDot = cleanSlug.includes('.')
-  const apiPath = `/api/content/${cleanSlug}/`
+/** Normalises a route or slug into the path form the delivery API expects: no leading or trailing slash. */
+export function toContentPath(slug: string | string[] | undefined | null): string {
+  const parts = Array.isArray(slug) ? slug : [slug]
+  return parts.filter(Boolean).join('/').replace(/^\/+|\/+$/g, '')
+}
 
-  if (slugHasDot) {
-    // Disallow dot paths, mirror server logic
-    return {
-      apiPath,
-      cleanSlug,
-      slugHasDot,
-      data: ref<IApiContentResponseModel | null>(null),
-      error: ref<any>(null),
-      pending: ref(false),
-    }
-  }
-
-  // During SSR, read segment from original request's event.context (set by middleware)
-  // and pass it as a header since the internal API call is a different event
-  const headers: Record<string, string> = {}
-  if (import.meta.server) {
-    const event = useRequestEvent()
-    if (event?.context?.engageSegment) {
-      headers['X-Engage-Segment'] = event.context.engageSegment
-    }
-    // Also forward visitor ID if middleware set it
-    if (event?.context?.engageVisitorId) {
-      headers['X-Engage-Visitor'] = event.context.engageVisitorId
-    }
-  }
-
-  const result = await nuxtApp.runWithContext(() =>
-    useFetch<IApiContentResponseModel>(apiPath, {
-      server: true,
-      cache: 'no-cache',
-      headers,
-    })
+/**
+ * Fetches one content item by path.
+ *
+ * Keyed on the path so two components asking for the same document share one request. That matters
+ * for the root: the navigation lives on the home page's own document, so on `/` the page fetch and
+ * the navigation fetch collapse into a single call.
+ */
+export function useContentByPath(path: string) {
+  return useAsyncData<PageContent>(
+    `content:${path}`,
+    () => $fetch<PageContent>('/api/content', { query: { path } }),
+    { deep: false }
   )
+}
 
-  // Normalize null when missing
-  if (result.error.value) {
-    // Keep same logging contract; caller can also log if desired
-    console.error(`Failed to fetch content for path: ${apiPath}`, result.error.value)
-  }
+/** The current route's content. */
+export function usePageContent() {
+  const route = useRoute()
+  return useContentByPath(toContentPath(route.params.slug as string | string[]))
+}
 
-  return {
-    apiPath,
-    cleanSlug,
-    slugHasDot,
-    data: result.data,
-    error: result.error,
-    pending: result.pending,
-  }
+/** Site navigation, which is a property of the root document rather than a separate endpoint. */
+export async function useNavigation() {
+  const { data } = await useContentByPath('')
+  const links = computed<LinkItem[]>(() => {
+    const props = data.value?.properties as HomePage | undefined
+    return props?.links ?? []
+  })
+  return { links }
 }

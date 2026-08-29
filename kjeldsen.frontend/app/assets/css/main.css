@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+/* Deliberately close to nothing. V2 is structure only - the design comes later.
+   Anything here should earn its place by making the page readable, not by making
+   it look finished. */
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}

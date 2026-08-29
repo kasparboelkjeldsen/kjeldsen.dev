@@ -1,0 +1,8 @@
+node_modules/
+.nuxt/
+.output/
+.data/
+dist/
+
+# Holds the real delivery key. This repository is public - never commit it.
+.env

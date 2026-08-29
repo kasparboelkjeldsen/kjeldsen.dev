@@ -1,174 +1,25 @@
-// nuxt.config.ts
-import { visualizer } from 'rollup-plugin-visualizer'
-import type { ConfigEnv } from 'vite'
-import { inspectChunks } from './inspectChunks'
-
-const analyze = process.env.ANALYZE === 'true'
-// Cache on by default in production, opt-in during local dev unless USE_CACHE=true
-const resolvedUseCache = process.env.NODE_ENV === 'production' || process.env.USE_CACHE === 'true'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
+  compatibilityDate: '2026-08-29',
   ssr: true,
-  compatibilityDate: '2024-11-01',
   devtools: { enabled: process.env.NODE_ENV !== 'production' },
-  multiCache: {
-    route: { enabled: resolvedUseCache },
-    data: { enabled: true },
-    api: {
-      enabled: resolvedUseCache,
-      prefix: '/__nuxt_multi_cache',
-      authorization: process.env.DELIVERY_KEY!,
-      cacheTagInvalidationDelay: 1000,
-    },
-  },
-  css: ['~/assets/css/tailwind.css'],
-  postcss: { plugins: { tailwindcss: {}, autoprefixer: {} } },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/fonts', 'nuxt-multi-cache'],
-  features: {
-    inlineStyles: true,
-  },
-  fonts: {
-    // default config applies to all families unless overridden
-    defaults: { subsets: ['latin'], preload: true },
-    provider: 'google',
-    families: [
-      { name: 'Atkinson Hyperlegible', weights: [400, 700] },
-      { name: 'JetBrains Mono', weights: [400, 700] },
-    ],
-  },
+  css: ['~/assets/css/main.css'],
 
-  experimental: {
-    payloadExtraction: false,
-    componentIslands: true,
+  // Tailwind 4 is a Vite plugin. No tailwind.config.js and no PostCSS config -
+  // configuration lives in the CSS file itself via @theme.
+  vite: {
+    plugins: [tailwindcss()],
   },
 
   runtimeConfig: {
-    murderKey: process.env.MURDER_KEY,
+    // Private: server only. The delivery key must never reach the browser, which is
+    // why all CMS calls go through the Nitro routes in server/api rather than direct.
     deliveryKey: process.env.DELIVERY_KEY,
     public: {
-      siteUrl: 'https://www.kjeldsen.dev',
-      useCache: String(resolvedUseCache),
-      murderClient: process.env.MURDER_CLIENT,
       cmsHost: process.env.CMSHOST || 'https://localhost:44375',
-      appInsights: process.env.APP_INSIGHTS,
-      debugUnloadListeners: process.env.DEBUG_UNLOAD_LISTENERS,
+      siteUrl: process.env.SITE_URL || 'http://localhost:3000',
     },
-  },
-
-  routeRules: {
-    '/__blockpreview': { ssr: true, prerender: false },
-    // Allow embedding assets and nuxt build output (CSS/JS) from any origin (for Engage iframe usage)
-    '/_nuxt/**': {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        Vary: 'Origin',
-      },
-    },
-    '/assets/**': {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        Vary: 'Origin',
-      },
-    },
-  },
-
-  vite: {
-    server: {
-      cors: true,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        'Access-Control-Allow-Headers': '*',
-      },
-    },
-    build: {
-      minify: true,
-      sourcemap: analyze,
-      target: 'es2022',
-      cssCodeSplit: true,
-      rollupOptions: {
-        output: {
-          manualChunks(id: string) {
-            if (id.includes('chart.js') || id.includes('vue-chartjs')) return 'vendor-chart'
-            if (id.includes('prismjs')) return 'vendor-prism'
-            if (id.includes('@microsoft/applicationinsights-web')) return 'vendor-appinsights'
-            return undefined
-          },
-        },
-      },
-    },
-    plugins: [
-      //shikiSsrOnly(),
-      ...(analyze
-        ? [
-            // client report
-            {
-              ...visualizer({
-                filename: 'stats-client.html',
-                template: 'treemap',
-                gzipSize: true,
-                brotliSize: true,
-              }),
-              apply(_c: any, env: ConfigEnv) {
-                return env.command === 'build'
-              }, // allow both; file name differs
-            } as any,
-            // print chunk → modules (client)
-            {
-              ...inspectChunks(12),
-              apply(_c: any, env: ConfigEnv) {
-                return env.command === 'build'
-              },
-            } as any,
-          ]
-        : []),
-    ],
-  },
-
-  nitro: {
-    minify: true,
-    sourceMap: analyze,
-    compressPublicAssets: true,
-    externals: {
-      // Force these to be bundled inline rather than externalized to avoid
-      // nested node_modules path resolution failures in the server output.
-      // Shiki and its transitive ESM dependencies need to be fully inlined.
-      inline: [
-        /shiki/,
-        /^hast-/,
-        /^unist-/,
-        /^property-information/,
-        /^stringify-entities/,
-        /^character-entities/,
-        /^space-separated-tokens/,
-        /^comma-separated-tokens/,
-        /^html-void-elements/,
-        /^zwitch/,
-        /^hastscript/,
-        /^vfile/,
-      ],
-    },
-    ...(analyze
-      ? {
-          rollupConfig: {
-            plugins: [
-              visualizer({
-                filename: 'stats-nitro.html',
-                template: 'treemap',
-                gzipSize: true,
-                brotliSize: true,
-              }),
-            ],
-          },
-        }
-      : {}),
-  },
-  webpack: {
-    extractCSS: process.env.EXTRACT_CSS === 'true',
   },
 })

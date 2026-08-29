@@ -1,5 +1,0 @@
-
-User-agent: *
-Allow: /
-
-Sitemap: https://www.kjeldsen.dev/sitemap.xml

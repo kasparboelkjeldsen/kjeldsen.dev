@@ -1,9 +1,0 @@
-.output/
-node_modules/
-server/delivery-api/
-stats-*.html
-*.log
-.nuxt/
-dist/
-coverage/
-*.min.*

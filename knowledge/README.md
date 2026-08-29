@@ -9,6 +9,7 @@ behind decisions that look strange without context.
 | [umbraco-18-upgrade.md](umbraco-18-upgrade.md) | The 17 → 18 upgrade: package matrix, code changes, and the traps that cost real time |
 | [engage-on-sqlite.md](engage-on-sqlite.md) | Why Engage needs a translation layer to run on SQLite, what it does, and what still does not work |
 | [upstream-findings.md](upstream-findings.md) | Portability and correctness findings worth reporting upstream |
+| [frontend-v2.md](frontend-v2.md) | Rebuilding the frontend: where OpenAPI moved in 18, what to keep from V1, and what the personalization round trips cost |
 
 ## A note on sources
 
