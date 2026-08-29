@@ -6,17 +6,21 @@ namespace Kjeldsen.Infra;
 /// <summary>
 /// The kjeldsen.dev zone and its records.
 ///
-/// The _dnsauth TXT records matter more than they look: Front Door's managed certificates
+/// Split in two because the dependencies point both ways: Front Door's custom domains need the
+/// zone, while the apex A record is an alias to the Front Door endpoint. Zone first, then Front
+/// Door, then the records.
+///
+/// The _dnsauth TXT records matter more than they look - Front Door's managed certificates
 /// revalidate through them, so losing one eventually breaks TLS on that hostname.
 /// </summary>
 public static class Dns
 {
-    public static void Create()
+    public static AzureNative.Dns.Zone CreateZone(AzureNative.Resources.ResourceGroup resourceGroup)
     {
     var kjeldsen_dev_zone = new AzureNative.Dns.Zone("kjeldsen-dev-zone", new()
     {
         Location = "global",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         ZoneName = "kjeldsen.dev",
         ZoneType = AzureNative.Dns.ZoneType.Public,
     }, new CustomResourceOptions
@@ -24,27 +28,36 @@ public static class Dns
         Protect = true,
     });
 
+        return kjeldsen_dev_zone;
+    }
+
+    public static void CreateRecords(
+        AzureNative.Resources.ResourceGroup resourceGroup,
+        AzureNative.Dns.Zone zone,
+        AzureNative.Cdn.AFDEndpoint frontDoorEndpoint)
+    {
     var dns_apex_a = new AzureNative.Dns.RecordSet("dns-apex-a", new()
     {
         RecordType = "A",
         RelativeRecordSetName = "@",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         TargetResource = new AzureNative.Dns.Inputs.SubResourceArgs
         {
             Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/afdendpoints/kjeldsen-dev",
         },
         Ttl = 3600.0,
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
+        DependsOn = { frontDoorEndpoint },
     });
 
     var dns_dnsauth_txt = new AzureNative.Dns.RecordSet("dns-dnsauth-txt", new()
     {
         RecordType = "TXT",
         RelativeRecordSetName = "_dnsauth",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Ttl = 3600.0,
         TxtRecords = new[]
         {
@@ -56,7 +69,7 @@ public static class Dns
                 },
             },
         },
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -66,7 +79,7 @@ public static class Dns
     {
         RecordType = "TXT",
         RelativeRecordSetName = "_dnsauth.www",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Ttl = 3600.0,
         TxtRecords = new[]
         {
@@ -78,7 +91,7 @@ public static class Dns
                 },
             },
         },
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -88,7 +101,7 @@ public static class Dns
     {
         RecordType = "TXT",
         RelativeRecordSetName = "_dnsauth.umbraco",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Ttl = 3600.0,
         TxtRecords = new[]
         {
@@ -100,7 +113,7 @@ public static class Dns
                 },
             },
         },
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -110,7 +123,7 @@ public static class Dns
     {
         RecordType = "TXT",
         RelativeRecordSetName = "asuid.umbraco",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Ttl = 3600.0,
         TxtRecords = new[]
         {
@@ -122,7 +135,7 @@ public static class Dns
                 },
             },
         },
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -136,9 +149,9 @@ public static class Dns
         },
         RecordType = "CNAME",
         RelativeRecordSetName = "www",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Ttl = 3600.0,
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -152,9 +165,9 @@ public static class Dns
         },
         RecordType = "CNAME",
         RelativeRecordSetName = "umbraco",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Ttl = 3600.0,
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -168,9 +181,9 @@ public static class Dns
         },
         RecordType = "CNAME",
         RelativeRecordSetName = "cdnverify",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Ttl = 3600.0,
-        ZoneName = "kjeldsen.dev",
+        ZoneName = zone.Name,
     }, new CustomResourceOptions
     {
         Protect = true,

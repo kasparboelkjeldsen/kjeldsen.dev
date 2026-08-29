@@ -6,13 +6,14 @@ namespace Kjeldsen.Infra;
 /// <summary>
 /// Storage, SQL and Key Vault.
 ///
-/// The Key Vault access policies and the SQL server are adopted as they exist. The previous
-/// TypeScript program generated the SQL admin password with RandomPassword, which would have
-/// rotated the live credential on any run; the password is deliberately not authored here.
+/// The SQL admin password is deliberately not authored here. The previous TypeScript program
+/// generated it with RandomPassword, so any run against fresh state would have rotated the live
+/// credential. Key Vault secrets are adopted rather than managed for the same reason: several
+/// are read by the backend at boot.
 /// </summary>
 public static class Data
 {
-    public static void Create()
+    public static void Create(AzureNative.Resources.ResourceGroup resourceGroup)
     {
     var kjdevstorage = new AzureNative.Storage.StorageAccount("kjdevstorage", new()
     {
@@ -46,7 +47,7 @@ public static class Data
             Bypass = AzureNative.Storage.Bypass.None,
             DefaultAction = AzureNative.Storage.DefaultAction.Allow,
         },
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.Storage.Inputs.SkuArgs
         {
             Name = AzureNative.Storage.SkuName.Standard_LRS,
@@ -63,12 +64,12 @@ public static class Data
 
     var kjdevblob = new AzureNative.Storage.BlobContainer("kjdevblob", new()
     {
-        AccountName = "kjdevstorage",
+        AccountName = kjdevstorage.Name,
         ContainerName = "kjdevblob",
         DefaultEncryptionScope = "$account-encryption-key",
         DenyEncryptionScopeOverride = false,
         PublicAccess = AzureNative.Storage.PublicAccess.None,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -80,7 +81,7 @@ public static class Data
         Location = "westeurope",
         MinimalTlsVersion = AzureNative.Sql.MinimalTlsVersion.MinimalTlsVersion_1_2,
         PublicNetworkAccess = AzureNative.Sql.ServerPublicNetworkAccessFlag.Enabled,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         RestrictOutboundNetworkAccess = AzureNative.Sql.ServerNetworkAccessFlag.Disabled,
         ServerName = "kjdev-sql",
         Tags = 
@@ -106,8 +107,8 @@ public static class Data
         MaxSizeBytes = 2147483648,
         ReadScale = AzureNative.Sql.DatabaseReadScale.Disabled,
         RequestedBackupStorageRedundancy = AzureNative.Sql.BackupStorageRedundancy.Geo,
-        ResourceGroupName = "kjdev-rg",
-        ServerName = "kjdev-sql",
+        ResourceGroupName = resourceGroup.Name,
+        ServerName = kjdev_sql.Name,
         Sku = new AzureNative.Sql.Inputs.SkuArgs
         {
             Capacity = 10,
@@ -300,7 +301,7 @@ public static class Data
             SoftDeleteRetentionInDays = 90,
             TenantId = "10a49740-5b2d-41c8-aff0-a9acb8ad414a",
         },
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Tags = 
         {
             { "environment", "production" },

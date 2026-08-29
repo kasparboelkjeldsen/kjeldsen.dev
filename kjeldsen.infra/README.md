@@ -50,6 +50,23 @@ encrypted values in state are unrecoverable. If you would rather not keep a pass
 `pulumi stack change-secrets-provider azurekeyvault://kjdevkv.vault.azure.net/keys/<key>` moves
 encryption to the existing Key Vault.
 
+## Cross-references, and where they stop
+
+Resources reference each other rather than repeating literals: `resourceGroup.Name`, the origins
+take the web apps' `DefaultHostName`, the web apps take their plan's `Id`, and so on. That is the
+point of using Pulumi over an ARM template - a real dependency graph.
+
+Nine nested `ResourceReference` ids are the exception and stay as literals: route to origin group,
+route to custom domain, route to rule set, and the security policy's domains and WAF policy. Azure
+returns those nested ids with lowercased path segments (`origingroups`, `customdomains`) while a
+resource's `.Id` output is canonical (`originGroups`, `customDomains`). ARM ids are case-insensitive
+so the two are equivalent, but Pulumi string-diffs them, and writing the canonical form back would
+produce a *perpetual* diff because Azure keeps returning its own casing. `DependsOn` carries the
+dependency instead, so the graph is still correct.
+
+The three `secrets/0--<guid>` ids on the custom domains and the `SQL_Default` maintenance
+configuration are Azure-managed resources this stack does not create, so they stay literal too.
+
 ## Things deliberately not authored here
 
 Two values are adopted rather than generated, because authoring them would damage production:

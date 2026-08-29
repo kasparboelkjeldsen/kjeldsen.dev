@@ -4,11 +4,11 @@ using AzureNative = Pulumi.AzureNative;
 namespace Kjeldsen.Infra;
 
 /// <summary>
-/// App Service plans and the two web apps (Nuxt frontend, Umbraco backoffice).
+/// App Service plans and the two web apps: the Nuxt frontend and the Umbraco backoffice.
 /// </summary>
 public static class Compute
 {
-    public static void Create()
+    public static (AzureNative.Web.WebApp Frontend, AzureNative.Web.WebApp Backend) Create(AzureNative.Resources.ResourceGroup resourceGroup)
     {
     var kjdev_asp_frontend = new AzureNative.Web.AppServicePlan("kjdev-asp-frontend", new()
     {
@@ -24,7 +24,7 @@ public static class Compute
         Name = "kjdev-asp-frontend",
         PerSiteScaling = false,
         Reserved = true,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.Web.Inputs.SkuDescriptionArgs
         {
             Capacity = 1,
@@ -60,7 +60,7 @@ public static class Compute
         Name = "kjdev-asp-backend",
         PerSiteScaling = false,
         Reserved = true,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.Web.Inputs.SkuDescriptionArgs
         {
             Capacity = 1,
@@ -128,9 +128,9 @@ public static class Compute
         PublicNetworkAccess = "Enabled",
         RedundancyMode = AzureNative.Web.RedundancyMode.None,
         Reserved = true,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         ScmSiteAlsoStopped = false,
-        ServerFarmId = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Web/serverfarms/kjdev-asp-frontend",
+        ServerFarmId = kjdev_asp_frontend.Id,
         SiteConfig = new AzureNative.Web.Inputs.SiteConfigArgs
         {
             AcrUseManagedIdentityCreds = false,
@@ -284,9 +284,9 @@ public static class Compute
         PublicNetworkAccess = "Enabled",
         RedundancyMode = AzureNative.Web.RedundancyMode.None,
         Reserved = true,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         ScmSiteAlsoStopped = false,
-        ServerFarmId = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Web/serverfarms/kjdev-asp-backend",
+        ServerFarmId = kjdev_asp_backend.Id,
         SiteConfig = new AzureNative.Web.Inputs.SiteConfigArgs
         {
             AcrUseManagedIdentityCreds = false,
@@ -380,5 +380,7 @@ public static class Compute
     {
         Protect = true,
     });
+
+        return (kjdev_app_frontend, kjdev_app_backend);
     }
 }

@@ -6,20 +6,26 @@ namespace Kjeldsen.Infra;
 /// <summary>
 /// Azure Front Door, in full.
 ///
-/// Previously only the profile was managed as code and everything below it was created by hand
-/// in the portal: endpoint, origin groups, origins, routes, custom domains, the cacheRules rule
-/// set and the WAF security policy. All of it is now here.
+/// Previously only the profile was code and everything below it was created by hand in the
+/// portal. Declared in dependency order so each reference exists before it is used.
+///
+/// The certificate secret ids on the custom domains stay as literals: they are Azure-managed
+/// resources with generated GUIDs that this stack does not create.
 /// </summary>
 public static class FrontDoor
 {
-    public static void Create()
+    public static AzureNative.Cdn.AFDEndpoint Create(
+        AzureNative.Resources.ResourceGroup resourceGroup,
+        AzureNative.Dns.Zone dnsZone,
+        AzureNative.Web.WebApp frontendApp,
+        AzureNative.Web.WebApp backendApp)
     {
     var kjdev_fd = new AzureNative.Cdn.Profile("kjdev-fd", new()
     {
         Location = "Global",
         OriginResponseTimeoutSeconds = 60,
         ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.Cdn.Inputs.SkuArgs
         {
             Name = AzureNative.Cdn.SkuName.Standard_AzureFrontDoor,
@@ -34,8 +40,8 @@ public static class FrontDoor
         EnabledState = AzureNative.Cdn.EnabledState.Enabled,
         EndpointName = "kjeldsen-dev",
         Location = "Global",
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -57,8 +63,8 @@ public static class FrontDoor
             SuccessfulSamplesRequired = 3,
         },
         OriginGroupName = "content",
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         SessionAffinityState = AzureNative.Cdn.EnabledState.Disabled,
     }, new CustomResourceOptions
     {
@@ -81,8 +87,8 @@ public static class FrontDoor
             SuccessfulSamplesRequired = 3,
         },
         OriginGroupName = "umbraco",
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         SessionAffinityState = AzureNative.Cdn.EnabledState.Disabled,
     }, new CustomResourceOptions
     {
@@ -93,15 +99,15 @@ public static class FrontDoor
     {
         EnabledState = AzureNative.Cdn.EnabledState.Enabled,
         EnforceCertificateNameCheck = true,
-        HostName = "kjdev-app-frontend.azurewebsites.net",
+        HostName = frontendApp.DefaultHostName,
         HttpPort = 80,
         HttpsPort = 443,
-        OriginGroupName = "content",
-        OriginHostHeader = "kjdev-app-frontend.azurewebsites.net",
+        OriginGroupName = og_content.Name,
+        OriginHostHeader = frontendApp.DefaultHostName,
         OriginName = "content",
         Priority = 2,
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         Weight = 1000,
     }, new CustomResourceOptions
     {
@@ -112,105 +118,16 @@ public static class FrontDoor
     {
         EnabledState = AzureNative.Cdn.EnabledState.Enabled,
         EnforceCertificateNameCheck = true,
-        HostName = "kjdev-app-backend-eqhhguczfrh6gndg.westeurope-01.azurewebsites.net",
+        HostName = backendApp.DefaultHostName,
         HttpPort = 80,
         HttpsPort = 443,
-        OriginGroupName = "umbraco",
+        OriginGroupName = og_umbraco.Name,
         OriginHostHeader = "umbraco.kjeldsen.dev",
         OriginName = "umbraco-kjeldsen-dev",
         Priority = 1,
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         Weight = 1000,
-    }, new CustomResourceOptions
-    {
-        Protect = true,
-    });
-
-    var route_content = new AzureNative.Cdn.Route("route-content", new()
-    {
-        CacheConfiguration = new AzureNative.Cdn.Inputs.AfdRouteCacheConfigurationArgs
-        {
-            CompressionSettings = new AzureNative.Cdn.Inputs.CompressionSettingsArgs
-            {
-                IsCompressionEnabled = false,
-            },
-            QueryStringCachingBehavior = AzureNative.Cdn.AfdQueryStringCachingBehavior.UseQueryString,
-        },
-        CustomDomains = new[]
-        {
-            new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
-            {
-                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/www-kjeldsen-dev-8c07",
-            },
-            new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
-            {
-                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/kjeldsen-dev-a132",
-            },
-        },
-        EnabledState = AzureNative.Cdn.EnabledState.Enabled,
-        EndpointName = "kjeldsen-dev",
-        ForwardingProtocol = AzureNative.Cdn.ForwardingProtocol.MatchRequest,
-        HttpsRedirect = AzureNative.Cdn.HttpsRedirect.Enabled,
-        LinkToDefaultDomain = AzureNative.Cdn.LinkToDefaultDomain.Disabled,
-        OriginGroup = new AzureNative.Cdn.Inputs.ResourceReferenceArgs
-        {
-            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/origingroups/content",
-        },
-        PatternsToMatch = new[]
-        {
-            "/*",
-        },
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
-        RouteName = "content",
-        RuleSets = new[]
-        {
-            new AzureNative.Cdn.Inputs.ResourceReferenceArgs
-            {
-                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/rulesets/cacheRules",
-            },
-        },
-        SupportedProtocols = 
-        {
-            AzureNative.Cdn.AFDEndpointProtocols.Http,
-            AzureNative.Cdn.AFDEndpointProtocols.Https,
-        },
-    }, new CustomResourceOptions
-    {
-        Protect = true,
-    });
-
-    var route_umbraco = new AzureNative.Cdn.Route("route-umbraco", new()
-    {
-        CustomDomains = new[]
-        {
-            new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
-            {
-                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/umbraco-kjeldsen-dev-62c0",
-            },
-        },
-        EnabledState = AzureNative.Cdn.EnabledState.Enabled,
-        EndpointName = "kjeldsen-dev",
-        ForwardingProtocol = AzureNative.Cdn.ForwardingProtocol.MatchRequest,
-        HttpsRedirect = AzureNative.Cdn.HttpsRedirect.Enabled,
-        LinkToDefaultDomain = AzureNative.Cdn.LinkToDefaultDomain.Disabled,
-        OriginGroup = new AzureNative.Cdn.Inputs.ResourceReferenceArgs
-        {
-            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/origingroups/umbraco",
-        },
-        PatternsToMatch = new[]
-        {
-            "/*",
-        },
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
-        RouteName = "umbraco",
-        SupportedProtocols = 
-        {
-            AzureNative.Cdn.AFDEndpointProtocols.Http,
-            AzureNative.Cdn.AFDEndpointProtocols.Https,
-        },
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -220,12 +137,12 @@ public static class FrontDoor
     {
         AzureDnsZone = new AzureNative.Cdn.Inputs.ResourceReferenceArgs
         {
-            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Network/dnszones/kjeldsen.dev",
+            Id = dnsZone.Id,
         },
         CustomDomainName = "kjeldsen-dev-a132",
         HostName = "kjeldsen.dev",
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         TlsSettings = new AzureNative.Cdn.Inputs.AFDDomainHttpsParametersArgs
         {
             CertificateType = AzureNative.Cdn.AfdCertificateType.ManagedCertificate,
@@ -245,8 +162,8 @@ public static class FrontDoor
     {
         CustomDomainName = "www-kjeldsen-dev-8c07",
         HostName = "www.kjeldsen.dev",
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         TlsSettings = new AzureNative.Cdn.Inputs.AFDDomainHttpsParametersArgs
         {
             CertificateType = AzureNative.Cdn.AfdCertificateType.ManagedCertificate,
@@ -266,8 +183,8 @@ public static class FrontDoor
     {
         CustomDomainName = "umbraco-kjeldsen-dev-62c0",
         HostName = "umbraco.kjeldsen.dev",
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         TlsSettings = new AzureNative.Cdn.Inputs.AFDDomainHttpsParametersArgs
         {
             CertificateType = AzureNative.Cdn.AfdCertificateType.ManagedCertificate,
@@ -285,8 +202,8 @@ public static class FrontDoor
 
     var ruleset_cache = new AzureNative.Cdn.RuleSet("ruleset-cache", new()
     {
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         RuleSetName = "cacheRules",
     }, new CustomResourceOptions
     {
@@ -325,52 +242,104 @@ public static class FrontDoor
         },
         MatchProcessingBehavior = AzureNative.Cdn.MatchProcessingBehavior.Continue,
         Order = 100,
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
         RuleName = "noContentCache",
-        RuleSetName = "cacheRules",
+        RuleSetName = ruleset_cache.Name,
     }, new CustomResourceOptions
     {
         Protect = true,
     });
 
-    var security_policy = new AzureNative.Cdn.SecurityPolicy("security-policy", new()
+    var route_content = new AzureNative.Cdn.Route("route-content", new()
     {
-        Parameters = new AzureNative.Cdn.Inputs.SecurityPolicyWebApplicationFirewallParametersArgs
+        CacheConfiguration = new AzureNative.Cdn.Inputs.AfdRouteCacheConfigurationArgs
         {
-            Associations = new[]
+            CompressionSettings = new AzureNative.Cdn.Inputs.CompressionSettingsArgs
             {
-                new AzureNative.Cdn.Inputs.SecurityPolicyWebApplicationFirewallAssociationArgs
-                {
-                    Domains = new[]
-                    {
-                        new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
-                        {
-                            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/kjeldsen-dev-a132",
-                        },
-                        new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
-                        {
-                            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/umbraco-kjeldsen-dev-62c0",
-                        },
-                    },
-                    PatternsToMatch = new[]
-                    {
-                        "/*",
-                    },
-                },
+                IsCompressionEnabled = false,
             },
-            Type = "WebApplicationFirewall",
-            WafPolicy = new AzureNative.Cdn.Inputs.ResourceReferenceArgs
+            QueryStringCachingBehavior = AzureNative.Cdn.AfdQueryStringCachingBehavior.UseQueryString,
+        },
+        CustomDomains = new[]
+        {
+            new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
             {
-                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Network/frontdoorWebApplicationFirewallPolicies/block",
+                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/www-kjeldsen-dev-8c07",
+            },
+            new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
+            {
+                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/kjeldsen-dev-a132",
             },
         },
-        ProfileName = "kjdev-fd",
-        ResourceGroupName = "kjdev-rg",
-        SecurityPolicyName = "BlockWeirdTraffic",
+        EnabledState = AzureNative.Cdn.EnabledState.Enabled,
+        EndpointName = kjeldsen_dev_endpoint.Name,
+        ForwardingProtocol = AzureNative.Cdn.ForwardingProtocol.MatchRequest,
+        HttpsRedirect = AzureNative.Cdn.HttpsRedirect.Enabled,
+        LinkToDefaultDomain = AzureNative.Cdn.LinkToDefaultDomain.Disabled,
+        OriginGroup = new AzureNative.Cdn.Inputs.ResourceReferenceArgs
+        {
+            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/origingroups/content",
+        },
+        PatternsToMatch = new[]
+        {
+            "/*",
+        },
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
+        RouteName = "content",
+        RuleSets = new[]
+        {
+            new AzureNative.Cdn.Inputs.ResourceReferenceArgs
+            {
+                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/rulesets/cacheRules",
+            },
+        },
+        SupportedProtocols = 
+        {
+            AzureNative.Cdn.AFDEndpointProtocols.Http,
+            AzureNative.Cdn.AFDEndpointProtocols.Https,
+        },
     }, new CustomResourceOptions
     {
         Protect = true,
+        DependsOn = { og_content, domain_www, domain_apex, ruleset_cache },
+    });
+
+    var route_umbraco = new AzureNative.Cdn.Route("route-umbraco", new()
+    {
+        CustomDomains = new[]
+        {
+            new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
+            {
+                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/umbraco-kjeldsen-dev-62c0",
+            },
+        },
+        EnabledState = AzureNative.Cdn.EnabledState.Enabled,
+        EndpointName = kjeldsen_dev_endpoint.Name,
+        ForwardingProtocol = AzureNative.Cdn.ForwardingProtocol.MatchRequest,
+        HttpsRedirect = AzureNative.Cdn.HttpsRedirect.Enabled,
+        LinkToDefaultDomain = AzureNative.Cdn.LinkToDefaultDomain.Disabled,
+        OriginGroup = new AzureNative.Cdn.Inputs.ResourceReferenceArgs
+        {
+            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/origingroups/umbraco",
+        },
+        PatternsToMatch = new[]
+        {
+            "/*",
+        },
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
+        RouteName = "umbraco",
+        SupportedProtocols = 
+        {
+            AzureNative.Cdn.AFDEndpointProtocols.Http,
+            AzureNative.Cdn.AFDEndpointProtocols.Https,
+        },
+    }, new CustomResourceOptions
+    {
+        Protect = true,
+        DependsOn = { og_umbraco, domain_umbraco },
     });
 
     var waf_block = new AzureNative.FrontDoor.Policy("waf-block", new()
@@ -446,7 +415,7 @@ public static class FrontDoor
             Mode = AzureNative.FrontDoor.PolicyMode.Detection,
             RequestBodyCheck = AzureNative.FrontDoor.PolicyRequestBodyCheck.Enabled,
         },
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.FrontDoor.Inputs.SkuArgs
         {
             Name = AzureNative.FrontDoor.SkuName.Standard_AzureFrontDoor,
@@ -456,5 +425,46 @@ public static class FrontDoor
         Protect = true,
     });
 
+    var security_policy = new AzureNative.Cdn.SecurityPolicy("security-policy", new()
+    {
+        Parameters = new AzureNative.Cdn.Inputs.SecurityPolicyWebApplicationFirewallParametersArgs
+        {
+            Associations = new[]
+            {
+                new AzureNative.Cdn.Inputs.SecurityPolicyWebApplicationFirewallAssociationArgs
+                {
+                    Domains = new[]
+                    {
+                        new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
+                        {
+                            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/kjeldsen-dev-a132",
+                        },
+                        new AzureNative.Cdn.Inputs.ActivatedResourceReferenceArgs
+                        {
+                            Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourcegroups/kjdev-rg/providers/Microsoft.Cdn/profiles/kjdev-fd/customdomains/umbraco-kjeldsen-dev-62c0",
+                        },
+                    },
+                    PatternsToMatch = new[]
+                    {
+                        "/*",
+                    },
+                },
+            },
+            Type = "WebApplicationFirewall",
+            WafPolicy = new AzureNative.Cdn.Inputs.ResourceReferenceArgs
+            {
+                Id = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.Network/frontdoorWebApplicationFirewallPolicies/block",
+            },
+        },
+        ProfileName = kjdev_fd.Name,
+        ResourceGroupName = resourceGroup.Name,
+        SecurityPolicyName = "BlockWeirdTraffic",
+    }, new CustomResourceOptions
+    {
+        Protect = true,
+        DependsOn = { domain_apex, domain_umbraco, waf_block },
+    });
+
+        return kjeldsen_dev_endpoint;
     }
 }

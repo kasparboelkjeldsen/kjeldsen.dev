@@ -8,7 +8,7 @@ namespace Kjeldsen.Infra;
 /// </summary>
 public static class Core
 {
-    public static void Create()
+    public static AzureNative.Resources.ResourceGroup Create()
     {
     var kjdev_rg = new AzureNative.Resources.ResourceGroup("kjdev-rg", new()
     {
@@ -33,7 +33,7 @@ public static class Core
         Location = "westeurope",
         PublicNetworkAccessForIngestion = AzureNative.OperationalInsights.PublicNetworkAccessType.Enabled,
         PublicNetworkAccessForQuery = AzureNative.OperationalInsights.PublicNetworkAccessType.Enabled,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = kjdev_rg.Name,
         RetentionInDays = 30,
         Sku = new AzureNative.OperationalInsights.Inputs.WorkspaceSkuArgs
         {
@@ -64,7 +64,7 @@ public static class Core
         PublicNetworkAccessForIngestion = AzureNative.ApplicationInsights.PublicNetworkAccessType.Enabled,
         PublicNetworkAccessForQuery = AzureNative.ApplicationInsights.PublicNetworkAccessType.Enabled,
         RequestSource = AzureNative.ApplicationInsights.RequestSource.Rest,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = kjdev_rg.Name,
         ResourceName = "kjdev-appinsights",
         RetentionInDays = 90,
         Tags = 
@@ -72,7 +72,7 @@ public static class Core
             { "environment", "production" },
             { "project", "kjeldsen.dev" },
         },
-        WorkspaceResourceId = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.OperationalInsights/workspaces/kjdev-logs",
+        WorkspaceResourceId = kjdev_logs.Id,
     }, new CustomResourceOptions
     {
         Protect = true,
@@ -88,7 +88,7 @@ public static class Core
         PublicNetworkAccessForIngestion = AzureNative.ApplicationInsights.PublicNetworkAccessType.Enabled,
         PublicNetworkAccessForQuery = AzureNative.ApplicationInsights.PublicNetworkAccessType.Enabled,
         RequestSource = AzureNative.ApplicationInsights.RequestSource.Rest,
-        ResourceGroupName = "kjdev-rg",
+        ResourceGroupName = kjdev_rg.Name,
         ResourceName = "kjdev-appinsights-umbraco",
         RetentionInDays = 90,
         Tags = 
@@ -96,10 +96,12 @@ public static class Core
             { "environment", "production" },
             { "project", "kjeldsen.dev" },
         },
-        WorkspaceResourceId = "/subscriptions/e544652d-b079-448d-b112-5e46db72c8f7/resourceGroups/kjdev-rg/providers/Microsoft.OperationalInsights/workspaces/kjdev-logs",
+        WorkspaceResourceId = kjdev_logs.Id,
     }, new CustomResourceOptions
     {
         Protect = true,
     });
+
+        return kjdev_rg;
     }
 }
