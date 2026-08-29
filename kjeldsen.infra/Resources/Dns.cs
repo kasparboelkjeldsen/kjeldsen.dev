@@ -109,7 +109,13 @@ public static class Dns
             {
                 Value = new[]
                 {
-                    "_u414hej8ajkif2gw08tnzapqeowx83q",
+                    // Must match the custom domain's current validationProperties.validationToken.
+                    // It held a token from an earlier validation round, which is why
+                    // umbraco.kjeldsen.dev went to TimedOut. Check with:
+                    //   az afd custom-domain show -g kjdev-rg --profile-name kjdev-fd \
+                    //     --custom-domain-name umbraco-kjeldsen-dev-62c0 \
+                    //     --query validationProperties.validationToken
+                    "_jks1ewv12bfw5bq8woulrsrniy4sc1v",
                 },
             },
         },
