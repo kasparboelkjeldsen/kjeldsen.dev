@@ -12,8 +12,11 @@ public static class SecretsExtension
             new Uri(vault!),
             new DefaultAzureCredential());
 
+        // Local runs boot a blank SQLite database instead (see appsettings.Development.json), so the
+        // CMS underneath can be upgraded in isolation. Media, licences and keys still come from Azure.
+        var useKeyVaultDatabase = builder.Configuration.GetValue("Azure:UseKeyVaultDatabase", true);
+
         // Fetch secrets manually
-        var sql = secretClient.GetSecret("UmbracoSqlConnectionString").Value.Value;
         var blob = secretClient.GetSecret("UmbracoPrimaryStorageKey").Value.Value;
         var storage = $"DefaultEndpointsProtocol=https;AccountName=kjdevstorage;AccountKey={blob};EndpointSuffix=core.windows.net";
         var frontdoor = secretClient.GetSecret("FrontDoorEndpointResourceId").Value.Value;
@@ -21,7 +24,12 @@ public static class SecretsExtension
         var deliveryKey = secretClient.GetSecret("UmbracoDeliveryKey").Value.Value;
         var engageLicense = secretClient.GetSecret("engagelicense").Value.Value;
 
-        builder.Configuration["ConnectionStrings:umbracoDbDSN"] = sql;
+        if (useKeyVaultDatabase)
+        {
+            builder.Configuration["ConnectionStrings:umbracoDbDSN"] =
+                secretClient.GetSecret("UmbracoSqlConnectionString").Value.Value;
+        }
+
         builder.Configuration["Umbraco:Storage:AzureBlob:Media:ConnectionString"] = storage;
         builder.Configuration["Umbraco:CMS:DeliveryApi:ApiKey"] = deliveryKey;
         builder.Configuration["Nuxt:ApiKey"] = deliveryKey;

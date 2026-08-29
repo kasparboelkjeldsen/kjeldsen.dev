@@ -23,7 +23,21 @@
       "applicationUrl": "https://localhost:44375;http://localhost:36323",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }      
+      }
+    },
+    "SqlServer": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:44375;http://localhost:36323",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__umbracoDbDSN": "Server=(localdb)\\MSSQLLocalDB;Database=kjeldsendev;Integrated Security=true;TrustServerCertificate=True;MultipleActiveResultSets=True",
+        "ConnectionStrings__umbracoDbDSN_ProviderName": "Microsoft.Data.SqlClient",
+        "Engage__Settings__DatabaseConnectionStringName": "umbracoDbDSN",
+        "Engage__Settings__Enabled": "true",
+        "EngageExtensions__NoColumnStore": "false"
+      }
     }
   }
 }

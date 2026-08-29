@@ -127,85 +127,71 @@ public static class EngageNoColumnStoreBootstrap
             if (!resourceName.Contains(MustContain, StringComparison.OrdinalIgnoreCase))
                 return;
 
-            // If DB supports columnstore, do nothing — let Engage create NCCIs.
+            // If the database supports columnstore, do nothing - let Engage create its NCCIs.
             if (_columnstoreSupported)
                 return;
 
-            // Otherwise: strip each NCCI block completely.
             var newline = __result.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
             var lines = __result.Replace("\r\n", "\n").Split('\n').ToList();
 
-            static bool IsCreateNonclusteredColumnstore(string line)
+            static bool IsCreateColumnstoreIndex(string line)
             {
                 var s = line.AsSpan().Trim();
                 return s.IndexOf("CREATE", StringComparison.OrdinalIgnoreCase) >= 0
-                    && s.IndexOf("NONCLUSTERED", StringComparison.OrdinalIgnoreCase) >= 0
                     && s.IndexOf("COLUMNSTORE", StringComparison.OrdinalIgnoreCase) >= 0
                     && s.IndexOf("INDEX", StringComparison.OrdinalIgnoreCase) >= 0;
             }
 
-            static bool IsBlockCommentHeader(string line)
-                => line.TrimStart().StartsWith("/*", StringComparison.Ordinal); // matches /***** Object: Index ... *****/
+            // Remove only the CREATE ... COLUMNSTORE INDEX statement itself, found by tracking
+            // parentheses forward from the CREATE line. Deliberately shape-independent: Engage
+            // 17 wrote these blank-line separated and ending ")WITH (...) ON [PRIMARY]" with no
+            // semicolon anywhere in the file, while Engage 18 ends them with ");" and nests them
+            // inside the table's IF ... BEGIN ... END block.
+            //
+            // Do NOT scan backwards for a preceding comment header to use as the start of the
+            // range. That was the previous approach, and against Engage 18 - where there is no
+            // ")WITH" line to stop the forward scan - it swallowed the whole preceding CREATE
+            // TABLE, silently dropping five core analytics tables from the schema.
+            var ranges = new List<(int Start, int End)>();
 
-            static bool IsWithTerminator(string line)
-                => line.IndexOf(")WITH", StringComparison.OrdinalIgnoreCase) >= 0;
-
-            // Collect removal ranges [start..end] so we can remove after scanning
-            var ranges = new List<(int start, int end)>();
-
-            for (int i = 0; i < lines.Count; i++)
+            for (var i = 0; i < lines.Count; i++)
             {
-                if (!IsCreateNonclusteredColumnstore(lines[i])) continue;
+                if (!IsCreateColumnstoreIndex(lines[i]))
+                    continue;
 
-                // find start: walk back to nearest preceding block comment, else include the IF line if present
-                int start = i;
-                int j = i - 1;
-                int? ifLine = null;
+                var depth = 0;
+                var opened = false;
+                var end = i;
 
-                while (j >= 0 && string.IsNullOrWhiteSpace(lines[j])) j--;
-                // capture an immediate preceding IF line (common structure)
-                if (j >= 0 && lines[j].TrimStart().StartsWith("IF", StringComparison.OrdinalIgnoreCase))
-                    ifLine = j;
+                for (var k = i; k < lines.Count; k++)
+                {
+                    foreach (var c in lines[k])
+                    {
+                        if (c == '(') { depth++; opened = true; }
+                        else if (c == ')') depth--;
+                    }
 
-                // then keep walking back to the block comment header (preferred start)
-                while (j >= 0 && !IsBlockCommentHeader(lines[j])) j--;
+                    end = k;
 
-                start = j >= 0 ? j : (ifLine ?? i);
+                    // The statement closes when the column list (and any trailing WITH (...))
+                    // is balanced again; a terminating semicolon may or may not be present.
+                    if (opened && depth <= 0)
+                        break;
+                }
 
-                // find end: walk forward to the WITH terminator line
-                int k = i;
-                while (k < lines.Count && !IsWithTerminator(lines[k])) k++;
-                int end = k < lines.Count ? k : i;
-
-                ranges.Add((start, end));
+                ranges.Add((i, end));
             }
 
             if (ranges.Count == 0)
                 return;
 
-            // Merge overlapping ranges (if any) then remove from bottom to top
-            ranges = ranges
-                .OrderBy(r => r.start)
-                .Aggregate(new List<(int start, int end)>(), (acc, r) =>
-                {
-                    if (acc.Count == 0) acc.Add(r);
-                    else
-                    {
-                        var last = acc[^1];
-                        if (r.start <= last.end + 1) // overlap/adjacent
-                            acc[^1] = (last.start, Math.Max(last.end, r.end));
-                        else
-                            acc.Add(r);
-                    }
-                    return acc;
-                });
-
-            for (int idx = ranges.Count - 1; idx >= 0; idx--)
+            for (var idx = ranges.Count - 1; idx >= 0; idx--)
             {
-                var (start, end) = ranges[idx];
-                var count = end - start + 1;
-                if (start >= 0 && count > 0 && start + count <= lines.Count)
-                    lines.RemoveRange(start, count);
+                var (rangeStart, rangeEnd) = ranges[idx];
+                var count = rangeEnd - rangeStart + 1;
+
+                if (rangeStart >= 0 && count > 0 && rangeStart + count <= lines.Count)
+                    lines.RemoveRange(rangeStart, count);
             }
 
             __result = string.Join(newline, lines);

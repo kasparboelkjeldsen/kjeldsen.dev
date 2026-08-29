@@ -28,7 +28,9 @@ namespace kjeldsen.backend.code.engage.Api;
 
 [ApiController]
 [Route("umbraco/engageextensions/pageview")]
-public class CustomPageViewApiController : MarketingApiControllerBase
+// Engage 18 dropped the legacy uMarketingSuite naming: MarketingApiControllerBase is now
+// EngageApiControllerBase, same namespace.
+public class CustomPageViewApiController : EngageApiControllerBase
 {
     private readonly IHeadlessPageViewService _headlessPageViewService;
     private readonly Umbraco.Engage.Infrastructure.Personalization.Segments.ISegmentService _segmentService;
