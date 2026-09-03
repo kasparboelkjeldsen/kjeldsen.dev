@@ -167,7 +167,22 @@ relies on, and the list of things still to verify against a running Engage are i
 `npm run gen:engage` regenerates `server/engage-api/` from `/umbraco/openapi/engage-api.json`.
 `ENGAGE_ENABLED=false` turns every Engage call off.
 
+## Caching and delivery
+
+A query cache, not an output cache: `server/utils/cache/store.ts` holds delivery API payloads in
+memory, keyed by what the route asked for (path and segment, or a container's children) and
+indexed by the `cacheKeys` each payload carries. The CMS posts the affected keys to
+`/__nuxt_multi_cache/purge/tags` on publish, unpublish and move to the recycle bin, and every
+entry depending on one of them is dropped. An hour's TTL backs that up.
+
+Front Door caches only `/_nuxt/*`, `/_fonts/*` and `/api/media/*` at the edge, all of which are
+immutable per URL (build assets and fonts carry a content hash; media is keyed by its resize
+parameters). Pages and API responses go to the origin every time, compressed there: Brotli for
+the server-rendered HTML (`server/plugins/compression.ts`) and for API JSON when the browser asks
+for it (`server/utils/compress.ts`), precompressed `.br`/`.gz` for static assets. Fonts are
+downloaded at build time by `@nuxt/fonts` and served from this origin; nothing loads from Google.
+
 ## Not here yet
 
-Caching of delivery responses, full-page preview, sitemap, image optimisation. Block preview is
-here; the page preview flow (`HeadlessPreview:Url`, still pointed at `/api/init-preview`) is not.
+Full-page preview, sitemap, image optimisation. Block preview is here; the page preview flow
+(`HeadlessPreview:Url`, still pointed at `/api/init-preview`) is not.

@@ -1,10 +1,13 @@
 import { getContentItemByPath20 } from '../delivery-api'
 import { deliveryClient, isContentPath } from '../utils/delivery'
+import { cached } from '../utils/cache/store'
+import { sendJson } from '../utils/compress'
 import { readVisitor, writeVisitor } from '../utils/engage/visitor'
 import { visitorRequest } from '../utils/engage/request'
 import { activeSegments } from '../utils/engage/segments'
 import { settle, trackPageview } from '../utils/engage/track'
 import type { EngageInfo } from '~~/types/engage'
+import type { PageContent } from '~~/types/content'
 
 /** How long a request may wait in total for Engage to register its pageview. */
 const TRACKING_BUDGET_MS = 1500
@@ -19,6 +22,10 @@ const TRACKING_BUDGET_MS = 1500
  * `/api/**` request falls through to the SSR renderer rather than 404ing - which turns "fetch the
  * home page" into a render that fetches itself, recursively, until the worker runs out of memory.
  * A query parameter has no empty-segment case.
+ *
+ * The delivery payload comes from the query cache (server/utils/cache/store.ts), keyed on path
+ * and segment and dropped when the CMS purges one of the keys the payload lists. A miss costs the
+ * hop to Umbraco; a 404 is thrown from the loader and therefore never cached.
  *
  * This is also where Engage happens, because it is the one request every navigation makes, server
  * side or client side:
@@ -55,22 +62,26 @@ export default defineEventHandler(async (event) => {
     ? { abTest: null, personalization: null, forced: null }
     : await activeSegments(path, visitorId, req)
 
-  const { data, error, response } = await getContentItemByPath20({
-    client: deliveryClient(),
-    path: { path },
-    headers: segments.forced ? { 'Forced-Segment': segments.forced } : undefined,
+  const data = await cached(`item:${path}:${segments.forced ?? ''}`, async () => {
+    const { data, error, response } = await getContentItemByPath20({
+      client: deliveryClient(),
+      path: { path },
+      headers: segments.forced ? { 'Forced-Segment': segments.forced } : undefined,
+    })
+
+    if (response?.status === 404) {
+      throw createError({ statusCode: 404, statusMessage: 'Content not found' })
+    }
+
+    if (error || !data) {
+      console.error(`[content] ${response?.status} for path "${path}"`, error)
+      throw createError({ statusCode: 502, statusMessage: 'Failed to fetch content' })
+    }
+
+    return { value: data, keys: cacheKeysOf(data, path) }
   })
 
   const tracked = await settle(tracking, started + TRACKING_BUDGET_MS)
-
-  if (response?.status === 404) {
-    throw createError({ statusCode: 404, statusMessage: 'Content not found' })
-  }
-
-  if (error || !data) {
-    console.error(`[content] ${response?.status} for path "${path}"`, error)
-    throw createError({ statusCode: 502, statusMessage: 'Failed to fetch content' })
-  }
 
   if (tracked && tracked.visitorId !== visitorId) {
     writeVisitor(event, tracked.visitorId)
@@ -80,12 +91,21 @@ export default defineEventHandler(async (event) => {
     setResponseHeader(event, 'Cache-Control', 'private, no-store')
   }
 
-  if (chrome) return data
+  if (chrome) return sendJson(event, data)
 
   const engage: EngageInfo = {
     pageviewId: tracked?.pageviewId ?? null,
     segment: segments.forced,
   }
 
-  return { ...data, engage }
+  return sendJson(event, { ...data, engage })
 })
+
+/**
+ * What a payload depends on: the keys the CMS put on it (its own document and everything it
+ * references), plus the path, so a purge can also address a page by where it lives.
+ */
+export function cacheKeysOf(content: PageContent, path: string): string[] {
+  const props = content.properties as { cacheKeys?: string[] | null } | null
+  return [...(props?.cacheKeys ?? []), `content-${content.id}`, `path:/${path}`]
+}

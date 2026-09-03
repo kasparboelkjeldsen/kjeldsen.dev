@@ -14,6 +14,26 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // Fonts are downloaded at build time and served from this origin under /_fonts/ with hashed
+  // names, which Front Door caches at the edge. Nothing is loaded from Google at runtime: the
+  // point of the setup is serving fast from cheap Azure, and that point dies if assets go elsewhere.
+  modules: ['@nuxt/fonts'],
+  fonts: {
+    provider: 'google',
+    families: [
+      { name: 'Inter', global: true, weights: [400, 500, 600], styles: ['normal'] },
+      { name: 'Instrument Serif', global: true, weights: [400], styles: ['normal', 'italic'] },
+      { name: 'JetBrains Mono', global: true, weights: [400, 500], styles: ['normal'] },
+    ],
+    defaults: { subsets: ['latin', 'latin-ext'] },
+  },
+
+  nitro: {
+    // .br and .gz variants of every build asset, written at build time and served when the
+    // client accepts them. Front Door caches the compressed variants too.
+    compressPublicAssets: true,
+  },
+
   app: {
     // A short crossfade between routes. The hero on the next page runs its own entrance, so this
     // only has to get the old page out of the way.
@@ -24,15 +44,7 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#07080c' },
         { name: 'color-scheme', content: 'dark' },
       ],
-      link: [
-        { rel: 'icon', type: 'image/svg+xml', href: favicon },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
-        },
-      ],
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: favicon }],
       // Marks the document as scripted before first paint. Entrance effects that hide an element
       // until it scrolls into view are gated on this class, so a browser without JavaScript - or a
       // crawler - gets everything visible and nothing waiting on an observer that never runs.

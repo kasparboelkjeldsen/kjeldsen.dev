@@ -249,6 +249,27 @@ rendered HTML.** The slow part is the hop to Umbraco; Vue SSR is cheap. Caching 
 fragmentation far cheaper to store and lets variants that differ in one block share most of their
 data.
 
+## What is built (2026-09-03)
+
+Steps 3 and 5 below, plus the refresh hook in a simpler form:
+
+- `kjeldsen.frontend/server/utils/cache/store.ts` - an in-process query cache keyed by
+  `item:<path>:<segment>` and `children:<path>`, with a reverse index from every payload's
+  `cacheKeys` to the entries that depend on them, a one-hour TTL and a 5000-entry cap.
+- `/__nuxt_multi_cache/purge/tags` - the purge endpoint, on the URL and header the backend has
+  called since V1, authenticated with the delivery key. The backend calls it on publish, unpublish
+  and move to the recycle bin (`ContentPublishedCacheKeyLogger`, `ContentUnpublishedCacheKeyLogger`).
+  A purge also drops the Engage segment map.
+- Purge rather than refresh: an affected entry is dropped, and the next request refetches it. The
+  warm pass and refresh-on-publish from the section above are still to do; at this size the miss
+  after a publish costs one delivery call.
+- Front Door caches `/_nuxt/*`, `/_fonts/*` and `/api/media/*` only. Pages and API responses are
+  `CONFIG_NOCACHE` by the `noContentCache` rule and compressed at the origin instead, since Front
+  Door only compresses what it caches.
+
+Measured before this: Umbraco answered a 41 KB post in 150 ms; the frontend's render was about
+300 ms warm and seconds cold. Always On is now enabled on both plans (free on B1).
+
 ## Where to start
 
 Roughly in dependency order, each step useful on its own:

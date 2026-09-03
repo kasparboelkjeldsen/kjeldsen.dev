@@ -230,9 +230,14 @@ public static class FrontDoor
                 Name = "UrlPath",
                 Parameters = new AzureNative.Cdn.Inputs.UrlPathMatchConditionParametersArgs
                 {
-                    MatchValues = 
+                    // Everything except these paths is served uncached from the origin: pages
+                    // and API calls carry visitor state. Media is resized on demand and immutable
+                    // per URL; build assets and fonts carry a content hash in their name.
+                    MatchValues =
                     {
                         "/api/media",
+                        "/_nuxt/",
+                        "/_fonts/",
                     },
                     NegateCondition = true,
                     Operator = AzureNative.Cdn.UrlPathOperator.Contains,
@@ -257,7 +262,20 @@ public static class FrontDoor
         {
             CompressionSettings = new AzureNative.Cdn.Inputs.CompressionSettingsArgs
             {
-                IsCompressionEnabled = false,
+                ContentTypesToCompress =
+                {
+                    "text/html",
+                    "text/css",
+                    "text/javascript",
+                    "application/javascript",
+                    "application/x-javascript",
+                    "application/json",
+                    "image/svg+xml",
+                    "text/plain",
+                    "application/xml",
+                    "text/xml",
+                },
+                IsCompressionEnabled = true,
             },
             QueryStringCachingBehavior = AzureNative.Cdn.AfdQueryStringCachingBehavior.UseQueryString,
         },
