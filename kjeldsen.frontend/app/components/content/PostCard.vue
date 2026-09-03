@@ -14,8 +14,8 @@
     >
       <img
         :src="withWidth(post.image.url, featured ? 1200 : 800)"
-        :srcset="cmsSrcset(post.image.url, featured ? [800, 1200, 1600] : [480, 800, 1200])"
-        :sizes="featured ? '(min-width: 48rem) 60vw, 100vw' : '(min-width: 64rem) 33vw, (min-width: 48rem) 50vw, 100vw'"
+        :srcset="cmsSrcset(post.image.url, featured ? [640, 800, 1000, 1200, 1600] : [320, 400, 480, 560, 640, 720, 800, 1000, 1200])"
+        :sizes="featured ? '(min-width: 48rem) 60vw, calc(100vw - 2.5rem)' : '(min-width: 64rem) 22rem, (min-width: 48rem) calc(50vw - 3rem), calc(100vw - 2.5rem)'"
         alt=""
         :width="featured ? 1200 : 800"
         :height="featured ? 750 : 500"

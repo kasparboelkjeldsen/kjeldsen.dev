@@ -12,7 +12,10 @@ export const BLOCK_SPAN: InjectionKey<ComputedRef<number>> = Symbol('blockSpan')
  * centred at 36rem at most.
  */
 export function sizesFor(span: number, shape: 'Square' | 'Ratio' | 'Slim' | string): string {
-  if (span < 12) return '(min-width: 48rem) 20rem, 100vw'
-  if (shape === 'Square') return '(min-width: 48rem) 36rem, 100vw'
-  return '(min-width: 64rem) 54rem, 100vw'
+  // On a phone the picture is the viewport minus the column's padding (1.25rem a side), not
+  // the viewport: a hint that is a few percent too wide makes the browser take the next rung up.
+  const phone = 'calc(100vw - 2.5rem)'
+  if (span < 12) return `(min-width: 48rem) 20rem, ${phone}`
+  if (shape === 'Square') return `(min-width: 48rem) 36rem, ${phone}`
+  return `(min-width: 64rem) 54rem, (min-width: 48rem) calc(100vw - 4rem), ${phone}`
 }

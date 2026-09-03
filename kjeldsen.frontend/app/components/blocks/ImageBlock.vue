@@ -57,10 +57,12 @@
   // the media route signs any width, so the ladder is ours, with steps a phone can land on
   // exactly rather than one size up. Heights follow the shape's aspect ratio, taken from the
   // media type's crop so it matches what the editor framed.
+  // Rungs 80 px apart through the phone range: a 372 px slot at any common pixel ratio lands
+  // within one rung of what it needs instead of jumping to 800.
   const LADDER: Record<string, number[]> = {
-    Square: [320, 480, 640, 800, 1000],
-    Slim: [480, 640, 800, 1000, 1200, 1600],
-    Ratio: [480, 640, 800, 1000, 1200, 1600],
+    Square: [320, 400, 480, 560, 640, 720, 800, 1000],
+    Slim: [400, 480, 560, 640, 720, 800, 1000, 1200, 1600],
+    Ratio: [400, 480, 560, 640, 720, 800, 1000, 1200, 1600],
   }
 
   const crops = computed<ImageCropModel[]>(() => {
