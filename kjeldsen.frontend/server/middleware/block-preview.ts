@@ -1,4 +1,5 @@
 import { timingSafeEqual } from 'node:crypto'
+import { highlightBlock } from '../utils/highlight'
 import type { AnyBlock } from '~~/types/content'
 
 /**
@@ -32,7 +33,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody<{ content?: AnyBlock }>(event)
-  event.context.blockPreview = body?.content ?? null
+  // Highlighted here too, so a code block previews in the editor the way it renders on the site.
+  event.context.blockPreview = body?.content ? await highlightBlock(body.content) : null
 })
 
 function authorised(sent: string | undefined): boolean {

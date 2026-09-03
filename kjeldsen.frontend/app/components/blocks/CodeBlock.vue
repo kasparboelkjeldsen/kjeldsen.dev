@@ -20,28 +20,33 @@
       </button>
     </div>
 
-    <!-- No syntax highlighting on purpose: V1 pulled in shiki and had to inline a dozen of its
-         transitive ESM deps in the Nitro build to work. Add it back deliberately, if at all. -->
-    <pre class="code-body m-0"><code><span v-for="(line, i) in lines" :key="i" class="code-line">{{ line }}</span></code></pre>
+    <!-- Highlighting happens on the server (server/utils/highlight.ts): the payload arrives with
+         one HTML string per line, built from escaped text and inline colours, and the client never
+         loads a highlighter. A language without a grammar there renders as plain text. -->
+    <pre v-if="highlighted" class="code-body m-0"><code><span v-for="(line, i) in highlighted" :key="i" class="code-line" v-html="line || ' '" /></code></pre>
+    <pre v-else class="code-body m-0"><code><span v-for="(line, i) in lines" :key="i" class="code-line">{{ line }}</span></code></pre>
   </div>
 </template>
 
 <script setup lang="ts">
   import type { CodeBlockElementModel } from '~~/server/delivery-api'
+  import { parseFence } from '~~/shared/fence'
 
   const props = defineProps<{ block: CodeBlockElementModel }>()
 
-  // Editors paste Markdown fences into the code field - ```json ... ``` - so the language is
-  // read off the opening fence and the fences themselves are dropped.
-  const parsed = computed(() => {
-    const raw = (props.block.properties?.code ?? '').replace(/\r\n?/g, '\n')
-    const fenced = raw.match(/^\s*```([\w+#.-]*)[ \t]*\n([\s\S]*?)\n?[ \t]*```\s*$/)
-    const body = (fenced ? fenced[2] : raw) ?? ''
-    return { lang: fenced?.[1] ?? '', body: body.replace(/\s+$/, '') }
-  })
+  // `highlighted` and `language` are added to the payload by the server; the generated model
+  // does not know them.
+  type Highlighted = { highlighted?: string[]; language?: string }
 
-  const lang = computed(() => parsed.value.lang)
+  const parsed = computed(() => parseFence(props.block.properties?.code))
+  const extra = computed(() => props.block.properties as Highlighted | undefined)
+
+  const lang = computed(() => extra.value?.language || parsed.value.lang)
   const lines = computed(() => (parsed.value.body ? parsed.value.body.split('\n') : []))
+  const highlighted = computed(() => {
+    const h = extra.value?.highlighted
+    return h && h.length === lines.value.length ? h : null
+  })
 
   const copied = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined

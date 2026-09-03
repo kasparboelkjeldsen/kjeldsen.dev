@@ -2,6 +2,7 @@ import { getContentItemByPath20 } from '../delivery-api'
 import { deliveryClient, isContentPath } from '../utils/delivery'
 import { cached } from '../utils/cache/store'
 import { sendJson } from '../utils/compress'
+import { highlightContent } from '../utils/highlight'
 import { readVisitor, writeVisitor } from '../utils/engage/visitor'
 import { visitorRequest } from '../utils/engage/request'
 import { activeSegments } from '../utils/engage/segments'
@@ -78,7 +79,9 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 502, statusMessage: 'Failed to fetch content' })
     }
 
-    return { value: data, keys: cacheKeysOf(data, path) }
+    // Code blocks are highlighted here, once per cache fill, so the browser gets coloured spans
+    // and never a highlighter.
+    return { value: await highlightContent(data), keys: cacheKeysOf(data, path) }
   })
 
   const tracked = await settle(tracking, started + TRACKING_BUDGET_MS)

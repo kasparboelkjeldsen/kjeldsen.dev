@@ -26,6 +26,10 @@ backoffice (see below) and on the site.
   and paragraph into the hero (`app/utils/hero.ts`) and lists the newest posts; a post carries its
   date, author, reading time, a progress bar and a sticky outline; a container lists its children
   as cards with the newest featured.
+- **Code.** Highlighted on the server (`server/utils/highlight.ts`, shiki's fine-grained core with
+  its JavaScript engine and only the grammars the posts use) when a payload is fetched, so the
+  browser receives coloured spans and never a highlighter. Editors paste Markdown fences; the
+  language is read off the fence (`shared/fence.ts`).
 - **Pictures the CMS has none of** - the home page when no background is set, listing pages, the
   error page - come from Unsplash, addressed by photo id in `app/utils/images.ts`.
 
