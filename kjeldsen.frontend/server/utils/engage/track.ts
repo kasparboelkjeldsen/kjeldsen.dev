@@ -14,17 +14,15 @@ export interface TrackedPageview {
  * the content route. Engage answers with the visitor id - minted when none was sent - and the
  * pageview id the client uses to attach engagement data later.
  *
- * Bounded by a deadline: analytics must never hold a page. Past it the pageview may still land
- * (the request is not aborted) but the response goes out without a pageview id.
+ * Returns the promise without waiting on it. The content route starts this first, fetches the
+ * page while it runs, and only then waits for it against a budget (see `settle`), so tracking
+ * overlaps the content fetch rather than delaying it. Behind Front Door the call has been measured
+ * at over a second on a cold backend.
  */
-export async function trackPageview(
-  req: VisitorRequest,
-  visitorId: string | null,
-  deadlineMs = 500
-): Promise<TrackedPageview | null> {
-  if (!engageEnabled()) return null
+export function trackPageview(req: VisitorRequest, visitorId: string | null): Promise<TrackedPageview | null> {
+  if (!engageEnabled()) return Promise.resolve(null)
 
-  const call = postAnalyticsPageviewTrackpageviewServer({
+  return postAnalyticsPageviewTrackpageviewServer({
     client: engageClient(),
     headers: visitorId ? { 'External-Visitor-Id': visitorId } : undefined,
     body: {
@@ -55,7 +53,16 @@ export async function trackPageview(
       console.warn('[engage] pageview error', e)
       return null
     })
+}
 
-  const deadline = new Promise<null>((resolve) => setTimeout(() => resolve(null), deadlineMs))
-  return Promise.race([call, deadline])
+/**
+ * Waits for a tracking call, but only until `deadline` (a `Date.now()` value). Past it the
+ * response goes out without a pageview id; the registration itself still completes in the
+ * background, so the visit is not lost, only the client-side engagement data for it.
+ */
+export function settle<T>(call: Promise<T | null>, deadline: number): Promise<T | null> {
+  const remaining = deadline - Date.now()
+  if (remaining <= 0) return Promise.resolve(null)
+  const timer = new Promise<null>((resolve) => setTimeout(() => resolve(null), remaining))
+  return Promise.race([call, timer])
 }

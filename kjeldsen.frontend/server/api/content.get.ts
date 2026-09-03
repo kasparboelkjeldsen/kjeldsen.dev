@@ -3,8 +3,11 @@ import { deliveryClient, isContentPath } from '../utils/delivery'
 import { readVisitor, writeVisitor } from '../utils/engage/visitor'
 import { visitorRequest } from '../utils/engage/request'
 import { activeSegments } from '../utils/engage/segments'
-import { trackPageview } from '../utils/engage/track'
+import { settle, trackPageview } from '../utils/engage/track'
 import type { EngageInfo } from '~~/types/engage'
+
+/** How long a request may wait in total for Engage to register its pageview. */
+const TRACKING_BUDGET_MS = 1500
 
 /**
  * Server-side proxy for a single content item, addressed by `?path=`.
@@ -43,17 +46,22 @@ export default defineEventHandler(async (event) => {
   const visitorId = chrome ? null : readVisitor(event)
   const req = visitorRequest(event, path)
 
-  // Segment first, in parallel with tracking: the delivery call needs the alias, the tracking call
-  // needs nothing from the page. Tracking is deadline-bounded and never fails the request.
-  const [segments, tracked] = chrome
-    ? [{ abTest: null, personalization: null, forced: null }, null]
-    : await Promise.all([activeSegments(path, visitorId, req), trackPageview(req, visitorId)])
+  // Tracking starts first and runs alongside everything below; it is waited for last, against a
+  // budget measured from here, so a slow Engage costs the response nothing until the page itself
+  // is ready. The segment lookup has to finish before the delivery call, which needs the alias.
+  const started = Date.now()
+  const tracking = chrome ? Promise.resolve(null) : trackPageview(req, visitorId)
+  const segments = chrome
+    ? { abTest: null, personalization: null, forced: null }
+    : await activeSegments(path, visitorId, req)
 
   const { data, error, response } = await getContentItemByPath20({
     client: deliveryClient(),
     path: { path },
     headers: segments.forced ? { 'Forced-Segment': segments.forced } : undefined,
   })
+
+  const tracked = await settle(tracking, started + TRACKING_BUDGET_MS)
 
   if (response?.status === 404) {
     throw createError({ statusCode: 404, statusMessage: 'Content not found' })
