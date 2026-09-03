@@ -11,6 +11,7 @@ behind decisions that look strange without context.
 | [upstream-findings.md](upstream-findings.md) | Portability and correctness findings worth reporting upstream |
 | [frontend-v2.md](frontend-v2.md) | Rebuilding the frontend: where OpenAPI moved in 18, what to keep from V1, and what the personalization round trips cost |
 | [caching-and-personalization.md](caching-and-personalization.md) | Segment-aware caching without a re-rendering frontend: what Front Door can't do, what Engage already exposes, and the resulting design |
+| [umbraco-mcp.md](umbraco-mcp.md) | Running the Umbraco MCP server locally: where the secret lives, the HTTPS/dev-cert traps, and tool-count cost |
 
 ## A note on sources
 
