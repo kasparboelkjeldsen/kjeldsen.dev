@@ -266,6 +266,10 @@ Steps 3 and 5 below, plus the refresh hook in a simpler form:
 - Front Door caches `/_nuxt/*`, `/_fonts/*` and `/api/media/*` only. Pages and API responses are
   `CONFIG_NOCACHE` by the `noContentCache` rule and compressed at the origin instead, since Front
   Door only compresses what it caches.
+- The client bundle loads after the window's load event (`server/plugins/defer-scripts.ts`), so
+  on a slow connection the hero picture and the fonts are not sharing bandwidth with script the
+  server-rendered page does not need to show itself. Lighthouse's mobile simulation counts every
+  request that starts before the hero paints against LCP; this takes the biggest one out.
 
 Measured before this: Umbraco answered a 41 KB post in 150 ms; the frontend's render was about
 300 ms warm and seconds cold. Always On is now enabled on both plans (free on B1).
