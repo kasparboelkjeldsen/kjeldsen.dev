@@ -44,7 +44,10 @@ that were already there: B1 for both App Service plans, Standard S0 for SQL, Sta
   forwarded address to a bare IP before sending it.
 - **The pipeline trigger only watches `kjeldsen.backend/**` and `kjeldsen.frontend/**`.** A change
   to the pipeline itself or to `knowledge/` does not build; queue a run with
-  `az pipelines run --branch main`. Manual runs build and deploy both apps.
+  `az pipelines run --branch main`. Manual runs build and deploy both apps. A push that touches
+  either app *does* trigger a run within about half a minute (`individualCI`); queuing a manual
+  run as well deploys everything twice. `az pipelines runs list` omits in-progress runs, so check
+  the REST build list before queuing.
 - **The backend still tries to purge V1's cache endpoint on publish** ("Nuxt cache invalidation
   failed: NotFound"). Harmless until the V2 cache exists; it will need pointing at the new route.
 
