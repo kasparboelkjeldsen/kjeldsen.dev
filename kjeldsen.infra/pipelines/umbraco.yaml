@@ -108,9 +108,9 @@ stages:
     - job: BuildAndPublishFrontend
       displayName: 'Build and Publish Frontend'
       steps:
-        - task: NodeTool@0
+        - task: UseNode@1
           inputs:
-            versionSpec: '22.x'
+            version: '22.x'
           displayName: 'Install Node.js'
 
         - task: PowerShell@2
