@@ -55,6 +55,12 @@ export default defineNuxtConfig({
     // through. Leave it unset and media is proxied unsigned, which is correct for a CMS that
     // has no HMAC key configured.
     imageKey: process.env.IMAGE_HMAC_KEY,
+    engage: {
+      // Set ENGAGE_ENABLED=false to stop every Engage call: no pageviews, no segments, no cookie.
+      // Locally the CMS runs Engage disabled under the SQLite profile, so the calls fail softly
+      // anyway; this is for turning them off outright.
+      enabled: process.env.ENGAGE_ENABLED !== 'false',
+    },
     public: {
       cmsHost: process.env.CMSHOST || 'https://localhost:44375',
       siteUrl: process.env.SITE_URL || 'http://localhost:3000',

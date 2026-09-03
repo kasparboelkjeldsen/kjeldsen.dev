@@ -162,12 +162,6 @@ stages:
             appType: 'webAppLinux'
             deploymentMethod: 'runFromPackage'
 
-        - task: PublishBuildArtifacts@1
-          inputs:
-            pathToPublish: '$(frontendDirectory)/.nuxt-prerender-routes.json'
-            artifactName: 'routes'
-          displayName: 'Publish prerender routes'
-
 # ----------------------------------------
 # Stage 2: Backend (Umbraco) - run on need
 # ----------------------------------------
@@ -235,7 +229,10 @@ stages:
 # -------------------------------
 # Stage 3: Warmup (after backend)
 # -------------------------------
+# V2 has no prerender route list, so there is nothing to warm from an artifact. Left in place but
+# switched off; the caching work will bring a warm pass of its own.
 - stage: Warmup
+  condition: false
   displayName: 'Warm Up Routes'
   dependsOn: BuildBackend
   condition: succeeded()

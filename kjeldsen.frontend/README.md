@@ -156,10 +156,18 @@ posted JSON off, because it otherwise hides component edits.
 The browser never talks to Umbraco directly. Every CMS call goes through a Nitro route so the
 delivery key stays server-side.
 
+## Umbraco Engage
+
+Analytics, personalization and A/B tests go through the content route: one pageview registered
+per navigation, the variant resolved by Engage only for pages that actually vary, and engagement
+data sent back from the browser when a page is left. The whole design, the Engage behaviour it
+relies on, and the list of things still to verify against a running Engage are in
+[knowledge/engage-headless-v2.md](../knowledge/engage-headless-v2.md).
+
+`npm run gen:engage` regenerates `server/engage-api/` from `/umbraco/openapi/engage-api.json`.
+`ENGAGE_ENABLED=false` turns every Engage call off.
+
 ## Not here yet
 
-Umbraco Engage — no personalization, segmentation or analytics. V1's approach is described in the
-knowledge note, including what its round trips cost; it is getting a fresh design rather than a
-port. Also absent by choice: caching, full-page preview, sitemap, image optimisation, SEO tags
-beyond `<title>`. Block preview is here; the page preview flow (`HeadlessPreview:Url`, still
-pointed at `/api/init-preview`) is not.
+Caching of delivery responses, full-page preview, sitemap, image optimisation. Block preview is
+here; the page preview flow (`HeadlessPreview:Url`, still pointed at `/api/init-preview`) is not.

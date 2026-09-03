@@ -8,6 +8,7 @@
     "preview": "nuxi preview",
     "start": "node .output/server/index.mjs",
     "gen": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 openapi-ts",
+    "gen:engage": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 openapi-ts -f openapi-ts.engage.config.ts",
     "build:cms-css": "tailwindcss -i app/assets/css/main.css -o ../kjeldsen.backend/wwwroot/css/cms.css",
     "typecheck": "nuxi typecheck"
   },
