@@ -53,15 +53,28 @@
     Slim: (c) => c.width / c.height >= 3.9,
   }
 
-  const crops = computed(() => {
+  // The widths offered per shape. The media type's own crops come in four sizes with big gaps;
+  // the media route signs any width, so the ladder is ours, with steps a phone can land on
+  // exactly rather than one size up. Heights follow the shape's aspect ratio, taken from the
+  // media type's crop so it matches what the editor framed.
+  const LADDER: Record<string, number[]> = {
+    Square: [320, 480, 640, 800, 1000],
+    Slim: [480, 640, 800, 1000, 1200, 1600],
+    Ratio: [480, 640, 800, 1000, 1200, 1600],
+  }
+
+  const crops = computed<ImageCropModel[]>(() => {
     const match = shapes[shape.value]
     if (!match) return []
-    return [...(image.value?.crops ?? [])].filter(match).sort((a, b) => a.width - b.width)
+    const reference = (image.value?.crops ?? []).find(match)
+    if (!reference) return []
+    const ratio = reference.width / reference.height
+    const widths = LADDER[shape.value] ?? [reference.width]
+    return widths.map((width) => ({ ...reference, width, height: Math.round(width / ratio) }))
   })
 
-  // The Delivery API reports a crop's size but not its alias, so the crop is re-requested by
-  // dimensions. rxy keeps the editor's focal point in frame when the processor has to cut, and
-  // every variant is asked for as WebP.
+  // The crop is requested by dimensions. rxy keeps the editor's focal point in frame when the
+  // processor has to cut, and every variant is asked for as WebP.
   function url(crop?: ImageCropModel) {
     const base = image.value?.url
     if (!base) return ''

@@ -48,6 +48,11 @@ that were already there: B1 for both App Service plans, Standard S0 for SQL, Sta
   either app *does* trigger a run within about half a minute (`individualCI`); queuing a manual
   run as well deploys everything twice. `az pipelines runs list` omits in-progress runs, so check
   the REST build list before queuing.
+- **First requests for new image variants are slow.** A never-before-seen crop or format
+  (`format=webp` was new on 2026-09-03) makes the CMS encode it, eight seconds for a 2400px hero on
+  S0; ImageSharp's cache is in the `kjdevblob` container (`cache/`), so it is once per variant.
+  The pipeline's warm-up stage crawls the pages and fetches their images after every frontend
+  deploy so a visitor never pays it.
 - **The backend still tries to purge V1's cache endpoint on publish** ("Nuxt cache invalidation
   failed: NotFound"). Harmless until the V2 cache exists; it will need pointing at the new route.
 

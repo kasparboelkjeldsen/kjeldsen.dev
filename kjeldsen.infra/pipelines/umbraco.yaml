@@ -248,60 +248,42 @@ stages:
               echo "timed out waiting for the deployment"; exit 1
 
 # -------------------------------
-# Stage 3: Warmup (after backend)
+# Stage 3: Warmup (after frontend)
 # -------------------------------
-# V2 has no prerender route list, so there is nothing to warm from an artifact. Left in place but
-# switched off; the caching work will bring a warm pass of its own.
+# Crawls the site's pages and fetches every image variant they reference, so the first visitor
+# after a deploy never waits for the CMS to encode a WebP (measured at eight seconds cold for a
+# hero picture) or for Front Door to fill its edge cache. Pages come from the navigation and the
+# blog listing; there is no route list any more.
 - stage: Warmup
-  displayName: 'Warm Up Routes'
-  dependsOn: BuildBackend
-  condition: false
+  displayName: 'Warm pages and images'
+  dependsOn: BuildFrontend
+  condition: succeeded()
   jobs:
-    - job: WarmupRoutes
-      displayName: 'Fetch all frontend routes to warm cache'
+    - job: Warm
+      displayName: 'Fetch pages, then their images'
       steps:
-        - task: NodeTool@0
-          inputs:
-            versionSpec: '20.x'
-          displayName: 'Install Node.js'
+        - checkout: none
+        - bash: |
+            set -u
+            base="https://www.kjeldsen.dev"
 
-        - checkout: self
-          displayName: 'Checkout source'
+            # The new package takes a little while to become the running site.
+            sleep 90
 
-        - download: current
-          artifact: routes
-          displayName: 'Download prerender routes artifact'
+            fetch() { curl -s --compressed -H 'Accept-Encoding: br, gzip' --max-time 120 "$1"; }
 
-        - task: PowerShell@2
-          displayName: 'Warm routes by fetching them from www.kjeldsen.dev'
-          inputs:
-            targetType: 'inline'
-            script: |
-              $routesFile = "$(Pipeline.Workspace)/routes/.nuxt-prerender-routes.json"
+            pages="/ /blog/ /umbraco-packages/"
+            for p in $pages; do
+              pages="$pages $(fetch "$base$p" | grep -o 'href="/[a-z0-9/-]*/"' | sed 's/href="//; s/"$//' | sort -u | tr '\n' ' ')"
+            done
+            pages=$(echo "$pages" | tr ' ' '\n' | sort -u)
 
-              if (!(Test-Path $routesFile)) {
-                Write-Warning "No prerender routes file found at $routesFile"
-                exit 0
-              }
-
-              $routes = Get-Content $routesFile | ConvertFrom-Json
-              $baseUrl = "https://www.kjeldsen.dev"
-
-              foreach ($route in $routes) {
-                $url = "$baseUrl$route"
-                $success = $false
-                for ($i = 1; $i -le 3; $i++) {
-                  try {
-                    $res = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 30
-                    Write-Host "Warmed: $url ($($res.StatusCode))"
-                    $success = $true
-                    break
-                  } catch {
-                    Write-Warning ("Attempt $i failed for " + $url + ": " + $_.Exception.Message)
-                    Start-Sleep -Seconds 5
-                  }
-                }
-                if (-not $success) {
-                  Write-Warning "Failed to warm: $url after 3 attempts"
-                }
-              }
+            for p in $pages; do
+              html=$(fetch "$base$p")
+              echo "page $p ($(echo -n "$html" | wc -c) bytes)"
+              echo "$html" | grep -o '/api/media/[^" ]*' | sed 's/&amp;/\&/g' | sort -u | while read -r u; do
+                code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 120 "$base$u")
+                echo "  image $code $u"
+              done
+            done
+          displayName: 'Warm www.kjeldsen.dev'

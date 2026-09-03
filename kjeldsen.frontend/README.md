@@ -35,9 +35,15 @@ backoffice (see below) and on the site.
   `sizes` hint derived from the grid columns the block spans (`app/utils/blocks.ts`): a
   half-width block never downloads a full-width picture. The media route signs `width`,
   `height`, `rxy`, `format` and `quality` and nothing else.
-- **First paint.** The stylesheet is inlined into the HTML (`features.inlineStyles`) and the
-  fonts the page uses are preloaded by `@nuxt/fonts`, so nothing render-blocking is fetched
+- **First paint.** The stylesheet is inlined into the HTML (`features.inlineStyles`), and
+  `server/plugins/font-preload.ts` reads the inlined `@font-face` rules and preloads the latin
+  regular weight of each family (plus the serif's italic), so the fonts start with the HTML
+  rather than after layout. No hashed file name is written anywhere by hand. Nothing is fetched
   from a second origin - there is no second origin.
+- **Warm after deploy.** The pipeline's last stage crawls the pages and fetches every image
+  variant they reference, so the one-time WebP encode on the CMS (eight seconds cold for a hero
+  picture on the S0 tier) and Front Door's edge fill happen before a visitor arrives. ImageSharp's
+  cache lives in blob storage, so an encode is paid once per variant, ever.
 - **Pictures the CMS has none of** - the home page when no background is set, listing pages, the
   error page - come from Unsplash, addressed by photo id in `app/utils/images.ts`.
 
