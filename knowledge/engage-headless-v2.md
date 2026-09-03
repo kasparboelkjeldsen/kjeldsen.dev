@@ -118,6 +118,19 @@ immediately.
 - `?chrome=1` returns the document without an `engage` field, as intended.
 - `collect` and `event` answer 204 for well-formed bodies.
 
+## Verified against production (2026-09-03)
+
+- `trackpageview/server` is **rewritten by the backend** to the site's own
+  `engageextensions/pageview/register` (`RedirectExtensions.AddEngageTrackingRewrite`), so that
+  controller is what actually runs. It returns the stock fields plus `activeSegmentAlias`.
+- **Never send the `headers` string.** When it is supplied, Engage replaces every header on the
+  real request, `Host` included; the stock controller does not care, but the
+  custom one then reads the Umbraco context and throws `UriFormatException: The hostname could
+  not be parsed`. Without it, both `https://kjeldsen.dev/...` and `https://www.kjeldsen.dev/...`
+  register and return ids, so the licence covers both hosts.
+- `remoteClientAddress` must be a bare IP. Front Door forwards `ip:port`; `HeadlessHttpContext`
+  rejects it with "Invalid IP Address supplied".
+
 ## To verify with a running Engage
 
 In roughly this order, each on its own:

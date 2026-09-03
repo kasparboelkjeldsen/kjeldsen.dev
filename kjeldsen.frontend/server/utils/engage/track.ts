@@ -32,8 +32,11 @@ export async function trackPageview(
       referrerUrl: req.referrer,
       browserUserAgent: req.userAgent,
       remoteClientAddress: req.ip,
-      // Engage parses this as key=value pairs and reads the visitor's language from it.
-      headers: `Accept-Language=${encodeURIComponent(req.acceptLanguage)}`,
+      // No `headers` string, on purpose. Engage's headless request wrapper clears every header
+      // on the underlying request when one is supplied - Host included - and the site's own
+      // register controller (which the backend rewrites this call to) then reads the Umbraco
+      // context and dies on the missing host. The visitor's language is lost to the pageview;
+      // the pageview is not.
       userIdentifier: '',
     },
   })
