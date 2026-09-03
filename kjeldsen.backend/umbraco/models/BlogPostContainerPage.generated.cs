@@ -64,13 +64,6 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual bool ChildKeys => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetChildKeys(this, _publishedValueFallback);
 
 		///<summary>
-		/// Last CDN Purge
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
-		[ImplementPropertyType("lastCdnPurge")]
-		public virtual global::System.DateTime LastCdnPurge => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetLastCdnPurge(this, _publishedValueFallback);
-
-		///<summary>
 		/// No Slug
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]

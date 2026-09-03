@@ -27,6 +27,11 @@
     codeBlock: defineAsyncComponent(() => import('~/components/blocks/CodeBlock.vue')),
     spotlightBlock: defineAsyncComponent(() => import('~/components/blocks/SpotlightBlock.vue')),
     vimeoBlock: defineAsyncComponent(() => import('~/components/blocks/VimeoBlock.vue')),
+    imageBlock: defineAsyncComponent(() => import('~/components/blocks/ImageBlock.vue')),
+    apiUserTest: defineAsyncComponent(() => import('~/components/blocks/ApiUserTest.vue')),
+    cacheKeyExampleBlock: defineAsyncComponent(
+      () => import('~/components/blocks/CacheKeyExampleBlock.vue')
+    ),
   }
 
   const resolved = computed(() => blocks[props.block.contentType as BlockType] ?? null)

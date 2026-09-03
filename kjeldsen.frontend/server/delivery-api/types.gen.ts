@@ -92,7 +92,7 @@ export type BlogPostPageContentModel = IApiContentBaseModel & {
     properties?: BlogPostPageContentPropertiesModel;
 };
 
-export type BlogPostPageContentPropertiesModel = HeadlessCompositionContentPropertiesModel & {
+export type BlogPostPageContentPropertiesModel = HeadlessCompositionContentPropertiesModel & SeoCompositionContentPropertiesModel & {
     grid?: ApiBlockGridModel | null;
     writer?: null | Array<IApiContentModel>;
 };
@@ -209,7 +209,6 @@ export type HeadlessCompositionContentPropertiesModel = {
     cachePage?: null | boolean;
     childKeys?: null | boolean;
     noSlug?: null | boolean;
-    lastCdnPurge?: null | string;
 };
 
 export type HeadlessCompositionContentResponseModel = IApiContentResponseBaseModel & HeadlessCompositionContentModel;
@@ -258,7 +257,9 @@ export type IApiContentModel = ({
     contentType: 'blogPostContainerPage';
 } & BlogPostContainerPageContentModel) | ({
     contentType: 'homePage';
-} & HomePageContentModel);
+} & HomePageContentModel) | ({
+    contentType: 'seoComposition';
+} & SeoCompositionContentModel);
 
 export type IApiContentResponseBaseModel = {
     contentType: null | string;
@@ -302,7 +303,9 @@ export type IApiContentResponseModel = ({
     contentType: 'blogPostContainerPage';
 } & BlogPostContainerPageContentResponseModel) | ({
     contentType: 'homePage';
-} & HomePageContentResponseModel);
+} & HomePageContentResponseModel) | ({
+    contentType: 'seoComposition';
+} & SeoCompositionContentResponseModel);
 
 export type IApiContentRouteModel = {
     path: null | string;
@@ -350,7 +353,11 @@ export type IApiElementModel = ({
     contentType: 'funTimeWebEkg';
 } & FunTimeWebEkgElementModel) | ({
     contentType: 'apiUserTest';
-} & ApiUserTestElementModel);
+} & ApiUserTestElementModel) | ({
+    contentType: 'writerElement';
+} & WriterElementElementModel) | ({
+    contentType: 'imageBlock';
+} & ImageBlockElementModel);
 
 export type IApiMediaWithCropsBaseModel = {
     focalPoint?: ImageFocalPointModel;
@@ -418,6 +425,18 @@ export type IApiMediaWithCropsResponseModel = ({
 } & UmbracoMediaArticleMediaWithCropsResponseModel) | ({
     mediaType: 'umbracoMediaVectorGraphics';
 } & UmbracoMediaVectorGraphicsMediaWithCropsResponseModel);
+
+export type ImageBlockElementModel = IApiElementBaseModel & {
+    contentType: 'imageBlock';
+    properties?: ImageBlockElementPropertiesModel;
+};
+
+export type ImageBlockElementPropertiesModel = {
+    image?: null | Array<IApiMediaWithCropsModel>;
+    altText?: null | string;
+    cropPreference?: null | string;
+    bottomText?: null | string;
+};
 
 export type ImageBlockPersonalizedElementModel = IApiElementBaseModel & {
     contentType: 'imageBlockPersonalized';
@@ -514,6 +533,21 @@ export type RteBlockElementModel = IApiElementBaseModel & {
 export type RteBlockElementPropertiesModel = {
     richText?: RichTextModel | null;
 };
+
+export type SeoCompositionContentModel = IApiContentBaseModel & {
+    contentType: 'seoComposition';
+    properties?: SeoCompositionContentPropertiesModel;
+};
+
+export type SeoCompositionContentPropertiesModel = {
+    seoTitle?: null | string;
+    seoDescription?: null | string;
+    seoPublishingDate?: null | string;
+    seoListImage?: null | Array<IApiMediaWithCropsModel>;
+    seoKeyWords?: null | string;
+};
+
+export type SeoCompositionContentResponseModel = IApiContentResponseBaseModel & SeoCompositionContentModel;
 
 export type SpotlightBlockElementModel = IApiElementBaseModel & {
     contentType: 'spotlightBlock';
@@ -645,6 +679,16 @@ export type WriterContentPropertiesModel = {
 };
 
 export type WriterContentResponseModel = IApiContentResponseBaseModel & WriterContentModel;
+
+export type WriterElementElementModel = IApiElementBaseModel & {
+    contentType: 'writerElement';
+    properties?: WriterElementElementPropertiesModel;
+};
+
+export type WriterElementElementPropertiesModel = {
+    writerName?: null | string;
+    luckyNumber?: null | number;
+};
 
 export type ZooHomepageContentModel = IApiContentBaseModel & {
     contentType: 'zooHomepage';

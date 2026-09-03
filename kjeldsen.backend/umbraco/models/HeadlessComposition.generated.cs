@@ -30,10 +30,6 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
 		bool ChildKeys { get; }
 
-		/// <summary>Last CDN Purge</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
-		global::System.DateTime LastCdnPurge { get; }
-
 		/// <summary>No Slug</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
 		bool NoSlug { get; }
@@ -91,17 +87,6 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		/// <summary>Static getter for Child Keys</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
 		public static bool GetChildKeys(IHeadlessComposition that, IPublishedValueFallback publishedValueFallback) => that.Value<bool>(publishedValueFallback, "childKeys");
-
-		///<summary>
-		/// Last CDN Purge
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
-		[ImplementPropertyType("lastCdnPurge")]
-		public virtual global::System.DateTime LastCdnPurge => GetLastCdnPurge(this, _publishedValueFallback);
-
-		/// <summary>Static getter for Last CDN Purge</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
-		public static global::System.DateTime GetLastCdnPurge(IHeadlessComposition that, IPublishedValueFallback publishedValueFallback) => that.Value<global::System.DateTime>(publishedValueFallback, "lastCdnPurge");
 
 		///<summary>
 		/// No Slug

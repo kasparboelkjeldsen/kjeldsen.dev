@@ -1,5 +1,5 @@
 <template>
-  <div v-if="embedUrl" class="aspect-video">
+  <div v-if="embedUrl" class="frame breakout aspect-video">
     <iframe
       :src="embedUrl"
       class="h-full w-full border-0"

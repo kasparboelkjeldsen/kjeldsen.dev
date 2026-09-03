@@ -64,6 +64,22 @@ It now finds the end by tracking parentheses forward from the `CREATE`, which is
 Verified against both script generations: 79 tables in and 79 out on 17, 81 in and 81 out on 18, with
 all columnstore indexes removed in both.
 
+**A uSync import warning can silently cost you a document type.** Umbraco 18 validates that a
+property's variation is compatible with its content type's: a `Variations: Segment` property on a
+`Variations: Nothing` type now throws `The property seoTitle cannot have variations of Segment with
+the content type variations of Nothing`. uSync logs the failure as a **warning**, keeps going, and
+reports success overall — so `seoComposition` never imported, and every document composed with it
+lost `seoTitle`, `seoDescription`, `seoListImage` and `seoPublishingDate` without anything looking
+broken. The blog listing simply had no data to show. Found on 2026-09-03, six days after the
+upgrade was called done.
+
+Fixed by setting `seoTitle` to `Variations: Nothing` in `uSync/v18/ContentTypes/seocomposition.config`
+and re-importing that one file. Segment variation on the title was a V1 Engage experiment; making the
+*type* segment-varying instead would change the delivery API's shape and was not wanted.
+
+The lesson for the next upgrade: `grep -c WRN` the import log. 221 changes is not the number to
+check — the warnings are.
+
 **Clean `obj/` and `bin/` after the package bump.** Umbraco and Engage ship backoffice assets as
 static web assets, and a stale manifest serves a mix of old and new files.
 

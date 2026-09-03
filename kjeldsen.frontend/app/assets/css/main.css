@@ -1,10 +1,917 @@
 @import 'tailwindcss';
 
-/* Deliberately close to nothing. V2 is structure only - the design comes later.
-   Anything here should earn its place by making the page readable, not by making
-   it look finished. */
+/* Source detection is stated rather than inferred because two different builds read this file:
+   the Vite plugin during `nuxi dev`/`nuxi build`, and the standalone Tailwind CLI that emits
+   wwwroot/css/cms.css for the backoffice block preview (`npm run build:cms-css`). The CLI roots
+   its automatic detection at this file's own directory, which contains no components at all. */
+@source '../../';
 
+/* ---------------------------------------------------------------------------------------------
+   Design tokens.
+
+   Dark only, by decision. One ink background, two soft accents - sky and violet - for anything
+   interactive, and a warm ember for emphasis so highlighted words read as warmth against a cool
+   page. Type is editorial: a serif display face for titles, Inter for reading, JetBrains Mono
+   for code and for the small "system" labels.
+   --------------------------------------------------------------------------------------------- */
 @theme {
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink: #07080c;
+  --color-ink-2: #0b0d13;
+  --color-surface: #10131b;
+  --color-surface-2: #161a25;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-2: rgb(255 255 255 / 0.16);
+  --color-fg: #e9ebf2;
+  --color-fg-2: #b7bccb;
+  --color-muted: #7c8296;
+  --color-sky: #7dd3fc;
+  --color-violet: #a78bfa;
+  --color-ember: #fb923c;
+  --color-gold: #fcd34d;
+
+  /* Emphasis colours. Editors write **bold** and --italic-- markers, and also use the editor's own
+     bold and italic buttons; both spellings get the same treatment (see the .mark-* rules). */
+  --color-mark-bold: #fdba74;
+  --color-mark-italic: #c4b5fd;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Baseline. `.__block-preview` is the wrapper the CMS puts around a block preview
+   (HeadlessBlockPreview:Template): that fragment lives in a shadow root with no <body> above it,
+   so colour and font have to be restated on it for a block to look the same in the editor as it
+   does on the site.
+   --------------------------------------------------------------------------------------------- */
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body,
+  .__block-preview {
+    background: var(--color-ink);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgb(167 139 250 / 0.35);
+    color: white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-sky);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Keyframes. Outside @theme on purpose: Tailwind only emits @theme keyframes for animations that
+   are used through a utility, and these are used from the plain rules below.
+   --------------------------------------------------------------------------------------------- */
+@keyframes drift-a {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(14vw, 10vh, 0); }
+}
+@keyframes drift-b {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-12vw, 14vh, 0); }
+}
+@keyframes drift-c {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(8vw, -10vh, 0) scale(1.15); }
+}
+@keyframes kenburns {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.12); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes reveal-safety {
+  to { opacity: 1; transform: none; }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Layout primitives.
+   --------------------------------------------------------------------------------------------- */
+.container-wide {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+.container-prose {
+  width: 100%;
+  max-width: 44rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 48rem) {
+  .container-wide,
+  .container-prose {
+    padding-inline: 2rem;
+  }
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--color-sky), var(--color-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Atmosphere: the aurora behind every page, and a film grain on top of it.
+
+   The aurora is three large radial gradients translated slowly across the viewport. Radial
+   gradients are already soft, so there is no blur filter to rasterise - each blob is one
+   composited layer moving on the GPU and nothing else repaints.
+   --------------------------------------------------------------------------------------------- */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-ink);
+}
+.aurora i {
+  position: absolute;
+  display: block;
+  width: 80vmax;
+  height: 80vmax;
+  border-radius: 50%;
+  will-change: transform;
+}
+.aurora .a {
+  left: -30vmax;
+  top: -35vmax;
+  background: radial-gradient(closest-side, rgb(56 189 248 / 0.2), transparent 72%);
+  animation: drift-a 48s ease-in-out infinite alternate;
+}
+.aurora .b {
+  right: -35vmax;
+  top: -15vmax;
+  background: radial-gradient(closest-side, rgb(139 92 246 / 0.2), transparent 72%);
+  animation: drift-b 60s ease-in-out infinite alternate;
+}
+.aurora .c {
+  left: 15vmax;
+  bottom: -55vmax;
+  background: radial-gradient(closest-side, rgb(251 146 60 / 0.11), transparent 72%);
+  animation: drift-c 54s ease-in-out infinite alternate;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Motion.
+
+   `.rise` is a plain CSS entrance for hero content: it runs on load with no script involved.
+   `.reveal` is scroll-triggered by the v-reveal directive (plugins/reveal.ts). It only hides
+   anything when the document is marked `.js`, and even then a safety animation shows the element
+   after three seconds in case hydration never arrives.
+   --------------------------------------------------------------------------------------------- */
+.rise {
+  animation: rise 1s var(--ease-out-expo) var(--d, 0ms) both;
+}
+
+.reveal {
+  --reveal-delay: 0ms;
+  transition:
+    opacity 0.9s var(--ease-out-quart) var(--reveal-delay),
+    transform 1s var(--ease-out-expo) var(--reveal-delay);
+}
+.js .reveal:not(.is-in) {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: reveal-safety 1ms linear 3s forwards;
+}
+
+.fade-img {
+  transition:
+    opacity 0.9s var(--ease-out-quart),
+    transform 1.6s var(--ease-out-expo);
+}
+.js .fade-img:not(.is-loaded) {
+  opacity: 0;
+  transform: scale(1.03);
+  animation: reveal-safety 1ms linear 4s forwards;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s var(--ease-out-quart);
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .aurora i,
+  .hero-img,
+  .dot {
+    animation: none !important;
+  }
+  .reveal,
+  .fade-img,
+  .page-enter-active,
+  .page-leave-active {
+    transition: none !important;
+  }
+  .js .reveal:not(.is-in),
+  .js .fade-img:not(.is-loaded) {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Site chrome.
+   --------------------------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 40;
+  transition:
+    transform 0.45s var(--ease-out-expo),
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    padding 0.35s ease;
+  border-bottom: 1px solid transparent;
+}
+.site-header.is-scrolled {
+  background: rgb(7 8 12 / 0.7);
+  border-bottom-color: var(--color-line);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+.site-header.is-hidden {
+  transform: translateY(-100%);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  letter-spacing: -0.01em;
+  color: var(--color-fg);
+}
+.wordmark .dot {
+  display: inline-block;
+  width: 0.4em;
+  height: 0.4em;
+  margin-inline: 0.08em;
+  border-radius: 50%;
+  vertical-align: 0.02em;
+  background: linear-gradient(135deg, var(--color-sky), var(--color-violet));
+  box-shadow: 0 0 12px rgb(125 211 252 / 0.6);
+  animation: pulse-dot 3s ease-in-out infinite;
+}
+
+.navlink {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-fg-2);
+  transition: color 0.25s ease;
+}
+.navlink::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.2rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-sky), var(--color-violet));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.navlink:hover,
+.navlink.router-link-active {
+  color: var(--color-fg);
+}
+@media (max-width: 40rem) {
+  .navlink {
+    padding-inline: 0.5rem;
+    font-size: 0.8125rem;
+  }
+  .navlink::after {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+}
+.navlink:hover::after,
+.navlink.router-link-active::after {
+  transform: scaleX(1);
+}
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 2px;
+  pointer-events: none;
+}
+.progress i {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--color-sky), var(--color-violet), var(--color-ember));
+  box-shadow: 0 0 12px rgb(167 139 250 / 0.6);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Hero.
+   --------------------------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+/* The fade-out mask sits on the container, not the picture: the picture is being scaled, and a
+   mask on it would scale too, pushing its transparent end past the box and leaving a hard edge. */
+.hero-media {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+}
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  transform-origin: center;
+  animation: kenburns 34s var(--ease-out-quart) both;
+}
+/* Darkens the picture behind the title and lets go towards the bottom: the image is already
+   masked out by then, so the hero has to end transparent or it draws a hard edge against the
+   aurora on the page behind it. */
+.hero-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgb(7 8 12 / 0.2),
+    rgb(7 8 12 / 0.5) 45%,
+    rgb(7 8 12 / 0.25) 80%,
+    rgb(7 8 12 / 0) 100%
+  );
+}
+.hero-title {
+  font-size: clamp(2.6rem, 6.5vw, 5.25rem);
+  color: var(--color-fg);
+}
+.hero.is-xl .hero-title {
+  font-size: clamp(3.2rem, 9vw, 7.5rem);
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+.hero.is-md .hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.75rem);
+}
+.hero-lede {
+  max-width: 40rem;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Surfaces.
+   --------------------------------------------------------------------------------------------- */
+.card {
+  position: relative;
+  border-radius: 1.25rem;
+  border: 1px solid var(--color-line);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.015));
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    border-color 0.3s ease,
+    box-shadow 0.5s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-line-2);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
+}
+
+/* Pointer-following glow. --mx/--my are set by the card on pointermove; without a fine pointer the
+   layer simply never appears. */
+.spot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    520px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(125 211 252 / 0.14),
+    rgb(167 139 250 / 0.06) 35%,
+    transparent 60%
+  );
+}
+@media (hover: hover) and (pointer: fine) {
+  .spot:hover::before {
+    opacity: 1;
+  }
+}
+
+.glow-card {
+  position: relative;
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgb(125 211 252 / 0.08), transparent 60%),
+    rgb(255 255 255 / 0.025);
+}
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgb(125 211 252 / 0.55),
+    rgb(167 139 250 / 0.25) 45%,
+    rgb(251 146 60 / 0.4)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* A spotlight in a half-width cell has no room for an icon column beside the words. */
+@media (min-width: 48rem) {
+  [data-span='6'] > .glow-card > .flex {
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  [data-span='6'] > .glow-card h2 {
+    font-size: 1.6rem;
+  }
+  [data-span='6'] > .glow-card .rte {
+    font-size: 0.9375rem;
+  }
+}
+
+.frame {
+  border-radius: 1.1rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.9);
+  overflow: hidden;
+}
+
+/* Blocks that want more room than the text column. Only when the block owns the whole row - a
+   half-width block next to another must stay inside its cell. */
+@media (min-width: 64rem) {
+  [data-span='12'] > .breakout {
+    margin-inline: -5rem;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.15rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  border: 1px solid var(--color-line-2);
+  color: var(--color-fg);
+  transition:
+    transform 0.4s var(--ease-out-expo),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.4s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: rgb(255 255 255 / 0.3);
+  background: rgb(255 255 255 / 0.05);
+}
+.btn-primary {
+  border-color: transparent;
+  color: var(--color-ink);
+  background: linear-gradient(90deg, var(--color-sky), var(--color-violet));
+  box-shadow: 0 10px 30px -12px rgb(125 211 252 / 0.6);
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #a5e3ff, #bda6ff);
+  box-shadow: 0 16px 36px -12px rgb(167 139 250 / 0.7);
+}
+.btn .arrow {
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.btn:hover .arrow {
+  transform: translateX(3px);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Block grid. Cells span the columns the editor gave them; on small screens everything stacks.
+   --------------------------------------------------------------------------------------------- */
+.block-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 2rem;
+  row-gap: 1.75rem;
+}
+.block-cell {
+  grid-column: span 12;
+  min-width: 0;
+}
+@media (min-width: 48rem) {
+  .block-cell {
+    grid-column: span var(--span, 12);
+  }
+}
+.block-cell[data-type='headerBlock'] {
+  margin-top: 1.5rem;
+}
+.block-cell[data-type='headerBlock'] + .block-cell {
+  margin-top: -0.5rem;
+}
+.block-cell[data-type='imageBlock'],
+.block-cell[data-type='vimeoBlock'],
+.block-cell[data-type='codeBlock'] {
+  margin-block: 0.5rem;
+}
+.block-cell[data-type='spotlightBlock'] {
+  margin-block: 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Code windows.
+   --------------------------------------------------------------------------------------------- */
+.code-window {
+  border-radius: 1rem;
+  border: 1px solid var(--color-line);
+  background: #0a0c12;
+  box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.9);
+  overflow: hidden;
+}
+.code-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--color-line);
+  background: rgb(255 255 255 / 0.025);
+}
+.code-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+.code-dots i {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.12);
+}
+.code-body {
+  overflow-x: auto;
+  padding-block: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: #d7dbe7;
+  counter-reset: line;
+  tab-size: 2;
+}
+.code-line {
+  display: block;
+  padding-inline: 1rem 1.25rem;
+  white-space: pre;
+  counter-increment: line;
+}
+.code-line::before {
+  content: counter(line);
+  display: inline-block;
+  width: 2.25ch;
+  margin-right: 1.25rem;
+  text-align: right;
+  color: rgb(255 255 255 / 0.22);
+  user-select: none;
+}
+.code-line:hover {
+  background: rgb(255 255 255 / 0.03);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Terminal-style lists (cache keys, the API user demo).
+   --------------------------------------------------------------------------------------------- */
+.term {
+  border-radius: 1rem;
+  border: 1px solid var(--color-line);
+  background: #0a0c12;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  overflow: hidden;
+}
+.term-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.35rem 1rem;
+  overflow-wrap: anywhere;
+}
+.term-row + .term-row {
+  border-top: 1px solid rgb(255 255 255 / 0.04);
+}
+.term-dot {
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  transform: translateY(-0.1em);
+  background: #34d399;
+  box-shadow: 0 0 8px rgb(52 211 153 / 0.6);
+}
+.term-dot.is-bad {
+  background: #fb7185;
+  box-shadow: 0 0 8px rgb(251 113 133 / 0.6);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Rich text. Markup arrives as bare tags with no classes we control, so everything is keyed on the
+   element. Global rather than scoped: the backoffice block preview is styled by this stylesheet
+   alone, and a scoped rule's `data-v-` hash is a build artifact.
+   --------------------------------------------------------------------------------------------- */
+.rte {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--color-fg-2);
+}
+.rte > :first-child {
+  margin-top: 0;
+}
+.rte > :last-child {
+  margin-bottom: 0;
+}
+.rte p {
+  margin-block: 1.1em;
+}
+.rte a {
+  color: var(--color-sky);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(125 211 252 / 0.35);
+  text-underline-offset: 4px;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+.rte a:hover {
+  color: #bae6fd;
+  text-decoration-color: currentColor;
+}
+.rte ul,
+.rte ol {
+  margin-block: 1.1em;
+  padding-inline-start: 1.5rem;
+}
+.rte ul {
+  list-style: none;
+}
+.rte ol {
+  list-style: decimal;
+}
+.rte li {
+  position: relative;
+  margin-block: 0.45em;
+  padding-inline-start: 0.25rem;
+}
+.rte ul > li::before {
+  content: '';
+  position: absolute;
+  left: -1.25rem;
+  top: 0.78em;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-sky), var(--color-violet));
+}
+.rte ol > li::marker {
+  color: var(--color-sky);
+  font-variant-numeric: tabular-nums;
+}
+.rte code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  padding: 0.12em 0.45em;
+  border-radius: 0.4rem;
+  border: 1px solid var(--color-line);
+  background: rgb(255 255 255 / 0.06);
+  color: #e2e8f0;
+  overflow-wrap: anywhere;
+}
+.rte pre {
+  margin-block: 1.5em;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--color-line);
+  background: #0a0c12;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+.rte pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+}
+.rte h1,
+.rte h2,
+.rte h3,
+.rte h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--color-fg);
+  margin-block: 2em 0.6em;
+  text-wrap: balance;
+}
+.rte h1 {
+  font-size: 2.4rem;
+}
+.rte h2 {
+  font-size: 1.9rem;
+}
+.rte h3 {
+  font-size: 1.45rem;
+}
+.rte h4 {
+  font-size: 1.2rem;
+}
+.rte blockquote {
+  margin-block: 1.75em;
+  padding-inline-start: 1.25rem;
+  border-inline-start: 2px solid var(--color-violet);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: var(--color-fg);
+}
+.rte img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  border: 1px solid var(--color-line);
+}
+.rte hr {
+  border: 0;
+  height: 1px;
+  margin-block: 2.5rem;
+  background: linear-gradient(90deg, transparent, var(--color-line-2), transparent);
+}
+.rte table {
+  width: 100%;
+  margin-block: 1.5em;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.rte th,
+.rte td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-line);
+  text-align: left;
+  vertical-align: top;
+}
+.rte th {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+/* A larger, looser setting for the paragraph under a title. */
+.rte-lede,
+.rte-lede p {
+  font-size: 1.2rem;
+  line-height: 1.65;
+  color: var(--color-fg-2);
+}
+@media (min-width: 48rem) {
+  .rte-lede,
+  .rte-lede p {
+    font-size: 1.3rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Emphasis, in one place for both spellings of it. Editors write **bold** and --italic-- as
+   markers in titles and inside RTE text (utils/marks.ts turns those into .mark-* spans), and also
+   use the editor's own bold and italic buttons, which arrive as <strong> and <em>. Both mean the
+   same thing, so both are styled the same.
+
+   Bold is warm - a gold-to-ember gradient, so a highlighted word glows against the cool page.
+   Italic swaps into the display serif in lavender, the editorial move of setting an aside in a
+   different voice.
+   --------------------------------------------------------------------------------------------- */
+.mark-bold,
+.rte strong,
+.rte b,
+h1 strong,
+h2 strong,
+h3 strong,
+h4 strong {
+  font-weight: 600;
+  color: var(--color-mark-bold);
+  background: linear-gradient(90deg, var(--color-gold), var(--color-ember));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.mark-italic,
+.rte em,
+.rte i,
+h1 em,
+h2 em,
+h3 em,
+h4 em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.08em;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  color: var(--color-mark-italic);
+}
+
+/* Display headings already are the serif, so an italic run inside one only changes colour. */
+.display .mark-italic,
+.display em {
+  font-size: 1em;
 }

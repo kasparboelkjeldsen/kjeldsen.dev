@@ -1,8 +1,14 @@
 {
   "mcpServers": {
     "umbraco": {
-      "command": "npx",
-      "args": ["-y", "@umbraco-cms/mcp-dev@18"],
+      "command": "cmd",
+      "args": [
+        "/c",
+        "set",
+        "PATH=%APPDATA%\\fnm\\aliases\\default;%PATH%&&npx",
+        "-y",
+        "@umbraco-cms/mcp-dev@18"
+      ],
       "env": {
         "UMBRACO_CLIENT_ID": "umbraco-back-office-mcp",
         "UMBRACO_CLIENT_SECRET": "${UMBRACO_MCP_CLIENT_SECRET}",

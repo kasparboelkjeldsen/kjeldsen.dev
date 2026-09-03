@@ -13,13 +13,11 @@ let cached: Client | null = null
 export function deliveryClient(): Client {
   if (cached) return cached
 
-  const config = useRuntimeConfig()
-  const baseUrl = normaliseHost(config.public.cmsHost)
-  const key = config.deliveryKey
+  const key = useRuntimeConfig().deliveryKey
 
   cached = createClient(
     createConfig({
-      baseUrl,
+      baseUrl: cmsBaseUrl(),
       auth: () => key,
     })
   )
@@ -27,8 +25,14 @@ export function deliveryClient(): Client {
   return cached
 }
 
-function normaliseHost(host: string | undefined): string {
-  const trimmed = (host || '').replace(/\/$/, '')
+/**
+ * The CMS origin, normalised.
+ *
+ * Exported because the delivery API is not the only thing addressed against it - media is proxied
+ * through this frontend too, so that route needs the same host resolved the same way.
+ */
+export function cmsBaseUrl(): string {
+  const trimmed = (useRuntimeConfig().public.cmsHost || '').replace(/\/$/, '')
   if (!trimmed) throw new Error('CMSHOST is not configured')
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
 }

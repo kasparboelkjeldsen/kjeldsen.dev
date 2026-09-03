@@ -1,27 +1,27 @@
 <template>
-  <div class="min-h-screen flex flex-col font-sans">
-    <header class="border-b">
-      <nav class="mx-auto max-w-3xl px-4 py-4">
-        <ul class="flex gap-4 text-sm">
-          <li v-for="link in links" :key="link.title ?? link.url ?? ''">
-            <NuxtLink :to="link.route?.path ?? link.url ?? '/'" class="underline-offset-4 hover:underline">
-              {{ link.title }}
-            </NuxtLink>
-          </li>
-        </ul>
-      </nav>
-    </header>
+  <div class="relative flex min-h-screen flex-col">
+    <!-- The atmosphere: a slow aurora behind everything, a film grain over it. Both fixed, both
+         inert, both purely decorative. -->
+    <div class="aurora" aria-hidden="true">
+      <i class="a"></i>
+      <i class="b"></i>
+      <i class="c"></i>
+    </div>
+    <div class="grain" aria-hidden="true"></div>
 
-    <main class="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
+    <SiteHeader :links="links" />
+
+    <main class="relative z-[1] flex-1">
       <slot />
     </main>
 
-    <footer class="border-t">
-      <div class="mx-auto max-w-3xl px-4 py-4 text-sm">kjeldsen.dev</div>
-    </footer>
+    <SiteFooter :links="links" />
   </div>
 </template>
 
 <script setup lang="ts">
+  import SiteHeader from '~/components/site/SiteHeader.vue'
+  import SiteFooter from '~/components/site/SiteFooter.vue'
+
   const { links } = await useNavigation()
 </script>

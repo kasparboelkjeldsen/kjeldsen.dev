@@ -20,7 +20,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 {
 	/// <summary>Blog Post Page</summary>
 	[PublishedModel("blogPostPage")]
-	public partial class BlogPostPage : PublishedContentModel, IHeadlessComposition
+	public partial class BlogPostPage : PublishedContentModel, IHeadlessComposition, ISeoComposition
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
@@ -80,17 +80,49 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual bool ChildKeys => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetChildKeys(this, _publishedValueFallback);
 
 		///<summary>
-		/// Last CDN Purge
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
-		[ImplementPropertyType("lastCdnPurge")]
-		public virtual global::System.DateTime LastCdnPurge => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetLastCdnPurge(this, _publishedValueFallback);
-
-		///<summary>
 		/// No Slug
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
 		[ImplementPropertyType("noSlug")]
 		public virtual bool NoSlug => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetNoSlug(this, _publishedValueFallback);
+
+		///<summary>
+		/// Seo Description
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("seoDescription")]
+		public virtual string SeoDescription => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoDescription(this, _publishedValueFallback);
+
+		///<summary>
+		/// Seo Key Words
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("seoKeyWords")]
+		public virtual string SeoKeyWords => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoKeyWords(this, _publishedValueFallback);
+
+		///<summary>
+		/// Seo List Image
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("seoListImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops SeoListImage => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoListImage(this, _publishedValueFallback);
+
+		///<summary>
+		/// Seo Publishing Date
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
+		[ImplementPropertyType("seoPublishingDate")]
+		public virtual global::System.DateTime SeoPublishingDate => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoPublishingDate(this, _publishedValueFallback);
+
+		///<summary>
+		/// Seo Title
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.1.1+2d8d866")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("seoTitle")]
+		public virtual string SeoTitle => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoTitle(this, _publishedValueFallback);
 	}
 }
