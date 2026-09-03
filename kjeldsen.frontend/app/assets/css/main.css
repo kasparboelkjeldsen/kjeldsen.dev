@@ -143,6 +143,8 @@
   letter-spacing: -0.015em;
   line-height: 1.05;
   text-wrap: balance;
+  /* Package names and URLs are single words longer than a phone is wide. */
+  overflow-wrap: anywhere;
 }
 
 .eyebrow {
@@ -506,7 +508,17 @@
   mask-composite: exclude;
 }
 
-/* A spotlight in a half-width cell has no room for an icon column beside the words. */
+/* A narrow spotlight - on a phone, or in a half-width cell - has no room for an icon column
+   beside the words, so the icon sits above them. */
+@media (max-width: 47.999rem) {
+  .glow-card > .flex {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .glow-card h2 {
+    font-size: 1.6rem;
+  }
+}
 @media (min-width: 48rem) {
   [data-span='6'] > .glow-card > .flex {
     flex-direction: column;
@@ -578,17 +590,22 @@
 /* ---------------------------------------------------------------------------------------------
    Block grid. Cells span the columns the editor gave them; on small screens everything stacks.
    --------------------------------------------------------------------------------------------- */
+/* One column on small screens, on purpose: twelve columns with 2rem gaps need 352px of gap alone,
+   which is wider than a phone's content box and pushes the whole layout viewport out to the right. */
 .block-grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: 2rem;
+  grid-template-columns: minmax(0, 1fr);
   row-gap: 1.75rem;
 }
 .block-cell {
-  grid-column: span 12;
   min-width: 0;
+  max-width: 100%;
 }
 @media (min-width: 48rem) {
+  .block-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
   .block-cell {
     grid-column: span var(--span, 12);
   }
@@ -612,6 +629,7 @@
    Code windows.
    --------------------------------------------------------------------------------------------- */
 .code-window {
+  max-width: 100%;
   border-radius: 1rem;
   border: 1px solid var(--color-line);
   background: #0a0c12;
@@ -669,6 +687,7 @@
    Terminal-style lists (cache keys, the API user demo).
    --------------------------------------------------------------------------------------------- */
 .term {
+  max-width: 100%;
   border-radius: 1rem;
   border: 1px solid var(--color-line);
   background: #0a0c12;
@@ -710,6 +729,7 @@
   font-size: 1.0625rem;
   line-height: 1.8;
   color: var(--color-fg-2);
+  overflow-wrap: anywhere;
 }
 .rte > :first-child {
   margin-top: 0;
