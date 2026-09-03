@@ -11,14 +11,14 @@
 </template>
 
 <script setup lang="ts">
-  import type { VimeoBlock } from '~~/types/content'
+  import type { VimeoBlockElementModel } from '~~/server/delivery-api'
 
-  const props = defineProps<{ block: VimeoBlock }>()
+  const props = defineProps<{ block: VimeoBlockElementModel }>()
 
   // Editors paste a page URL; only the numeric id is embeddable. Anything that is not a Vimeo
   // URL with an id renders nothing rather than framing an arbitrary origin.
   const embedUrl = computed(() => {
-    const raw = props.block.properties.url ?? ''
+    const raw = props.block.properties?.url ?? ''
     const match = raw.match(/vimeo\.com\/(?:video\/)?(\d+)/)
     return match ? `https://player.vimeo.com/video/${match[1]}` : ''
   })

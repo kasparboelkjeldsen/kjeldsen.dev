@@ -48,44 +48,59 @@ Keep `NODE_TLS_REJECT_UNAUTHORIZED=0` on the generate script — the local CMS u
 Keep generation as an explicit `npm run gen`, never a build step: the CMS has to be running, and a
 CI box will not have one.
 
-## Typed per-doctype models are gone. Plan for it.
+## Typed per-doctype models: Umbraco 18 does this itself now
 
-V1's generated client has ~90 model files — `HomePageContentResponseModel`,
-`BlogPostPagePropertiesModel`, `CardBlockElementModel` and so on. Those did not come from Umbraco.
-They came from **`Umbraco.Community.DeliveryApiExtensions`** and its
-`DeliveryApiExtensions:TypedSwagger` setting, which walks the doctypes and writes a schema per
-content type.
+V1 got its ~90 typed model files from **`Umbraco.Community.DeliveryApiExtensions`**, which walked
+the doctypes and wrote a schema per content type into the Swagger document. That package stops at
+**17.0.1** — there is no v18, and it could not work on 18 anyway: it hooks Swashbuckle's
+`ISchemaFilter`/`IDocumentFilter`, and 18 generates its documents with
+**Microsoft.AspNetCore.OpenApi** instead. `Umbraco.Cms.Api.Common` only references
+`Swashbuckle.AspNetCore.SwaggerUI` now — the UI, not the generator.
 
-That package stops at **17.0.1** — there is no v18 on nuget.org (checked the flat-container index).
-It was dropped from `kjeldsen.backend.csproj` during the 18 upgrade; the config section left behind
-in `appsettings.json` does nothing now.
+**The feature moved into core.** `Umbraco.Cms.Api.Delivery` ships
+`OpenApi.Transformers.ContentTypeSchemaTransformer`, which does the same job against the new
+pipeline — and rather better, since it handles circular references, repairs the framework's
+discriminator mapping refs, and models compositions properly. It is **off by default**:
 
-The consequence is concrete. On 18 the delivery document has 10 schemas, and content is:
+```jsonc
+"Umbraco": { "CMS": { "DeliveryApi": {
+  "OpenApi": { "GenerateContentTypeSchemas": true }
+} } }
+```
+
+Measured effect on this site: the delivery document went from **10 schemas to 105**, and
+`IApiContentResponseModel` became a real discriminated union:
 
 ```jsonc
 "IApiContentResponseModel": {
-  "contentType": ["null","string"],
-  "name":        ["null","string"],
-  "route":       { "$ref": "IApiContentRouteModel" },
-  "id":          "uuid",
-  "properties":  { "type": ["null","object"] },   // untyped bag, no per-doctype shape
-  "cultures":    { }
+  "oneOf": [ { "$ref": "HomePageContentResponseModel" }, … ],
+  "discriminator": { "propertyName": "contentType", "mapping": { "homePage": "…", … } }
 }
 ```
 
-So the generated client gives correct *envelope* types and an unknown `properties`. Options, in the
-order they should be considered:
+which `@hey-api/openapi-ts` turns into a TypeScript union that narrows on `contentType`:
 
-1. **Hand-write the property types** in a small `types/content.ts`, keyed by `contentType`, and
-   narrow with a type guard on `contentType`. There are only 5 page types and ~13 block types on
-   this site. This is honest, has no build dependency, and the compiler still catches typos at
-   every call site. Start here.
-2. Watch for a v18 of DeliveryApiExtensions and re-add it if it lands — the wiring is a package
-   reference plus the config section already sitting in `appsettings.json`.
-3. Generate the types from uSync's doctype files at `kjeldsen.backend/uSync/`. Doable, but it is a
-   whole tool to own; not worth it for a site this size.
+```ts
+export type IApiContentResponseModel =
+  | ({ contentType: 'homePage' } & HomePageContentResponseModel)
+  | ({ contentType: 'blogPostPage' } & BlogPostPageContentResponseModel)
+  | …
+```
 
-Do not fake it by casting `properties` to a large interface and pretending it is checked.
+Compositions come through as intersections (`HomePageContentPropertiesModel =
+HeadlessCompositionContentPropertiesModel & NavigationCompositionContentPropertiesModel & { … }`),
+so shared properties are typed once.
+
+Two consequences for how this repo is written:
+
+- `types/content.ts` is **not** hand-written. It only aliases generated names and holds `gridOf`.
+  When a doctype changes, run `npm run gen`; nothing there needs editing.
+- The setting must be **identical locally and in production**. The client is generated against the
+  local document, so a mismatch would mean shipping types the live API does not honour. It lives in
+  `appsettings.json`, not `appsettings.Development.json`, for exactly that reason.
+
+Note that `properties` is optional on the generated element models (`properties?: …`), so component
+code needs `block.properties?.foo`.
 
 ### The API key became a security scheme
 

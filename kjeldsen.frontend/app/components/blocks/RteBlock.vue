@@ -6,10 +6,10 @@
 </template>
 
 <script setup lang="ts">
-  import type { RteBlock } from '~~/types/content'
+  import type { RteBlockElementModel } from '~~/server/delivery-api'
 
-  const props = defineProps<{ block: RteBlock }>()
-  const markup = computed(() => props.block.properties.richText?.markup ?? '')
+  const props = defineProps<{ block: RteBlockElementModel }>()
+  const markup = computed(() => props.block.properties?.richText?.markup ?? '')
 </script>
 
 <style scoped>

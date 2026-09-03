@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-  import type { CodeBlock } from '~~/types/content'
+  import type { CodeBlockElementModel } from '~~/server/delivery-api'
 
-  const props = defineProps<{ block: CodeBlock }>()
-  const code = computed(() => props.block.properties.code ?? '')
+  const props = defineProps<{ block: CodeBlockElementModel }>()
+  const code = computed(() => props.block.properties?.code ?? '')
 </script>

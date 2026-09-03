@@ -1,17 +1,16 @@
 <template>
-  <component :is="tag" :class="sizeClass">{{ block.properties.headerTitle }}</component>
+  <component :is="tag" :class="sizeClass">{{ block.properties?.headerTitle }}</component>
 </template>
 
 <script setup lang="ts">
-  import type { HeaderBlock } from '~~/types/content'
+  import type { HeaderBlockElementModel } from '~~/server/delivery-api'
 
-  const props = defineProps<{ block: HeaderBlock }>()
+  const props = defineProps<{ block: HeaderBlockElementModel }>()
 
-  // headerLevel comes back as either a number or a string depending on the datatype.
+  // headerLevel is a string from the datatype ("h2", "2", ...), so pull the digits out of it.
   const level = computed(() => {
-    const raw = props.block.properties.headerLevel
-    const n = typeof raw === 'string' ? parseInt(raw.replace(/\D/g, ''), 10) : raw
-    return Number.isFinite(n) && n! >= 1 && n! <= 6 ? (n as number) : 2
+    const n = parseInt((props.block.properties?.headerLevel ?? '').replace(/\D/g, ''), 10)
+    return n >= 1 && n <= 6 ? n : 2
   })
 
   const tag = computed(() => `h${level.value}`)

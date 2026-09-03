@@ -45,10 +45,14 @@ Everything under `server/delivery-api/` is generated. Do not edit it.
 
 ## Types
 
-Umbraco 18's delivery document types content `properties` as an untyped bag — the package that used
-to emit per-doctype schemas has no v18 release. So `types/content.ts` is **hand-written** and
-describes what this site's doctypes actually return. When a doctype changes, that file changes with
-it, and the compiler points at every call site. Narrow with `isPage(content, 'homePage')`.
+Content types are **generated**, not hand-written. Umbraco 18 emits a schema per document, element
+and media type into the delivery document when
+`Umbraco:CMS:DeliveryApi:OpenApi:GenerateContentTypeSchemas` is on (it is, in `appsettings.json`),
+so the client gets a union discriminated on `contentType` with typed `properties`.
+
+Narrow with a plain check — `if (content.contentType === 'homePage')` — and TypeScript does the
+rest. `types/content.ts` only aliases the generated names and holds the `gridOf` helper. When a
+doctype changes, run `npm run gen`.
 
 ## Layout
 

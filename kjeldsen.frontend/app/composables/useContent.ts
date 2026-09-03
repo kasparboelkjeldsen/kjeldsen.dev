@@ -1,4 +1,5 @@
-import type { PageContent, HomePage, LinkItem } from '~~/types/content'
+import type { ApiLinkModel, NavigationCompositionContentPropertiesModel } from '~~/server/delivery-api'
+import type { PageContent } from '~~/types/content'
 
 /** Normalises a route or slug into the path form the delivery API expects: no leading or trailing slash. */
 export function toContentPath(slug: string | string[] | undefined | null): string {
@@ -27,11 +28,16 @@ export function usePageContent() {
   return useContentByPath(toContentPath(route.params.slug as string | string[]))
 }
 
-/** Site navigation, which is a property of the root document rather than a separate endpoint. */
+/**
+ * Site navigation, which is a property of the root document rather than a separate endpoint.
+ *
+ * `links` comes from the navigation composition, so it is read off that shape rather than off a
+ * specific page type — any content type composed with it will carry the property.
+ */
 export async function useNavigation() {
   const { data } = await useContentByPath('')
-  const links = computed<LinkItem[]>(() => {
-    const props = data.value?.properties as HomePage | undefined
+  const links = computed<ApiLinkModel[]>(() => {
+    const props = data.value?.properties as NavigationCompositionContentPropertiesModel | undefined
     return props?.links ?? []
   })
   return { links }

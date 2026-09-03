@@ -4,7 +4,263 @@ export type ClientOptions = {
     baseUrl: 'https://localhost:44375' | (string & {});
 };
 
-export type IApiContentResponseModel = {
+export type AnimalContentModel = IApiContentBaseModel & {
+    contentType: 'animal';
+    properties?: AnimalContentPropertiesModel;
+};
+
+export type AnimalContentPropertiesModel = {
+    type?: null | string;
+    habitat?: null | string;
+    diet?: null | string;
+    lifespan?: null | string;
+    colors?: null | string;
+    description?: null | string;
+    image?: null | Array<IApiMediaWithCropsModel>;
+};
+
+export type AnimalContentResponseModel = IApiContentResponseBaseModel & AnimalContentModel;
+
+export type ApiBlockGridAreaModel = {
+    alias: string;
+    rowSpan: number;
+    columnSpan: number;
+    items: Array<ApiBlockGridItemModel>;
+};
+
+export type ApiBlockGridItemModel = {
+    rowSpan: number;
+    columnSpan: number;
+    areaGridColumns: number;
+    areas: Array<ApiBlockGridAreaModel>;
+    content: IApiElementModel;
+    settings: IApiElementModel;
+};
+
+export type ApiBlockGridModel = {
+    gridColumns: number;
+    items: Array<ApiBlockGridItemModel>;
+};
+
+export type ApiBlockItemModel = {
+    content: IApiElementModel;
+    settings: IApiElementModel;
+};
+
+export type ApiBlockListModel = {
+    items: Array<ApiBlockItemModel>;
+};
+
+export type ApiImageCropperValueModel = {
+    url: string;
+    focalPoint: ImageFocalPointModel;
+    crops: null | Array<ImageCropModel>;
+};
+
+export type ApiLinkModel = {
+    url?: null | string;
+    queryString?: null | string;
+    title?: null | string;
+    target?: null | string;
+    destinationId?: null | string;
+    destinationType?: null | string;
+    route?: IApiContentRouteModel;
+    linkType: LinkTypeModel;
+    culture?: null | string;
+};
+
+export type ApiUserTestElementModel = IApiElementBaseModel & {
+    contentType: 'apiUserTest';
+    properties?: ApiUserTestElementPropertiesModel;
+};
+
+export type ApiUserTestElementPropertiesModel = {
+    [key: string]: unknown;
+};
+
+export type BlogPostContainerPageContentModel = IApiContentBaseModel & {
+    contentType: 'blogPostContainerPage';
+    properties?: BlogPostContainerPageContentPropertiesModel;
+};
+
+export type BlogPostContainerPageContentPropertiesModel = HeadlessCompositionContentPropertiesModel;
+
+export type BlogPostContainerPageContentResponseModel = IApiContentResponseBaseModel & BlogPostContainerPageContentModel;
+
+export type BlogPostPageContentModel = IApiContentBaseModel & {
+    contentType: 'blogPostPage';
+    properties?: BlogPostPageContentPropertiesModel;
+};
+
+export type BlogPostPageContentPropertiesModel = HeadlessCompositionContentPropertiesModel & {
+    grid?: ApiBlockGridModel | null;
+    writer?: null | Array<IApiContentModel>;
+};
+
+export type BlogPostPageContentResponseModel = IApiContentResponseBaseModel & BlogPostPageContentModel;
+
+export type CacheKeyExampleBlockElementModel = IApiElementBaseModel & {
+    contentType: 'cacheKeyExampleBlock';
+    properties?: CacheKeyExampleBlockElementPropertiesModel;
+};
+
+export type CacheKeyExampleBlockElementPropertiesModel = {
+    [key: string]: unknown;
+};
+
+export type CardBlockElementModel = IApiElementBaseModel & {
+    contentType: 'cardBlock';
+    properties?: CardBlockElementPropertiesModel;
+};
+
+export type CardBlockElementPropertiesModel = {
+    title?: null | string;
+    text?: RichTextModel | null;
+};
+
+export type CardElementModel = IApiElementBaseModel & {
+    contentType: 'card';
+    properties?: CardElementPropertiesModel;
+};
+
+export type CardElementPropertiesModel = {
+    title?: null | string;
+    call?: null | string;
+};
+
+export type CodeBlockElementModel = IApiElementBaseModel & {
+    contentType: 'codeBlock';
+    properties?: CodeBlockElementPropertiesModel;
+};
+
+export type CodeBlockElementPropertiesModel = {
+    code?: null | string;
+};
+
+export type ContentPageContentModel = IApiContentBaseModel & {
+    contentType: 'contentPage';
+    properties?: ContentPageContentPropertiesModel;
+};
+
+export type ContentPageContentPropertiesModel = HeadlessCompositionContentPropertiesModel & {
+    grid?: ApiBlockGridModel | null;
+};
+
+export type ContentPageContentResponseModel = IApiContentResponseBaseModel & ContentPageContentModel;
+
+export type FileMediaPropertiesModel = {
+    umbracoFile?: null | string;
+    umbracoExtension?: null | string;
+    umbracoBytes?: null | number;
+};
+
+export type FileMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'File';
+    properties?: FileMediaPropertiesModel;
+};
+
+export type FileMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & FileMediaWithCropsModel;
+
+export type FolderMediaPropertiesModel = {
+    [key: string]: unknown;
+};
+
+export type FolderMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'Folder';
+    properties?: FolderMediaPropertiesModel;
+};
+
+export type FolderMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & FolderMediaWithCropsModel;
+
+export type FunTimeWebEkgElementModel = IApiElementBaseModel & {
+    contentType: 'funTimeWebEkg';
+    properties?: FunTimeWebEkgElementPropertiesModel;
+};
+
+export type FunTimeWebEkgElementPropertiesModel = {
+    [key: string]: unknown;
+};
+
+export type FunTimeWebMurderBlockElementModel = IApiElementBaseModel & {
+    contentType: 'funTimeWebMurderBlock';
+    properties?: FunTimeWebMurderBlockElementPropertiesModel;
+};
+
+export type FunTimeWebMurderBlockElementPropertiesModel = {
+    [key: string]: unknown;
+};
+
+export type HeaderBlockElementModel = IApiElementBaseModel & {
+    contentType: 'headerBlock';
+    properties?: HeaderBlockElementPropertiesModel;
+};
+
+export type HeaderBlockElementPropertiesModel = {
+    headerTitle?: null | string;
+    headerLevel?: null | string;
+};
+
+export type HeadlessCompositionContentModel = IApiContentBaseModel & {
+    contentType: 'headlessComposition';
+    properties?: HeadlessCompositionContentPropertiesModel;
+};
+
+export type HeadlessCompositionContentPropertiesModel = {
+    cachePage?: null | boolean;
+    childKeys?: null | boolean;
+    noSlug?: null | boolean;
+    lastCdnPurge?: null | string;
+};
+
+export type HeadlessCompositionContentResponseModel = IApiContentResponseBaseModel & HeadlessCompositionContentModel;
+
+export type HomePageContentModel = IApiContentBaseModel & {
+    contentType: 'homePage';
+    properties?: HomePageContentPropertiesModel;
+};
+
+export type HomePageContentPropertiesModel = HeadlessCompositionContentPropertiesModel & NavigationCompositionContentPropertiesModel & {
+    grid?: ApiBlockGridModel | null;
+    background?: null | Array<IApiMediaWithCropsModel>;
+};
+
+export type HomePageContentResponseModel = IApiContentResponseBaseModel & HomePageContentModel;
+
+export type IApiContentBaseModel = {
+    contentType: null | string;
+    name?: null | string;
+    createDate: string;
+    updateDate: string;
+    route: IApiContentRouteModel;
+    id: string;
+    properties: null | {
+        [key: string]: unknown;
+    };
+};
+
+export type IApiContentModel = ({
+    contentType: 'headlessComposition';
+} & HeadlessCompositionContentModel) | ({
+    contentType: 'navigationComposition';
+} & NavigationCompositionContentModel) | ({
+    contentType: 'zooHomepage';
+} & ZooHomepageContentModel) | ({
+    contentType: 'writerContainerPage';
+} & WriterContainerPageContentModel) | ({
+    contentType: 'writer';
+} & WriterContentModel) | ({
+    contentType: 'animal';
+} & AnimalContentModel) | ({
+    contentType: 'blogPostPage';
+} & BlogPostPageContentModel) | ({
+    contentType: 'contentPage';
+} & ContentPageContentModel) | ({
+    contentType: 'blogPostContainerPage';
+} & BlogPostContainerPageContentModel) | ({
+    contentType: 'homePage';
+} & HomePageContentModel);
+
+export type IApiContentResponseBaseModel = {
     contentType: null | string;
     name?: null | string;
     createDate: string;
@@ -15,9 +271,38 @@ export type IApiContentResponseModel = {
         [key: string]: unknown;
     };
     cultures: null | {
-        [key: string]: IApiContentRouteModel;
+        [key: string]: {
+            path: null | string;
+            queryString?: null | string;
+            startItem: {
+                id: string;
+                path: null | string;
+            };
+        };
     };
 };
+
+export type IApiContentResponseModel = ({
+    contentType: 'headlessComposition';
+} & HeadlessCompositionContentResponseModel) | ({
+    contentType: 'navigationComposition';
+} & NavigationCompositionContentResponseModel) | ({
+    contentType: 'zooHomepage';
+} & ZooHomepageContentResponseModel) | ({
+    contentType: 'writerContainerPage';
+} & WriterContainerPageContentResponseModel) | ({
+    contentType: 'writer';
+} & WriterContentResponseModel) | ({
+    contentType: 'animal';
+} & AnimalContentResponseModel) | ({
+    contentType: 'blogPostPage';
+} & BlogPostPageContentResponseModel) | ({
+    contentType: 'contentPage';
+} & ContentPageContentResponseModel) | ({
+    contentType: 'blogPostContainerPage';
+} & BlogPostContainerPageContentResponseModel) | ({
+    contentType: 'homePage';
+} & HomePageContentResponseModel);
 
 export type IApiContentRouteModel = {
     path: null | string;
@@ -30,7 +315,76 @@ export type IApiContentStartItemModel = {
     path: null | string;
 };
 
-export type IApiMediaWithCropsResponseModel = {
+export type IApiElementBaseModel = {
+    contentType: null | string;
+    id: string;
+    name?: null | string;
+    properties: null | {
+        [key: string]: unknown;
+    };
+};
+
+export type IApiElementModel = ({
+    contentType: 'testBlock';
+} & TestBlockElementModel) | ({
+    contentType: 'spotlightBlock';
+} & SpotlightBlockElementModel) | ({
+    contentType: 'headerBlock';
+} & HeaderBlockElementModel) | ({
+    contentType: 'rteBlock';
+} & RteBlockElementModel) | ({
+    contentType: 'imageBlockPersonalized';
+} & ImageBlockPersonalizedElementModel) | ({
+    contentType: 'vimeoBlock';
+} & VimeoBlockElementModel) | ({
+    contentType: 'codeBlock';
+} & CodeBlockElementModel) | ({
+    contentType: 'cardBlock';
+} & CardBlockElementModel) | ({
+    contentType: 'card';
+} & CardElementModel) | ({
+    contentType: 'cacheKeyExampleBlock';
+} & CacheKeyExampleBlockElementModel) | ({
+    contentType: 'funTimeWebMurderBlock';
+} & FunTimeWebMurderBlockElementModel) | ({
+    contentType: 'funTimeWebEkg';
+} & FunTimeWebEkgElementModel) | ({
+    contentType: 'apiUserTest';
+} & ApiUserTestElementModel);
+
+export type IApiMediaWithCropsBaseModel = {
+    focalPoint?: ImageFocalPointModel;
+    crops?: null | Array<ImageCropModel>;
+    id: string;
+    name: null | string;
+    mediaType: null | string;
+    url: null | string;
+    extension?: null | string;
+    width?: null | number;
+    height?: null | number;
+    bytes?: null | number;
+    properties: null | {
+        [key: string]: unknown;
+    };
+};
+
+export type IApiMediaWithCropsModel = ({
+    mediaType: 'Folder';
+} & FolderMediaWithCropsModel) | ({
+    mediaType: 'Image';
+} & ImageMediaWithCropsModel) | ({
+    mediaType: 'File';
+} & FileMediaWithCropsModel) | ({
+    mediaType: 'umbracoMediaVideo';
+} & UmbracoMediaVideoMediaWithCropsModel) | ({
+    mediaType: 'umbracoMediaAudio';
+} & UmbracoMediaAudioMediaWithCropsModel) | ({
+    mediaType: 'umbracoMediaArticle';
+} & UmbracoMediaArticleMediaWithCropsModel) | ({
+    mediaType: 'umbracoMediaVectorGraphics';
+} & UmbracoMediaVectorGraphicsMediaWithCropsModel);
+
+export type IApiMediaWithCropsResponseBaseModel = {
     path: null | string;
     createDate: string;
     updateDate: string;
@@ -47,6 +401,34 @@ export type IApiMediaWithCropsResponseModel = {
     properties: null | {
         [key: string]: unknown;
     };
+};
+
+export type IApiMediaWithCropsResponseModel = ({
+    mediaType: 'Folder';
+} & FolderMediaWithCropsResponseModel) | ({
+    mediaType: 'Image';
+} & ImageMediaWithCropsResponseModel) | ({
+    mediaType: 'File';
+} & FileMediaWithCropsResponseModel) | ({
+    mediaType: 'umbracoMediaVideo';
+} & UmbracoMediaVideoMediaWithCropsResponseModel) | ({
+    mediaType: 'umbracoMediaAudio';
+} & UmbracoMediaAudioMediaWithCropsResponseModel) | ({
+    mediaType: 'umbracoMediaArticle';
+} & UmbracoMediaArticleMediaWithCropsResponseModel) | ({
+    mediaType: 'umbracoMediaVectorGraphics';
+} & UmbracoMediaVectorGraphicsMediaWithCropsResponseModel);
+
+export type ImageBlockPersonalizedElementModel = IApiElementBaseModel & {
+    contentType: 'imageBlockPersonalized';
+    properties?: ImageBlockPersonalizedElementPropertiesModel;
+};
+
+export type ImageBlockPersonalizedElementPropertiesModel = {
+    image?: null | Array<IApiMediaWithCropsModel>;
+    altText?: null | string;
+    cropPreference?: null | string;
+    bottomText?: null | string;
 };
 
 export type ImageCropCoordinatesModel = {
@@ -68,6 +450,34 @@ export type ImageFocalPointModel = {
     top: number;
 };
 
+export type ImageMediaPropertiesModel = {
+    umbracoFile?: ApiImageCropperValueModel | null;
+    umbracoWidth?: null | number;
+    umbracoHeight?: null | number;
+    umbracoBytes?: null | number;
+    umbracoExtension?: null | string;
+};
+
+export type ImageMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'Image';
+    properties?: ImageMediaPropertiesModel;
+};
+
+export type ImageMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & ImageMediaWithCropsModel;
+
+export type LinkTypeModel = 'Content' | 'Media' | 'External';
+
+export type NavigationCompositionContentModel = IApiContentBaseModel & {
+    contentType: 'navigationComposition';
+    properties?: NavigationCompositionContentPropertiesModel;
+};
+
+export type NavigationCompositionContentPropertiesModel = {
+    links?: null | Array<ApiLinkModel>;
+};
+
+export type NavigationCompositionContentResponseModel = IApiContentResponseBaseModel & NavigationCompositionContentModel;
+
 export type PagedIApiContentResponseModel = {
     total: number;
     items: Array<IApiContentResponseModel>;
@@ -78,6 +488,11 @@ export type PagedIApiMediaWithCropsResponseModel = {
     items: Array<IApiMediaWithCropsResponseModel>;
 };
 
+export type PickedColorModel = {
+    value: string;
+    label: string;
+};
+
 export type ProblemDetails = {
     type?: null | string;
     title?: null | string;
@@ -85,6 +500,164 @@ export type ProblemDetails = {
     detail?: null | string;
     instance?: null | string;
 };
+
+export type RichTextModel = {
+    markup: string;
+    blocks: Array<ApiBlockItemModel>;
+};
+
+export type RteBlockElementModel = IApiElementBaseModel & {
+    contentType: 'rteBlock';
+    properties?: RteBlockElementPropertiesModel;
+};
+
+export type RteBlockElementPropertiesModel = {
+    richText?: RichTextModel | null;
+};
+
+export type SpotlightBlockElementModel = IApiElementBaseModel & {
+    contentType: 'spotlightBlock';
+    properties?: SpotlightBlockElementPropertiesModel;
+};
+
+export type SpotlightBlockElementPropertiesModel = {
+    header?: null | string;
+    text?: RichTextModel | null;
+    iconImage?: null | Array<IApiMediaWithCropsModel>;
+};
+
+export type TestBlockElementModel = IApiElementBaseModel & {
+    contentType: 'testBlock';
+    properties?: TestBlockElementPropertiesModel;
+};
+
+export type TestBlockElementPropertiesModel = {
+    decimal?: null | number;
+    email?: null | string;
+    numeric?: null | number;
+    slider?: null | number;
+    tags?: null | Array<string>;
+    textarea?: null | string;
+    textbox?: null | string;
+    toggle?: null | boolean;
+    checkboxlist?: null | Array<string>;
+    dropdown?: null | string;
+    blocklist?: ApiBlockListModel | null;
+    dropdownMultiple?: null | Array<string>;
+    multipleTextString?: null | Array<string>;
+    radioButtonList?: null | string;
+    mediaPicker?: null | Array<IApiMediaWithCropsModel>;
+    multipleMediaPicker?: null | Array<IApiMediaWithCropsModel>;
+    userPicker?: null | number;
+    colorPicker?: PickedColorModel | null;
+    contentPicker?: null | Array<IApiContentModel>;
+    datePicker?: null | string;
+    dateAndTimePicker?: null | string;
+    documentPicker?: IApiContentModel | null;
+    eyeDropPicker?: null | string;
+    multiUrlPicker?: null | Array<ApiLinkModel>;
+    blockGrid?: ApiBlockGridModel | null;
+    codeEditor?: null | string;
+    markDownEditor?: null | string;
+    richTextEditor?: RichTextModel | null;
+};
+
+export type UmbracoMediaArticleMediaPropertiesModel = {
+    umbracoFile?: null | string;
+    umbracoExtension?: null | string;
+    umbracoBytes?: null | number;
+};
+
+export type UmbracoMediaArticleMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'umbracoMediaArticle';
+    properties?: UmbracoMediaArticleMediaPropertiesModel;
+};
+
+export type UmbracoMediaArticleMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & UmbracoMediaArticleMediaWithCropsModel;
+
+export type UmbracoMediaAudioMediaPropertiesModel = {
+    umbracoFile?: null | string;
+    umbracoExtension?: null | string;
+    umbracoBytes?: null | number;
+};
+
+export type UmbracoMediaAudioMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'umbracoMediaAudio';
+    properties?: UmbracoMediaAudioMediaPropertiesModel;
+};
+
+export type UmbracoMediaAudioMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & UmbracoMediaAudioMediaWithCropsModel;
+
+export type UmbracoMediaVectorGraphicsMediaPropertiesModel = {
+    umbracoFile?: null | string;
+    umbracoExtension?: null | string;
+    umbracoBytes?: null | number;
+};
+
+export type UmbracoMediaVectorGraphicsMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'umbracoMediaVectorGraphics';
+    properties?: UmbracoMediaVectorGraphicsMediaPropertiesModel;
+};
+
+export type UmbracoMediaVectorGraphicsMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & UmbracoMediaVectorGraphicsMediaWithCropsModel;
+
+export type UmbracoMediaVideoMediaPropertiesModel = {
+    umbracoFile?: null | string;
+    umbracoExtension?: null | string;
+    umbracoBytes?: null | number;
+};
+
+export type UmbracoMediaVideoMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'umbracoMediaVideo';
+    properties?: UmbracoMediaVideoMediaPropertiesModel;
+};
+
+export type UmbracoMediaVideoMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & UmbracoMediaVideoMediaWithCropsModel;
+
+export type VimeoBlockElementModel = IApiElementBaseModel & {
+    contentType: 'vimeoBlock';
+    properties?: VimeoBlockElementPropertiesModel;
+};
+
+export type VimeoBlockElementPropertiesModel = {
+    url?: null | string;
+};
+
+export type WriterContainerPageContentModel = IApiContentBaseModel & {
+    contentType: 'writerContainerPage';
+    properties?: WriterContainerPageContentPropertiesModel;
+};
+
+export type WriterContainerPageContentPropertiesModel = {
+    [key: string]: unknown;
+};
+
+export type WriterContainerPageContentResponseModel = IApiContentResponseBaseModel & WriterContainerPageContentModel;
+
+export type WriterContentModel = IApiContentBaseModel & {
+    contentType: 'writer';
+    properties?: WriterContentPropertiesModel;
+};
+
+export type WriterContentPropertiesModel = {
+    writerName?: null | string;
+    luckyNumber?: null | number;
+};
+
+export type WriterContentResponseModel = IApiContentResponseBaseModel & WriterContentModel;
+
+export type ZooHomepageContentModel = IApiContentBaseModel & {
+    contentType: 'zooHomepage';
+    properties?: ZooHomepageContentPropertiesModel;
+};
+
+export type ZooHomepageContentPropertiesModel = {
+    splash?: null | Array<IApiMediaWithCropsModel>;
+    heroTitle?: null | string;
+    grid?: ApiBlockGridModel | null;
+};
+
+export type ZooHomepageContentResponseModel = IApiContentResponseBaseModel & ZooHomepageContentModel;
 
 export type GetContent20Data = {
     body?: never;

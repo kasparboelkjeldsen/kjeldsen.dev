@@ -16,8 +16,12 @@
 
   const props = defineProps<{ block: AnyBlock }>()
 
-  // Async so each block lands in its own chunk instead of the entry bundle.
-  const blocks: Record<string, ReturnType<typeof defineAsyncComponent>> = {
+  // `contentType` is the union discriminant, so this narrows for free at every call site.
+  type BlockType = NonNullable<AnyBlock['contentType']>
+
+  // Async so each block lands in its own chunk instead of the entry bundle. Partial<> because we
+  // deliberately do not have a component for every block type — the fallback below covers the rest.
+  const blocks: Partial<Record<BlockType, ReturnType<typeof defineAsyncComponent>>> = {
     headerBlock: defineAsyncComponent(() => import('~/components/blocks/HeaderBlock.vue')),
     rteBlock: defineAsyncComponent(() => import('~/components/blocks/RteBlock.vue')),
     codeBlock: defineAsyncComponent(() => import('~/components/blocks/CodeBlock.vue')),
@@ -25,5 +29,5 @@
     vimeoBlock: defineAsyncComponent(() => import('~/components/blocks/VimeoBlock.vue')),
   }
 
-  const resolved = computed(() => blocks[props.block.contentType] ?? null)
+  const resolved = computed(() => blocks[props.block.contentType as BlockType] ?? null)
 </script>
