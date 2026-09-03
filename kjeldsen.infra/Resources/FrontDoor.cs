@@ -223,27 +223,17 @@ public static class FrontDoor
                 },
             },
         },
+        // Everything except these paths is served uncached from the origin: pages and API calls
+        // carry visitor state. Media is resized on demand and immutable per URL; build assets
+        // and fonts carry a content hash in their name.
+        //
+        // One condition per path on purpose. Conditions are ANDed; a single negated condition
+        // with several values is ORed across the values, which matched everything.
         Conditions = new object[]
         {
-            new AzureNative.Cdn.Inputs.DeliveryRuleUrlPathConditionArgs
-            {
-                Name = "UrlPath",
-                Parameters = new AzureNative.Cdn.Inputs.UrlPathMatchConditionParametersArgs
-                {
-                    // Everything except these paths is served uncached from the origin: pages
-                    // and API calls carry visitor state. Media is resized on demand and immutable
-                    // per URL; build assets and fonts carry a content hash in their name.
-                    MatchValues =
-                    {
-                        "/api/media",
-                        "/_nuxt/",
-                        "/_fonts/",
-                    },
-                    NegateCondition = true,
-                    Operator = AzureNative.Cdn.UrlPathOperator.Contains,
-                    TypeName = "DeliveryRuleUrlPathMatchConditionParameters",
-                },
-            },
+            NotContainingPath("/api/media"),
+            NotContainingPath("/_nuxt/"),
+            NotContainingPath("/_fonts/"),
         },
         MatchProcessingBehavior = AzureNative.Cdn.MatchProcessingBehavior.Continue,
         Order = 100,
@@ -485,4 +475,18 @@ public static class FrontDoor
 
         return kjeldsen_dev_endpoint;
     }
+
+    /// <summary>A rule condition that is true when the request path does not contain <paramref name="fragment"/>.</summary>
+    private static AzureNative.Cdn.Inputs.DeliveryRuleUrlPathConditionArgs NotContainingPath(string fragment) =>
+        new()
+        {
+            Name = "UrlPath",
+            Parameters = new AzureNative.Cdn.Inputs.UrlPathMatchConditionParametersArgs
+            {
+                MatchValues = { fragment },
+                NegateCondition = true,
+                Operator = AzureNative.Cdn.UrlPathOperator.Contains,
+                TypeName = "DeliveryRuleUrlPathMatchConditionParameters",
+            },
+        };
 }
