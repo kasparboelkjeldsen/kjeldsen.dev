@@ -1,15 +1,17 @@
 import type { EngageCollectBatch } from '~~/types/engage'
 
 /**
- * Engagement collection, client side.
+ * Engage, client side: registers each pageview and collects engagement for it.
+ *
+ * Registration happens here, after the page has rendered, rather than on the server while it
+ * renders: the call to Engage takes a few hundred milliseconds and nothing about the page
+ * should wait for it. The server route does the actual registration with the visitor's real
+ * browser and address, sets the visitor cookie on a first visit, and returns the pageview id.
  *
  * For each pageview: how long the page was open and how much of that the visitor was actually
  * doing something, how far down they scrolled, and which outbound links they clicked. One batch
  * per pageview, sent when the page is left - a navigation, a tab close, a switch to another tab -
  * with sendBeacon so it survives the unload.
- *
- * The pageview id comes from the content response (useEngageInfo); until it is known nothing is
- * measured, so a page Engage never registered costs nothing here either.
  *
  * Nothing about the visitor lives in this file. The server adds the visitor id from its cookie.
  */
@@ -33,6 +35,33 @@ export default defineNuxtPlugin(() => {
   const router = useRouter()
 
   let current: Pageview | null = null
+  let previousPath: string | null = null
+  let registeredPath: string | null = null
+
+  // ------------------------------------------------------------------ registration
+
+  async function register(path: string) {
+    // Nuxt runs afterEach more than once for the initial navigation; the same path twice in a
+    // row is one pageview.
+    if (registeredPath === path) return
+    registeredPath = path
+
+    const referrer = previousPath ? location.origin + previousPath : document.referrer
+    try {
+      const res = await $fetch<{ pageviewId: string | null }>('/api/engage/pageview', {
+        method: 'POST',
+        body: { path, referrer },
+      })
+      // A stale answer - the visitor has already moved on - must not reopen the old page.
+      if (router.currentRoute.value.path === path) {
+        info.value = { ...info.value, pageviewId: res.pageviewId }
+      }
+    } catch {
+      // Analytics never surfaces as an error.
+    }
+  }
+
+  // ------------------------------------------------------------------ measurement
 
   function open(id: string) {
     current = {
@@ -118,18 +147,27 @@ export default defineNuxtPlugin(() => {
     }
   }
 
-  // A new pageview id means a new page was registered: close the old one, open the new.
+  // ------------------------------------------------------------------ wiring
+
+  // A new pageview id opens a new batch; the previous one is sent first.
   watch(
     () => info.value.pageviewId,
     (id) => {
       if (current && current.id !== id) send()
       if (id && current?.id !== id) open(id)
-    },
-    { immediate: true }
+    }
   )
 
-  router.beforeEach(() => {
+  // afterEach fires for the initial navigation as well as later ones, so this covers the first
+  // page too; a mounted hook on top of it registered the first page twice.
+  router.beforeEach((to, from) => {
     send()
+    previousPath = from.path
+    info.value = { ...info.value, pageviewId: null }
+    void to
+  })
+  router.afterEach((to) => {
+    void register(to.path)
   })
 
   window.addEventListener('scroll', onScroll, { passive: true })

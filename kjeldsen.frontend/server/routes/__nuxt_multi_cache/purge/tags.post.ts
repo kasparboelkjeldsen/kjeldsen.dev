@@ -1,5 +1,6 @@
 import { timingSafeEqual } from 'node:crypto'
 import { purge } from '../../../utils/cache/store'
+import { purgeRendered } from '../../../utils/cache/output'
 import { invalidateSegmentMap } from '../../../utils/engage/segment-map'
 
 /**
@@ -29,11 +30,14 @@ export default defineEventHandler(async (event) => {
   // Listings go with every purge (see content-children.ts): the container's key is not on the
   // children it lists, and a new or removed child changes the listing without touching it.
   const dropped = purge([...keys, 'children:*'])
+  // Every rendered page goes: listings and navigation appear on all of them, and re-rendering
+  // twenty pages is cheaper than working out which twenty.
+  const pages = purgeRendered()
   // Which pages vary by segment is content configuration too; cheap to refetch, so refetch.
   invalidateSegmentMap()
 
-  console.info(`[cache] purged ${dropped} entries for ${keys.length} keys`)
-  return { status: 'ok', keys: keys.length, dropped }
+  console.info(`[cache] purged ${dropped} entries and ${pages} rendered pages for ${keys.length} keys`)
+  return { status: 'ok', keys: keys.length, dropped, pages }
 })
 
 function authorised(sent: string | undefined): boolean {

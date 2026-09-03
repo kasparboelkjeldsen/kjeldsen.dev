@@ -118,6 +118,17 @@ immediately.
 - `?chrome=1` returns the document without an `engage` field, as intended.
 - `collect` and `event` answer 204 for well-formed bodies.
 
+## Registration moved to the client (2026-09-03, later the same day)
+
+The content route no longer registers pageviews. Measured on production, the registration call
+was 150 to 400 ms through Front Door, and waiting for it was most of a warm page's time to first
+byte. The client plugin now posts to `/api/engage/pageview` after hydration and after each
+navigation; that route makes the same server-to-server call with the visitor's browser and
+address, sets the cookie on a first visit, and returns the pageview id the plugin opens its batch
+on. Step 5 above therefore happens after the page, not before it. Bots without JavaScript are no
+longer counted, which matches Engage's own script. The segment lookup (step 3) stays on the
+server, where it has to be.
+
 ## Verified against production (2026-09-03)
 
 - `trackpageview/server` is **rewritten by the backend** to the site's own

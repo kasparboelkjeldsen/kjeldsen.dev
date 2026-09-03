@@ -30,7 +30,8 @@ export default defineNuxtConfig({
 
   nitro: {
     // .br and .gz variants of every build asset, written at build time and served when the
-    // client accepts them. Front Door caches the compressed variants too.
+    // client accepts them. Front Door caches the compressed variants too. Dynamic responses are
+    // compressed by server/plugins/render.ts and server/utils/compress.ts.
     compressPublicAssets: true,
   },
 

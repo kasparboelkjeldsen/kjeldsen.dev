@@ -57,10 +57,12 @@ export function useContentByPath(path: string, options: ContentOptions = {}) {
   )
 
   if (!chrome) {
+    // Only the segment comes from the page; the pageview id is set by the client plugin once it
+    // has registered the view, and must not be wiped by a later refresh of this data.
     watch(
-      () => result.data.value?.engage,
-      (info) => {
-        if (info) engage.value = info
+      () => result.data.value?.engage?.segment,
+      (segment) => {
+        engage.value = { ...engage.value, segment: segment ?? null }
       },
       { immediate: true }
     )

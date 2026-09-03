@@ -173,11 +173,24 @@ relies on, and the list of things still to verify against a running Engage are i
 
 ## Caching and delivery
 
-A query cache, not an output cache: `server/utils/cache/store.ts` holds delivery API payloads in
-memory, keyed by what the route asked for (path and segment, or a container's children) and
-indexed by the `cacheKeys` each payload carries. The CMS posts the affected keys to
-`/__nuxt_multi_cache/purge/tags` on publish, unpublish and move to the recycle bin, and every
-entry depending on one of them is dropped. An hour's TTL backs that up.
+Two caches, both in memory, both dropped by the CMS's purge:
+
+- **Query cache** (`server/utils/cache/store.ts`): delivery API payloads keyed by what the route
+  asked for (path and segment, or a container's children), indexed by the `cacheKeys` each
+  payload carries. A purge drops every entry depending on one of the posted keys, and every
+  listing.
+- **Output cache** (`server/utils/cache/output.ts`, `server/middleware/output-cache.ts`,
+  `server/plugins/render.ts`): rendered HTML per path, stored pre-compressed, served by the
+  middleware before Nuxt renders anything. Bypassed for a visitor who has a segment on a page
+  that varies, never filled by anything but a plain 200, and emptied entirely on any purge.
+  `X-Output-Cache: hit|miss` says which happened.
+
+The CMS posts affected keys to `/__nuxt_multi_cache/purge/tags` on publish, unpublish and move to
+the recycle bin. An hour's TTL backs both caches up.
+
+Engage's pageview registration is off the render path: the client plugin posts to
+`/api/engage/pageview` after hydration and on each navigation, which is where the visitor cookie
+and pageview id come from.
 
 Front Door caches only `/_nuxt/*`, `/_fonts/*` and `/api/media/*` at the edge, all of which are
 immutable per URL (build assets and fonts carry a content hash; media is keyed by its resize

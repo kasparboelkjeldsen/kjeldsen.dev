@@ -3,15 +3,11 @@ import { deliveryClient, isContentPath } from '../utils/delivery'
 import { cached } from '../utils/cache/store'
 import { sendJson } from '../utils/compress'
 import { highlightContent } from '../utils/highlight'
-import { readVisitor, writeVisitor } from '../utils/engage/visitor'
+import { readVisitor } from '../utils/engage/visitor'
 import { visitorRequest } from '../utils/engage/request'
 import { activeSegments } from '../utils/engage/segments'
-import { settle, trackPageview } from '../utils/engage/track'
 import type { EngageInfo } from '~~/types/engage'
 import type { PageContent } from '~~/types/content'
-
-/** How long a request may wait in total for Engage to register its pageview. */
-const TRACKING_BUDGET_MS = 1500
 
 /**
  * Server-side proxy for a single content item, addressed by `?path=`.
@@ -28,17 +24,13 @@ const TRACKING_BUDGET_MS = 1500
  * and segment and dropped when the CMS purges one of the keys the payload lists. A miss costs the
  * hop to Umbraco; a 404 is thrown from the loader and therefore never cached.
  *
- * This is also where Engage happens, because it is the one request every navigation makes, server
- * side or client side:
+ * Personalization happens here too: if the page varies by segment (most do not) and the visitor
+ * is known from the signed cookie, Engage resolves which variant applies and that alias is forced
+ * on the delivery call. A personalized response is marked private so no shared cache, Front Door
+ * included, ever holds one visitor's variant for another.
  *
- * 1. The visitor is read from the signed cookie.
- * 2. If the page varies by segment (most do not), Engage resolves which variant this visitor
- *    gets, and that alias is forced on the delivery call. A page that does not vary never asks.
- * 3. The pageview is registered - once, here, with the visitor's own browser and address - and a
- *    visitor with no cookie yet gets one from Engage's answer.
- *
- * A personalized response is marked private so no shared cache, Front Door included, ever holds
- * one visitor's variant for another.
+ * Pageview registration is deliberately not here: the browser does it after the page has
+ * rendered (server/api/engage/pageview.post.ts), so nothing about the page waits on Engage.
  */
 export default defineEventHandler(async (event) => {
   const path = String(getQuery(event).path ?? '').replace(/^\/+|\/+$/g, '')
@@ -47,21 +39,12 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: 'Not found' })
   }
 
-  // A chrome fetch - the navigation reading the root document - is not a pageview and is never
-  // personalized. It skips Engage entirely.
+  // A chrome fetch - the navigation reading the root document - is never personalized.
   const chrome = getQuery(event).chrome === '1'
 
-  const visitorId = chrome ? null : readVisitor(event)
-  const req = visitorRequest(event, path)
-
-  // Tracking starts first and runs alongside everything below; it is waited for last, against a
-  // budget measured from here, so a slow Engage costs the response nothing until the page itself
-  // is ready. The segment lookup has to finish before the delivery call, which needs the alias.
-  const started = Date.now()
-  const tracking = chrome ? Promise.resolve(null) : trackPageview(req, visitorId)
   const segments = chrome
     ? { abTest: null, personalization: null, forced: null }
-    : await activeSegments(path, visitorId, req)
+    : await activeSegments(path, readVisitor(event), visitorRequest(event, path))
 
   const data = await cached(`item:${path}:${segments.forced ?? ''}`, async () => {
     const { data, error, response } = await getContentItemByPath20({
@@ -84,23 +67,13 @@ export default defineEventHandler(async (event) => {
     return { value: await highlightContent(data), keys: cacheKeysOf(data, path) }
   })
 
-  const tracked = await settle(tracking, started + TRACKING_BUDGET_MS)
-
-  if (tracked && tracked.visitorId !== visitorId) {
-    writeVisitor(event, tracked.visitorId)
-  }
-
   if (segments.forced) {
     setResponseHeader(event, 'Cache-Control', 'private, no-store')
   }
 
   if (chrome) return sendJson(event, data)
 
-  const engage: EngageInfo = {
-    pageviewId: tracked?.pageviewId ?? null,
-    segment: segments.forced,
-  }
-
+  const engage: EngageInfo = { pageviewId: null, segment: segments.forced }
   return sendJson(event, { ...data, engage })
 })
 
