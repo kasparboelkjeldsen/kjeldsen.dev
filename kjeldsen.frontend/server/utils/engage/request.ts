@@ -24,9 +24,23 @@ export function visitorRequest(event: H3Event, contentPath: string): VisitorRequ
     url: `${site}${path === '/' ? '/' : `${path}/`}`,
     referrer: getHeader(event, 'referer') ?? '',
     userAgent: getHeader(event, 'user-agent') ?? '',
-    ip: getRequestIP(event, { xForwardedFor: true }) ?? '127.0.0.1',
+    ip: clientIp(getRequestIP(event, { xForwardedFor: true })),
     acceptLanguage: getHeader(event, 'accept-language') ?? 'en',
   }
+}
+
+/**
+ * A bare IP address Engage will accept. Behind Front Door the forwarded value arrives as
+ * `ip:port` (and `[v6]:port`), and Engage refuses anything `IPAddress.TryParse` cannot read.
+ */
+function clientIp(raw: string | undefined): string {
+  const value = (raw ?? '').trim()
+  const v6 = value.match(/^\[([0-9a-f:.]+)\](?::\d+)?$/i)
+  if (v6?.[1]) return v6[1]
+  const v4 = value.match(/^(\d{1,3}(?:\.\d{1,3}){3})(?::\d+)?$/)
+  if (v4?.[1]) return v4[1]
+  if (/^[0-9a-f:]+$/i.test(value) && value.includes(':')) return value
+  return '127.0.0.1'
 }
 
 /** Headers that make an Engage API call look like it came from the visitor. */

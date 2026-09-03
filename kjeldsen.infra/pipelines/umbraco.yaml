@@ -215,16 +215,20 @@ stages:
           artifact: umbraco
           displayName: 'Download Umbraco Artifact'
 
-        - task: AzureRmWebAppDeployment@5
-          displayName: 'Deploy Umbraco CM to Azure App Service'
+        # A clean deploy on purpose: the plain zip deploy left assemblies from removed packages
+        # behind in wwwroot, and Umbraco scans every DLL it finds there. This removes anything
+        # that is not in the package.
+        - task: AzureCLI@2
+          displayName: 'Deploy Umbraco CM to Azure App Service (clean)'
           inputs:
-            ConnectionType: 'AzureRM'
             azureSubscription: '$(azureSubscription)'
-            appType: 'webApp'
-            WebAppName: '$(webAppNameCm)'
-            packageForLinux: '$(Pipeline.Workspace)/umbraco/*.zip'
-            enableCustomDeployment: true
-            DeploymentType: 'zipDeploy'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              set -e
+              pkg=$(ls $(Pipeline.Workspace)/umbraco/*.zip | head -1)
+              az webapp deploy --resource-group "$(resourceGroup)" --name "$(webAppNameCm)" \
+                --src-path "$pkg" --type zip --clean true --restart true --timeout 900000
 
 # -------------------------------
 # Stage 3: Warmup (after backend)
