@@ -232,10 +232,9 @@ stages:
 # V2 has no prerender route list, so there is nothing to warm from an artifact. Left in place but
 # switched off; the caching work will bring a warm pass of its own.
 - stage: Warmup
-  condition: false
   displayName: 'Warm Up Routes'
   dependsOn: BuildBackend
-  condition: succeeded()
+  condition: false
   jobs:
     - job: WarmupRoutes
       displayName: 'Fetch all frontend routes to warm cache'
