@@ -227,8 +227,25 @@ stages:
             inlineScript: |
               set -e
               pkg=$(ls $(Pipeline.Workspace)/umbraco/*.zip | head -1)
+              # Asynchronous, then polled: a synchronous deploy of this package takes longer
+              # than Kudu's gateway allows and comes back as a 504 while the deploy itself
+              # carries on and succeeds.
               az webapp deploy --resource-group "$(resourceGroup)" --name "$(webAppNameCm)" \
-                --src-path "$pkg" --type zip --clean true --restart true --timeout 900000
+                --src-path "$pkg" --type zip --clean true --restart true --async true
+              # The Kudu host is the default host with ".scm." after the app name.
+              scm="https://$(az webapp show --resource-group "$(resourceGroup)" --name "$(webAppNameCm)" \
+                --query "defaultHostName" -o tsv | sed 's/^\([^.]*\)\./\1.scm./')"
+              for i in $(seq 1 60); do
+                sleep 20
+                state=$(az rest --method get --url "$scm/api/deployments/latest" \
+                  --resource "https://management.azure.com/" --query "[status, complete]" -o tsv | tr '\n' ' ')
+                echo "deployment: $state"
+                case "$state" in
+                  "4 True"*|"4 true"*) echo "deployed"; exit 0 ;;
+                  "3 True"*|"3 true"*|"-1 True"*|"-1 true"*) echo "deployment failed"; exit 1 ;;
+                esac
+              done
+              echo "timed out waiting for the deployment"; exit 1
 
 # -------------------------------
 # Stage 3: Warmup (after backend)
