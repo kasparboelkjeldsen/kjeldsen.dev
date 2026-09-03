@@ -12,6 +12,8 @@ behind decisions that look strange without context.
 | [frontend-v2.md](frontend-v2.md) | Rebuilding the frontend: where OpenAPI moved in 18, what to keep from V1, and what the personalization round trips cost |
 | [caching-and-personalization.md](caching-and-personalization.md) | Segment-aware caching without a re-rendering frontend: what Front Door can't do, what Engage already exposes, and the resulting design |
 | [umbraco-mcp.md](umbraco-mcp.md) | Running the Umbraco MCP server locally: where the secret lives, the HTTPS/dev-cert traps, and tool-count cost |
+| [production-deploy.md](production-deploy.md) | The 2026-09-03 production deploy: fresh database, unattended install, the traps (stale assemblies, one-shot uSync import, startup probe, forwarded ports) and where the backup is |
+| [engage-headless-v2.md](engage-headless-v2.md) | How the V2 frontend is wired to Engage: one pageview per navigation, segments resolved by Engage, what to verify |
 
 ## A note on sources
 
