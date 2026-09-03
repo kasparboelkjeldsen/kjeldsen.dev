@@ -74,7 +74,9 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 502, statusMessage: 'Failed to fetch children' })
     }
 
-    const keys = new Set<string>([`path:${path.replace(/\/+$/, '') || '/'}`, `children:${path}`])
+    // `children:*` is on every listing: a purge drops all listings, because the container's own
+    // key is not on the children it returns and a listing is one cheap call to rebuild.
+    const keys = new Set<string>([`path:${path.replace(/\/+$/, '') || '/'}`, `children:${path}`, 'children:*'])
 
     const summaries = (data.items ?? [])
       .map((item): ChildSummary => {

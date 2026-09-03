@@ -26,7 +26,9 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Expected a JSON array of cache keys' })
   }
 
-  const dropped = purge(keys)
+  // Listings go with every purge (see content-children.ts): the container's key is not on the
+  // children it lists, and a new or removed child changes the listing without touching it.
+  const dropped = purge([...keys, 'children:*'])
   // Which pages vary by segment is content configuration too; cheap to refetch, so refetch.
   invalidateSegmentMap()
 
