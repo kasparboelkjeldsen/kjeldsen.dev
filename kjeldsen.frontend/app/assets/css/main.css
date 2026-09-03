@@ -628,8 +628,10 @@
 /* ---------------------------------------------------------------------------------------------
    Code windows.
    --------------------------------------------------------------------------------------------- */
+/* No max-width here: the window breaks out of the text column like the images do, and a cap of
+   100% would hold it at the column's width while the negative margins still shift it left. The
+   grid cell's min-width: 0 is what keeps long lines from widening the page. */
 .code-window {
-  max-width: 100%;
   border-radius: 1rem;
   border: 1px solid var(--color-line);
   background: #0a0c12;
