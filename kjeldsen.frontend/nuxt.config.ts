@@ -14,6 +14,10 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // The stylesheet goes into the HTML rather than a render-blocking request of its own: it is
+  // about 8 KB compressed, and the page it rides on is served from the output cache anyway.
+  features: { inlineStyles: true },
+
   // Fonts are downloaded at build time and served from this origin under /_fonts/ with hashed
   // names, which Front Door caches at the edge. Nothing is loaded from Google at runtime: the
   // point of the setup is serving fast from cheap Azure, and that point dies if assets go elsewhere.

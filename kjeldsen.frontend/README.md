@@ -30,6 +30,14 @@ backoffice (see below) and on the site.
   its JavaScript engine and only the grammars the posts use) when a payload is fetched, so the
   browser receives coloured spans and never a highlighter. Editors paste Markdown fences; the
   language is read off the fence (`shared/fence.ts`).
+- **Images.** Every CMS image is requested as WebP (`format=webp`, re-encoded by ImageSharp on
+  the CMS, about a third of the JPEG bytes) at the crop sizes the media type defines, with a
+  `sizes` hint derived from the grid columns the block spans (`app/utils/blocks.ts`): a
+  half-width block never downloads a full-width picture. The media route signs `width`,
+  `height`, `rxy`, `format` and `quality` and nothing else.
+- **First paint.** The stylesheet is inlined into the HTML (`features.inlineStyles`) and the
+  fonts the page uses are preloaded by `@nuxt/fonts`, so nothing render-blocking is fetched
+  from a second origin - there is no second origin.
 - **Pictures the CMS has none of** - the home page when no background is set, listing pages, the
   error page - come from Unsplash, addressed by photo id in `app/utils/images.ts`.
 

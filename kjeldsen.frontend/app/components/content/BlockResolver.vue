@@ -14,7 +14,11 @@
   import { defineAsyncComponent } from 'vue'
   import type { AnyBlock } from '~~/types/content'
 
-  const props = defineProps<{ block: AnyBlock }>()
+  const props = withDefaults(defineProps<{ block: AnyBlock; span?: number }>(), { span: 12 })
+
+  // How many of the grid's twelve columns this block occupies. Provided rather than passed, so a
+  // block that cares (images size themselves by it) can ask, and the rest never see it.
+  provide(BLOCK_SPAN, computed(() => props.span))
 
   // `contentType` is the union discriminant, so this narrows for free at every call site.
   type BlockType = NonNullable<AnyBlock['contentType']>

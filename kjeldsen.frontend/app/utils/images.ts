@@ -8,8 +8,11 @@
  * the listing pages, the error page. Hotlinked through Unsplash's own image CDN with explicit
  * widths, so a phone never downloads a desktop backdrop.
  */
+/** Every CMS image is asked for as WebP: ImageSharp re-encodes on the way out, at a third of the bytes. */
+export const FORMAT = 'format=webp'
+
 export function withWidth(url: string, width: number): string {
-  return `${url}${url.includes('?') ? '&' : '?'}width=${width}`
+  return `${url}${url.includes('?') ? '&' : '?'}width=${width}&${FORMAT}`
 }
 
 export function cmsSrcset(url: string, widths: number[] = [800, 1200, 1600, 2000]): string {

@@ -32,6 +32,12 @@ export function processingCommands(query: URLSearchParams): string | null {
     } else if (key === 'rxy') {
       const focal = value.split(',').map(Number)
       if (focal.length !== 2 || focal.some((n) => !Number.isFinite(n) || n < 0 || n > 1)) return null
+    } else if (key === 'format') {
+      // ImageSharp re-encodes on request; WebP is a third of the bytes of the JPEG originals.
+      if (!['webp', 'jpg', 'jpeg', 'png'].includes(value)) return null
+    } else if (key === 'quality') {
+      const q = Number(value)
+      if (!Number.isInteger(q) || q < 1 || q > 100) return null
     } else {
       return null
     }

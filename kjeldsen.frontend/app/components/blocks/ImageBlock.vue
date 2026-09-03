@@ -1,11 +1,11 @@
 <template>
-  <figure v-if="src" class="m-0" :class="shape === 'Square' ? 'mx-auto max-w-xl' : 'breakout'">
+  <figure v-if="src" class="m-0" :class="figureClass">
     <div class="frame">
       <img
         ref="img"
         :src="src"
         :srcset="srcset || undefined"
-        :sizes="shape === 'Square' ? '(min-width: 48rem) 36rem, 100vw' : '(min-width: 64rem) 54rem, 100vw'"
+        :sizes="sizes"
         :alt="alt"
         :width="largest?.width"
         :height="largest?.height"
@@ -22,8 +22,14 @@
 
 <script setup lang="ts">
   import type { ImageBlockElementModel, ImageCropModel } from '~~/server/delivery-api'
+  import { FORMAT } from '~/utils/images'
+  import { BLOCK_SPAN, sizesFor } from '~/utils/blocks'
 
   const props = defineProps<{ block: ImageBlockElementModel }>()
+
+  // How many grid columns the block has, from the resolver. Decides the `sizes` hint and whether
+  // the picture may break out of the text column: a half-width block stays inside its cell.
+  const span = inject(BLOCK_SPAN, computed(() => 12))
 
   // Media picker properties arrive as an array even when the editor picks one item.
   const image = computed(() => props.block.properties?.image?.[0] ?? null)
@@ -31,6 +37,12 @@
   const alt = computed(() => props.block.properties?.altText ?? '')
   const caption = computed(() => props.block.properties?.bottomText ?? '')
   const shape = computed(() => props.block.properties?.cropPreference ?? 'Ratio')
+
+  const figureClass = computed(() => {
+    if (shape.value === 'Square') return span.value < 12 ? 'mx-auto max-w-md' : 'mx-auto max-w-xl'
+    return span.value < 12 ? '' : 'breakout'
+  })
+  const sizes = computed(() => sizesFor(span.value, shape.value))
 
   // cropPreference names a shape, not a crop alias. The media type defines four widths for each
   // shape (16:9, 1:1 and 4:1), so match on aspect ratio and let srcset choose the width. "None"
@@ -48,19 +60,22 @@
   })
 
   // The Delivery API reports a crop's size but not its alias, so the crop is re-requested by
-  // dimensions. rxy keeps the editor's focal point in frame when the processor has to cut.
+  // dimensions. rxy keeps the editor's focal point in frame when the processor has to cut, and
+  // every variant is asked for as WebP.
   function url(crop?: ImageCropModel) {
     const base = image.value?.url
     if (!base) return ''
-    if (!crop) return base
+    const join = base.includes('?') ? '&' : '?'
+    if (!crop) return `${base}${join}${FORMAT}`
 
     const focal = image.value?.focalPoint
     const params = [
       ...(focal ? [`rxy=${focal.left},${focal.top}`] : []),
       `width=${crop.width}`,
       `height=${crop.height}`,
+      FORMAT,
     ]
-    return `${base}${base.includes('?') ? '&' : '?'}${params.join('&')}`
+    return `${base}${join}${params.join('&')}`
   }
 
   const largest = computed(() => crops.value.at(-1))

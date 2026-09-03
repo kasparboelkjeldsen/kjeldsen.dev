@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
   import PageResolver from '~/components/content/PageResolver.vue'
+  import { describe } from '~/utils/seo'
   import type { SeoCompositionContentPropertiesModel } from '~~/server/delivery-api'
 
   const route = useRoute()
@@ -38,10 +39,12 @@
     title: () => (isHome.value ? 'kjeldsen.dev' : `${pageTitle.value} · kjeldsen.dev`),
   })
 
+  const description = computed(() => seo.value?.seoDescription || describe(data.value))
+
   useSeoMeta({
-    description: () => seo.value?.seoDescription || undefined,
+    description: () => description.value,
     ogTitle: () => pageTitle.value,
-    ogDescription: () => seo.value?.seoDescription || undefined,
+    ogDescription: () => description.value,
     ogType: () => (data.value?.contentType === 'blogPostPage' ? 'article' : 'website'),
     ogImage: () => {
       const url = seo.value?.seoListImage?.[0]?.url

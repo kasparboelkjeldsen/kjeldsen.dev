@@ -9,7 +9,7 @@
       :data-span="item.columnSpan || 12"
       :data-type="item.content?.contentType ?? undefined"
     >
-      <BlockResolver v-if="item.content" :block="item.content" />
+      <BlockResolver v-if="item.content" :block="item.content" :span="item.columnSpan || 12" />
 
       <!-- Nested areas, so grids inside grids still render. -->
       <div v-for="(area, a) in item.areas" :key="a" class="mt-6 flex flex-col gap-6">
