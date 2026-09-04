@@ -42,7 +42,8 @@ backoffice (see below) and on the site.
   from a second origin - there is no second origin.
 - **Script after picture.** `server/plugins/defer-scripts.ts` takes the client bundle and its
   modulepreload hints out of the head and puts them back from a few bytes of inline script once
-  the window has loaded (or after two seconds, whichever is first). Every page is server-rendered
+  the browser reports its largest-contentful-paint entry (or after two seconds, whichever is
+  first). Every page is server-rendered
   and links are ordinary anchors, so the bundle only adds client-side navigation and the entrance
   animations; on a slow connection it no longer shares bandwidth with the hero picture and the
   fonts. `DEFER_SCRIPTS=0` in the environment switches it off without a rebuild.
