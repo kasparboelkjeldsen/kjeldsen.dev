@@ -49,7 +49,10 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#07080c' },
         { name: 'color-scheme', content: 'dark' },
       ],
-      link: [{ rel: 'icon', type: 'image/svg+xml', href: favicon }],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: favicon },
+        { rel: 'alternate', type: 'application/rss+xml', title: 'kjeldsen.dev', href: '/feed.xml' },
+      ],
       // Marks the document as scripted before first paint. Entrance effects that hide an element
       // until it scrolls into view are gated on this class, so a browser without JavaScript - or a
       // crawler - gets everything visible and nothing waiting on an observer that never runs.

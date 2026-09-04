@@ -30,6 +30,7 @@
           </li>
           <li>
             <a href="https://umbraco.com" class="footlink" rel="noopener" target="_blank">Umbraco</a>
+            <a href="/feed.xml" class="footlink">RSS</a>
           </li>
         </ul>
       </div>

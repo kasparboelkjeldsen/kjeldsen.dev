@@ -162,6 +162,8 @@ posted JSON off, because it otherwise hides component edits.
 |---|---|
 | `server/api/content.get.ts` | Proxies one content item. Holds the delivery key. |
 | `server/api/content-children.ts` | Children of a container page, ordered and projected to a card summary. |
+| `server/utils/children.ts` | The loader behind that: one delivery call, cached under the children's keys. |
+| `server/routes/feed.xml.get.ts` | The blog as RSS 2.0, from the same summaries. Announced in the head and the footer. |
 | `server/routes/api/[...].ts` | 404s unmatched `/api/` paths — see the note in the file. |
 | `server/utils/delivery.ts` | The configured delivery client. |
 | `server/utils/media.ts` | Which image commands get signed, and how. |
@@ -222,5 +224,5 @@ downloaded at build time by `@nuxt/fonts` and served from this origin; nothing l
 
 ## Not here yet
 
-Full-page preview, sitemap, image optimisation. Block preview is here; the page preview flow
+Full-page preview and a sitemap. Block preview is here; the page preview flow
 (`HeadlessPreview:Url`, still pointed at `/api/init-preview`) is not.
