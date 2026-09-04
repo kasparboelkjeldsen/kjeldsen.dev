@@ -85,3 +85,9 @@ collided on extraction: the site ended up with empty plugin folders and no Engag
 backoffice files either. The package folders are untracked and ignored now; only `App_Plugins`
 exists, with one capitalisation.
 
+The mechanism, from Kudu's rsync log: every file syncs, then the clean step deletes what is "not
+present in the extracted zip" with a case-sensitive comparison. With a ghost lower-case folder on
+the share, rsync wrote the `App_Plugins` files into it and the clean step deleted all 572 of them.
+The first deploy after the fix still hit the ghost; a second deploy of the same artifact (with
+`az webapp deploy --type zip --clean true`, a Windows path for `--src-path`) came up clean.
+
