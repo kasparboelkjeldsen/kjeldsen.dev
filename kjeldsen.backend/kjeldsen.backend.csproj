@@ -44,6 +44,17 @@
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
+  <!-- The Kraftvaerk packages copy their backoffice files into wwwroot/App_Plugins during the build,
+       after the project's content items were evaluated, so publish did not know about them. On the
+       Linux build agent that folder is also distinct from the lower-case one Windows treats as the
+       same, and the backoffice asks for /App_Plugins/... with capitals. Pick them up here, after
+       the copy, so the publish output carries whatever the packages wrote. -->
+  <Target Name="PublishCopiedAppPlugins" AfterTargets="CopyKraftvaerkBlockPreviewAssets;CopyPackageReferenceProjectAssets" BeforeTargets="ResolveStaticWebAssetsInputs">
+    <ItemGroup>
+      <Content Include="wwwroot\App_Plugins\**" Exclude="@(Content)" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
+
   <PropertyGroup>
     <!-- Razor files are needed for the backoffice to work correctly -->
     <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
