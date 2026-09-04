@@ -481,3 +481,9 @@ umbraco-package-schema.json
 
 # Media files
 /wwwroot/media/
+
+# The Kraftvaerk packages copy their backoffice files here on every build; the publish target in
+# the csproj picks them up. Never commit them: a lower-case copy of this folder in the repo
+# collided with the packages' App_Plugins on the case-insensitive App Service share.
+/wwwroot/App_Plugins/Kraftvaerk.*/
+/wwwroot/App_Plugins/kraftvaerk.*/

@@ -72,3 +72,16 @@ that were already there: B1 for both App Service plans, Standard S0 for SQL, Sta
 | Kudu | `https://kjdev-app-backend-eqhhguczfrh6gndg.scm.westeurope-01.azurewebsites.net`, reachable with `az rest --resource https://management.azure.com/` |
 | Backup | `backups/kjdevsqldbumbraco-20260903T154430Z.bacpac` in `kjdevstorage` |
 | Backoffice admin | kaspark88@gmail.com; the password is outside the repository and should be changed on first login |
+
+## App_Plugins and the case-insensitive share
+
+The Kraftvaerk packages copy their backoffice files into `wwwroot/App_Plugins` during the build,
+after the project's content items were evaluated. Two things followed from that in September 2026:
+the Linux publish never carried the copied files (a target in the csproj now adds them as content
+after the copy), and the copies that had been committed sat in a lower-case `wwwroot/app_plugins`
+folder, which on the Linux agent is a second folder next to the packages' `App_Plugins`. The
+published zip carried both, and App Service's `/home` is a case-insensitive share, so the two
+collided on extraction: the site ended up with empty plugin folders and no Engage or uSync
+backoffice files either. The package folders are untracked and ignored now; only `App_Plugins`
+exists, with one capitalisation.
+
