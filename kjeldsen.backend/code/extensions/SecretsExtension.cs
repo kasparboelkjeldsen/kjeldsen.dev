@@ -8,12 +8,17 @@ public static class SecretsExtension
     public static WebApplicationBuilder AddSecrets(this WebApplicationBuilder builder)
     {
         var vault = builder.Configuration["Azure:KeyVault"];
+        // Locally the managed identity probe (IMDS) times out and fails hard instead of falling
+        // through to the Azure CLI / Visual Studio login, so skip it outside Azure.
         var secretClient = new SecretClient(
             new Uri(vault!),
-            new DefaultAzureCredential());
+            new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            {
+                ExcludeManagedIdentityCredential = builder.Environment.IsDevelopment()
+            }));
 
-        // Local runs boot a blank SQLite database instead (see appsettings.Development.json), so the
-        // CMS underneath can be upgraded in isolation. Media, licences and keys still come from Azure.
+        // Set "Azure:UseKeyVaultDatabase": false to keep a locally configured database, e.g. a
+        // throwaway SQLite copy for upgrading the CMS in isolation.
         var useKeyVaultDatabase = builder.Configuration.GetValue("Azure:UseKeyVaultDatabase", true);
 
         // Fetch secrets manually
