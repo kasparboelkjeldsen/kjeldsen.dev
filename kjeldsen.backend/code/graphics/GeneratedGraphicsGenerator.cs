@@ -36,13 +36,16 @@ public sealed partial class GeneratedGraphicsGenerator(
     // An animated piece is 4-10k tokens of SVG plus script; the SDK defaults to 4096.
     private const int MaxOutputTokens = 16000;
 
+    private const string NotesMarker = "===NOTES===";
     private const string SvgMarker = "===SVG===";
     private const string ScriptMarker = "===SCRIPT===";
     private const string EndMarker = "===END===";
 
     public async Task<GeneratedGraphicsResult> GenerateAsync(GeneratedGraphicsRequest request, CancellationToken cancellationToken)
     {
-        var prefix = $"g{request.MediaKey.ToString("N")[..6]}";
+        // Several graphics share a page, and SVG ids are document-global, so each gets its own id
+        // prefix. Hashed rather than the key's first digits: keys minted in a batch can share those.
+        var prefix = $"g{Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(request.MediaKey.ToByteArray()))[..6]}";
         var contents = new List<AIContent>();
 
         var reference = await LoadReferenceImageAsync(request.ReferenceMediaKey, cancellationToken);
@@ -72,7 +75,7 @@ public sealed partial class GeneratedGraphicsGenerator(
         watch.Stop();
 
         var text = response.Text;
-        var (svg, script) = Parse(text);
+        var (notes, svg, script) = Parse(text);
 
         if (string.IsNullOrWhiteSpace(svg))
         {
@@ -88,7 +91,8 @@ public sealed partial class GeneratedGraphicsGenerator(
                      $"in {watch.Elapsed.TotalSeconds:0}s; {usage?.InputTokenCount ?? 0} in / {usage?.OutputTokenCount ?? 0} out tokens; " +
                      $"svg {svg.Length:n0} chars, script {script.Length:n0} chars" +
                      (reference is null ? "" : "; reference image attached") +
-                     (response.FinishReason == ChatFinishReason.Length ? "; WARNING: output was cut off at the token limit" : "");
+                     (response.FinishReason == ChatFinishReason.Length ? "; WARNING: output was cut off at the token limit" : "") +
+                     (notes.Length == 0 ? "" : $"\n\nModel's notes:\n{notes}");
 
         return new GeneratedGraphicsResult(svg, script, status);
     }
@@ -148,7 +152,7 @@ public sealed partial class GeneratedGraphicsGenerator(
         sb.AppendLine();
         if (hasReference)
         {
-            sb.AppendLine("The attached photo is a reference for subject and composition only. Redraw it as a flat vector illustration in the style described; do not trace it and do not reproduce photographic detail.");
+            sb.AppendLine("A REFERENCE PHOTO is attached. Redraw it: keep its colours (including the background), its composition and its mood, as described in the system instructions. The brief above says what matters most and may add or change details; where it is silent, the photo decides.");
             sb.AppendLine();
         }
         sb.AppendLine($"ASPECT RATIO: {request.AspectRatio} (set the viewBox to match, e.g. 16:9 -> viewBox=\"0 0 1600 900\").");
@@ -178,7 +182,19 @@ public sealed partial class GeneratedGraphicsGenerator(
         You are the illustrator for a personal developer blog with a dark, editorial design. You draw small, charming flat vector illustrations as inline SVG, and when asked you animate them with GSAP.
 
         THE PAGE
-        The graphic sits inline in an article on a near-black page (#07080c) inside a rounded panel (#10131b). Readers see it at 300-900 px wide. Site accents: sky #7dd3fc, violet #a78bfa, ember #fb923c, gold #fcd34d, warm peach #fdba74, lavender #c4b5fd, text #e9ebf2, muted #7c8296. Use a limited, harmonious palette that lives with these; soft gradients are welcome. The background of the SVG should be transparent or a very subtle dark tint - never a white or light block.
+        The graphic sits inline in an article on a near-black page (#07080c) inside a rounded panel with clipped corners. Readers see it at 300-900 px wide.
+
+        WHEN A REFERENCE PHOTO IS ATTACHED
+        The drawing is a vector rendition of that photo. Before drawing, look at it properly, then:
+        - Palette: sample its five or six dominant colours - the background, the main subject tones, the shadows, any accent - and build the drawing from exactly those, as hex values. A pale photo gives a pale drawing; a warm one stays warm. Do not swap in the site's colours.
+        - Background: draw the photo's background colour as a full-bleed rect (0 0 to the viewBox size) first, so the panel shows the photo's atmosphere rather than the page's black. Soft gradients and vignettes are welcome where the photo has them.
+        - Composition: keep the placement, scale, cropping and the direction things face. If a hand enters from the left in the photo, it enters from the left in the drawing, at the same height.
+        - Mood and light: the same softness, contrast and light direction.
+        - Style: simplify into clean, rounded vector shapes - you are illustrating the photo, not tracing it, and photographic detail (skin texture, lens blur, noise) is left out. Someone who has seen the photo should recognise this drawing as that photo.
+        Site accents (sky #7dd3fc, violet #a78bfa, ember #fb923c, gold #fcd34d) are only for small highlights such as a sparkle or a glow, if anything.
+
+        WHEN THERE IS NO REFERENCE PHOTO
+        You are free. Choose a limited, harmonious palette that lives with the dark page: sky #7dd3fc, violet #a78bfa, ember #fb923c, gold #fcd34d, warm peach #fdba74, lavender #c4b5fd, text #e9ebf2, muted #7c8296. The background may be transparent, a subtle dark tint, or a full-bleed scene colour if the brief calls for a place (a night sky, a room) - never a bare white block.
 
         STYLE
         Cute, warm, hand-made feel: rounded shapes, slightly imperfect curves, simple shading with one or two tones per object, no photorealism, no stock-clipart stiffness, no text unless the brief asks for it. Compose with breathing room. Everything must read clearly at 300 px wide.
@@ -189,14 +205,18 @@ public sealed partial class GeneratedGraphicsGenerator(
         - Presentation attributes only (fill, stroke, opacity, stroke-linecap...). No <style>, no <script>, no <image>, no <foreignObject>, no external references, no base64, no CSS animations.
         - Use paths, circles, ellipses, rects, polygons, gradients. Keep it under about 12 KB: fewer, better shapes beat many tiny ones.
         - Give every group that will be animated its natural resting position in the markup - the SVG is also shown as a still image before the script runs, and it must look finished on its own.
+        - A group the script will animate must carry NO transform attribute of its own: GSAP's x, y, rotation and scale replace the element's transform, so a markup translate would be lost and the piece would jump to the origin. Put static positioning on an inner wrapper instead - <g id="PREFIX-heart"><g transform="translate(930 178) rotate(-8)">...paths...</g></g> - and animate the outer, untransformed group. The same goes for any element you select by id in the script.
 
         GSAP RULES (only when animation is requested)
         - You write the BODY of a JavaScript function with the signature (svg, gsap). It must build and `return` a gsap timeline created with gsap.timeline({ paused: true }). The host plays it once when it scrolls into view and calls .restart() on hover or tap, so the opening state must be established by the timeline itself: use .from / .fromTo (or .set at position 0) for every initial offset, never rely on the markup being pre-offset.
         - Select elements only through svg.querySelector('#<prefix>-...') or svg.querySelectorAll; never touch document, window, fetch, timers or anything outside the svg. Core GSAP only: timeline, to, from, fromTo, set, eases such as "power2.out", "back.out(1.7)", "elastic.out(1, 0.5)", "sine.inOut". No plugins, no imports, no require.
-        - Transform groups, not individual path points. Set transformOrigin in the tween (e.g. transformOrigin: "50% 100%") so rotations and scales pivot sensibly; the host sets nothing for you.
+        - Transform groups, not individual path points. Set transformOrigin in the tween (e.g. transformOrigin: "50% 100%") so rotations and scales pivot sensibly; the host sets nothing for you. x and y are offsets from the element's resting place in the markup (0,0 = where it was drawn), never absolute canvas coordinates: to bring a hand in from off-canvas, `from(hand, { x: -320 })`, not `set(hand, { x: 1200 })`.
+        - Before you finish, check every tween target against the markup: it has an id with the prefix, it has no transform attribute, and its final tween values return it to (or near) 0 so the piece ends looking like the still.
         - Total length 2-5 seconds. Gentle easing, a little overlap between steps, one clear beat of delight (a squash, a bounce, a sparkle). It should end in the resting pose of the markup, or in a pose that still looks like a complete picture.
 
-        OUTPUT FORMAT - exactly this, nothing before or after, no markdown fences, no commentary:
+        OUTPUT FORMAT - exactly this, nothing before or after, no markdown fences:
+        ===NOTES===
+        Two to four short lines: the palette you are using as hex values (sampled from the photo when there is one), and the composition in one sentence. These are kept with the drawing for the editor.
         ===SVG===
         <svg ...>...</svg>
         ===SCRIPT===
@@ -204,14 +224,19 @@ public sealed partial class GeneratedGraphicsGenerator(
         ===END===
         """;
 
-    private static (string Svg, string Script) Parse(string text)
+    private static (string Notes, string Svg, string Script) Parse(string text)
     {
-        string svg = string.Empty, script = string.Empty;
+        string notes = string.Empty, svg = string.Empty, script = string.Empty;
 
+        var notesAt = text.IndexOf(NotesMarker, StringComparison.Ordinal);
         var svgAt = text.IndexOf(SvgMarker, StringComparison.Ordinal);
         var scriptAt = text.IndexOf(ScriptMarker, StringComparison.Ordinal);
         var endAt = text.LastIndexOf(EndMarker, StringComparison.Ordinal);
 
+        if (notesAt >= 0 && svgAt > notesAt)
+        {
+            notes = text[(notesAt + NotesMarker.Length)..svgAt];
+        }
         if (svgAt >= 0)
         {
             var from = svgAt + SvgMarker.Length;
@@ -237,7 +262,7 @@ public sealed partial class GeneratedGraphicsGenerator(
             if (m.Success) svg = m.Value;
         }
 
-        return (svg.Trim(), StripFence(script).Trim());
+        return (notes.Trim(), svg.Trim(), StripFence(script).Trim());
     }
 
     /// <summary>A model that fences the script in ```js anyway gets the fence removed.</summary>

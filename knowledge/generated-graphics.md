@@ -33,16 +33,34 @@ The system prompt in the generator is the specification. The parts that matter f
   `gsap.timeline()` whose opening state is set by the timeline itself (`from`/`fromTo`/`set`),
   because the host calls `.restart()` on hover. It may only select inside `svg`; no plugins.
 
-Sonnet 5.5 followed all of that on the first try: 118 s, 3k tokens in (the photo is most of
-it) and 15k out for a 4 KB SVG and a 3 KB script. Most of the output tokens are the model
-thinking, not the drawing. If the drawings get worse on harder briefs, change
-`GeneratedGraphics.ProfileAlias` to an Opus profile.
+- An element the script animates carries **no `transform` attribute** in the markup; static
+  positioning goes on an inner wrapper group. GSAP's `x`/`y` replace the attribute rather than add
+  to it, and Opus's first hands drawing lost its heart to the top-left corner exactly that way.
+- With a reference photo the drawing is a rendition *of the photo*: its sampled palette including
+  the background (drawn as a full-bleed rect), its composition, light and mood. Site accents are
+  for sparkles only. Without a photo the model is free, on the dark palette.
+- The reply opens with a `===NOTES===` block (palette as hex, composition in a sentence), kept in
+  *Status* so an editor can see what the model thought it was doing.
+
+Sonnet 5.5 managed the first piece (118 s, 15k output tokens, most of them thinking) but
+coloured it for the dark site rather than the photo. Opus 5.5 is the profile now
+(`GeneratedGraphics.ProfileAlias` = `opus-5-5`, created as a copy of the Sonnet profile with the
+model id swapped): 80-100 s and 8-10k output tokens a piece, and it matches a photo's palette
+closely once told to. Profiles live in `umbracoAIProfile`; the management API for them answered
+400 to the API user, so the row was inserted by SQL.
 
 ## Things to know
 
 - **The save waits for the model.** A minute or two for an animated piece. The backoffice sits on
   the save button meanwhile. Fine for one editor; a background job with a second save would be the
   fix if it ever is not.
+- **One at a time.** The saving notification runs inside the media tree's write lock, so a second
+  media save - any media, by anyone - waits on the first drawing and fails after about twenty
+  seconds with `DistributedWriteLockTimeoutException`. Three items created in parallel: one drew,
+  two failed with that in *Status* and were regenerated one after the other. Same fix as above.
+- **Ids are prefixed per item** with a hash of the media key, not its first digits: keys minted
+  in a batch can share those, and two graphics with the same gradient ids on one page draw with
+  each other's colours.
 - **The script runs on the page.** That is the point of GSAP over CSS, and the editor who saved
   the item chose it. The generator strips the ways SVG itself can carry script; the timeline code
   is given only the `<svg>` element and `gsap`. Anyone who can save media can run JavaScript on

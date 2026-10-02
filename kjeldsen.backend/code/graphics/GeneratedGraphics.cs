@@ -10,8 +10,11 @@ public static class GeneratedGraphics
 {
     public const string MediaTypeAlias = "generatedGraphics";
 
-    /// <summary>The Umbraco.AI profile that draws. Swap for an Opus profile if Sonnet struggles.</summary>
-    public const string ProfileAlias = "sonnet-5-5";
+    /// <summary>
+    /// The Umbraco.AI profile that draws. Sonnet (profile "sonnet-5-5") managed the first piece but
+    /// drifted from the reference photo's colours; Opus is on for fidelity.
+    /// </summary>
+    public const string ProfileAlias = "opus-5-5";
 
     public static class Props
     {
