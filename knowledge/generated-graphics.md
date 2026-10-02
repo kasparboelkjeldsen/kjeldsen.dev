@@ -72,6 +72,19 @@ closely once told to. Profiles live in `umbracoAIProfile`; the management API fo
 - **Ids are prefixed per item** with a hash of the media key, not its first digits: keys minted
   in a batch can share those, and two graphics with the same gradient ids on one page draw with
   each other's colours.
+- **Front Door's origin timeout is 240 s** (the maximum; was the default 60 s until 2026-10-02).
+  A save in the backoffice holds the request while the model draws, and at 60 s Front Door
+  answered 504 while the origin finished anyway, so every generated save looked like a failure.
+  The Pulumi profile carries the same value.
+- **The Anthropic key only decrypts on the server that saved it.** After the connection was
+  re-saved from production, the local backend got `invalid x-api-key` from Anthropic for the
+  same row - Umbraco.AI protects connection secrets with the server's data-protection keys.
+  Generate through production's Management API in that case (the API user is in the shared
+  database and the generator code is deployed), rather than re-saving the key locally, which
+  would break production the same way.
+- **Batch generation from a script**: one item at a time, and read the result off the saved
+  item rather than the HTTP status - through Front Door the request can come back before the
+  save does. `kjeldsen.experiment` keeps the script used for *Headless - Not Hovedløst*.
 - **The script runs on the page.** That is the point of GSAP over CSS, and the editor who saved
   the item chose it. The generator strips the ways SVG itself can carry script; the timeline code
   is given only the `<svg>` element and `gsap`. Anyone who can save media can run JavaScript on

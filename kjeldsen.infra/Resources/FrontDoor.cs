@@ -23,7 +23,10 @@ public static class FrontDoor
     var kjdev_fd = new AzureNative.Cdn.Profile("kjdev-fd", new()
     {
         Location = "Global",
-        OriginResponseTimeoutSeconds = 60,
+        // The maximum. Saving a Generated Graphics item in the backoffice holds the request while
+        // the model draws (one to two minutes); at the default 60 s Front Door answered 504 while
+        // the origin carried on, so every such save looked like a failure. Raised live 2026-10-02.
+        OriginResponseTimeoutSeconds = 240,
         ProfileName = "kjdev-fd",
         ResourceGroupName = resourceGroup.Name,
         Sku = new AzureNative.Cdn.Inputs.SkuArgs
