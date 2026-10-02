@@ -38,8 +38,8 @@ stages:
       displayName: 'Detect Frontend/Backend Changes'
       steps:
         - checkout: self
-          displayName: 'Checkout (fetchDepth=2 for diff)'
-          fetchDepth: 2
+          displayName: 'Checkout (full history, to diff against the last deployed commit)'
+          fetchDepth: 0
 
         - pwsh: |
             Write-Host "Build.Reason: $(Build.Reason)"
@@ -53,22 +53,39 @@ stages:
               exit 0
             }
 
-            # Ensure git exists and repo has at least two commits to diff
-            $hasParent = $false
+            # The base is the commit of the last successful run of this pipeline, so a push of
+            # several commits is judged as a whole. Diffing HEAD^..HEAD, as this used to, missed
+            # everything but the last commit of a push: on 2026-10-02 the frontend changes sat
+            # one commit below the backend ones and only the backend deployed. A run that
+            # legitimately skipped an area still counts as the base, which is fine - that area
+            # had no changes to deploy, by definition.
+            $base = $null
             try {
-              $parent = git rev-parse "$(Build.SourceVersion)^" 2>$null
-              if ($LASTEXITCODE -eq 0 -and $parent) { $hasParent = $true }
-            } catch { $hasParent = $false }
+              $url = "$(System.CollectionUri)$(System.TeamProject)/_apis/build/builds" +
+                     "?definitions=$(System.DefinitionId)&statusFilter=completed&resultFilter=succeeded" +
+                     "&branchName=$(Build.SourceBranch)&`$top=1&api-version=7.1"
+              $r = Invoke-RestMethod -Uri $url -Headers @{ Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN" }
+              if ($r.count -ge 1) { $base = $r.value[0].sourceVersion }
+            } catch { Write-Warning "Could not read the last successful build: $_" }
 
-            if (-not $hasParent) {
-              Write-Warning "No parent commit found (first commit or shallow). Defaulting to both true."
-              Write-Host "##vso[task.setvariable variable=FrontendChanged;isOutput=true]true"
-              Write-Host "##vso[task.setvariable variable=BackendChanged;isOutput=true]true"
-              exit 0
+            if ($base) {
+              git cat-file -e "$base^{commit}" 2>$null
+              if ($LASTEXITCODE -ne 0) { Write-Warning "Base $base is not in this clone."; $base = $null }
+              elseif ($base -eq "$(Build.SourceVersion)") { Write-Warning "Base is this very commit (re-run?); using its parent."; $base = $null }
             }
 
-            # Get changed files between HEAD^ and HEAD
-            $files = git diff --name-only "$(Build.SourceVersion)^" "$(Build.SourceVersion)"
+            if (-not $base) {
+              $base = git rev-parse "$(Build.SourceVersion)^" 2>$null
+              if ($LASTEXITCODE -ne 0 -or -not $base) {
+                Write-Warning "No base commit to diff against. Defaulting to both true."
+                Write-Host "##vso[task.setvariable variable=FrontendChanged;isOutput=true]true"
+                Write-Host "##vso[task.setvariable variable=BackendChanged;isOutput=true]true"
+                exit 0
+              }
+            }
+
+            Write-Host "Diffing $base..$(Build.SourceVersion)"
+            $files = git diff --name-only "$base" "$(Build.SourceVersion)"
             Write-Host "Changed files:`n$files"
 
             $frontendMatch = $false
@@ -92,6 +109,8 @@ stages:
             Write-Host "##vso[task.setvariable variable=BackendChanged;isOutput=true]$backendOut"
           displayName: 'Compute change flags'
           name: Changes
+          env:
+            SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
 # ---------------------------------------
 # Stage 1: Frontend (Nuxt) - run on need
