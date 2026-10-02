@@ -83,7 +83,9 @@ export type BlogPostContainerPageContentModel = IApiContentBaseModel & {
     properties?: BlogPostContainerPageContentPropertiesModel;
 };
 
-export type BlogPostContainerPageContentPropertiesModel = HeadlessCompositionContentPropertiesModel;
+export type BlogPostContainerPageContentPropertiesModel = HeadlessCompositionContentPropertiesModel & {
+    background?: null | Array<IApiMediaWithCropsModel>;
+};
 
 export type BlogPostContainerPageContentResponseModel = IApiContentResponseBaseModel & BlogPostContainerPageContentModel;
 
