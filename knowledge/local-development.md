@@ -20,6 +20,14 @@ Two consequences worth keeping in mind:
   from the local backoffice therefore purges the local frontend, not the live one, and the live
   pages stay stale until their hour's TTL runs out or something publishes from production.
 
+- **A page created and published through the Management API from the local server was invisible
+  to production** (delivery API 404 by path *and* by id, even after a restart) because no rows
+  were written to `umbracoDocumentUrl` for it - local served it from the in-memory URL cache the
+  publish had filled, production builds that cache from the table at boot. Re-saving the page
+  (a rename to the same name) and publishing again wrote the rows and production picked it up
+  within a minute. Seen 2026-10-02 with a page created via the MCP's `create-document`; pages
+  edited through the backoffice have not shown it. Check the table before blaming the deploy.
+
 The SQL server's firewall must allow the machine's IP (`az sql server firewall-rule create`), and
 `DefaultAzureCredential` skips managed identity in Development because the IMDS probe on a
 laptop fails hard instead of falling through to the Azure CLI login (`SecretsExtension.cs`).
