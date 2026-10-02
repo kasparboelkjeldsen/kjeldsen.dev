@@ -103,7 +103,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string SeoKeyWords => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoKeyWords(this, _publishedValueFallback);
 
 		///<summary>
-		/// Seo List Image
+		/// Seo List Image: The header backdrop, the listing card picture and the social image. A photo, or a Generated Graphics item.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]

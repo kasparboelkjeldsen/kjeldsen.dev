@@ -558,6 +558,30 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+/* Filling a box of another shape - a hero backdrop, a listing card - rather than sizing it. The
+   markup's preserveAspectRatio is switched to `slice` for this (utils/graphics.ts). */
+.graphic.is-cover,
+.graphic.is-cover svg {
+  width: 100%;
+  height: 100%;
+}
+/* The hero's backdrop when it is a drawing: same place and veil as a photo, same slow drift,
+   drawn a little stronger than a photo because flat colour needs less taming than a picture. */
+.hero-media .graphic {
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+  transform-origin: center;
+  animation: kenburns 34s var(--ease-out-quart) both;
+}
+.hero-media .graphic.is-animated {
+  cursor: default;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-media .graphic {
+    animation: none;
+  }
+}
 
 /* Blocks that want more room than the text column. Only when the block owns the whole row - a
    half-width block next to another must stay inside its cell. */

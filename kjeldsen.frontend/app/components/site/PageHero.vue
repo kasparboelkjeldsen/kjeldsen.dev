@@ -1,6 +1,13 @@
 <template>
   <section class="hero" :class="sizeClass">
-    <div v-if="image" class="hero-media" aria-hidden="true">
+    <!-- A drawing as the backdrop: filled and cropped like a photo would be, under the same veil.
+         It plays once on load (it is in view by definition) and again on hover. -->
+    <div v-if="graphic" class="hero-media" aria-hidden="true">
+      <GeneratedGraphic :svg="graphic.svg" :script="graphic.script" fit="cover" />
+      <div class="hero-veil"></div>
+    </div>
+
+    <div v-else-if="image" class="hero-media" aria-hidden="true">
       <img
         :src="image"
         :srcset="imageSet || undefined"
@@ -43,6 +50,9 @@
    * The entrance is pure CSS (`.rise`, staggered with --d), so it plays on first paint with no
    * script and again on every client-side navigation because the element is new each time.
    */
+  import GeneratedGraphic from '~/components/blocks/GeneratedGraphic.vue'
+  import type { GeneratedGraphic as Graphic } from '~/utils/graphics'
+
   const props = withDefaults(
     defineProps<{
       /** Already marked up - see utils/marks.ts. */
@@ -51,6 +61,8 @@
       lede?: string
       image?: string | null
       imageSet?: string
+      /** A Generated Graphics item as the backdrop instead of a photo. Wins over `image`. */
+      graphic?: Graphic | null
       size?: 'xl' | 'lg' | 'md'
     }>(),
     { size: 'lg' }

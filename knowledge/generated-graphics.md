@@ -18,8 +18,19 @@ The first one is the hands passing a heart in *The Culture of Kindness*.
 | `code/graphics/GeneratedGraphicsGenerator.cs` | Builds the conversation, attaches the reference photo (downscaled to 1280 px JPEG, read from the media file system), calls `IAIChatService` with the profile alias, parses the `===SVG===` / `===SCRIPT===` reply, strips script elements and event attributes from the SVG. The whole prompt lives here. |
 | `code/graphics/GeneratedGraphicsApiMediaBuilder.cs` | Decorates the delivery API's media builder so a picked Generated Graphics item always carries `svg`, `script` and `animate`. Without it those only appear with `?expand=...`, which the backoffice block preview never sends. |
 | Data type *Image or Graphic Picker* | The image block's picker, allowing Image and Generated Graphics. The old *Image Media Picker* (Image only) still serves `seoListImage` and the reference image. |
-| `kjeldsen.frontend/app/components/blocks/GeneratedGraphic.vue` | Renders the SVG with `v-html` (server-side, so it is a still before any script) and builds the timeline after mount with `new Function('svg', 'gsap', script)`. `document.querySelector('.graphic').__timeline` in devtools. |
-| `kjeldsen.frontend/app/utils/graphics.ts` | Reads the three properties off a media item; `ImageBlock.vue` branches on it. |
+| `kjeldsen.frontend/app/components/blocks/GeneratedGraphic.vue` | Renders the SVG with `v-html` (server-side, so it is a still before any script) and builds the timeline after mount with `new Function('svg', 'gsap', script)`. `fit="cover"` fills a box and crops (the root's `preserveAspectRatio` is switched to `slice`); `trigger="manual"` leaves playing to the parent through the exposed `replay()`. `document.querySelector('.graphic').__timeline` in devtools. |
+| `kjeldsen.frontend/shared/graphics.ts` | Reads the properties off a media item, builds the file URL. Shared because the server-side listing loader needs it too; `app/utils/graphics.ts` re-exports it. |
+| `code/graphics/GeneratedGraphicsSvgController.cs` + `kjeldsen.frontend/server/api/media/svg/[key].get.ts` | The drawing as a file: `/api/media/svg/<key>.svg?v=<updateDate>`, for `og:image`. The CMS serves it at `/media/svg/<key>.svg`; the frontend proxies it on its own origin, where Front Door caches `/api/media/*`, so the revision in the query is what makes a regenerated drawing a new URL. |
+
+## Where a graphic can go
+
+- **Image block** in the grid (`ImageBlock.vue` hands over to `GeneratedGraphic.vue`).
+- **SEO list image** on posts (the *Image or Graphic Picker* is on the SEO composition now): it
+  becomes the post's hero backdrop, drawn full-bleed under the same veil and fade as a photo and
+  playing once on load; the listing card's picture, playing when the card is hovered (or once in
+  view on a device without hover); and the `og:image`, as the SVG file above. Most social
+  networks do not render SVG cards - a raster rendition is the follow-up if that matters.
+- **Home page background** (the unfiltered Media Picker already allowed it).
 
 ## The contract with the model
 

@@ -4,11 +4,29 @@
     class="card spot group flex w-full overflow-hidden"
     :class="featured ? 'flex-col md:flex-row' : 'flex-col'"
     @pointermove="track"
+    @mouseenter="graphicEl?.replay()"
   >
+    <!-- A drawing where the photo would be. It plays when the card - not just the picture - is
+         hovered; on a device without hover it plays once as it scrolls into view. -->
+    <div
+      v-if="post.graphic"
+      class="relative overflow-hidden bg-surface"
+      :class="featured ? 'aspect-[16/10] md:aspect-auto md:min-h-[24rem] md:w-[55%] md:border-r md:border-b-0 border-b border-line' : 'aspect-[16/10] border-b border-line'"
+    >
+      <GeneratedGraphic
+        ref="graphicEl"
+        :svg="post.graphic.svg"
+        :script="post.graphic.script"
+        fit="cover"
+        trigger="manual"
+        class="absolute inset-0"
+      />
+    </div>
+
     <!-- The featured picture is positioned absolutely on wide screens so the words set the card's
          height; a portrait photo otherwise stretches the card to its own full height. -->
     <div
-      v-if="post.image"
+      v-else-if="post.image"
       class="relative overflow-hidden bg-surface"
       :class="featured ? 'aspect-[16/10] md:aspect-auto md:min-h-[24rem] md:w-[55%] md:border-r md:border-b-0 border-b border-line' : 'aspect-[16/10] border-b border-line'"
     >
@@ -60,9 +78,12 @@
   import { markText } from '~/utils/marks'
   import { formatDate } from '~/utils/dates'
   import { cmsSrcset, withWidth } from '~/utils/images'
+  import GeneratedGraphic from '~/components/blocks/GeneratedGraphic.vue'
   import type { ChildSummary } from '~~/server/api/content-children'
 
   const props = defineProps<{ post: ChildSummary; featured?: boolean }>()
+
+  const graphicEl = ref<InstanceType<typeof GeneratedGraphic> | null>(null)
 
   const title = computed(() => markText(props.post.title ?? props.post.name))
 

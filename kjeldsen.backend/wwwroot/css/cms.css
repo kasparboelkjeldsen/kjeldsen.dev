@@ -1259,6 +1259,25 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+.graphic.is-cover, .graphic.is-cover svg {
+  width: 100%;
+  height: 100%;
+}
+.hero-media .graphic {
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+  transform-origin: center;
+  animation: kenburns 34s var(--ease-out-quart) both;
+}
+.hero-media .graphic.is-animated {
+  cursor: default;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-media .graphic {
+    animation: none;
+  }
+}
 @media (min-width: 64rem) {
   [data-span='12'] > .breakout {
     margin-inline: -5rem;

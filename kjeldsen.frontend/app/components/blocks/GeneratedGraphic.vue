@@ -4,12 +4,12 @@
   <div
     ref="host"
     class="graphic"
-    :class="{ 'is-animated': !!script }"
+    :class="{ 'is-animated': !!script, 'is-cover': fit === 'cover' }"
     role="img"
     :aria-label="alt || undefined"
-    @mouseenter="replay"
-    @pointerdown="replay"
-    v-html="svg"
+    @mouseenter="onHover"
+    @pointerdown="onHover"
+    v-html="markup"
   />
 </template>
 
@@ -19,13 +19,33 @@
    *
    * The script is model output, executed on the page on purpose - the editor who saved the media
    * item chose that. It is given only the <svg> element and gsap, and the generator strips script
-   * elements and event attributes out of the markup. The timeline plays once when the graphic
-   * scrolls into view, and again on hover or tap. Under prefers-reduced-motion it never starts by
-   * itself; a tap still plays it, because then the reader asked.
+   * elements and event attributes out of the markup.
+   *
+   * `trigger: 'view'` (the default, for a graphic in the reading column) plays the timeline once
+   * when it scrolls into view and again on hover or tap. `trigger: 'manual'` leaves playing to the
+   * parent through the exposed `replay()` - a listing card plays its picture when the whole card
+   * is hovered, not just the picture - except on a device without hover, where it plays once in
+   * view instead, since nothing else would ever start it. Under prefers-reduced-motion nothing
+   * plays by itself; a tap still does, because then the reader asked.
+   *
+   * `fit: 'cover'` makes the drawing fill its box and crop, for backdrops and cards.
    */
-  const props = defineProps<{ svg: string; script?: string | null; alt?: string }>()
+  import { coverSvg } from '~/utils/graphics'
+
+  const props = withDefaults(
+    defineProps<{
+      svg: string
+      script?: string | null
+      alt?: string
+      fit?: 'contain' | 'cover'
+      trigger?: 'view' | 'manual'
+    }>(),
+    { fit: 'contain', trigger: 'view' }
+  )
 
   type Timeline = { play(): unknown; restart(): unknown; kill(): unknown }
+
+  const markup = computed(() => (props.fit === 'cover' ? coverSvg(props.svg) : props.svg))
 
   const host = ref<HTMLElement | null>(null)
   let timeline: Timeline | null = null
@@ -53,6 +73,9 @@
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
+    const playsInView = props.trigger === 'view' || window.matchMedia('(hover: none)').matches
+    if (!playsInView) return
+
     observer = new IntersectionObserver(
       (entries) => {
         if (!entries.some((e) => e.isIntersecting)) return
@@ -74,4 +97,10 @@
   function replay() {
     timeline?.restart()
   }
+
+  function onHover() {
+    if (props.trigger === 'view') replay()
+  }
+
+  defineExpose({ replay })
 </script>

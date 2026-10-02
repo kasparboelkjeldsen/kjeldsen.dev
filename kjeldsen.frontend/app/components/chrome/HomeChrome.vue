@@ -2,6 +2,7 @@
   <PageHero
     :image="backdrop.src"
     :image-set="backdrop.srcset"
+    :graphic="graphic"
     :eyebrow="content.name ?? 'kjeldsen.dev'"
     :title="title"
     size="xl"
@@ -53,6 +54,7 @@
   import { markText } from '~/utils/marks'
   import { liftHero } from '~/utils/hero'
   import { cmsSrcset, UNSPLASH, unsplash, unsplashSrcset, withWidth } from '~/utils/images'
+  import { generatedGraphicOf } from '~/utils/graphics'
   import { gridOf, type PageContent } from '~~/types/content'
 
   const props = defineProps<{ content: Extract<PageContent, { contentType: 'homePage' }> }>()
@@ -62,10 +64,12 @@
   const hero = computed(() => liftHero(gridOf(props.content)))
   const title = computed(() => markText(hero.value.title || props.content.name || 'kjeldsen.dev'))
 
-  // The editor's background picture if one is set; the Earth at night otherwise.
+  // The editor's background: a Generated Graphics item drawn full-bleed, or a picture if one is
+  // set; the Earth at night otherwise.
+  const graphic = computed(() => generatedGraphicOf(props.content.properties?.background?.[0]))
   const backdrop = computed(() => {
     const media = props.content.properties?.background?.[0]
-    if (media?.url) {
+    if (media?.url && !graphic.value) {
       return { src: withWidth(media.url, 1800), srcset: cmsSrcset(media.url) }
     }
     return { src: unsplash(UNSPLASH.earth, 1800), srcset: unsplashSrcset(UNSPLASH.earth) }

@@ -2,6 +2,7 @@ import { getContent20 } from '../delivery-api'
 import type { SeoCompositionContentPropertiesModel, WriterContentPropertiesModel } from '../delivery-api'
 import { deliveryClient } from './delivery'
 import { cached } from './cache/store'
+import { generatedGraphicOf, type GeneratedGraphic } from '~~/shared/graphics'
 
 /** The picture a listing card shows. Width and height are the source media's, for aspect ratio. */
 export interface ChildImage {
@@ -26,6 +27,8 @@ export interface ChildSummary {
   date: string | null
   authors: string[]
   image: ChildImage | null
+  /** The list image when it is a Generated Graphics item instead of a photo; `image` is null then. */
+  graphic: GeneratedGraphic | null
 }
 
 /** What the `fields`/`expand` below actually ask for, which the generated union cannot express. */
@@ -70,7 +73,9 @@ export async function loadChildren(path: string): Promise<ChildSummary[]> {
     const summaries = (data.items ?? [])
       .map((item): ChildSummary => {
         const props = (item.properties ?? {}) as CardProperties
-        const image = props.seoListImage?.[0]
+        const media = props.seoListImage?.[0]
+        const graphic = generatedGraphicOf(media)
+        const image = graphic ? null : media
 
         for (const key of props.cacheKeys ?? []) keys.add(key)
         keys.add(`content-${item.id}`)
@@ -88,6 +93,7 @@ export async function loadChildren(path: string): Promise<ChildSummary[]> {
             .map((w) => w.properties?.writerName || w.name || '')
             .filter(Boolean),
           image: image?.url ? { url: image.url, width: image.width ?? null, height: image.height ?? null } : null,
+          graphic,
         }
       })
       // Newest first, on the date an editor set. `updateDate` is the fallback so children without a

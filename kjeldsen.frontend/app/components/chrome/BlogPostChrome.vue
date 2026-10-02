@@ -1,7 +1,7 @@
 <template>
   <ReadingProgress />
 
-  <PageHero :image="image?.src" :image-set="image?.srcset" :title="title" :lede="description ?? undefined" size="lg">
+  <PageHero :image="image?.src" :image-set="image?.srcset" :graphic="graphic" :title="title" :lede="description ?? undefined" size="lg">
     <template #eyebrow>
       <time v-if="date" :datetime="date">{{ formatDate(date) }}</time>
       <span v-if="date && author"> · </span>
@@ -40,6 +40,7 @@
   import { markText } from '~/utils/marks'
   import { formatDate, readingMinutes } from '~/utils/dates'
   import { cmsSrcset, withWidth } from '~/utils/images'
+  import { generatedGraphicOf } from '~/utils/graphics'
   import { gridOf, type PageContent } from '~~/types/content'
 
   const props = defineProps<{ content: Extract<PageContent, { contentType: 'blogPostPage' }> }>()
@@ -58,8 +59,10 @@
     return named?.writerName || writer?.name || null
   })
 
+  // The list image is the backdrop: a photo, or a Generated Graphics item drawn full-bleed.
+  const graphic = computed(() => generatedGraphicOf(seo.value?.seoListImage?.[0]))
   const image = computed(() => {
-    const url = seo.value?.seoListImage?.[0]?.url
+    const url = graphic.value ? null : seo.value?.seoListImage?.[0]?.url
     return url ? { src: withWidth(url, 1800), srcset: cmsSrcset(url) } : null
   })
 

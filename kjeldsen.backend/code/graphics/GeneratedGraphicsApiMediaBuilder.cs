@@ -37,6 +37,10 @@ public sealed class GeneratedGraphicsApiMediaBuilder(IApiMediaWithCropsBuilder i
             result.Properties[alias] = media.Value(alias);
         }
 
+        // A picked media item carries no dates, and the SVG file URL needs something to vary on
+        // when the drawing is regenerated under the same key.
+        result.Properties["updateDate"] = media.UpdateDate;
+
         return result;
     }
 }

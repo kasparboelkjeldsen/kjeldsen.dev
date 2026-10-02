@@ -11,6 +11,7 @@
 <script setup lang="ts">
   import PageResolver from '~/components/content/PageResolver.vue'
   import { describe } from '~/utils/seo'
+  import { generatedGraphicOf, graphicFileUrl } from '~/utils/graphics'
   import type { SeoCompositionContentPropertiesModel } from '~~/server/delivery-api'
 
   const route = useRoute()
@@ -46,9 +47,14 @@
     ogTitle: () => pageTitle.value,
     ogDescription: () => description.value,
     ogType: () => (data.value?.contentType === 'blogPostPage' ? 'article' : 'website'),
+    // A Generated Graphics item is addressed as a file (/api/media/svg/<key>.svg), because
+    // crawlers want an image URL, not markup. Note that most social cards do not render SVG;
+    // a raster rendition is the follow-up if that ever matters.
     ogImage: () => {
-      const url = seo.value?.seoListImage?.[0]?.url
-      return url ? `${config.public.siteUrl.replace(/\/$/, '')}${url}?width=1200` : undefined
+      const media = seo.value?.seoListImage?.[0]
+      const graphic = generatedGraphicOf(media)
+      const path = graphic ? graphicFileUrl(graphic) : media?.url ? `${media.url}?width=1200` : null
+      return path ? `${config.public.siteUrl.replace(/\/$/, '')}${path}` : undefined
     },
     twitterCard: 'summary_large_image',
   })

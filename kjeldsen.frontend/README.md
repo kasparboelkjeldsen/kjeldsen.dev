@@ -162,6 +162,7 @@ posted JSON off, because it otherwise hides component edits.
 |---|---|
 | `server/api/content.get.ts` | Proxies one content item. Holds the delivery key. |
 | `server/api/content-children.ts` | Children of a container page, ordered and projected to a card summary. |
+| `server/api/media/svg/[key].get.ts` | A Generated Graphics item as an SVG file, for `og:image`. |
 | `server/utils/children.ts` | The loader behind that: one delivery call, cached under the children's keys. |
 | `server/routes/feed.xml.get.ts` | The blog as RSS 2.0, from the same summaries. Announced in the head and the footer. |
 | `server/routes/api/[...].ts` | 404s unmatched `/api/` paths — see the note in the file. |
