@@ -1,5 +1,36 @@
 # Running the backend locally
 
+**Since 2026-10-02 a local run uses the production Azure SQL database.** This is a one-person blog
+and the owner chose one environment over the ceremony of two: `appsettings.Development.json` no
+longer overrides the connection string, so `AddSecrets()` pulls the Azure SQL connection string
+from Key Vault exactly as production does. Media, delivery keys, licences and App Insights come
+from Key Vault and Azure Blob as before.
+
+```bash
+dotnet run --project kjeldsen.backend
+```
+
+Two consequences worth keeping in mind:
+
+- **Unattended upgrades run against the shared database.** Bumping a package locally and booting
+  migrates production's schema before production has the code. The owner accepts that for this
+  site; if production misbehaves after a local boot, that is the first suspect, and pushing the
+  bump is the fix.
+- **The CMS's cache purge goes to `Nuxt:Host`**, which is `localhost:3000` locally. Publishing
+  from the local backoffice therefore purges the local frontend, not the live one, and the live
+  pages stay stale until their hour's TTL runs out or something publishes from production.
+
+The SQL server's firewall must allow the machine's IP (`az sql server firewall-rule create`), and
+`DefaultAzureCredential` skips managed identity in Development because the IMDS probe on a
+laptop fails hard instead of falling through to the Azure CLI login (`SecretsExtension.cs`).
+
+To work against a throwaway database instead - say, for upgrading the CMS in isolation - set
+`Azure:UseKeyVaultDatabase` to `false` and provide a connection string; the notes below describe
+how that used to be set up with SQLite or LocalDB and still apply.
+
+---
+
+## The old local-database modes (kept for reference)
 There are two local database modes. Neither touches the Azure SQL database — that connection string
 is only pulled from Key Vault when `Azure:UseKeyVaultDatabase` is true, which it is not in
 `appsettings.Development.json`. Media, delivery keys, licences and App Insights still come from

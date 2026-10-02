@@ -190,6 +190,26 @@ export type FunTimeWebMurderBlockElementPropertiesModel = {
     [key: string]: unknown;
 };
 
+export type GeneratedGraphicsMediaPropertiesModel = {
+    prompt?: null | string;
+    referenceImage?: null | Array<IApiMediaWithCropsModel>;
+    aspectRatio?: null | string;
+    animate?: null | boolean;
+    animationPrompt?: null | string;
+    regenerate?: null | boolean;
+    generationStatus?: null | string;
+    svg?: null | string;
+    script?: null | string;
+    generationHash?: null | string;
+};
+
+export type GeneratedGraphicsMediaWithCropsModel = IApiMediaWithCropsBaseModel & {
+    mediaType: 'generatedGraphics';
+    properties?: GeneratedGraphicsMediaPropertiesModel;
+};
+
+export type GeneratedGraphicsMediaWithCropsResponseModel = IApiMediaWithCropsResponseBaseModel & GeneratedGraphicsMediaWithCropsModel;
+
 export type HeaderBlockElementModel = IApiElementBaseModel & {
     contentType: 'headerBlock';
     properties?: HeaderBlockElementPropertiesModel;
@@ -218,7 +238,7 @@ export type HomePageContentModel = IApiContentBaseModel & {
     properties?: HomePageContentPropertiesModel;
 };
 
-export type HomePageContentPropertiesModel = HeadlessCompositionContentPropertiesModel & NavigationCompositionContentPropertiesModel & {
+export type HomePageContentPropertiesModel = NavigationCompositionContentPropertiesModel & HeadlessCompositionContentPropertiesModel & {
     grid?: ApiBlockGridModel | null;
     background?: null | Array<IApiMediaWithCropsModel>;
 };
@@ -238,10 +258,12 @@ export type IApiContentBaseModel = {
 };
 
 export type IApiContentModel = ({
-    contentType: 'headlessComposition';
-} & HeadlessCompositionContentModel) | ({
+    contentType: 'seoComposition';
+} & SeoCompositionContentModel) | ({
     contentType: 'navigationComposition';
 } & NavigationCompositionContentModel) | ({
+    contentType: 'headlessComposition';
+} & HeadlessCompositionContentModel) | ({
     contentType: 'zooHomepage';
 } & ZooHomepageContentModel) | ({
     contentType: 'writerContainerPage';
@@ -250,16 +272,14 @@ export type IApiContentModel = ({
 } & WriterContentModel) | ({
     contentType: 'animal';
 } & AnimalContentModel) | ({
-    contentType: 'blogPostPage';
-} & BlogPostPageContentModel) | ({
-    contentType: 'contentPage';
-} & ContentPageContentModel) | ({
-    contentType: 'blogPostContainerPage';
-} & BlogPostContainerPageContentModel) | ({
     contentType: 'homePage';
 } & HomePageContentModel) | ({
-    contentType: 'seoComposition';
-} & SeoCompositionContentModel);
+    contentType: 'contentPage';
+} & ContentPageContentModel) | ({
+    contentType: 'blogPostPage';
+} & BlogPostPageContentModel) | ({
+    contentType: 'blogPostContainerPage';
+} & BlogPostContainerPageContentModel);
 
 export type IApiContentResponseBaseModel = {
     contentType: null | string;
@@ -284,10 +304,12 @@ export type IApiContentResponseBaseModel = {
 };
 
 export type IApiContentResponseModel = ({
-    contentType: 'headlessComposition';
-} & HeadlessCompositionContentResponseModel) | ({
+    contentType: 'seoComposition';
+} & SeoCompositionContentResponseModel) | ({
     contentType: 'navigationComposition';
 } & NavigationCompositionContentResponseModel) | ({
+    contentType: 'headlessComposition';
+} & HeadlessCompositionContentResponseModel) | ({
     contentType: 'zooHomepage';
 } & ZooHomepageContentResponseModel) | ({
     contentType: 'writerContainerPage';
@@ -296,16 +318,14 @@ export type IApiContentResponseModel = ({
 } & WriterContentResponseModel) | ({
     contentType: 'animal';
 } & AnimalContentResponseModel) | ({
-    contentType: 'blogPostPage';
-} & BlogPostPageContentResponseModel) | ({
-    contentType: 'contentPage';
-} & ContentPageContentResponseModel) | ({
-    contentType: 'blogPostContainerPage';
-} & BlogPostContainerPageContentResponseModel) | ({
     contentType: 'homePage';
 } & HomePageContentResponseModel) | ({
-    contentType: 'seoComposition';
-} & SeoCompositionContentResponseModel);
+    contentType: 'contentPage';
+} & ContentPageContentResponseModel) | ({
+    contentType: 'blogPostPage';
+} & BlogPostPageContentResponseModel) | ({
+    contentType: 'blogPostContainerPage';
+} & BlogPostContainerPageContentResponseModel);
 
 export type IApiContentRouteModel = {
     path: null | string;
@@ -328,18 +348,24 @@ export type IApiElementBaseModel = {
 };
 
 export type IApiElementModel = ({
+    contentType: 'vimeoBlock';
+} & VimeoBlockElementModel) | ({
     contentType: 'testBlock';
 } & TestBlockElementModel) | ({
     contentType: 'spotlightBlock';
 } & SpotlightBlockElementModel) | ({
-    contentType: 'headerBlock';
-} & HeaderBlockElementModel) | ({
     contentType: 'rteBlock';
 } & RteBlockElementModel) | ({
     contentType: 'imageBlockPersonalized';
 } & ImageBlockPersonalizedElementModel) | ({
-    contentType: 'vimeoBlock';
-} & VimeoBlockElementModel) | ({
+    contentType: 'imageBlock';
+} & ImageBlockElementModel) | ({
+    contentType: 'headerBlock';
+} & HeaderBlockElementModel) | ({
+    contentType: 'funTimeWebMurderBlock';
+} & FunTimeWebMurderBlockElementModel) | ({
+    contentType: 'funTimeWebEkg';
+} & FunTimeWebEkgElementModel) | ({
     contentType: 'codeBlock';
 } & CodeBlockElementModel) | ({
     contentType: 'cardBlock';
@@ -348,16 +374,10 @@ export type IApiElementModel = ({
 } & CardElementModel) | ({
     contentType: 'cacheKeyExampleBlock';
 } & CacheKeyExampleBlockElementModel) | ({
-    contentType: 'funTimeWebMurderBlock';
-} & FunTimeWebMurderBlockElementModel) | ({
-    contentType: 'funTimeWebEkg';
-} & FunTimeWebEkgElementModel) | ({
     contentType: 'apiUserTest';
 } & ApiUserTestElementModel) | ({
     contentType: 'writerElement';
-} & WriterElementElementModel) | ({
-    contentType: 'imageBlock';
-} & ImageBlockElementModel);
+} & WriterElementElementModel);
 
 export type IApiMediaWithCropsBaseModel = {
     focalPoint?: ImageFocalPointModel;
@@ -389,7 +409,9 @@ export type IApiMediaWithCropsModel = ({
     mediaType: 'umbracoMediaArticle';
 } & UmbracoMediaArticleMediaWithCropsModel) | ({
     mediaType: 'umbracoMediaVectorGraphics';
-} & UmbracoMediaVectorGraphicsMediaWithCropsModel);
+} & UmbracoMediaVectorGraphicsMediaWithCropsModel) | ({
+    mediaType: 'generatedGraphics';
+} & GeneratedGraphicsMediaWithCropsModel);
 
 export type IApiMediaWithCropsResponseBaseModel = {
     path: null | string;
@@ -424,7 +446,9 @@ export type IApiMediaWithCropsResponseModel = ({
     mediaType: 'umbracoMediaArticle';
 } & UmbracoMediaArticleMediaWithCropsResponseModel) | ({
     mediaType: 'umbracoMediaVectorGraphics';
-} & UmbracoMediaVectorGraphicsMediaWithCropsResponseModel);
+} & UmbracoMediaVectorGraphicsMediaWithCropsResponseModel) | ({
+    mediaType: 'generatedGraphics';
+} & GeneratedGraphicsMediaWithCropsResponseModel);
 
 export type ImageBlockElementModel = IApiElementBaseModel & {
     contentType: 'imageBlock';

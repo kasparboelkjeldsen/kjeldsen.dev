@@ -1,5 +1,14 @@
 <template>
-  <figure v-if="src" class="m-0" :class="figureClass">
+  <!-- A Generated Graphics item in the picker: the drawing goes inline, in the same frame a photo
+       would get, with the editor's alt text and caption. -->
+  <figure v-if="graphic" class="m-0" :class="figureClass">
+    <div class="frame">
+      <GeneratedGraphic :svg="graphic.svg" :script="graphic.script" :alt="alt" />
+    </div>
+    <figcaption v-if="caption" class="mt-3 text-center font-mono text-xs text-muted">{{ caption }}</figcaption>
+  </figure>
+
+  <figure v-else-if="src" class="m-0" :class="figureClass">
     <div class="frame">
       <img
         ref="img"
@@ -22,8 +31,10 @@
 
 <script setup lang="ts">
   import type { ImageBlockElementModel, ImageCropModel } from '~~/server/delivery-api'
+  import GeneratedGraphic from '~/components/blocks/GeneratedGraphic.vue'
   import { FORMAT } from '~/utils/images'
   import { BLOCK_SPAN, sizesFor } from '~/utils/blocks'
+  import { generatedGraphicOf } from '~/utils/graphics'
 
   const props = defineProps<{ block: ImageBlockElementModel }>()
 
@@ -33,6 +44,9 @@
 
   // Media picker properties arrive as an array even when the editor picks one item.
   const image = computed(() => props.block.properties?.image?.[0] ?? null)
+
+  // The picker also accepts a Generated Graphics item; then there is no photo to size.
+  const graphic = computed(() => generatedGraphicOf(image.value))
 
   const alt = computed(() => props.block.properties?.altText ?? '')
   const caption = computed(() => props.block.properties?.bottomText ?? '')

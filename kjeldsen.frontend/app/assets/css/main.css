@@ -540,6 +540,25 @@
   overflow: hidden;
 }
 
+/* A generated graphic: an inline SVG the model drew (app/components/blocks/GeneratedGraphic.vue).
+   The SVG carries a viewBox and no size of its own, so it fills the frame's width and takes its
+   height from the drawing. One that animates replays on hover or tap, hence the hand cursor. */
+.graphic {
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.graphic svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.graphic.is-animated {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Blocks that want more room than the text column. Only when the block owns the whole row - a
    half-width block next to another must stay inside its cell. */
 @media (min-width: 64rem) {

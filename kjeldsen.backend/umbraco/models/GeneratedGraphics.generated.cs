@@ -18,30 +18,30 @@ using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Web.Common.PublishedModels
 {
-	/// <summary>Blog Post Page</summary>
-	[PublishedModel("blogPostPage")]
-	public partial class BlogPostPage : PublishedContentModel, IHeadlessComposition, ISeoComposition
+	/// <summary>Generated Graphics</summary>
+	[PublishedModel("generatedGraphics")]
+	public partial class GeneratedGraphics : PublishedContentModel
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
-		public new const string ModelTypeAlias = "blogPostPage";
+		public new const string ModelTypeAlias = "generatedGraphics";
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
-		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+		public new const PublishedItemType ModelItemType = PublishedItemType.Media;
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		public new static IPublishedContentType GetModelContentType(IPublishedContentTypeCache contentTypeCache)
 			=> PublishedModelUtility.GetModelContentType(contentTypeCache, ModelItemType, ModelTypeAlias);
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<BlogPostPage, TValue>> selector)
+		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<GeneratedGraphics, TValue>> selector)
 			=> PublishedModelUtility.GetModelPropertyType(GetModelContentType(contentTypeCache), selector);
 #pragma warning restore 0109
 
 		private IPublishedValueFallback _publishedValueFallback;
 
 		// ctor
-		public BlogPostPage(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
+		public GeneratedGraphics(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
 			: base(content, publishedValueFallback)
 		{
 			_publishedValueFallback = publishedValueFallback;
@@ -50,79 +50,81 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Grid
+		/// Animate: Also generate a GSAP timeline. It plays once when the graphic scrolls into view, and again on hover or tap.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
+		[ImplementPropertyType("animate")]
+		public virtual bool Animate => this.Value<bool>(_publishedValueFallback, "animate");
+
+		///<summary>
+		/// Animation direction: Optional. What should happen, in what order, with what feel. Left empty, the model picks the scene's natural action.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("grid")]
-		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockGridModel Grid => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockGridModel>(_publishedValueFallback, "grid");
+		[ImplementPropertyType("animationPrompt")]
+		public virtual string AnimationPrompt => this.Value<string>(_publishedValueFallback, "animationPrompt");
 
 		///<summary>
-		/// Writer
+		/// Aspect ratio: e.g. 16:9 (default), 4:1, 1:1, 4:3.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("writer")]
-		public virtual global::Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent Writer => this.Value<global::Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>(_publishedValueFallback, "writer");
+		[ImplementPropertyType("aspectRatio")]
+		public virtual string AspectRatio => this.Value<string>(_publishedValueFallback, "aspectRatio");
 
 		///<summary>
-		/// Cache Page
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
-		[ImplementPropertyType("cachePage")]
-		public virtual bool CachePage => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetCachePage(this, _publishedValueFallback);
-
-		///<summary>
-		/// Child Keys
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
-		[ImplementPropertyType("childKeys")]
-		public virtual bool ChildKeys => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetChildKeys(this, _publishedValueFallback);
-
-		///<summary>
-		/// No Slug
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
-		[ImplementPropertyType("noSlug")]
-		public virtual bool NoSlug => global::Umbraco.Cms.Web.Common.PublishedModels.HeadlessComposition.GetNoSlug(this, _publishedValueFallback);
-
-		///<summary>
-		/// Seo Description
+		/// Brief fingerprint: Internal: the brief the current drawing was made from.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("seoDescription")]
-		public virtual string SeoDescription => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoDescription(this, _publishedValueFallback);
+		[ImplementPropertyType("generationHash")]
+		public virtual string GenerationHash => this.Value<string>(_publishedValueFallback, "generationHash");
 
 		///<summary>
-		/// Seo Key Words
+		/// Status: Written by the generator on every save: model, timing, token counts, or the error.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("seoKeyWords")]
-		public virtual string SeoKeyWords => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoKeyWords(this, _publishedValueFallback);
+		[ImplementPropertyType("generationStatus")]
+		public virtual string GenerationStatus => this.Value<string>(_publishedValueFallback, "generationStatus");
 
 		///<summary>
-		/// Seo List Image
+		/// Prompt: What to draw: subject, mood, style notes. The model draws a flat vector illustration for the dark site design.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("seoListImage")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops SeoListImage => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoListImage(this, _publishedValueFallback);
+		[ImplementPropertyType("prompt")]
+		public virtual string Prompt => this.Value<string>(_publishedValueFallback, "prompt");
 
 		///<summary>
-		/// Seo Publishing Date
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
-		[ImplementPropertyType("seoPublishingDate")]
-		public virtual global::System.DateTime SeoPublishingDate => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoPublishingDate(this, _publishedValueFallback);
-
-		///<summary>
-		/// Seo Title
+		/// Reference image: Optional. A photo the model uses for subject and composition - it is sent along with the prompt.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("seoTitle")]
-		public virtual string SeoTitle => global::Umbraco.Cms.Web.Common.PublishedModels.SeoComposition.GetSeoTitle(this, _publishedValueFallback);
+		[ImplementPropertyType("referenceImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops ReferenceImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "referenceImage");
+
+		///<summary>
+		/// Regenerate: Tick and save to draw again even though nothing above changed. Clears itself.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
+		[ImplementPropertyType("regenerate")]
+		public virtual bool Regenerate => this.Value<bool>(_publishedValueFallback, "regenerate");
+
+		///<summary>
+		/// GSAP timeline: Body of a function (svg, gsap) returning a paused timeline. Generated when Animate is on.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("script")]
+		public virtual string Script => this.Value<string>(_publishedValueFallback, "script");
+
+		///<summary>
+		/// SVG: The drawing. Generated; hand edits survive until the brief changes or Regenerate is ticked.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "18.2.0+3a150af")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("svg")]
+		public virtual string Svg => this.Value<string>(_publishedValueFallback, "svg");
 	}
 }

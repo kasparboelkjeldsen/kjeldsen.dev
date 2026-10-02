@@ -499,3 +499,5 @@ kjeldsen.frontend/.env copy
 
 .claude/settings.local.json
 kjeldsen.experiment/
+
+.claude/launch.json

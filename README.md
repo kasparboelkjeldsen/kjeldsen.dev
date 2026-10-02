@@ -13,7 +13,7 @@ Each part has its own README; this one is the map.
 | `kjeldsen.backend/` | Umbraco 18.1 on .NET 10 with Engage 18, the Delivery API, uSync, blob-backed media and image cache, and the custom code that talks to the frontend | [knowledge/](knowledge/README.md) |
 | `kjeldsen.frontend/` | Nuxt 4, Tailwind 4, a generated Delivery API client, two caches, server-side syntax highlighting, an RSS feed | [kjeldsen.frontend/README.md](kjeldsen.frontend/README.md) |
 | `kjeldsen.infra/` | Pulumi in C# against a local file backend, adopted from the live resources, plus the Azure Pipelines YAML | [kjeldsen.infra/README.md](kjeldsen.infra/README.md) |
-| `knowledge/` | Working notes: the reasons behind decisions that look odd without context, and the traps that cost time | [knowledge/README.md](knowledge/README.md) |
+| `knowledge/` | Working notes: the reasons behind decisions that look odd without context, the traps that cost time, and how the model-drawn illustrations work | [knowledge/README.md](knowledge/README.md) |
 
 ## How it fits together
 
@@ -33,12 +33,12 @@ Each part has its own README; this one is the map.
 
 ## Running it locally
 
-The CMS first, then the frontend. The backend's `SqlServer` launch profile uses LocalDB and runs
-Engage; see [knowledge/local-development.md](knowledge/local-development.md) for the profiles and
-first-boot behaviour.
+The CMS first, then the frontend. A local run shares the production Azure SQL database - one
+environment, by choice; see [knowledge/local-development.md](knowledge/local-development.md) for
+what that implies.
 
 ```bash
-cd kjeldsen.backend && dotnet run --launch-profile SqlServer
+cd kjeldsen.backend && dotnet run
 ```
 
 ```bash
