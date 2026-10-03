@@ -2,7 +2,7 @@
  * A Table block: a JSON description of a table, written by an editor or an agent through the
  * Management API / MCP, rendered by app/components/blocks/TableBlock.vue.
  *
- * The format is documented for authors in knowledge/table-block.md and on the block's property
+ * The format is documented for authors in knowledge/blocks.md and on the block's property
  * in the backoffice; this is the parser for it. Everything here is lenient on purpose - a column
  * may be a bare string, a row may be an array or an object, a cell may be a value or an object
  * with styling - and everything comes out normalised: columns with keys, rows as arrays of cells

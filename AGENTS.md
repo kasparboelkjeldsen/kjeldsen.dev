@@ -9,14 +9,9 @@ index. Read the note for the area before changing it.
 
 ## Writing content through the API or the Umbraco MCP
 
-Pages are block grids. The blocks that take structured data:
-
-| Block | Alias | What goes in | Format |
-|---|---|---|---|
-| Table Block | `tableBlock` | `table`: JSON describing columns, rows, footer, note and an optional mobile variant; `caption` | [knowledge/table-block.md](knowledge/table-block.md) |
-| Data Visio Block | `dataVisioBlock` | `dataset`: JSON; `prompt`: what the chart should say; `chartType`; `model` (Sonnet or Opus). The chart is written by the model on save. | [knowledge/data-visio.md](knowledge/data-visio.md) |
-| Code Block | `codeBlock` | `code`: a fenced block, the language on the fence | - |
-| Image Block | `imageBlock` | `image`: a photo or a Generated Graphics media item | [knowledge/generated-graphics.md](knowledge/generated-graphics.md) |
+Pages are block grids. [knowledge/blocks.md](knowledge/blocks.md) is the catalogue: every
+block's alias, key, column spans and properties, the grid JSON a page is written as, the Table
+block's JSON format and the Data Visio block's brief. Read it before writing content.
 
 Text fields across the site accept `**bold**` and `--italic--` as emphasis markers; nothing else
 in a text field becomes markup.

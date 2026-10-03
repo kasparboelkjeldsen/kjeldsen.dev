@@ -7,7 +7,7 @@ option that draws it, and the frontend renders that with a preconfigured ECharts
 same block is a half-width cell or a full-width one, on a phone or a desktop - the script lays
 itself out for the box it gets.
 
-The test page is `/data-visio/`.
+The test page is `/data-visio/`. The block's place among the others is in [blocks.md](blocks.md).
 
 ## The pieces
 
