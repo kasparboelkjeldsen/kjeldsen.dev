@@ -15,6 +15,7 @@ behind decisions that look strange without context.
 | [production-deploy.md](production-deploy.md) | The 2026-09-03 production deploy: fresh database, unattended install, the traps (stale assemblies, one-shot uSync import, startup probe, forwarded ports) and where the backup is |
 | [engage-headless-v2.md](engage-headless-v2.md) | How the V2 frontend is wired to Engage: one pageview per navigation, segments resolved by Engage, what to verify |
 | [generated-graphics.md](generated-graphics.md) | Illustrations drawn by the model: the Generated Graphics media type, the save-time generation through Umbraco.AI, the SVG/GSAP contract and how the frontend plays it |
+| [data-visio.md](data-visio.md) | Charts drawn by the model from a pasted dataset: the Data Visio block, the ECharts contract, server-rendered stills, sizing by grid span |
 
 ## A note on sources
 

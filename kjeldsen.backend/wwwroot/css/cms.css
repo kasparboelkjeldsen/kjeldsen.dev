@@ -645,6 +645,10 @@
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
+  .backdrop-filter {
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -1278,6 +1282,61 @@
     animation: none;
   }
 }
+.visio-frame {
+  container-type: inline-size;
+  padding: 1rem 1rem 0.75rem;
+}
+@media (min-width: 48rem) {
+  .visio-frame {
+    padding: 1.25rem 1.25rem 1rem;
+  }
+}
+.visio {
+  --aspect: 1.6;
+  position: relative;
+  width: 100%;
+  height: clamp(260px, calc(100cqw / var(--aspect)), 600px);
+  overflow: hidden;
+}
+@container (max-width: 479px) {
+  .visio {
+    height: clamp(240px, calc(100cqw / min(var(--aspect), 1.25)), 480px);
+  }
+}
+.visio-still {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.5s ease;
+}
+.visio-still svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.visio-live {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.visio.is-live .visio-live {
+  opacity: 1;
+}
+.visio.is-live .visio-still {
+  opacity: 0;
+  pointer-events: none;
+}
+.visio-fallback {
+  margin: 0;
+  padding: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-fg-2);
+}
+.visio-empty {
+  padding: 1.5rem;
+  text-align: center;
+}
 @media (min-width: 64rem) {
   [data-span='12'] > .breakout {
     margin-inline: -5rem;
@@ -1341,7 +1400,7 @@
 .block-cell[data-type='headerBlock'] + .block-cell {
   margin-top: -0.5rem;
 }
-.block-cell[data-type='imageBlock'], .block-cell[data-type='vimeoBlock'], .block-cell[data-type='codeBlock'] {
+.block-cell[data-type='imageBlock'], .block-cell[data-type='vimeoBlock'], .block-cell[data-type='codeBlock'], .block-cell[data-type='dataVisioBlock'] {
   margin-block: 0.5rem;
 }
 .block-cell[data-type='spotlightBlock'] {
@@ -1771,6 +1830,42 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-duration {
   syntax: "*";
   inherits: false;
@@ -1834,6 +1929,15 @@
       --tw-drop-shadow-color: initial;
       --tw-drop-shadow-alpha: 100%;
       --tw-drop-shadow-size: initial;
+      --tw-backdrop-blur: initial;
+      --tw-backdrop-brightness: initial;
+      --tw-backdrop-contrast: initial;
+      --tw-backdrop-grayscale: initial;
+      --tw-backdrop-hue-rotate: initial;
+      --tw-backdrop-invert: initial;
+      --tw-backdrop-opacity: initial;
+      --tw-backdrop-saturate: initial;
+      --tw-backdrop-sepia: initial;
       --tw-duration: initial;
       --tw-ease: initial;
       --tw-translate-x: 0;

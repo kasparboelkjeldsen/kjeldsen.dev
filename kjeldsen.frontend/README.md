@@ -175,7 +175,7 @@ posted JSON off, because it otherwise hides component edits.
 | `app/components/content/` | Page and block resolvers, block grid, post cards, listing, outline. |
 | `app/components/chrome/` | What surrounds the grid on each page type. |
 | `app/components/site/` | Header, footer, hero, reading progress. |
-| `app/components/blocks/` | One component per block type, async-loaded. `GeneratedGraphic.vue` is the model-drawn SVG with its GSAP timeline (see [knowledge/generated-graphics.md](../knowledge/generated-graphics.md)); `ImageBlock.vue` hands over to it when the picked media is a Generated Graphics item. |
+| `app/components/blocks/` | One component per block type, async-loaded. `GeneratedGraphic.vue` is the model-drawn SVG with its GSAP timeline (see [knowledge/generated-graphics.md](../knowledge/generated-graphics.md)); `ImageBlock.vue` hands over to it when the picked media is a Generated Graphics item. `DataVisioBlock.vue` / `DataVisioChart.vue` draw a model-written ECharts option over a server-rendered still (see [knowledge/data-visio.md](../knowledge/data-visio.md)). |
 | `app/plugins/reveal.ts` | The `v-reveal` scroll-entrance directive. |
 | `app/utils/` | Emphasis markers, hero lifting, slugs, dates, image URLs. |
 | `app/error.vue` | The 404 and error page. |

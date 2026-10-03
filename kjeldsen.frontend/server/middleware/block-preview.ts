@@ -1,5 +1,5 @@
 import { timingSafeEqual } from 'node:crypto'
-import { highlightBlock } from '../utils/highlight'
+import { prepareBlock } from '../utils/highlight'
 import type { AnyBlock } from '~~/types/content'
 
 /**
@@ -33,8 +33,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody<{ content?: AnyBlock }>(event)
-  // Highlighted here too, so a code block previews in the editor the way it renders on the site.
-  event.context.blockPreview = body?.content ? await highlightBlock(body.content) : null
+  // Highlighted here too, so a code block previews in the editor the way it renders on the site -
+  // and a Data Visio block previews as its server-drawn still, since the editor runs no scripts.
+  event.context.blockPreview = body?.content ? await prepareBlock(body.content) : null
 })
 
 function authorised(sent: string | undefined): boolean {

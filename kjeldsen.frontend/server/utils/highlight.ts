@@ -1,6 +1,7 @@
 import { createHighlighterCore, type HighlighterCore, type ThemedToken } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import { parseFence } from '~~/shared/fence'
+import { stillForVisio } from './visio'
 import type { PageContent, AnyBlock, BlockGrid } from '~~/types/content'
 
 /**
@@ -118,20 +119,31 @@ export async function highlightBlock<T extends AnyBlock>(block: T): Promise<T> {
   return block
 }
 
-async function highlightGrid(grid: BlockGrid | null | undefined): Promise<void> {
+/**
+ * Everything a block gets done to it on the server before the payload is cached: code blocks are
+ * highlighted, Data Visio blocks get a still of their chart. The span is the grid columns the
+ * block occupies, which decides how wide the still is drawn.
+ */
+export async function prepareBlock<T extends AnyBlock>(block: T, span = 12): Promise<T> {
+  await highlightBlock(block)
+  stillForVisio(block, span)
+  return block
+}
+
+async function prepareGrid(grid: BlockGrid | null | undefined): Promise<void> {
   for (const item of grid?.items ?? []) {
-    if (item.content) await highlightBlock(item.content)
+    if (item.content) await prepareBlock(item.content, item.columnSpan || 12)
     for (const area of item.areas ?? []) {
       for (const areaItem of area.items ?? []) {
-        if (areaItem.content) await highlightBlock(areaItem.content)
+        if (areaItem.content) await prepareBlock(areaItem.content, 12)
       }
     }
   }
 }
 
-/** Highlights every code block in a page's grid, in place, and returns the page. */
+/** Prepares every block in a page's grid (highlighting, chart stills), in place, and returns the page. */
 export async function highlightContent<T extends PageContent>(content: T): Promise<T> {
   const grid = (content.properties as { grid?: BlockGrid | null } | null)?.grid
-  await highlightGrid(grid)
+  await prepareGrid(grid)
   return content
 }

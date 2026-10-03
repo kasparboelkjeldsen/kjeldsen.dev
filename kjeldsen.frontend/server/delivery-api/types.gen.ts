@@ -150,6 +150,25 @@ export type ContentPageContentPropertiesModel = HeadlessCompositionContentProper
 
 export type ContentPageContentResponseModel = IApiContentResponseBaseModel & ContentPageContentModel;
 
+export type DataVisioBlockElementModel = IApiElementBaseModel & {
+    contentType: 'dataVisioBlock';
+    properties?: DataVisioBlockElementPropertiesModel;
+};
+
+export type DataVisioBlockElementPropertiesModel = {
+    dataset?: null | string;
+    prompt?: null | string;
+    chartType?: null | string;
+    model?: null | string;
+    caption?: null | string;
+    regenerate?: null | boolean;
+    summary?: null | string;
+    spec?: null | string;
+    meta?: null | string;
+    generationStatus?: null | string;
+    generationHash?: null | string;
+};
+
 export type FileMediaPropertiesModel = {
     umbracoFile?: null | string;
     umbracoExtension?: null | string;
@@ -379,7 +398,9 @@ export type IApiElementModel = ({
     contentType: 'apiUserTest';
 } & ApiUserTestElementModel) | ({
     contentType: 'writerElement';
-} & WriterElementElementModel);
+} & WriterElementElementModel) | ({
+    contentType: 'dataVisioBlock';
+} & DataVisioBlockElementModel);
 
 export type IApiMediaWithCropsBaseModel = {
     focalPoint?: ImageFocalPointModel;
