@@ -32,6 +32,8 @@
     spotlightBlock: defineAsyncComponent(() => import('~/components/blocks/SpotlightBlock.vue')),
     vimeoBlock: defineAsyncComponent(() => import('~/components/blocks/VimeoBlock.vue')),
     imageBlock: defineAsyncComponent(() => import('~/components/blocks/ImageBlock.vue')),
+    openImageBlock: defineAsyncComponent(() => import('~/components/blocks/OpenImageBlock.vue')),
+    readMoreBlock: defineAsyncComponent(() => import('~/components/blocks/ReadMoreBlock.vue')),
     dataVisioBlock: defineAsyncComponent(() => import('~/components/blocks/DataVisioBlock.vue')),
     tableBlock: defineAsyncComponent(() => import('~/components/blocks/TableBlock.vue')),
     apiUserTest: defineAsyncComponent(() => import('~/components/blocks/ApiUserTest.vue')),

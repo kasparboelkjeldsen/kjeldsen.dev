@@ -70,6 +70,40 @@ else in a text field becomes markup.
 | `bottomText` | Textstring | Caption under the picture. |
 | `cropPreference` | Dropdown | `Ratio` (16:9, default), `Square`, `Slim` (4:1), `None`. Picks the crop ladder, not an alias. |
 
+### Open Image Block - `openImageBlock` (`0da33810-d90d-451c-beb8-858ebe1a487b`), 6 or 12
+
+An Image Block that opens. In the page it is the same picture, crop ladder, frame and caption
+(`OpenImageBlock.vue` renders `ImageBlock.vue` with `zoom`), plus a corner badge and a zoom-in
+cursor. Clicked, it opens `ImageLightbox.vue`: a native modal `<dialog>` with the **whole,
+uncropped** image, as large as the screen allows and never upscaled past the original. The
+opened image is still resized through `/api/media` (a WebP srcset from 480 to 2000 px wide,
+capped at the original's width); zooming in switches the `sizes` hint so the browser fetches the
+largest. Wheel, pinch, double click or double tap zoom (up to 4x) about the cursor or fingers;
+a zoomed picture pans with a drag, and an unzoomed one is dismissed by dragging it up or down.
+Escape, the close button or a tap beside the picture closes it; `+`, `-`, `0` and the arrows work
+from the keyboard. Focus returns to the picture.
+
+| Property | Editor | Notes |
+|---|---|---|
+| `image` | Image Media Picker (images only), mandatory | Same media JSON as `imageBlock.image`. Generated Graphics are not offered here. |
+| `altText` | Textstring | Also the dialog's accessible name. |
+| `bottomText` | Textstring | Caption under the picture and at the foot of the opened view. |
+| `cropPreference` | Dropdown | As on the Image Block; only the in-page picture is cropped. |
+
+### Read More Block - `readMoreBlock` (`5eaba068-1493-4873-81ea-a893365c1d97`), 6 or 12
+
+Text that starts folded: about four lines show, fading out, above a pill button carrying the
+label. Opening animates the height to the full text, melts the fade and draws a sky-to-ember rule
+down the left edge; the button becomes the close label and the chevron turns. Closing a long text
+from below scrolls the block back into view. Text that fits inside the fold shows whole with no
+button. The whole text is in the server-rendered markup (`ReadMoreBlock.vue`).
+
+| Property | Editor | Notes |
+|---|---|---|
+| `label` | Textstring | The button. Empty means "Read more". Emphasis markers work: `How the --segment-aware-- cache works`. |
+| `text` | Rich text (`Read More Rich Text`, `52308e7d-8261-4ce2-9214-476a0277ca36`), mandatory | Text only: paragraphs, bold, italic, underline, strike, sub/superscript, links, lists, quotes, rules. No images, media, embeds, tables, code blocks, headings or source editing. Written as `{ "markup": "<p>...</p>", "blocks": null }`; emphasis markers work. |
+| `closeLabel` | Textstring | Optional; the button once open. Empty means "Show less". |
+
 ### Table Block - `tableBlock` (`c8d9e0f1-2a3b-4c5d-8e6f-7a8b9c0d1e2f`), 6 or 12
 
 | Property | Editor | Notes |

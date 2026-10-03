@@ -9,7 +9,17 @@
   </figure>
 
   <figure v-else-if="src" class="m-0" :class="figureClass">
-    <div class="frame">
+    <!-- With `zoom` (the Open Image block) the frame is a button that opens the whole picture. -->
+    <component
+      :is="zoom ? 'button' : 'div'"
+      ref="frame"
+      class="frame"
+      :class="{ 'zoom-frame': zoom }"
+      :type="zoom ? 'button' : undefined"
+      :aria-label="zoom ? (alt ? `Open image: ${alt}` : 'Open image') : undefined"
+      :aria-haspopup="zoom ? 'dialog' : undefined"
+      @click="zoom && (opened = true)"
+    >
       <img
         ref="img"
         :src="src"
@@ -24,19 +34,47 @@
         :class="{ 'is-loaded': loaded }"
         @load="loaded = true"
       >
-    </div>
+      <span v-if="zoom" class="zoom-badge" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+        </svg>
+      </span>
+    </component>
     <figcaption v-if="caption" class="mt-3 text-center font-mono text-xs text-muted">{{ caption }}</figcaption>
+
+    <!-- Mounted on the first open, so the lightbox's code is only fetched by readers who use it. -->
+    <ImageLightbox
+      v-if="zoom && everOpened && image?.url"
+      v-model:open="opened"
+      :url="image.url"
+      :width="image.width"
+      :height="image.height"
+      :alt="alt"
+      :caption="caption"
+      :return-focus="frame"
+    />
   </figure>
 </template>
 
 <script setup lang="ts">
-  import type { ImageBlockElementModel, ImageCropModel } from '~~/server/delivery-api'
+  import { defineAsyncComponent } from 'vue'
+  import type { ImageBlockElementModel, ImageCropModel, OpenImageBlockElementModel } from '~~/server/delivery-api'
   import GeneratedGraphic from '~/components/blocks/GeneratedGraphic.vue'
   import { FORMAT } from '~/utils/images'
   import { BLOCK_SPAN, sizesFor } from '~/utils/blocks'
   import { generatedGraphicOf } from '~/utils/graphics'
 
-  const props = defineProps<{ block: ImageBlockElementModel }>()
+  const ImageLightbox = defineAsyncComponent(() => import('~/components/blocks/ImageLightbox.vue'))
+
+  // The Open Image block has the same properties and is rendered by this component with `zoom`.
+  const props = defineProps<{ block: ImageBlockElementModel | OpenImageBlockElementModel; zoom?: boolean }>()
+
+  const frame = ref<HTMLElement | null>(null)
+  const opened = ref(false)
+  const everOpened = ref(false)
+  watch(opened, (v) => {
+    if (v) everOpened.value = true
+  })
 
   // How many grid columns the block has, from the resolver. Decides the `sizes` hint and whether
   // the picture may break out of the text column: a half-width block stays inside its cell.

@@ -402,7 +402,11 @@ export type IApiElementModel = ({
     contentType: 'dataVisioBlock';
 } & DataVisioBlockElementModel) | ({
     contentType: 'tableBlock';
-} & TableBlockElementModel);
+} & TableBlockElementModel) | ({
+    contentType: 'readMoreBlock';
+} & ReadMoreBlockElementModel) | ({
+    contentType: 'openImageBlock';
+} & OpenImageBlockElementModel);
 
 export type IApiMediaWithCropsBaseModel = {
     focalPoint?: ImageFocalPointModel;
@@ -546,6 +550,18 @@ export type NavigationCompositionContentPropertiesModel = {
 
 export type NavigationCompositionContentResponseModel = IApiContentResponseBaseModel & NavigationCompositionContentModel;
 
+export type OpenImageBlockElementModel = IApiElementBaseModel & {
+    contentType: 'openImageBlock';
+    properties?: OpenImageBlockElementPropertiesModel;
+};
+
+export type OpenImageBlockElementPropertiesModel = {
+    image?: null | Array<IApiMediaWithCropsModel>;
+    altText?: null | string;
+    bottomText?: null | string;
+    cropPreference?: null | string;
+};
+
 export type PagedIApiContentResponseModel = {
     total: number;
     items: Array<IApiContentResponseModel>;
@@ -567,6 +583,17 @@ export type ProblemDetails = {
     status?: null | number;
     detail?: null | string;
     instance?: null | string;
+};
+
+export type ReadMoreBlockElementModel = IApiElementBaseModel & {
+    contentType: 'readMoreBlock';
+    properties?: ReadMoreBlockElementPropertiesModel;
+};
+
+export type ReadMoreBlockElementPropertiesModel = {
+    label?: null | string;
+    text?: RichTextModel | null;
+    closeLabel?: null | string;
 };
 
 export type RichTextModel = {

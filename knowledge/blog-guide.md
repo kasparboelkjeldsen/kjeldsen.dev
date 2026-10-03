@@ -48,6 +48,9 @@ order.
 [HEADER] h1 | The little model that could
 [RTE] A paragraph or several. Markdown-ish prose is fine: paragraphs, lists, links, inline code.
 [IMAGE] photo: a cat asleep on a server rack | alt: A cat asleep on a server rack | caption: Production, 03:12
+[OPEN IMAGE] photo: the full Azure portal blade | alt: ... | caption: ... | shape: Ratio
+[READ MORE] label: How the cache key is built | close: Fold it back
+    Prose that most readers can skip, folded away until asked for.
 [CODE] csharp
     ...code...
 [SPOTLIGHT] header: What this cost | text: Two evenings and about $17 of API calls.
@@ -113,6 +116,41 @@ describe style, describe content. If a reference photo exists, say so; the drawi
 its palette and composition. Animation is one clear action, two to five seconds, that plays once
 and again on hover. `aspect` is `16:9` by default; `4:1` for a banner, `1:1` for a square, `3:1`
 for a hero that will also be the list image.
+
+### [OPEN IMAGE]
+
+`[OPEN IMAGE] photo: what the picture should show | alt: ... | caption: ... | shape: Ratio`
+
+A photo that the reader can open. In the page it looks exactly like an `[IMAGE]` photo, cropped
+to its `shape`, with a small expand badge in the corner. Clicked or tapped, it opens over the page
+**whole and uncropped**, as large as the screen allows, and the reader can zoom in (scroll,
+double-click, pinch, double-tap) and drag it around; on a phone a swipe down closes it. The
+caption is shown in both places.
+
+Use it when the detail is the point: a screenshot with small text, a dashboard, a diagram, a
+wide photo whose crop loses something. A plain illustration stays an `[IMAGE]`. Photos only:
+a generated illustration cannot be opened, and a small screenshot is never enlarged past its own
+size, so give a full-size capture. `shape: None` shows the uncropped picture in the page too.
+
+### [READ MORE]
+
+```
+[READ MORE] label: How the cache key is built | close: Fold it back
+  The prose that is folded away. Paragraphs, lists, links, quotes and the emphasis markers;
+  nothing else.
+```
+
+A fold-out. The first four lines or so of the text show, fading out above a button with the
+`label`; the reader taps it and the rest unfolds. `label` is what the button says, so make it
+say what is inside ("The three things that broke", "How the cache key is built"); left out, it
+reads "Read more". `close` is optional and defaults to "Show less". Emphasis markers work in
+both.
+
+Use it for what most readers can skip and some will want: the long story behind a decision, a
+derivation, a list of edge cases, a war story that would break the flow. The main argument never
+goes in a fold. Text only: no images, tables, code listings or headings inside; those stay their
+own blocks, before or after it. A text shorter than the fold simply shows whole, so do not fold
+two sentences. One or two per post; half width (`| span: 6`) works beside an image.
 
 ### [CODE]
 
@@ -246,7 +284,9 @@ fifth of what it was"). Exact figures belong in the table.
 3. **Sections with h2 headings**, each one thing: the problem, the approach, what happened, the
    numbers, what it cost, what is next. Four to seven sections.
 4. **Evidence where it is claimed**: the code listing next to the paragraph that explains it,
-   the chart next to the result it shows, the table next to the comparison.
+   the chart next to the result it shows, the table next to the comparison, the screenshot
+   (as an `[OPEN IMAGE]`, so its detail can be read) next to the step it shows. Detail that would
+   break the flow goes in a `[READ MORE]`.
 5. **A spotlight** for the one thing to remember, or the cost, or the warning.
 6. **Close short**: what is next, or a question, or a link to the code. No summary of the post.
 
@@ -269,7 +309,7 @@ what it cost.
 
 [HEADER] h2 | What the editor sees
 [RTE] ...three paragraphs on the block, the save, the status field...
-[IMAGE] photo: the backoffice with a Data Visio block open, dataset pasted, status filled in | alt: The Data Visio block in the Umbraco backoffice | caption: One block, one save, one chart
+[OPEN IMAGE] photo: the backoffice with a Data Visio block open, dataset pasted, status filled in | alt: The Data Visio block in the Umbraco backoffice | caption: One block, one save, one chart
 
 [HEADER] h2 | Sonnet first, Opus when it matters
 [RTE] ...two paragraphs...
@@ -285,6 +325,8 @@ what it cost.
 [RTE] ...the heart that flew to the top-left corner, the donut refused for naming a variable top...
 [CODE] javascript
     const top = data.sources[0]; // refused, once
+[READ MORE] label: The other four things that broke
+  ...a paragraph or a short list per failure, for the reader who wants all of them...
 [SPOTLIGHT] header: Cost of the week | text: Twelve charts, nine drawings, about $22 of API calls. The decorator that let a laptop use the key cost more in head-scratching than the charts did in dollars.
 
 [HEADER] h2 | What is next
@@ -294,8 +336,8 @@ what it cost.
 ## Handing the draft over
 
 The draft goes to the person or agent that places it in the CMS. They will take each block as
-written: prose into RTE blocks, JSON into Table and Chart blocks verbatim, image briefs into the
-media library. So:
+written: prose into RTE blocks, folded prose and its labels into Read More blocks, JSON into
+Table and Chart blocks verbatim, image briefs into the media library. So:
 
 - Keep the block order and the notation exact; it is parsed by eye and by hand.
 - Put JSON on its own lines, valid and complete. Test it mentally: every row has the columns'
