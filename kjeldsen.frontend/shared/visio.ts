@@ -72,7 +72,7 @@ export const COMPACT_BELOW = 480
 export function visioHeight(width: number, aspect: number): number {
   const compact = width < COMPACT_BELOW
   const effective = compact ? Math.min(aspect, 1.25) : aspect
-  const [min, max] = compact ? [240, 480] : [260, 600]
+  const [min, max] = compact ? [300, 480] : [260, 600]
   return Math.round(Math.min(max, Math.max(min, width / effective)))
 }
 

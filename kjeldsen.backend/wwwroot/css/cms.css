@@ -436,6 +436,11 @@
   .gap-10 {
     gap: calc(var(--spacing) * 10);
   }
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .overflow-hidden {
     overflow: hidden;
   }
@@ -1300,7 +1305,7 @@
 }
 @container (max-width: 479px) {
   .visio {
-    height: clamp(240px, calc(100cqw / min(var(--aspect), 1.25)), 480px);
+    height: clamp(300px, calc(100cqw / min(var(--aspect), 1.25)), 480px);
   }
 }
 .visio-still {

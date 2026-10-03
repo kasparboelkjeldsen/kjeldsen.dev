@@ -45,7 +45,7 @@ together.
 ## Sizing
 
 The box's height is CSS: `clamp(260px, 100cqw / aspect, 600px)` on a wide frame,
-`clamp(240px, 100cqw / min(aspect, 1.25), 480px)` under 480 px (container query on the frame).
+`clamp(300px, 100cqw / min(aspect, 1.25), 480px)` under 480 px (container query on the frame).
 `visioHeight()` in `shared/visio.ts` is the same rule in TypeScript, used to size the server
 still. Because the height is settled by CSS before any script runs, nothing shifts when the live
 chart replaces the still.
