@@ -1,0 +1,29 @@
+{
+  "runId": "2026-10-03_1051_mcp_gpt-6-luna-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T12:00:00+02:00",
+  "total": 94,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 errors, 0 warnings). / returns 200 via the '/' domain on 'The MCP Notebook' page and lists both posts as cards with date, title, summary and working links. Both posts render every block (image, text) with no errors. 3 provided Unsplash photos imported into a 'Blog Images' media folder and served through signed GetCropUrl URLs that load. Everything published." },
+    { "id": "modeling", "name": "Content modeling", "score": 21.5, "max": 25, "notes": "Folders 8/8: blogHomePage/blogPostPage in Pages, four element blocks in Blocks. Block grid 5/7: a single 'Blog Block Grid' data type on both pages with intro, text, image and post-list blocks, but there is no rich text block. blogTextBlock.text is a plain TextArea rendered with whitespace-pre-line, so the body can't have links, lists or inline formatting. Structure 5/5: siteRoot is the only root type, siteRoot -> blogHomePage -> blogPostPage, templates assigned, camelCase aliases, data type in Custom/Umbraco.BlockGrid. Hygiene 3.5/5: no compositions and summary is a real property, but there is no publish date property (the listing shows CreateDate) and no listing image property." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 24.5, "max": 25, "notes": "Both templates use Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold blockgrid partials are unchanged. There are 4 adapters in Partials/blockgrid/Components/<alias>.cshtml, each receiving BlockGridItem<T>, mapping to a record and calling Component.InvokeAsync, with no markup. 4 ViewComponents render Shared/Components/<Name>/Default.cshtml, records live in Models/Blog/, and the component views are plain. Program.cs/appsettings untouched, no migrations, GetCropUrl and friendly Children/Url() used, Tailwind built. Minor: the full HTML shell (head/header/footer) is duplicated across blogHomePage.cshtml and blogPostPage.cshtml with no shared layout." },
+    { "id": "content", "name": "Content & presentation", "score": 8, "max": 10, "notes": "Content 4/6: both posts are on-topic and accurate ('MCP Turns Tool Sprawl into One Conversation' and 'From Prompt to Published Page: MCP in Practice') and spread over image + 2 text blocks each. But they are thin, about 4 short paragraphs (~180 words) per post, and fairly generic. One post uses two images and the other one; all are relevant. Presentation 4/4: clean, coherent Tailwind design with a large hero, a two-card listing with dates and excerpts, and a readable narrow post column with captions and a back link. Cards have no images." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "Schema, content, media and domain all built through Umbraco MCP (67 calls, 26 writes). No migrations, Management API shell calls, browser, uSync or DB use. Razor written after the restart, no warnings, no memory access or reads outside the folder. The final report is accurate: it describes what was built and makes no false claims." }
+  ],
+  "summary": "A clean, fully working MCP-built blog ('The MCP Notebook') that follows the block-rendering pipeline and folder conventions exactly. Points are lost on the model, which has no rich text block or real date property, and on the thin, generic post content.",
+  "strengths": [
+    "All 43 automated checks pass; build has 0 warnings",
+    "Textbook adapter -> ViewComponent -> plain record pipeline for all 4 blocks",
+    "Provided Unsplash photos imported into a media folder, with caption credits, served through GetCropUrl",
+    "Domain '/' assigned correctly; clean schema tree with siteRoot -> blogHomePage -> blogPostPage",
+    "Polished, coherent Tailwind design"
+  ],
+  "issues": [
+    { "severity": "major", "text": "No rich text block: blogTextBlock.text is a plain TextArea rendered with whitespace-pre-line (Views/Shared/Components/BlogText/Default.cshtml), so post bodies can't have links, lists or emphasis" },
+    { "severity": "minor", "text": "No publish date property on blogPostPage; the listing orders and displays by CreateDate (Views/Partials/blockgrid/Components/blogPostListBlock.cshtml)" },
+    { "severity": "minor", "text": "Posts are short (~4 paragraphs, ~180 words each) and generic" },
+    { "severity": "minor", "text": "No listing image property, so the front-page cards are text-only" },
+    { "severity": "minor", "text": "Page shell (head, header, footer) duplicated across Views/blogHomePage.cshtml and Views/blogPostPage.cshtml instead of a shared layout" }
+  ]
+}

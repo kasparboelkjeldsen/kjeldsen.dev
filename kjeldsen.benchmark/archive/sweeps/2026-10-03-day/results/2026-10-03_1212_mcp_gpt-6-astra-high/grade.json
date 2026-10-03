@@ -1,0 +1,29 @@
+{
+  "runId": "2026-10-03_1212_mcp_gpt-6-astra-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T13:10:00+02:00",
+  "total": 91.5,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 warnings). / returns 200 through the '/' domain on the published front page. It lists both posts as cards with image, date, excerpt and a working link. Both posts render their hero and rich text blocks with no errors. The 2 provided Unsplash photos are imported into a 'MCP Journal' media folder and served through GetCropUrl URLs that load. All content is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 19, "max": 25, "notes": "Folders and kinds are correct: 3 element types in Blocks, blogFrontPage and blogPost in Pages (8/8). The block set is thin (3/7): heroBlock, richTextBlock and postListingBlock, with no standalone image block. Each post body is hero plus one rich text block holding the entire article, the weak model. Structure is right (5/5): siteRoot is the only root type, front page under siteRoot, posts only under the front page, templates assigned, 'Blog block grid' in Custom. Hygiene 3/5: there is no publish date property, so the card date comes from CreateDate. Listing title, cover image and alt duplicate the hero block's heading, image and alt on every post." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 24.5, "max": 25, "notes": "blogFrontPage and blogPost call Html.GetBlockGridHtmlAsync, and the scaffold blockgrid partials are untouched. There is one adapter per block in Views/Partials/blockgrid/Components/<alias>.cshtml. Each maps BlockGridItem<T> to a plain record in Models/Blocks and calls Component.InvokeAsync. The Hero, PostListing and RichText ViewComponents render plain Default.cshtml views. GetCropUrl and friendly extensions are used; Program.cs, appsettings.json and migrations are untouched. Styling goes through the Tailwind pipeline. -0.5: the model left an artifacts/ folder of 6 verification PNGs (~2.5 MB) inside the solution." },
+    { "id": "content", "name": "Content & presentation", "score": 8, "max": 10, "notes": "Both posts are about MCP, around 7 paragraphs each with H2 sections. Post 1 accurately covers tools, resources and prompts and links the official architecture docs. Post 2 is mostly a meta account of building this site. Each post is a single rich text block with one image, not spread over several blocks. Post 1 reuses the front page hero photo, and only 2 photos are used in total (4/6). Presentation is polished and editorial (4/4): serif headings, a split hero with photo credit, a 2-column card grid and a readable narrow article column." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "All schema, media, content and templates were built through Umbraco MCP: 31 writes, no Management API, uSync, DB or migrations. Order was followed: MCP work up to ~354s, then build and restart, then Razor written from ~585s. The model saved the layout Razor as a file after the MCP template tool rejected '?' characters, and disclosed this. The 4 browser calls were a local Playwright script checking the rendered site, not backoffice use. No memory or out-of-folder reads. The final report is accurate." }
+  ],
+  "summary": "A polished, fully working MCP-built blog ('The MCP Journal') with clean ViewComponent architecture and correct folders and structure. The content model is thin: only hero, rich text and listing blocks, no image block, each post body one rich text block, and the post date taken from CreateDate.",
+  "strengths": [
+    "Everything works: clean build, domain on the front page, all published, crop URLs from imported provided photos",
+    "Textbook adapter → plain model → ViewComponent pipeline, with GetBlockGridHtmlAsync on both pages",
+    "Correct doc type folders, allowed children, root restriction and Custom data type",
+    "Strict MCP-only build in the right order, with an honest final report",
+    "Attractive editorial design via Tailwind"
+  ],
+  "issues": [
+    { "severity": "major", "text": "Weak block set: no image block; each post body is a single richTextBlock holding the whole article (blogPost 'blocks' on /one-protocol-more-possibilities/ and /from-conversation-to-published-content/)" },
+    { "severity": "minor", "text": "No publish date property; the card date is post.CreateDate (Views/Partials/blockgrid/Components/postListingBlock.cshtml)" },
+    { "severity": "minor", "text": "blogPost listing fields (title, coverImage, coverAlt) duplicate the hero block's heading, image and alt; the front page shows usb-cables.jpg twice (hero + card)" },
+    { "severity": "minor", "text": "Only 2 of the provided photos used; post 2 is mostly about building this demo rather than MCP itself" },
+    { "severity": "minor", "text": "Stray artifacts/ folder with 6 verification screenshots left in Umbraco.Bench; package-lock.json added to Umbraco.Bench.Frontend" }
+  ]
+}

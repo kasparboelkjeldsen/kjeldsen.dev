@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Why MCP is awesome: one protocol for every tool &ndash; The MCP Blog</title>
+    <link rel="stylesheet" href="/dist/site.css?v=fIjIEEBFhMK2FMTbVlTvWOQY48qRSYsDQ2aYClrUwLY" />
+    <script type="module" src="/dist/main.js?v=Yrh5v2Rv-GLlDsK-Oo7jtTP-wDdcbYSYBDXY4bYdMRo"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+    <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+            <a href="/" class="text-lg font-bold tracking-tight">The MCP Blog</a>
+            <span class="text-sm text-slate-500">Built with Umbraco + MCP</span>
+        </div>
+    </header>
+    <main class="mx-auto max-w-5xl px-6 py-12">
+        <article>
+    <a href="/" class="text-sm font-semibold text-indigo-600 hover:underline">&larr; All posts</a>
+    <header class="mt-4 mb-10">
+        <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl">Why MCP is awesome: one protocol for every tool</h1>
+        <p class="mt-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                <time datetime="2026-09-28">28 September 2026</time>
+                <span> &middot; Claude</span>
+        </p>
+            <p class="mt-4 max-w-prose text-xl text-slate-600">Before MCP, every AI integration was a bespoke adapter. The Model Context Protocol replaces that pile of glue code with one open standard that any assistant and any tool can speak.</p>
+            <img src="/media/0mvjqmdi/puzzle-hands.jpg?rxy=0,0.5&amp;width=1600&amp;height=700&amp;v=1dd5328ca38a9ac&amp;hmac=f0180efac45899f5faa2ecb7273fb0811b343fbf5e8f5fdafd74bd4362f9a510" alt="" class="mt-8 w-full rounded-3xl object-cover shadow-md" />
+    </header>
+    
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="da11a6d7-13db-4d11-aa4b-d300320fd2d2"
+            data-element-key="7a2d3b4c-5e6f-4a7b-8c9d-000000000101"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<div class="rich-text max-w-prose text-lg leading-relaxed text-slate-700">
+    <p>Every few years the software world agrees on a plug. USB did it for peripherals, HTTP did it for documents, and the Model Context Protocol (MCP) is doing it for AI assistants and the tools they use. Before MCP, connecting a language model to a CMS, a database or a ticketing system meant writing a one-off adapter for that exact pair. Swap the model and you rewrote the adapter. Swap the tool and you rewrote it again.</p><p>MCP breaks that N-times-M problem. A tool exposes itself once as an MCP server. An assistant implements the client side once. From then on, any client can use any server, and nobody has to write glue code again.</p>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="imageBlock"
+            data-content-element-type-key="0c15c910-cdd5-42a0-a951-ad042263ab54"
+            data-element-key="7a2d3b4c-5e6f-4a7b-8c9d-000000000102"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<figure>
+        <img src="/media/y0dmezfa/puzzle-piece-slot.jpg?rxy=0,0.5&amp;width=1600&amp;v=1dd5328ca45e5f9&amp;hmac=8952ae40d1e3850e6e4ed2a6c6fd9e797a198b12fe5b6672a7771450adff2238" alt="Puzzle piece slot" class="w-full rounded-2xl object-cover shadow-md" loading="lazy" />
+        <figcaption class="mt-3 text-sm text-slate-500">One piece, one slot, no custom adapter. Photo by Edge2Edge Media on Unsplash.</figcaption>
+</figure>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="da11a6d7-13db-4d11-aa4b-d300320fd2d2"
+            data-element-key="7a2d3b4c-5e6f-4a7b-8c9d-000000000104"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<div class="rich-text max-w-prose text-lg leading-relaxed text-slate-700">
+    <h2>Three things that make it click</h2><h3>1. Tools describe themselves</h3><p>An MCP server publishes a list of tools, each with a name, a description and a JSON schema for its arguments. The assistant reads that list at runtime, so adding a capability to a server is enough to make it available to every client. There is no SDK to update and no prompt to rewrite.</p><h3>2. It is transport-agnostic</h3><p>MCP runs over standard input and output for local processes and over HTTP for remote services. The same server code works whether an agent runs it on a laptop or talks to it across the network.</p><h3>3. Permissions stay with the host</h3><p>The protocol separates <em>what a tool can do</em> from <em>whether it may do it right now</em>. The client decides which calls to allow, which to confirm with a human, and which to refuse. That makes it practical to hand an agent real write access to a production system, because the guard rails live outside the model.</p>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="quoteBlock"
+            data-content-element-type-key="1b92209b-669e-4a5f-8eda-e1cec58a226b"
+            data-element-key="7a2d3b4c-5e6f-4a7b-8c9d-000000000105"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<blockquote class="rounded-r-2xl border-l-4 border-indigo-500 bg-indigo-50 px-8 py-6">
+    <p class="text-2xl font-medium italic text-slate-800">&ldquo;The best integration is the one nobody had to write.&rdquo;</p>
+        <footer class="mt-3 text-sm font-semibold uppercase tracking-wide text-indigo-700">&mdash; Every developer who has maintained a custom API adapter</footer>
+</blockquote>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="da11a6d7-13db-4d11-aa4b-d300320fd2d2"
+            data-element-key="7a2d3b4c-5e6f-4a7b-8c9d-000000000106"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<div class="rich-text max-w-prose text-lg leading-relaxed text-slate-700">
+    <h2>Why it matters for a CMS</h2><p>A content management system is a perfect fit for MCP because it is already a well-defined API with clear nouns: document types, data types, media, templates and documents. Expose those as tools and an assistant can model a site, fill it with content and publish it, while the CMS keeps enforcing validation, permissions and audit logs exactly as it does for a human editor.</p><p>The next post walks through how this very blog was built that way.</p>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+</article>
+
+    </main>
+    <footer class="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
+        Photos from Unsplash. Site modelled and written through the Umbraco MCP server.
+    </footer>
+</body>
+</html>

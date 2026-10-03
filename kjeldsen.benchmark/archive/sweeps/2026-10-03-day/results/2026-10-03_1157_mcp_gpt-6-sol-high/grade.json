@@ -1,0 +1,27 @@
+{
+  "runId": "2026-10-03_1157_mcp_gpt-6-sol-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T12:30:00Z",
+  "total": 90,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 errors, 0 warnings). / is 200 through the '/' domain on the MCP Journal blogHome page, and lists both posts as cards with image, excerpt and a working link. Both posts render every block (hero + 3 text blocks) with no error text. The 3 media items are provided Unsplash photos imported into a media folder and served via GetCropUrl; 5/5 images load. Everything is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 17, "max": 25, "notes": "Folders and kinds are correct (8/8): heroBlock/textBlock/postCardBlock elements in Blocks, blogHome/blogPost in Pages. Block grid is used on both page types, but the block set is thin (3/7): hero, a plain-TextArea 'text' block and a post card. There is no rich text block (body is a textarea split on newlines, so no links, lists or emphasis) and no image block. Structure is fine (5/5): siteRoot is the only root type, siteRoot>blogHome>blogPost, templates assigned, camelCase aliases, the custom 'Blog Block Grid' data type sits in Custom/Umbraco.BlockGrid. Hygiene is weak (1/5): blogPost has no date, excerpt or listing-image properties. The front-page listing is hand-built postCardBlocks that duplicate each post's title, summary and image, and hard-code the post URL in a TextBox 'link' rather than a content picker. A renamed or new post doesn't update the listing, and there are no dates anywhere." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "Textbook pipeline. blogHome/blogPost views call Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold blockgrid partials are untouched. There are 3 adapters at Views/Partials/blockgrid/Components/<alias>.cshtml taking BlockGridItem<T>, mapping to sealed plain models in Models/Blocks/ and calling Component.InvokeAsync with no markup. There are 3 one-line ViewComponents rendering Views/Shared/Components/<Name>/Default.cshtml, whose views depend only on the plain models. Images use friendly GetCropUrl. Program.cs and appsettings.json are untouched, there are no migrations, and Tailwind goes through src/site.css into dist/site.css (block grid layout CSS added there)." },
+    { "id": "content", "name": "Content & presentation", "score": 8, "max": 10, "notes": "Two on-topic, accurate posts ('turns useful context into useful work', 'makes integrations easier to grow'), each a hero plus 3 headed sections of 2 paragraphs. They are reasonably substantive, though fairly short and partly meta (about building this very site). Each post's only image is a dimmed hero background (the same photo as its listing card). There are no inline images, so images do little for the posts (4/6). The design is clean and coherent: a header, a big hero, two image cards, a readable max-w-3xl article column and a photo-credit footer. No dates or bylines (4/4)." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "Schema and content were built through MCP only (49 MCP calls, 25 writes; no browser, Management API, uSync, DB or migration use), in the right order (model, content, then stop/build/Razor/restart; no warnings). It stayed in the project folder with no memory access. The final report is short and accurate: it claims only what is true (site built, pages and images return 200) and nothing is actually broken." }
+  ],
+  "summary": "GPT-6-Sol built 'MCP Journal' with a clean, convention-perfect Razor/ViewComponent pipeline and a polished Tailwind design: a hero plus two image cards on the front page, and two published MCP posts. The content model is thin: there are no rich text or image blocks, and the listing is hand-maintained post cards with hard-coded URLs instead of reading post properties (no dates or excerpts on blogPost).",
+  "strengths": [
+    "Block rendering follows the scaffold exactly: GetBlockGridHtmlAsync, markup-free adapters, one ViewComponent per block, plain models in Models/Blocks/",
+    "Clean build, all checks pass, '/' domain set, everything published, provided Unsplash photos imported and served via GetCropUrl",
+    "Polished, coherent Tailwind design with a readable article column and photo credits",
+    "Accurate, honest final report; MCP-only process in the right order"
+  ],
+  "issues": [
+    { "severity": "major", "text": "Front-page listing is hand-built postCardBlock content duplicating each post's title, summary and image, with the post URL hard-coded in a TextBox 'link' (snapshot.json: MCP Journal blocks). blogPost has no date/excerpt/listing-image properties, so new or renamed posts aren't reflected." },
+    { "severity": "major", "text": "Thin block set: no rich text block (textBlock.body is a plain TextArea split on '\n' in Views/Shared/Components/Text/Default.cshtml) and no image block, so posts can't carry inline images, links or lists." },
+    { "severity": "minor", "text": "Posts have no inline images; the only image is a 45%-opacity hero background reused from the listing card (/why-mcp-turns-useful-context-into-useful-work/)." },
+    { "severity": "minor", "text": "No publish dates anywhere on the listing or the posts." }
+  ]
+}

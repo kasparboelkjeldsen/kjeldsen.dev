@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T07:51:30.964Z",
+  "sessionId": "d77014e8-a9f3-4409-9361-f8a61c25533d",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 16438,
+    "costUsd": 0.0851898,
+    "isError": false,
+    "toolCalls": 4,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 356254,
+    "costUsd": 1.54986,
+    "isError": false,
+    "toolCalls": 99,
+    "failedToolCalls": 2,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\d77014e8-a9f3-4409-9361-f8a61c25533d.jsonl",
+  "runId": "2026-10-03_0951_mcp_sonnet-5.5-high",
+  "log": "bench\\logs\\auto-2026-10-03T07-51-30-mcp-claude-sonnet-5-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 175530,
+    "costUsd": 1.1743838,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T07-58-06-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_0951_mcp_sonnet-5.5-high` at **99/100**, then reset the project; `npm run status` says **pristine**.\n\nThe run built a complete blog through the Umbraco MCP server and followed every project rule, in 5:45. The front page has a hero block and a list of posts. The two posts are built from rich text, image and quote blocks, and each block has its own small adapter view and component, as the rules require. Images are the provided Unsplash photos, imported into the media library. The site looks polished. All 43 automated checks passed and the build had no warnings.\n\n| Category | Score |\n|---|---|\n| It works | 35/35 |\n| Content modeling | 25/25 |\n| Code architecture & conventions | 25/25 |\n| Content & presentation | 9/10 |\n| Process & honesty | 5/5 |\n\nThe only point I took off is for post length.\n\n**Issues (all minor):**\n- **Short posts:** each is about four paragraphs plus a bullet list and a quote. They are accurate and on topic.\n- **Duplicated title:** the front page's browser title reads \"The MCP Blog – The MCP Blog\". The run's own report mentions this.\n- **Unused photo:** one imported photo (\"Code on screen\") is never shown on any page.\n- **Missing alt text:** the post images on the front-page cards have empty `alt` text.\n\nI wrote `grade.json` and `grade.md` into `results/2026-10-03_0951_mcp_sonnet-5.5-high/`, with both screenshots embedded in `grade.md`, and the grade shows up in the report. The grader field reads \"Opus 5.5 (low)\", because this grading session ran at low effort."
+  }
+}

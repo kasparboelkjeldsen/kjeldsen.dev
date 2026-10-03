@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>I Built This Blog by Talking to Umbraco | The Model Context Blog</title>
+    <link rel="stylesheet" href="/dist/site.css?v=aCumlXiVyGgHIxM0DG0L5A9RLCYOpYu3YpT9fOge7QE" />
+    <script type="module" src="/dist/main.js?v=Yrh5v2Rv-GLlDsK-Oo7jtTP-wDdcbYSYBDXY4bYdMRo"></script>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-50 text-slate-800 antialiased">
+    <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/85 backdrop-blur">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            <a href="/" class="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-900">
+                <span class="inline-block size-3 rotate-45 rounded-sm bg-indigo-600"></span>
+                The Model Context Blog
+            </a>
+            <a href="https://modelcontextprotocol.io" class="text-sm font-medium text-slate-600 hover:text-indigo-600">What is MCP?</a>
+        </div>
+    </header>
+
+    <main class="flex-1">
+        <article>
+    <div class="border-b border-slate-200 bg-white">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-3 text-sm">
+            <a href="/" class="font-medium text-indigo-600 hover:text-indigo-800">&larr; All posts</a>
+            <time datetime="2026-09-29" class="text-slate-500">29 September 2026</time>
+        </div>
+    </div>
+
+    
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="heroBlock"
+            data-content-element-type-key="4850dc9d-efe3-4e3a-8d03-4dfeb02b66b5"
+            data-element-key="068ca696-10a2-4f53-b8cd-6d649d640209"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<section class="relative isolate overflow-hidden bg-slate-900 text-white">
+        <img src="/media/lhyfkzza/code-on-a-laptop-screen.jpg?rxy=0,0.5&amp;width=2000&amp;height=900&amp;v=1dd500dc0e8a5d6&amp;hmac=779bfa3a98b96528a4bf35cfdf621c308eb8ba841b78cced406392d528ecb0dc" alt="" class="absolute inset-0 -z-20 h-full w-full object-cover" />
+    <div class="absolute inset-0 -z-10 bg-linear-to-t from-slate-950/90 via-slate-900/60 to-slate-900/30"></div>
+    <div class="mx-auto max-w-4xl px-6 py-24 sm:py-36">
+        <h1 class="text-4xl font-bold tracking-tight text-balance sm:text-6xl">I built this blog by talking to Umbraco</h1>
+            <p class="mt-6 max-w-2xl text-lg text-slate-200 sm:text-xl">No backoffice clicks, no migration scripts: just an agent, the Umbraco MCP server and a clear set of house rules.</p>
+    </div>
+</section>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="edb8c6f3-fe02-467a-b012-e36d3187c018"
+            data-element-key="6f6b79a1-38b1-45ba-ab9b-c627ba3c207b"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="mx-auto max-w-3xl px-6 py-8">
+    <div class="rich-text"><p>The page you're reading was built by an AI agent in a single session. It started with an empty Umbraco install and a <code>.mcp.json</code> that pointed at the local Umbraco MCP server. Every step went through that server's tools, which call Umbraco's Management API.</p><h2>The order of operations</h2><ol><li><strong>Model the content.</strong> Five element types (Hero, Rich Text, Image, Quote and Blog Post List) were created with <code>create-element-type</code> and moved into the <em>Blocks</em> folder. Two block grid data types came next: one for the front page and one for posts. Then the <em>Blog Front Page</em> and <em>Blog Post</em> page types were added, with templates and allowed children.</li><li><strong>Create the content.</strong> The Unsplash photos were streamed straight into the media library with <code>create-media</code>. The front page and both posts were created and published as block grid JSON, and each one was read back to confirm it had saved.</li><li><strong>Write the views, last.</strong> ModelsBuilder only regenerates models when the site restarts. So the Razor was written only after the content was in place.</li></ol></div>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="quoteBlock"
+            data-content-element-type-key="f04d920f-5a4a-4917-9b7f-5c69b7c59fb0"
+            data-element-key="c7d595d3-95d1-4cb9-873d-e5d8a955dc08"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<figure class="mx-auto max-w-3xl px-6 py-10">
+    <blockquote class="border-l-4 border-indigo-500 pl-6 text-2xl leading-snug font-medium text-slate-900 italic sm:text-3xl">
+        <p>&ldquo;The agent didn&#x27;t need to know Umbraco&#x27;s API ahead of time. It needed tools that describe themselves, and a project that writes its conventions down.&rdquo;</p>
+    </blockquote>
+        <figcaption class="mt-4 pl-7 text-sm font-semibold tracking-wide text-indigo-600 uppercase">&mdash; Lesson one</figcaption>
+</figure>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="edb8c6f3-fe02-467a-b012-e36d3187c018"
+            data-element-key="eec2b75e-9e53-4896-b599-d7f7f228b7d6"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="mx-auto max-w-3xl px-6 py-8">
+    <div class="rich-text"><h2>What made it work</h2><p><strong>Guardrails that live in the CMS.</strong> This project enforces its own rules. When the agent saved the new block grid data types at the root, a notification handler moved them into <code>/Custom/Umbraco.BlockGrid</code>. The agent didn't have to remember that rule, because Umbraco applied it.</p><p><strong>Reading back after every write.</strong> Block grid values are nested JSON: a layout, content data and an expose list that all have to refer to the same keys. A mistake there fails quietly. Reading each document straight back showed that every block had been stored, and that the server had filled in details such as the media type alias.</p><p><strong>Knowing each tool's quirks.</strong> <code>update-document-type</code> replaces the whole type, so the agent always fetched the current definition, merged its change and sent everything back. <code>create-element-type</code> has no parent folder option, so each block is created at the root and then moved into place.</p></div>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="imageBlock"
+            data-content-element-type-key="a42099f4-17b4-4141-865f-9a2678fde352"
+            data-element-key="1143a574-cf71-44fa-91f0-26392ed485fe"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+    <figure class="mx-auto max-w-5xl px-6 py-8">
+        <img src="/media/vcynb3r4/friendly-robot.jpg?rxy=0,0.5&amp;width=1600&amp;v=1dd500dc16860e2&amp;hmac=61f02ec99085983591cb610d136ce120bda800df822edff012e550ec345f4313" alt="Your newest content editor. It never forgets to fill in the alt text." loading="lazy" class="w-full rounded-2xl shadow-lg ring-1 ring-slate-900/10" />
+            <figcaption class="mt-3 text-center text-sm text-slate-500">Your newest content editor. It never forgets to fill in the alt text.</figcaption>
+    </figure>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="edb8c6f3-fe02-467a-b012-e36d3187c018"
+            data-element-key="7012c1d6-5b99-4afa-bda0-c76ac82492ac"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="mx-auto max-w-3xl px-6 py-8">
+    <div class="rich-text"><h2>Why this is awesome</h2><p>Setting up a content model is usually an afternoon of clicking through the backoffice. Here it was a conversation. More importantly, the result is ordinary Umbraco: normal document types, normal block grids and normal published content, all exported to uSync and ready to commit. Nothing about it depends on the AI that built it.</p><p>That's what MCP does well. It doesn't replace your platform or lock you into a new one. It lets an assistant work with the platform you already trust, using the same API and permissions your editors already have.</p></div>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+</article>
+
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+        <div class="mx-auto max-w-6xl px-6 py-8 text-sm text-slate-500">
+            Built with Umbraco through the Model Context Protocol. Photos from <a href="https://unsplash.com" class="underline hover:text-indigo-600">Unsplash</a>.
+        </div>
+    </footer>
+</body>
+</html>

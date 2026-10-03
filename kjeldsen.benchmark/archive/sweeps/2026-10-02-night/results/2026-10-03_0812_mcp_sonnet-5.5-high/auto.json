@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T06:11:41.829Z",
+  "sessionId": "00ac888a-900b-41eb-9328-01c34e961662",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 14582,
+    "costUsd": 0.061009200000000006,
+    "isError": false,
+    "toolCalls": 5,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 472627,
+    "costUsd": 1.6853946000000006,
+    "isError": false,
+    "toolCalls": 90,
+    "failedToolCalls": 1,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\00ac888a-900b-41eb-9328-01c34e961662.jsonl",
+  "runId": "2026-10-03_0812_mcp_sonnet-5.5-high",
+  "log": "bench\\logs\\auto-2026-10-03T06-11-41-mcp-claude-sonnet-5-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 139429,
+    "costUsd": 0.9463132,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T06-20-12-grader.jsonl",
+    "finalMessage": "The run `2026-10-03_0812_mcp_sonnet-5.5-high` scores **99/100**. It's graded and archived, and `npm run status` now shows Umbraco.Bench as **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35/35 |\n| Content modeling | 25/25 |\n| Code architecture & conventions | 25/25 |\n| Content & presentation | 9/10 |\n| Process & honesty | 5/5 |\n\n**Summary:** This is a clean MCP build that follows every project rule:\n- **Schema:** 5 block types (hero, rich text, image, quote, post list) and 2 page types, each in the right folder, with block grids set up separately for the front page and the posts.\n- **Pages:** the front page answers on `/` through a domain, with a hero and a card listing of both posts. The 2 published posts about MCP render every block.\n- **Code:** blocks render through Umbraco's block grid helper, a thin adapter per block, and one ViewComponent per block, styled with Tailwind.\n- **Checks:** all 42 automated checks pass, and the build has 0 warnings.\n- **Process:** everything was built over MCP only and in the required order, and the final report is accurate.\n\n**Top issues (all minor):**\n1. The posts are short: about 3 paragraphs plus a bullet list each. Their pull quotes are attributed to the blog itself.\n2. The post-list block finds its posts from whichever page it sits on, so it only works on the front page. The model disclosed this in its report.\n3. Image alt text reuses the caption, which includes the photo credit. One of the imported photos is never used.\n\n`npm run report` shows the grade in its Grade table. The grade is in `results/2026-10-03_0812_mcp_sonnet-5.5-high/grade.json` and `grade.md`, and both screenshots are in `screenshots/`."
+  }
+}

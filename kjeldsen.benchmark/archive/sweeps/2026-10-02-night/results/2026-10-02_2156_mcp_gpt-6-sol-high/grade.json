@@ -1,0 +1,27 @@
+{
+  "runId": "2026-10-02_2156_mcp_gpt-6-sol-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-02T20:06:23Z",
+  "total": 91,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 errors, 0 warnings). / returns 200 via the '/' domain on 'The MCP Journal' and lists both posts as cards with image, eyebrow, title and summary; links work. Both posts render hero + article blocks with no errors. 3 provided Unsplash photos imported into a 'Blog photography' media folder and served through GetCropUrl; 5/5 images load. All content published." },
+    { "id": "modeling", "name": "Content modeling", "score": 18, "max": 25, "notes": "Folders/kinds 8/8: heroBlock, articleBlock, postListingBlock in Blocks (elements); blogHome, blogPost in Pages; siteRoot in Repositories. Block grid 3/7: both pages use one 'Blog Blocks' grid, but the block set is only hero, a single rich text 'article' and a post listing. There is no image block, and each post body is one rich text block holding all paragraphs and subheadings. Structure 5/5: siteRoot is the only root type, blogHome under siteRoot, blogPost only under blogHome, templates assigned, camelCase aliases, data type in /Custom/Umbraco.BlockGrid. Hygiene 2/5: blogPost has no date, excerpt or listing image properties. The listing pulls title, summary and image from whichever block comes first in the post (cast to HeroBlock), and posts have no publish date at all." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "blogHome/blogPost call Html.GetBlockGridHtmlAsync(Model, \"blocks\"); scaffold blockgrid partials untouched. One markup-free adapter per block in Views/Partials/blockgrid/Components/<alias>.cshtml receiving BlockGridItem<T>, mapping to plain models in Models/Blocks/ and calling Component.InvokeAsync. Three ViewComponents (Hero, Article, PostListing) with plain Default.cshtml views. Program.cs/appsettings.json untouched, no migrations, friendly extensions (Children<T>, Url(), Ancestor<T>, GetCropUrl), styled via Tailwind with two small rules added to src/site.css." },
+    { "id": "content", "name": "Content & presentation", "score": 8, "max": 10, "notes": "Posts 4/6: two posts genuinely about why MCP is awesome ('Why MCP makes local development feel connected', 'MCP is awesome when people stay in control'), each about 5 paragraphs with two subheadings, accurate and relevant (code-screen and puzzle-hands photos). But each post is only a hero plus one rich text block, with a single image, so the content is not spread over several blocks. Presentation 4/4: polished, coherent design with header and footer, a split hero, a card grid with images, and a readable narrow article column." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "49 Umbraco MCP calls (22 writes); no browser, migration, Management API, uSync or DB use; no warnings about order of operations; stayed in the project folder with no memory access. The final report ('No known issues', content via MCP, three supplied photos) is accurate." }
+  ],
+  "summary": "A clean, well-styled MCP-built blog ('The MCP Journal') whose code follows the block pipeline exactly. The content model is thin: three blocks with no image block, each post's body sits in a single rich text block, and posts have no date/excerpt/listing-image properties because the listing reads the first hero block.",
+  "strengths": [
+    "Textbook rendering pipeline: GetBlockGridHtmlAsync, markup-free adapters, one ViewComponent per block, plain models in Models/Blocks/",
+    "Polished, coherent Tailwind design with an image card listing and readable post pages",
+    "Provided Unsplash photos imported into a media folder and served via GetCropUrl, with photographer credits shown",
+    "Clean process: MCP only, stayed in folder, accurate final report"
+  ],
+  "issues": [
+    { "severity": "major", "text": "Weak block set: only heroBlock, articleBlock (one rich text) and postListingBlock. There is no image block, and each post body is a single rich text block (both post URLs)." },
+    { "severity": "major", "text": "blogPost has no date, excerpt or listing image properties. The card data comes from `post.Blocks.FirstOrDefault()?.Content as HeroBlock` (Views/Partials/blockgrid/Components/postListingBlock.cshtml), so reordering blocks breaks the listing, and no post shows a date." },
+    { "severity": "minor", "text": "Only one image per post, and each post has just two blocks. The content is substantive but not spread over several blocks." },
+    { "severity": "minor", "text": "One shared 'Blog Blocks' grid allows postListingBlock on posts and articleBlock on the front page; there are no per-page block restrictions." }
+  ]
+}

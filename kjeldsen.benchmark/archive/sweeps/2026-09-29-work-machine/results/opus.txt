@@ -1,0 +1,33 @@
+OPUS 5.5: HIGH vs ULTRACODE
+Umbraco MCP benchmark, 2026-09-29, both graded by Fable 5.1
+
+                       High    Ultracode   Ratio
+Grade                97/100       99/100      +2
+Total time             7:33        16:05    2.1x
+Tokens (no cache)   164,228      539,993    3.3x
+Tokens (total)    4,453,380   12,741,032    2.9x
+Output tokens        41,792       76,633    1.8x
+Requests                 42          118    2.8x
+
+51 of the 118 ultracode requests were in subagents.
+
+GRADE BY CATEGORY
+                       High    Ultracode
+It works (/35)           35           35
+Modeling (/25)           24           24
+Architecture (/25)       24           25
+Content (/10)             9           10
+Process (/5)              5            5
+
+WHERE THE DIFFERENCE CAME FROM
+- Architecture +1: ultracode put the post query in a
+  service; high did the query in the block adapter.
+- Content +1: ultracode's posts are about 470 and 490
+  words; high's are about 300 each.
+- Time: modeling and content took about the same in
+  both runs (4 to 5 minutes). The extra time is in the
+  Razor phase, 10:12 against 2:29, which includes the
+  review workflow (about 3.5 minutes, 7 subagents) and
+  the rebuild after it.
+- The review found one low-severity bug, which was
+  fixed. Neither extra point came from it.

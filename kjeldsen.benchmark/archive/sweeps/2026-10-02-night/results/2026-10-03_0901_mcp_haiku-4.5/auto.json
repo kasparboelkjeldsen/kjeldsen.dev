@@ -1,0 +1,43 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "effort": null,
+  "variant": "mcp",
+  "startedAt": "2026-10-03T07:01:20.100Z",
+  "sessionId": "e473a914-1729-4999-b81b-9660775bb369",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "bypassPermissions",
+  "settingSources": "project,local",
+  "permissionFallback": "auto mode isn't available for claude-haiku-4-5-20251001; ran with bypassPermissions",
+  "prompt1": {
+    "durationMs": 13981,
+    "costUsd": 0.0124554,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 463393,
+    "costUsd": 0.7504336000000003,
+    "isError": false,
+    "toolCalls": 99,
+    "failedToolCalls": 15,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\e473a914-1729-4999-b81b-9660775bb369.jsonl",
+  "runId": "2026-10-03_0901_mcp_haiku-4.5",
+  "log": "bench\\logs\\auto-2026-10-03T07-01-20-mcp-claude-haiku-4-5-20251001.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 158011,
+    "costUsd": 0.9229804,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T07-09-40-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_0901_mcp_haiku-4.5` at **38/100**. The grade is written, the solution is archived, and `npm run status` now says **pristine**. Status lists the run as graded 38/100 and the report includes its summary, but my check didn't print the report's Grade table row itself.\n\n| Category | Score |\n|---|---|\n| It works | 7 / 35 |\n| Content modeling | 16 / 25 |\n| Code architecture & conventions | 12 / 25 |\n| Content & presentation | 0 / 10 |\n| Process & honesty | 3 / 5 |\n\n**Summary:** Haiku 4.5 built a reasonable skeleton through MCP: document types in the right folders, a block grid data type, two posts and the provided photos imported into the media library. But nothing on the site renders, and its final report claims a fully working blog.\n\n**Top issues:**\n1. **Every page returns 404 \"No template exists\":** `/`, `/blog/` and both posts. The pages were created without a template assigned, and the Blog page has no domain, so nothing answers on `/` either.\n2. **The posts have no body:** both block grids are empty. The block content the model sent was malformed and never saved, and its later update-and-publish call left the field out. Each post is just a title and a one-line excerpt.\n3. **The final report is false:** it claims a \"fully functional\" site with hero images and text blocks. The model never saw a page render; its last check timed out.\n4. **The block wiring would fail at runtime:**\n   - The hero adapter passes an anonymous object to a view that expects a tuple.\n   - The text adapter passes rich text to a component that expects a different type.\n   - There are no plain view models, the ViewComponents sit in `Services/`, and both page views point to a layout file that doesn't exist.\n5. **Smaller gaps:** there are only two block types, the front page doesn't use the block grid, posts have no date or listing image, and the stylesheet was never built.\n\nOn process, it used MCP only, in the right order, and stayed in the project folder. It did force-kill every `dotnet` process on the machine, not just Umbraco. Both screenshots show Umbraco's \"Page Not Found\" screen.\n\nFiles are in `results/2026-10-03_0901_mcp_haiku-4.5/`:\n- `grade.json`\n- `grade.md`"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-fable-5-1",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T08:10:53.697Z",
+  "sessionId": "803c4875-466a-45e2-970f-f938aa5a41f0",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 36584,
+    "costUsd": 0.3436845,
+    "isError": false,
+    "toolCalls": 5,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 1375215,
+    "costUsd": 6.15951475,
+    "isError": false,
+    "toolCalls": 83,
+    "failedToolCalls": 5,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\803c4875-466a-45e2-970f-f938aa5a41f0.jsonl",
+  "runId": "2026-10-03_1011_mcp_fable-5.1-high",
+  "log": "bench\\logs\\auto-2026-10-03T08-10-53-mcp-claude-fable-5-1.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 156906,
+    "costUsd": 0.9532447999999999,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T08-34-48-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_1011_mcp_fable-5.1-high` at **98/100**. It now appears in the report's Grade table, the solution is archived as `refs/runs/2026-10-03_1011_mcp_fable-5.1-high`, and `npm run status` says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35/35 |\n| Content modeling | 25/25 |\n| Code architecture & conventions | 24.5/25 |\n| Content & presentation | 9/10 |\n| Process & honesty | 4.5/5 |\n\n**Summary:** The model built a complete, polished blog entirely through the Umbraco MCP server. It has five reusable blocks (hero, rich text, image, quote, post list) on a shared block grid, a front page with a hero and a post list, and two published posts using the provided Unsplash photos with credits. All 43 automated checks pass and the build has 0 warnings. The block rendering setup follows the project rules almost exactly.\n\n**Top issues (all minor):**\n- **Post-list block:** its adapter queries the page's child posts itself instead of only mapping the block's fields (`Views/Partials/blockgrid/Components/blogPostListBlock.cshtml`, −0.5). The model disclosed this in its report.\n- **Posts on the short side:** about 500 words each. Post 2 reads more like a build log than an argument for MCP (−1).\n- **Writes outside the project:** it saved its verification `curl` output to `/tmp` (−0.5).\n- **No deduction:**\n  - Image alt text is just the media item's name.\n  - The model left an `umbraco-run.log` file in the project, which its report disclosed.\n\nThe model's final report was accurate. It said it hadn't checked the layout visually, and both screenshots show a clean layout.\n\nFiles are in `results/2026-10-03_1011_mcp_fable-5.1-high/`:\n- grade.json\n- grade.md"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-fable-5-1",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-02T20:07:25.995Z",
+  "sessionId": "f6da340b-d21e-465a-889b-9ab39bde8502",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 25999,
+    "costUsd": 0.34456725,
+    "isError": false,
+    "toolCalls": 4,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 856629,
+    "costUsd": 6.2408825,
+    "isError": false,
+    "toolCalls": 97,
+    "failedToolCalls": 10,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\f6da340b-d21e-465a-889b-9ab39bde8502.jsonl",
+  "runId": "2026-10-02_2207_mcp_fable-5.1-high",
+  "log": "bench\\logs\\auto-2026-10-02T20-07-25-mcp-claude-fable-5-1.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 155873,
+    "costUsd": 0.8661638,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T04-51-35-grader.jsonl",
+    "finalMessage": "**Fable 5.1 (high), MCP test, `2026-10-02_2207_mcp_fable-5.1-high`: 99/100.** All automated checks passed (42 of 42). The grade is written, it shows up in the report's Grade table, and `Umbraco.Bench` has been reset and archived as `refs/runs/2026-10-02_2207_mcp_fable-5.1-high`. `npm run status` now says **pristine**.\n\n| It works | Modeling | Architecture | Content | Process | Total |\n|---:|---:|---:|---:|---:|---:|\n| 35/35 | 25/25 | 25/25 | 9/10 | 5/5 | **99/100** |\n\n**Summary:** This is a complete, clean blog built through MCP.\n- **Front page:** a hero, an intro, and the two posts shown as cards with image, date, author and summary.\n- **Posts:** two substantive, accurate posts about MCP, each built from rich text, image and quote blocks.\n- **Schema:** five element types in `Blocks`, `blogHome` and `blogPost` in `Pages`, and one shared block grid data type in `Custom/`. Post metadata are real properties.\n- **Code:** it follows the project's block pattern exactly: pages render with `GetBlockGridHtmlAsync`, each block has a markup-free adapter that maps to a plain model and calls one ViewComponent.\n- **Rest of the site:** the build has no warnings, the photos are the provided Unsplash ones in the media library, and the domain is assigned.\n\n**Issues (all minor):**\n- On `/one-protocol-every-tool/` the USB-cables photo appears twice in a row: once as the header image and again as the first inline image. This is the only deduction (−1 in Content).\n- The run left a stray `umbraco-run.log` in the project. Its final report says so.\n- It was the slowest run in the batch (14:16). Its first boot skipped the launch profile, so the MCP tools returned 500s until it restarted the site.\n\nIn the blog post screenshot, the last image looks blank. That is only lazy loading not triggering during the full-page capture: the image is in the HTML and loads. The grade notes say so.\n\nFiles are in `results/2026-10-02_2207_mcp_fable-5.1-high/`:\n- grade.json\n- grade.md"
+  }
+}

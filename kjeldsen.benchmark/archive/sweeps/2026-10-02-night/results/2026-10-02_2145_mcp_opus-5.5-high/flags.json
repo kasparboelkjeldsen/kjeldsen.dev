@@ -1,0 +1,4 @@
+{
+  "excludeFromScore": true,
+  "reason": "ran with the Claude Bash cd handicap (fnm hook without its environment, fixed 2026-10-02 22:00); rerun with the fix on 2026-10-03"
+}

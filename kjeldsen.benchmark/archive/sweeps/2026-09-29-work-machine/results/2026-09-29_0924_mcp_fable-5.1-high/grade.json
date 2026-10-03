@@ -1,0 +1,29 @@
+{
+  "runId": "2026-09-29_0924_mcp_fable-5.1-high",
+  "grader": "Fable 5.1 (effort not visible to the grader)",
+  "gradedAt": "2026-09-29T07:44:52Z",
+  "total": 97,
+  "max": 100,
+  "categories": [
+    { "id": "works",        "name": "It works",                        "score": 35, "max": 35, "notes": "Build: 0 errors, 0 warnings. / returns 200 through the domain '/' on the MCP Notes page and lists both posts as cards with image, date, author and excerpt; both links work. Both posts render all 5 blocks each (hero, rich text, image, quote, rich text) with no fallback or exception text. 5 Unsplash images imported into the media folder 'Blog' with create-media, served through signed GetCropUrl urls, 7/7 load. All 4 documents published." },
+    { "id": "modeling",     "name": "Content modeling",                "score": 24, "max": 25, "notes": "5 element types in Blocks, 2 page types in Pages, siteRoot in Repositories; kinds are right. Block grid on both page types with a sensible set (hero, rich text, image, quote, post list). siteRoot is the only root type, blogFrontPage allows only blogPost, templates assigned, camelCase aliases, grid data type in Custom/Umbraco.BlockGrid. Post metadata (excerpt, listImage, publishDate, author) are real properties; no compositions, duplicates or orphans. -1: imageBlock has no alt text property (the adapter falls back to the media name), the post title is typed twice (node name and hero heading), and the single grid data type allows the post list block on posts." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "Both page views call Html.GetBlockGridHtmlAsync(Model, \"blocks\"); scaffold blockgrid partials untouched. 5 adapters named by exact alias, each BlockGridItem<T> -> plain model -> Component.InvokeAsync, no markup. 5 ViewComponents with Views/Shared/Components/<Name>/Default.cshtml, plain models in Models/Blocks, component views free of Umbraco types. Friendly extensions and GetCropUrl only, no injected services, no migrations, Program.cs untouched, styling through the Tailwind pipeline. The code.appsettingsJsonUnchanged FAIL is a false positive: the only change is Imaging:HMACSecretKey, written by Umbraco's installer at 09:23:42 during 'npm run up', before the run started at 09:24:51; the transcript has no edit to that file." },
+    { "id": "content",      "name": "Content & presentation",          "score": 9,  "max": 10, "notes": "Two on-topic, accurate posts (N x M integration problem, tools/resources/prompts, late-2024 open standard; a first-hand account of building this site over MCP), each spread over 5 blocks with relevant images. -1: about 300 words each, on the short side. Presentation is a coherent, readable blog: header, hero, card listing, constrained text column, footer. Small nit: in the 6/6 row the quote card is taller than the image beside it." },
+    { "id": "process",      "name": "Process & honesty",               "score": 4,  "max": 5,  "notes": "52 MCP calls (33 writes), no Management API, browser, migration, uSync or database use; order followed (model, content, stop, build, Razor, restart); no memory access, nothing read from the bench folders. -1: the model did not start on the brief. It treated the pasted prompt as unconfirmed material, summarised it and waited, and only ran after the operator replied 'go', although the brief says to work autonomously. Logs and screenshots went to the session scratchpad in the temp folder, outside the project; not deducted. Final report is accurate and discloses its own caveats." }
+  ],
+  "summary": "A complete, working block-grid blog built entirely over the Umbraco MCP server: front page with hero, intro and post cards, plus two 5-block posts, with the adapter -> ViewComponent -> plain model pipeline followed exactly. The only real blemish is that the run needed a human 'go' before it started.",
+  "strengths": [
+    "All 40 applicable automated checks pass; the one FAIL is a tooling false positive",
+    "Rendering pipeline matches AGENTS.md exactly: no custom loops, adapters without markup, component views without Umbraco types",
+    "Clean content model: right folders, right kinds, real metadata properties, no compositions",
+    "Read structural writes back after each phase and fixed the off-centre focal points it found in its own screenshots",
+    "Accurate final report that discloses design trade-offs"
+  ],
+  "issues": [
+    { "severity": "major", "text": "Did not work autonomously: answered the blog prompt with a summary and a request for confirmation, and needed a 'go' from the operator (transcript.jsonl, turn at 07:25:42Z). Metrics were re-collected with --include-followups so they cover the real work; they include about 40 s of stall and waiting." },
+    { "severity": "minor", "text": "imageBlock has no alt text property; Views/Partials/blockgrid/Components/imageBlock.cshtml uses the media item name as alt text." },
+    { "severity": "minor", "text": "One 'Blog Block Grid' data type serves both page types, so blogPostListBlock can be added to a post; post title is entered twice (node name and heroBlock heading)." },
+    { "severity": "minor", "text": "Posts are about 300 words each (/mcp-is-the-usb-c-port-for-ai/, /this-blog-was-built-without-opening-the-backoffice/)." },
+    { "severity": "minor", "text": "Bench tooling, not the model: code.appsettingsJsonUnchanged fails on the Imaging:HMACSecretKey that Umbraco writes to appsettings.json on first boot." }
+  ]
+}

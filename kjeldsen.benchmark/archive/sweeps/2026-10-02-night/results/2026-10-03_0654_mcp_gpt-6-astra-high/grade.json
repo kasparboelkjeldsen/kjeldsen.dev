@@ -1,0 +1,67 @@
+{
+  "runId": "2026-10-03_0654_mcp_gpt-6-astra-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T05:11:45Z",
+  "total": 93,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 35,
+      "max": 35,
+      "notes": "Build passes with 0 errors and 0 warnings. / returns 200 through the '/' domain on the site page and shows a hero plus a listing of both posts. Each card has an image, category, date, reading time, excerpt and a working link. Both posts render every block with no errors. All 5 images are the provided Unsplash photos, imported into a 'Blog photography' media folder and served through signed GetCropUrl URLs. All content is published."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 21,
+      "max": 25,
+      "notes": "Folders and kinds are correct: siteRoot in Repositories, blogFrontPage and blogPost in Pages, 4 element blocks in Blocks (8/8). The block set is weak (3/7). There is no image block. Each post body is one property-less articleHeaderBlock, which pulls title, cover and metadata from the page, plus a single richTextBlock holding the whole article. The front page uses heroBlock and postListingBlock. Structure is fine (5/5): only siteRoot is allowed at root, the front page allows only blogPost, templates are assigned, aliases are camelCase, and both block grid data types sit in /Custom. Hygiene is fine (5/5): post metadata (title, summary, coverImage, category, publishedDate, readingMinutes) are real properties, with no compositions and no orphaned types."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 24,
+      "max": 25,
+      "notes": "Both page templates call Html.GetBlockGridHtmlAsync and the scaffold's blockgrid partials are untouched (7/7). There are 4 exact-alias adapters that map to plain records and call Component.InvokeAsync with no markup. articleHeaderBlock.cshtml hard-casts Umbraco.AssignedContentItem to BlogPost and maps page properties rather than block content, so it would throw if the block were placed on any other page (5/6). There are 4 thin ViewComponents with Shared/Components/<Name>/Default.cshtml views, plain records in Models/Blocks, and no Umbraco dependencies in the views (7/7). Program.cs and appsettings are untouched, there are no migrations, GetCropUrl and friendly extensions are used, and styling goes through Tailwind into dist/site.css (5/5)."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 8,
+      "max": 10,
+      "notes": "Both posts are on topic and accurate. Post 1 covers why MCP gives AI a common way to discover and use app capabilities; post 2 is a practical build story. Each has several sections with headings and a pull quote. However, each post's body is one rich text block with one cover image, so it is not spread over several blocks or images (4/6). The design is polished and editorial: a split hero, a two-card listing with meta, a centred article header, a readable 700px prose column and a consistent footer (4/4)."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 5,
+      "max": 5,
+      "notes": "All 28 Umbraco writes went through MCP, with no Management API, DB, uSync writes or migrations. The order was schema and content via MCP, then stop, build and restart, then Razor. No memory access and no reads outside the folder. The one browser use was a verification screenshot script, which was deleted afterwards, though its screenshots were left in Umbraco.Bench/artifacts/. The final report is accurate and claims no false successes."
+    }
+  ],
+  "summary": "Built 'Common Ground', a polished MCP blog: a hero and post-listing front page and two substantive, accurate posts. The site works fully, with media-library crops, a domain and a clean adapter→ViewComponent pipeline. The main weakness is the post model: a property-less header block plus one rich text block per post, and no image block.",
+  "strengths": [
+    "Everything works: 0 build warnings, all pages and images load, domain on the site page, all content published",
+    "Textbook rendering pipeline: GetBlockGridHtmlAsync, exact-alias adapters, thin ViewComponents, plain record models",
+    "Post metadata modeled as real properties and used for rich listing cards",
+    "Distinctive, well-crafted editorial design built with the Tailwind pipeline",
+    "Clean MCP-only process in the right order, with an accurate final report"
+  ],
+  "issues": [
+    {
+      "severity": "major",
+      "text": "Each post body is a single richTextBlock holding the whole article, plus a property-less articleHeaderBlock. There is no image block and only one image per post (snapshot.json, /why-mcp-makes-tools-better-together/)."
+    },
+    {
+      "severity": "minor",
+      "text": "articleHeaderBlock has no properties. Its adapter hard-casts Umbraco.AssignedContentItem to BlogPost, so the block depends on the hosting page and would throw anywhere else (Views/Partials/blockgrid/Components/articleHeaderBlock.cshtml)."
+    },
+    {
+      "severity": "minor",
+      "text": "Verification screenshots and verification.json were left in the project folder (Umbraco.Bench/artifacts/)."
+    }
+  ],
+  "graderSaidItWas": "Opus 5.5 (low)"
+}

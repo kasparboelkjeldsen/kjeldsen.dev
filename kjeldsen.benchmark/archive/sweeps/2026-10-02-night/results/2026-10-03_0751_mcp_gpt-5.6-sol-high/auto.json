@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-5.6-sol",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T05:51:20.093Z",
+  "sessionId": "01a10051-6a5f-7380-ac0a-a042fbaf3927",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 29841,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 4,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 1023111,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 108,
+    "failedToolCalls": 5,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T07-51-38-01a10051-6a5f-7380-ac0a-a042fbaf3927.jsonl",
+  "runId": "2026-10-03_0751_mcp_gpt-5.6-sol-high",
+  "log": "bench\\logs\\auto-2026-10-03T05-51-20-mcp-gpt-5.6-sol.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 147674,
+    "costUsd": 0.9659775999999999,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T06-09-13-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_0751_mcp_gpt-5.6-sol-high` (GPT-5.6-Sol, high effort, MCP test) at **93/100**. Its grade shows in the report's Grade table, the reset archived the solution as `refs/runs/2026-10-03_0751_mcp_gpt-5.6-sol-high`, and `npm run status` now says **pristine**.\n\n| Category | Score |\n|---|---:|\n| It works | 35/35 |\n| Content modeling | 20/25 |\n| Code architecture & conventions | 25/25 |\n| Content & presentation | 8/10 |\n| Process & honesty | 5/5 |\n\n**Summary:** The model built a clean, working blog through MCP. The front page has a hero block and a post-listing block, and each of the two published posts uses an article-header block plus one rich text block. Rendering follows the project's required pattern exactly: each block's partial passes a plain model to a ViewComponent, which holds the markup. The design is a polished dark Tailwind theme. All 42 automated checks passed, the build had 0 warnings, all three pages return 200, and the images are the provided Unsplash photos imported into the media library. Every point it lost is in content modeling or the posts themselves.\n\n**Top issues:**\n1. **Major – weak block set for posts.** There is no image block, and each post's whole body is a single rich text block after the header.\n2. **Minor – post metadata lives in a block.** The date, excerpt and listing image are on `articleHeaderBlock` inside the grid, not on `blogPost`. The listing (`postListingBlock.cshtml`) has to dig through each post's blocks to find them, and a post without a header block silently disappears from the front page.\n3. **Minor – hard-coded text.** The listing heading \"Latest writing / Why MCP is awesome\" and the \"← All field notes\" link are written into the component views rather than stored as content.\n4. **Minor – short posts.** The posts are accurate but brief: 4–5 paragraphs and one image each.\n\nProcess was clean: the schema and content were built only over MCP, nothing was read outside the project folder, and the final report matches what was built.\n\nFiles are in `results/2026-10-03_0751_mcp_gpt-5.6-sol-high/`:\n- grade.json\n- grade.md"
+  }
+}

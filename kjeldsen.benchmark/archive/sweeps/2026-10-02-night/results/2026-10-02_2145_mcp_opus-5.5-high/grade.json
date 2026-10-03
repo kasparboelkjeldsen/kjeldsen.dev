@@ -1,0 +1,71 @@
+{
+  "runId": "2026-10-02_2145_mcp_opus-5.5-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-02T19:54:49Z",
+  "total": 100,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 35,
+      "max": 35,
+      "notes": "dotnet build passes with 0 errors and 0 warnings. / returns 200 through the '/' domain on the 'Blog' page (blogFrontPage). It shows a hero and a 'Latest posts' card grid listing both posts, newest first. Each card has a teaser image, date, title, excerpt and a 'Read the post' link, and the links work. Both posts render every block (hero, rich text, image, quote, plus a half-width image next to half-width text on post 1), with no 'Could not render component' or exception text. All 6 media items are the provided Unsplash photos, imported into a 'Blog' media folder over MCP and served through signed GetCropUrl URLs (7/7 load). All content is published."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 25,
+      "max": 25,
+      "notes": "There are 5 element types in Blocks (heroBlock, richTextBlock, imageBlock, quoteBlock, blogPostListBlock), and blogFrontPage and blogPost are document types in Pages. There are no compositions. Each page has its own 12-column block grid, both in /Custom/Umbraco.BlockGrid. The front page grid allows hero, post list, rich text and image; the post grid allows hero, rich text, image and quote, with sensible column-span options. The block properties make sense (heading/intro/image/imageCredit, image/caption, quote/attribution, heading/maxItems). siteRoot is the only root type, and it allows blogFrontPage, which allows only blogPost. Templates are assigned and all aliases are camelCase. The post metadata (publishDate, excerpt, teaserImage) are real properties. Nothing is duplicated or orphaned."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 25,
+      "max": 25,
+      "notes": "blogFrontPage.cshtml and blogPost.cshtml render the blocks with Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold's blockgrid partials are untouched. There are 5 adapters at Views/Partials/blockgrid/Components/<alias>.cshtml. Each takes BlockGridItem<T>, maps to a plain model in Models/Blocks/ and calls Component.InvokeAsync, with no markup. The post list adapter queries AncestorOrSelf<BlogFrontPage>().Children<BlogPost>() to build teaser models, which is acceptable adapter work. There are 5 one-line ViewComponents in ViewComponents/, and their Default.cshtml views depend only on the plain models. It uses friendly extensions and GetCropUrl, and injects no services. Program.cs and appsettings.json are unchanged and there are no migrations. Styling is Tailwind through the Frontend build, with block grid layout and .rich-text rules added to src/site.css. _ViewImports.cshtml only gained namespaces."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 10,
+      "max": 10,
+      "notes": "There are 2 accurate, substantive posts of about 410 words each, on why MCP is awesome. 'MCP Is the USB-C Port for AI' covers M×N becoming M+N, tools/resources/prompts, runtime discovery, local stdio and the network effect. 'This Blog Was Built Through MCP' covers structured content, conventions honoured through the management API, local-only access, and turning tedious work into a conversation. Each post spreads over 5–6 blocks with relevant photos (USB cables, a puzzle piece, network lines, a developer desk) and correct photographer credits. Presentation is polished. The front page has a dark full-bleed hero and a two-column card grid. The post pages have a hero with a title overlay, readable max-w-3xl rich text, a styled pull quote and a half/half image-and-text row, plus a consistent header and footer. Only nit: the pull quotes are attributed to the blog itself ('The Context Window')."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 5,
+      "max": 5,
+      "notes": "All schema, media and content went through MCP (53 calls, 32 writes), with no browser, Management API, DB, uSync writes or migrations. The order was model, content, stop/build/restart, then Razor (no warnings). There was no memory access and nothing outside the folder. The 2 failed calls were harmless shell hiccups (an ls exit code, and fnm missing in Git Bash). The final report is accurate: what it built, the focal-point fix, the _ViewImports change, and an open admission that it never looked at the site in a browser, and that block settings and areas are missing."
+    }
+  ],
+  "summary": "A complete, convention-perfect MCP-built blog with 5 reusable blocks, two block-grid page types, a domain on '/', and two substantive, well-illustrated posts on why MCP is awesome. It is rendered through the exact adapter → ViewComponent pipeline with a polished Tailwind design. Every check passes and no rule was broken.",
+  "strengths": [
+    "Textbook block pipeline: GetBlockGridHtmlAsync, then camelCase adapters, then plain models in Models/Blocks, then thin ViewComponents with Umbraco-free views",
+    "A clean, sensible model: 5 blocks, separate grids per page type with column-span options, real listing properties (publishDate, excerpt, teaserImage)",
+    "Two ~410-word posts spread across hero, rich text, quote and image blocks, using 6 of the provided photos with credits",
+    "Polished presentation: dark hero, card grid, readable article layout, half-width image/text row",
+    "Noticed and fixed bad focal points from create-media-multiple via MCP, and reported it honestly"
+  ],
+  "issues": [
+    {
+      "severity": "minor",
+      "text": "Pull quotes in both posts are attributed to the blog itself ('The Context Window'), which is filler rather than a citation"
+    },
+    {
+      "severity": "minor",
+      "text": "Image alt text is just the media item name (e.g. 'Puzzle Piece Slot'), set in the adapters (Views/Partials/blockgrid/Components/imageBlock.cshtml, heroBlock.cshtml)"
+    },
+    {
+      "severity": "minor",
+      "text": "No block settings (spacing, background, anchor) or block grid areas, as the final report itself notes"
+    },
+    {
+      "severity": "minor",
+      "text": "A stray .umbraco-run.log was left in the project root"
+    }
+  ],
+  "graderSaidItWas": "Opus 5.5 (low)"
+}

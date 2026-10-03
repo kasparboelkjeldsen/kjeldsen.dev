@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-5.6-luna",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T05:13:24.383Z",
+  "sessionId": "01a1002e-b001-7190-b8db-31a1a8a974d3",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 24115,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 1017350,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 125,
+    "failedToolCalls": 10,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T07-13-42-01a1002e-b001-7190-b8db-31a1a8a974d3.jsonl",
+  "runId": "2026-10-03_0713_mcp_gpt-5.6-luna-high",
+  "log": "bench\\logs\\auto-2026-10-03T05-13-24-mcp-gpt-5.6-luna.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 148579,
+    "costUsd": 0.9532214000000001,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T05-31-06-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_0713_mcp_gpt-5.6-luna-high` (GPT-5.6-Luna, high effort, MCP test) at **87/100**. The grade shows in the `npm run report` Grade table, the solution is archived as `refs/runs/2026-10-03_0713_mcp_gpt-5.6-luna-high`, and `npm run status` says the project is **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 34/35 |\n| Content modeling | 20/25 |\n| Code architecture & conventions | 22/25 |\n| Content & presentation | 6/10 |\n| Process & honesty | 5/5 |\n\n**Summary:** The model built a blog front page and two posts on the block grid, using three blocks: a hero, rich text and a post list. Rendering goes through the required path: the block grid helper, one adapter per block, then one ViewComponent per block. The site has a polished dark Tailwind design, all 42 automated checks pass, and the build has 0 warnings. Everything was built through the MCP server in the required order, and the final report is accurate.\n\n**Top issues:**\n1. **The posts are thin (major).** Each post is a hero block plus one rich text block of about 3 short paragraphs. There is no image block or other content block.\n2. **No post metadata properties (major).** Blog posts have no date, excerpt or listing-image fields, so each card on the front page shows only the creation date and the title.\n3. **The post-list block is wired awkwardly (minor).** `BlogPostListViewComponent` reads the current page from the request, so it only works on the blog front page, and its adapter passes in an empty model.\n4. **Post paragraphs run together (minor).** The rich text view uses `prose` classes, but the Tailwind typography plugin isn't installed.\n5. **The photos are barely visible (minor).** The three provided Unsplash photos only appear as 30%-opacity hero backgrounds.\n\nBoth screenshots rendered without errors. The grade files are `results/2026-10-03_0713_mcp_gpt-5.6-luna-high/grade.json` and `grade.md`."
+  }
+}

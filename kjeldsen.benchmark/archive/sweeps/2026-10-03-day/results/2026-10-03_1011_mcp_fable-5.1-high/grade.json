@@ -1,0 +1,29 @@
+{
+  "runId": "2026-10-03_1011_mcp_fable-5.1-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T08:36:57Z",
+  "total": 98,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "dotnet build is clean (0 errors, 0 warnings). / returns 200 through the domain '/' on the 'Blog' page. It shows a hero block and a 'Latest posts' block whose cards have an image, date, author, title, summary and a working link to each post. Both posts render every block (rich text, image, quote) with no 'Could not render component' text. All 7 images load through GetCropUrl URLs. All 5 media items are provided Unsplash photos, imported into a 'Blog' media folder. All content is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 25, "max": 25, "notes": "5 element types (heroBlock, richTextBlock, imageBlock, quoteBlock, blogPostListBlock) are in Blocks. blogFrontPage and blogPost are in Pages, and siteRoot is in Repositories. Each type is the right kind, and none uses a composition. siteRoot is the only root type, siteRoot -> blogFrontPage -> blogPost, and both page types have default templates. One 12-column 'Blog Block Grid' data type in /Custom/Umbraco.BlockGrid is shared by both pages, with sensible column-span options per block. Post metadata (summary, heroImage, publishDate, author) are real properties. Aliases are camelCase, and there are no duplicate or orphaned types. Minor: because the grid is shared, the hero and post-list blocks are also allowed on posts. That is harmless, so no deduction." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 24.5, "max": 25, "notes": "Pages call Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold's blockgrid partials are untouched. Each block has a markup-free adapter at Views/Partials/blockgrid/Components/<alias>.cshtml that takes BlockGridItem<T>, maps it to a plain model in Models/Blocks/ and calls Component.InvokeAsync. Each block has a one-line ViewComponent rendering Views/Shared/Components/<Name>/Default.cshtml, and the component views use only the plain model. Program.cs and appsettings.json are untouched, there are no migrations, and there is no .cs file in the Models/ root. The code uses the friendly extensions and GetCropUrl with no injected services. Styling goes through Tailwind (src/site.css adds block grid CSS and rich-text typography, built to wwwroot/dist/site.css). -0.5: the blogPostListBlock adapter does more than map the block. It queries UmbracoContext.PublishedRequest.PublishedContent.Children<BlogPost>() inline instead of using a service. The model disclosed this." },
+    { "id": "content", "name": "Content & presentation", "score": 9, "max": 10, "notes": "Post 1, 'Why MCP is awesome: one protocol, every tool', covers the N×M problem, self-describing tool schemas, local/scoped/auditable servers and why it matters. Post 2, 'Building this blog through MCP', is a first-hand account of building the site over MCP (modelling, content, lessons learned). Both are accurate, about 500 words each, and spread over rich text, image (including a 6+6 side-by-side pair) and quote blocks. Images fit and carry credits. -1: the posts are on the short side, and post 2 is more a build log than an argument for MCP. The presentation is a polished blog: a clean header and footer, a hero with an image overlay, two-column cards, and readable post pages with a lead, a wide header image and good rich-text typography." },
+    { "id": "process", "name": "Process & honesty", "score": 4.5, "max": 5, "notes": "All schema, media and content went through the Umbraco MCP server (46 calls, 30 writes). There was no Management API, DB, uSync, browser or migration use, and metrics.json has no warnings. The run followed the order model -> content -> Razor -> stop/build/restart. There was no memory access and no reads of the bench's results/tests/baseline. -0.5 for a small stray: verification curl output went to /tmp (root.html etc.), outside the project folder. The final report is accurate. It says it did not check the layout visually, and it discloses the leftover umbraco-run.log, the SQLite lock retries and the adapter query." }
+  ],
+  "summary": "A complete, polished MCP-built blog: 5 reusable blocks on a shared block grid, a hero plus post-list front page, and two published posts with credited Unsplash images. Every check passes and the adapter -> ViewComponent pipeline is followed almost exactly.",
+  "strengths": [
+    "All 43 automated checks pass, and the build has 0 warnings",
+    "The adapter/ViewComponent pipeline is textbook, with one-line ViewComponents and plain models in Models/Blocks/",
+    "Real post metadata properties (summary, heroImage, publishDate, author) drive the listing cards",
+    "Uses grid column spans (side-by-side 6+6 images, 8-column quote), with CSS added for the grid layout",
+    "An honest final report that discloses its limits"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "The post-list adapter queries content itself (UmbracoContext.PublishedRequest.PublishedContent.Children<BlogPost>()) instead of only mapping the block (Views/Partials/blockgrid/Components/blogPostListBlock.cshtml)" },
+    { "severity": "minor", "text": "Posts are fairly short (about 500 words each), and post 2 is more a build log than a case for MCP (/building-this-blog-through-mcp-without-opening-the-backoffice/)" },
+    { "severity": "minor", "text": "Verification curl output was written to /tmp, outside the project folder" },
+    { "severity": "minor", "text": "Image alt text is the media item name (heroBlock.cshtml, imageBlock.cshtml, blogPost.cshtml)" },
+    { "severity": "minor", "text": "A leftover umbraco-run.log sits in Umbraco.Bench.Umbraco/ (disclosed)" }
+  ]
+}

@@ -1,0 +1,121 @@
+diff --git a/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml b/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml
+index 6e4cdfe..6e92cc9 100644
+--- a/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml
++++ b/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml
+@@ -3,4 +3,5 @@
+ @using Umbraco.Cms.Web.Common.Views
+ @using Umbraco.Cms.Core.Models.PublishedContent
+ @using Microsoft.AspNetCore.Html
++@using Umbraco.Bench.Umbraco.Models
+ @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+\ No newline at end of file
+diff --git a/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml b/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml
+new file mode 100644
+index 0000000..9be6c26
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml
+@@ -0,0 +1,54 @@
++﻿@inherits UmbracoViewPage<BlogFrontPage>
++@{
++    Layout = null;
++}
++<!DOCTYPE html>
++<html>
++<head>
++    <title>@Model.Value("pageTitle")</title>
++    <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
++</head>
++<body>
++    <div class="container mx-auto p-8">
++        <h1 class="text-4xl font-bold mb-4">@Model.Value("pageTitle")</h1>
++        @if (Model.HasValue("pageDescription"))
++        {
++            <p class="text-lg text-gray-600 mb-8">@Model.Value("pageDescription")</p>
++        }
++
++        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
++            @{
++                var blogPosts = Model.Children<BlogPost>();
++            }
++            @foreach (var post in blogPosts)
++            {
++                <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
++                    @if (post.HasValue("featuredImage"))
++                    {
++                        var image = post.Value<IPublishedContent>("featuredImage");
++                        @if (image != null)
++                        {
++                            <div class="relative h-48 overflow-hidden bg-gray-200">
++                                <img src="@image.Url()" alt="@post.Value("title")" class="w-full h-full object-cover" />
++                            </div>
++                        }
++                    }
++                    <div class="p-6">
++                        <h2 class="text-2xl font-bold mb-2">
++                            <a href="@post.Url()" class="text-blue-600 hover:text-blue-800">@post.Value("title")</a>
++                        </h2>
++                        @if (post.HasValue("excerpt"))
++                        {
++                            <p class="text-gray-600 mb-4">@post.Value("excerpt")</p>
++                        }
++                        <a href="@post.Url()" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
++                            Read More
++                        </a>
++                    </div>
++                </article>
++            }
++        </div>
++    </div>
++    <script type="module" src="~/dist/main.js" asp-append-version="true"></script>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/Umbraco.Bench.Umbraco/Views/blogPost.cshtml b/Umbraco.Bench.Umbraco/Views/blogPost.cshtml
+new file mode 100644
+index 0000000..6bdf432
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/blogPost.cshtml
+@@ -0,0 +1,42 @@
++﻿@inherits UmbracoViewPage<BlogPost>
++@{
++    Layout = null;
++}
++<!DOCTYPE html>
++<html>
++<head>
++    <title>@Model.Value("title")</title>
++    <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
++</head>
++<body>
++    <nav class="bg-gray-100 p-4">
++        <div class="container mx-auto">
++            <a href="/" class="text-blue-600 hover:text-blue-800">← Back to Blog</a>
++        </div>
++    </nav>
++
++    <article class="container mx-auto p-8 max-w-2xl">
++        @if (Model.HasValue("featuredImage"))
++        {
++            var image = Model.Value<IPublishedContent>("featuredImage");
++            @if (image != null)
++            {
++                <img src="@image.Url()" alt="@Model.Value("title")" class="w-full mb-8 rounded-lg" />
++            }
++        }
++
++        <h1 class="text-5xl font-bold mb-4">@Model.Value("title")</h1>
++
++        @if (Model.HasValue("excerpt"))
++        {
++            <p class="text-xl text-gray-700 mb-8 font-semibold">@Model.Value("excerpt")</p>
++        }
++
++        <div class="prose prose-lg max-w-none">
++            @Html.Raw(Model.Value("content"))
++        </div>
++    </article>
++
++    <script type="module" src="~/dist/main.js" asp-append-version="true"></script>
++</body>
++</html>
+\ No newline at end of file

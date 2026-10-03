@@ -1,0 +1,184 @@
+diff --git a/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml b/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml
+new file mode 100644
+index 0000000..9625a6d
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml
+@@ -0,0 +1,74 @@
++﻿@using Umbraco.Cms.Web.Common.PublishedModels;
++@using Umbraco.Bench.Umbraco.Models;
++@using Umbraco.Extensions;
++@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlogFrontPage>
++@{
++	Layout = null;
++	ViewData["Title"] = Model?.Heading ?? "Blog";
++}
++
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>@ViewData["Title"]</title>
++    <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
++    <style>
++        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
++        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
++        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 0; text-align: center; }
++        header h1 { margin: 0; font-size: 2.5rem; }
++        header p { margin: 0.5rem 0 0; opacity: 0.95; }
++        .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0; }
++        .blog-card { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
++        .blog-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.15); }
++        .blog-card-image { width: 100%; height: 200px; object-fit: cover; background: #f0f0f0; }
++        .blog-card-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
++        .blog-card-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 0.5rem; }
++        .blog-card-date { font-size: 0.9rem; color: #666; margin-bottom: 1rem; }
++        .blog-card-link { color: #667eea; font-weight: 500; text-decoration: none; margin-top: auto; }
++        .blog-card-link:hover { text-decoration: underline; }
++    </style>
++</head>
++<body>
++    <header>
++        <div class="container">
++            <h1>@Model?.Heading</h1>
++            @if (Model?.Description != null)
++            {
++                <p>@Html.Raw(Model.Description)</p>
++            }
++        </div>
++    </header>
++
++    <div class="container">
++        <div class="blog-grid">
++            @{
++                var blogPosts = Model?.Children<BlogPostPage>();
++                if (blogPosts != null)
++                {
++                    foreach (var post in blogPosts.OrderByDescending(p => p.PublishedDate))
++                    {
++                        <a href="@post.Url()" class="blog-card">
++                            @if (post.FeaturedImage != null)
++                            {
++                                var imageUrl = post.FeaturedImage.GetCropUrl(width: 400, height: 250);
++                                <img src="@imageUrl" alt="@post.Title" class="blog-card-image" />
++                            }
++                            <div class="blog-card-content">
++                                <h2 class="blog-card-title">@post.Title</h2>
++                                @if (post.PublishedDate != default)
++                                {
++                                    <p class="blog-card-date">@post.PublishedDate.ToString("MMMM dd, yyyy")</p>
++                                }
++                                <span class="blog-card-link">Read More →</span>
++                            </div>
++                        </a>
++                    }
++                }
++            }
++        </div>
++    </div>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/Umbraco.Bench.Umbraco/Views/blogPostPage.cshtml b/Umbraco.Bench.Umbraco/Views/blogPostPage.cshtml
+new file mode 100644
+index 0000000..cac3be0
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/blogPostPage.cshtml
+@@ -0,0 +1,79 @@
++﻿@using Umbraco.Cms.Web.Common.PublishedModels;
++@using Umbraco.Bench.Umbraco.Models;
++@using Umbraco.Extensions;
++@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlogPostPage>
++@{
++	Layout = null;
++	ViewData["Title"] = Model?.Title ?? "Blog Post";
++}
++
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>@ViewData["Title"]</title>
++    <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
++    <style>
++        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; }
++        .container { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
++        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem 0; }
++        header a { color: rgba(255,255,255,0.8); text-decoration: none; }
++        header a:hover { color: white; }
++        .post-header { text-align: center; padding: 2rem 0; }
++        .post-title { font-size: 2.5rem; margin: 0; }
++        .post-date { color: #666; font-size: 0.95rem; margin-top: 0.5rem; }
++        .post-image { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin: 2rem 0; }
++        .post-content { font-size: 1.05rem; }
++        .post-content h3 { font-size: 1.5rem; margin-top: 1.5rem; }
++        .post-content ul { margin: 1rem 0; padding-left: 2rem; }
++        .post-content li { margin-bottom: 0.5rem; }
++        .back-link { display: inline-block; margin-top: 2rem; padding: 0.75rem 1.5rem; background: #f0f0f0; border-radius: 4px; text-decoration: none; color: #667eea; font-weight: 500; }
++        .back-link:hover { background: #e0e0e0; }
++    </style>
++</head>
++<body>
++    <header>
++        <div class="container">
++            @{
++                var parentPage = Model?.Parent<BlogFrontPage>();
++                if (parentPage != null)
++                {
++                    <a href="@parentPage.Url()">← Back to Blog</a>
++                }
++            }
++        </div>
++    </header>
++
++    <div class="container">
++        <div class="post-header">
++            <h1 class="post-title">@Model?.Title</h1>
++            @if (Model?.PublishedDate != default)
++            {
++                <p class="post-date">Published on @Model.PublishedDate.ToString("MMMM dd, yyyy")</p>
++            }
++        </div>
++
++        @if (Model?.FeaturedImage != null)
++        {
++            var imageUrl = Model.FeaturedImage.GetCropUrl(width: 800, height: 400);
++            <img src="@imageUrl" alt="@Model.Title" class="post-image" />
++        }
++
++        @if (Model?.Content != null)
++        {
++            <div class="post-content">
++                @Html.Raw(Model.Content)
++            </div>
++        }
++
++        @{
++            var parent = Model?.Parent<BlogFrontPage>();
++            if (parent != null)
++            {
++                <a href="@parent.Url()" class="back-link">← Back to Blog</a>
++            }
++        }
++    </div>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/Umbraco.Bench.Umbraco/appsettings.json b/Umbraco.Bench.Umbraco/appsettings.json
+index 85c3dee..6881446 100644
+--- a/Umbraco.Bench.Umbraco/appsettings.json
++++ b/Umbraco.Bench.Umbraco/appsettings.json
+@@ -33,7 +33,10 @@
+       },
+       "Security": {
+         "AllowConcurrentLogins": false
++      },
++      "Imaging": {
++        "HMACSecretKey": "HPImonD4dRd5f5QyydzZck1fgiJN/m\u002Boa3p4Ud3984aRrXSVMUfuQARZDR7CWIgpMmZK9fQybEggZaH7G4X61w=="
+       }
+     }
+   }
+-}
++}
+\ No newline at end of file

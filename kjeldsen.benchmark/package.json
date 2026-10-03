@@ -1,0 +1,27 @@
+{
+  "name": "umbraco-bench",
+  "private": true,
+  "type": "module",
+  "description": "Model sweep tooling for the Umbraco.Bench MCP benchmark",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "status": "node bench/status.mjs",
+    "auto": "node bench/auto.mjs",
+    "setup": "node bench/setup.mjs",
+    "up": "node bench/up.mjs",
+    "down": "node bench/down.mjs",
+    "collect": "node bench/collect.mjs",
+    "check": "node bench/check.mjs",
+    "api": "node bench/api.mjs",
+    "screenshot": "node bench/screenshot.mjs",
+    "reset": "node bench/reset.mjs",
+    "report": "node bench/report.mjs",
+    "baseline": "node bench/baseline.mjs",
+    "score": "node bench/score.mjs",
+    "honesty": "node bench/honesty.mjs",
+    "archive": "node bench/archive.mjs",
+    "export": "node bench/export.mjs"
+  }
+}

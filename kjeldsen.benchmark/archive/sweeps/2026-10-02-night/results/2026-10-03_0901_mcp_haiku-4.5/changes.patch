@@ -1,0 +1,188 @@
+diff --git a/Umbraco.Bench.Umbraco/Services/HeroViewComponent.cs b/Umbraco.Bench.Umbraco/Services/HeroViewComponent.cs
+new file mode 100644
+index 0000000..0ead6aa
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Services/HeroViewComponent.cs
+@@ -0,0 +1,9 @@
++using Microsoft.AspNetCore.Mvc;
++
++namespace Umbraco.Bench.Umbraco.Services;
++
++public sealed class HeroViewComponent : ViewComponent
++{
++    public IViewComponentResult Invoke(string title, string imageUrl)
++        => View(new { title, imageUrl });
++}
+diff --git a/Umbraco.Bench.Umbraco/Services/TextViewComponent.cs b/Umbraco.Bench.Umbraco/Services/TextViewComponent.cs
+new file mode 100644
+index 0000000..7455b7b
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Services/TextViewComponent.cs
+@@ -0,0 +1,10 @@
++using Microsoft.AspNetCore.Mvc;
++using Umbraco.Cms.Core.Models.Blocks;
++
++namespace Umbraco.Bench.Umbraco.Services;
++
++public sealed class TextViewComponent : ViewComponent
++{
++    public IViewComponentResult Invoke(BlockValue content)
++        => View((object)content);
++}
+diff --git a/Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/heroBlock.cshtml b/Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/heroBlock.cshtml
+new file mode 100644
+index 0000000..21e36f0
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/heroBlock.cshtml
+@@ -0,0 +1,8 @@
++@inherits UmbracoViewPage<BlockGridItem<Umbraco.Bench.Umbraco.Models.HeroBlock>>
++
++@{
++    var title = Model.Content.Title ?? "";
++    var imageUrl = Model.Content.FeaturedImage?.GetCropUrl(width: 1200, height: 400) ?? "";
++}
++
++@await Component.InvokeAsync("Hero", new { title, imageUrl })
+diff --git a/Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/textBlock.cshtml b/Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/textBlock.cshtml
+new file mode 100644
+index 0000000..0b4a4ef
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/textBlock.cshtml
+@@ -0,0 +1,3 @@
++@inherits UmbracoViewPage<BlockGridItem<Umbraco.Bench.Umbraco.Models.TextBlock>>
++
++@await Component.InvokeAsync("Text", new { content = Model.Content.Content })
+diff --git a/Umbraco.Bench.Umbraco/Views/Shared/Components/Hero/Default.cshtml b/Umbraco.Bench.Umbraco/Views/Shared/Components/Hero/Default.cshtml
+new file mode 100644
+index 0000000..737cdea
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/Shared/Components/Hero/Default.cshtml
+@@ -0,0 +1,9 @@
++@model (string title, string imageUrl)
++
++<div class="hero-block mb-8">
++    @if (!string.IsNullOrEmpty(Model.imageUrl))
++    {
++        <img src="@Model.imageUrl" alt="@Model.title" class="w-full h-96 object-cover rounded-lg mb-4" />
++    }
++    <h2 class="text-3xl font-bold">@Model.title</h2>
++</div>
+diff --git a/Umbraco.Bench.Umbraco/Views/Shared/Components/Text/Default.cshtml b/Umbraco.Bench.Umbraco/Views/Shared/Components/Text/Default.cshtml
+new file mode 100644
+index 0000000..e279076
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/Shared/Components/Text/Default.cshtml
+@@ -0,0 +1,5 @@
++@model Umbraco.Cms.Core.Strings.IHtmlEncodedString
++
++<div class="text-block mb-8 prose prose-sm max-w-none">
++    @Html.Raw(Model)
++</div>
+diff --git a/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml b/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml
+index 6e4cdfe..e377126 100644
+--- a/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml
++++ b/Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml
+@@ -2,5 +2,6 @@
+ @using Umbraco.Cms.Web.Common.PublishedModels
+ @using Umbraco.Cms.Web.Common.Views
+ @using Umbraco.Cms.Core.Models.PublishedContent
++@using Umbraco.Cms.Core.Models.Blocks
+ @using Microsoft.AspNetCore.Html
+ @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+\ No newline at end of file
+diff --git a/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml b/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml
+new file mode 100644
+index 0000000..7823a78
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml
+@@ -0,0 +1,41 @@
++﻿@inherits UmbracoViewPage<Umbraco.Bench.Umbraco.Models.BlogFrontPage>
++@using Umbraco.Cms.Web.Common.PublishedModels
++
++@{
++    Layout = "layout.cshtml";
++}
++
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>@Model.Title</title>
++    <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
++</head>
++<body class="bg-white">
++    <div class="max-w-4xl mx-auto px-4 py-12">
++        <h1 class="text-4xl font-bold mb-2">@Model.Title</h1>
++        <p class="text-gray-600 mb-12">Exploring the power of MCP and modern content management</p>
++
++        <div class="grid gap-8">
++            @foreach (var post in Model.Children<Umbraco.Bench.Umbraco.Models.BlogPostPage>())
++            {
++                <article class="border-l-4 border-blue-500 pl-6 py-4">
++                    <h2 class="text-2xl font-bold mb-2">
++                        <a href="@post.Url()!" class="text-blue-600 hover:text-blue-800">
++                            @post.Title
++                        </a>
++                    </h2>
++                    <p class="text-gray-600 mb-4">@post.Excerpt</p>
++                    <a href="@post.Url()!" class="inline-block text-blue-600 hover:text-blue-800 font-medium">
++                        Read more →
++                    </a>
++                </article>
++            }
++        </div>
++    </div>
++
++    <script type="module" src="~/dist/main.js" asp-append-version="true"></script>
++</body>
++</html>
+diff --git a/Umbraco.Bench.Umbraco/Views/blogPostPage.cshtml b/Umbraco.Bench.Umbraco/Views/blogPostPage.cshtml
+new file mode 100644
+index 0000000..2cb3680
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/blogPostPage.cshtml
+@@ -0,0 +1,43 @@
++﻿@inherits UmbracoViewPage<Umbraco.Bench.Umbraco.Models.BlogPostPage>
++@using Umbraco.Cms.Web.Common.PublishedModels
++
++@{
++    Layout = "layout.cshtml";
++}
++
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>@Model.Title</title>
++    <meta name="description" content="@Model.Excerpt" />
++    <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
++</head>
++<body class="bg-white">
++    <div class="max-w-4xl mx-auto px-4 py-12">
++        <a href="@Model.Parent().Url()!" class="text-blue-600 hover:text-blue-800 mb-6 inline-block">
++            ← Back to Blog
++        </a>
++
++        <article>
++            <header class="mb-12">
++                <h1 class="text-4xl font-bold mb-4">@Model.Title</h1>
++                <p class="text-xl text-gray-600">@Model.Excerpt</p>
++            </header>
++
++            <div class="prose prose-lg max-w-none">
++                @await Html.GetBlockGridHtmlAsync(Model, "blocks")
++            </div>
++        </article>
++
++        <nav class="mt-16 pt-8 border-t border-gray-200">
++            <a href="@Model.Parent().Url()!" class="text-blue-600 hover:text-blue-800 font-medium">
++                ← Back to all posts
++            </a>
++        </nav>
++    </div>
++
++    <script type="module" src="~/dist/main.js" asp-append-version="true"></script>
++</body>
++</html>

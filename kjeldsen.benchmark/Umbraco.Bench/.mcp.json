@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "umbraco": {
+      "command": "npx",
+      "args": ["-y", "@umbraco-cms/mcp-dev@18"],
+      "env": {
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "UMBRACO_CLIENT_ID": "umbraco-back-office-mcp-local-only",
+        "UMBRACO_CLIENT_SECRET": "mcp-local-dev-secret-b3ll4b00t-not-a-real-secret",
+        "UMBRACO_BASE_URL": "${UMBRACO_MCP_URL:-https://localhost:44317}",
+        "UMBRACO_INCLUDE_TOOL_COLLECTIONS": "document,document-type,data-type,template,media",
+        "UMBRACO_ALLOWED_MEDIA_PATHS": "unsplash"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "state": "finished",
+  "startedAt": "2026-10-03T07:01:20.035Z",
+  "updatedAt": "2026-10-03T07:12:19.193Z",
+  "done": [
+    {
+      "label": "claude-haiku-4-5-20251001 · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0901_mcp_haiku-4.5",
+      "grade": "38/100",
+      "error": null
+    }
+  ],
+  "queued": []
+}

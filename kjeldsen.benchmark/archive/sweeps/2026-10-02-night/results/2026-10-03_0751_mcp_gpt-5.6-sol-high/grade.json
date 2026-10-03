@@ -1,0 +1,28 @@
+{
+  "runId": "2026-10-03_0751_mcp_gpt-5.6-sol-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T09:00:00Z",
+  "total": 93,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build 0 errors / 0 warnings. / returns 200 via the '/' domain on the 'MCP Field Notes' page and lists both posts as cards with image, date, title and excerpt; links work. Both posts render every block (article header + rich text) with no errors. All 3 images are provided Unsplash photos imported into a Blog media folder and served through signed GetCropUrl URLs (5/5 load). All content published." },
+    { "id": "modeling", "name": "Content modeling", "score": 20, "max": 25, "notes": "Folders 8/8: four elements in Blocks, blogFrontPage/blogPost in Pages, siteRoot untouched in Repositories. Block grid 4/7: grid on both page types, but the block set is hero, articleHeader, richText and postListing; there is no standalone image block, and each post body is one rich text block holding the whole article after the header. Structure 5/5: siteRoot the only root type, blogFrontPage -> blogPost only, templates assigned, camelCase aliases, the one custom data type (Blog Block Grid) in Custom/Umbraco.BlockGrid. Hygiene 3/5: no compositions, but post metadata (date, excerpt, listing image) lives on an articleHeaderBlock inside the grid instead of on blogPost, so the listing has to dig through each post's blocks for the first header (a post without one silently drops off the front page). The listing heading 'Latest writing / Why MCP is awesome' is hard-coded in the component view, and postListingBlock has no properties." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "Both page views just call Html.GetBlockGridHtmlAsync(Model, \"blocks\") inside a shared _Layout; scaffold blockgrid partials unchanged. Four adapters at Views/Partials/blockgrid/Components/<alias>.cshtml take BlockGridItem<T>, map to plain models in Models/Blocks and call Component.InvokeAsync with no markup. Four one-line ViewComponents render Views/Shared/Components/<Name>/Default.cshtml, and those views depend only on the plain models. Program.cs and appsettings.json untouched, no migrations, friendly Children<T>/Url()/GetCropUrl, no injected services. Tailwind built to wwwroot/dist/site.css." },
+    { "id": "content", "name": "Content & presentation", "score": 8, "max": 10, "notes": "Posts 4/6: two accurate, on-topic posts ('MCP turns AI from adviser into collaborator', 'MCP makes integrations feel native'), each with 4-5 short paragraphs and two h2 sections. They are fairly brief, have one image each, and are only two blocks each (header + one rich text). Presentation 4/4: a polished dark editorial design with a hero, a two-column card listing, a large post title, a 16:9 hero image with credit, and a readable prose column." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "Schema and content were built entirely over Umbraco MCP (66 calls, 30 writes). There was no browser, migration, Management API, uSync or database use, no memory access and no out-of-folder or bench-folder reads, and metrics.json has no warnings. postListingBlock was added after the first restart, but the model rebuilt and restarted again before writing any Razor. The final report is accurate and matches what was built." }
+  ],
+  "summary": "A clean, working MCP-built blog. The front page has a hero and a post-listing block, and two published MCP posts use an article-header block plus one rich text block, all rendered through a textbook adapter -> ViewComponent pipeline with a polished Tailwind design. The points lost are in content modeling: there is no image block, each post body is a single rich text block, and post metadata lives in a block rather than on the post type.",
+  "strengths": [
+    "Clean block pipeline: GetBlockGridHtmlAsync, markup-free adapters, plain models in Models/Blocks, thin ViewComponents",
+    "Everything works: 0 warnings, all pages 200, signed crop URLs, '/' domain, all content published",
+    "Provided Unsplash photos imported into a media folder, with alt text and credits",
+    "Polished, coherent dark editorial design built with Tailwind",
+    "Strictly followed the MCP channel and order of operations; final report is accurate"
+  ],
+  "issues": [
+    { "severity": "major", "text": "Weak block set for posts: no image block, and each post body is a single richTextBlock holding the whole article (blogPost 'blocks' = articleHeaderBlock + richTextBlock)" },
+    { "severity": "minor", "text": "Post metadata (publishedDate, summary, listing image) is stored on articleHeaderBlock inside the grid instead of on blogPost; Views/Partials/blockgrid/Components/postListingBlock.cshtml digs into each post's blocks and silently drops posts without a header block" },
+    { "severity": "minor", "text": "Listing heading 'Latest writing / Why MCP is awesome' and the '← All field notes' link to '/' are hard-coded in Views/Shared/Components/PostListing/Default.cshtml and ArticleHeader/Default.cshtml" },
+    { "severity": "minor", "text": "Posts are fairly short (4-5 paragraphs) with a single image each" }
+  ]
+}

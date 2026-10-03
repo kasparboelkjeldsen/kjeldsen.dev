@@ -1,0 +1,31 @@
+{
+  "runId": "2026-10-03_1243_mcp_gpt-5.6-luna-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T13:30:00Z",
+  "total": 87.5,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 warnings, 0 errors). / is 200 via the '/' domain on 'MCP Blog' and lists both posts as cards with image, title, excerpt and working links (no date). Both posts render their hero and rich-text blocks with no errors. The 3 images are provided Unsplash photos, imported into the 'Blog Images' media folder and served through signed GetCropUrl URLs (5/5 load). Everything is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 17.5, "max": 25, "notes": "Folders 6/8: blogPost renders (it has a template) but is filed in 'Repository Items' instead of Pages (-2). blockSettings in Data and the 3 blocks in Blocks are correct. Block grid 4/7: the grid is on both page types, but the block set is only hero, rich text and blog listing. There's no standalone image block, and each post is just one hero plus one rich-text block. The settings element's backgroundColor/spacing are free-text textstrings that only end up as unused data attributes. Structure 5/5: siteRoot is the only root type, front page -> blogPost children, templates assigned, camelCase aliases, and the block grid data type is in /Custom. Hygiene 2.5/5: blogPost has no metadata properties at all (only 'blocks'). The listing excerpt and image are scraped from the post's first hero block, there's no publish date (posts sort by UpdateDate), and the hero component hard-codes the eyebrow text 'MCP / Umbraco / Field notes'." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 24.5, "max": 25, "notes": "Both templates use Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold blockgrid partials are untouched. There's one adapter per block in blockgrid/Components/<alias>.cshtml, each taking BlockGridItem<T>, mapping to a plain model and calling Component.InvokeAsync with no markup. There are 3 ViewComponents with Default.cshtml views that depend only on the plain models in Models/Blocks/. Friendly extensions and GetCropUrl are used, Program.cs and appsettings.json are untouched, there are no migrations, and styling uses Tailwind via dist/site.css. Minor: the two page templates each duplicate a full HTML shell instead of sharing a layout (-0.5)." },
+    { "id": "content", "name": "Content & presentation", "score": 5.5, "max": 10, "notes": "Posts 2/6: both are on topic and accurate but very thin. Each has a hero intro sentence, one h2 and two short paragraphs (~100 words, ~715 chars of page text) in a single rich-text block, plus a photo credit line. The images are relevant (network/code photos). Look 3.5/4: a polished dark hero with an image, a clean two-card listing and readable post typography. The front page has no site header/nav (posts do), and the post pages feel nearly empty below the hero." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "Built everything through MCP (78 MCP calls, 30 writes, no browser/Management API/DB/migrations/uSync writes). No order-of-operations warnings, and stayedInFolder passes with no outside paths, memory or bench refs. The final report is accurate: it lists what was created (including the Repository Item type), the URLs, uSync export and clean builds, with no false claims." }
+  ],
+  "summary": "A working MCP-built blog with a correct, clean block pipeline (3 blocks, adapters, ViewComponents) and a polished Tailwind look. It is held back by a thin content model (no post date/excerpt/image properties, blogPost filed as a Repository Item, no image block) and two very short posts of about two paragraphs each.",
+  "strengths": [
+    "Textbook rendering pipeline: GetBlockGridHtmlAsync -> markup-free adapters -> ViewComponents with plain models",
+    "Clean build, all pages 200, domain '/' assigned, everything published",
+    "Provided Unsplash photos imported into a media folder and served via GetCropUrl",
+    "Polished, coherent visual design with Tailwind",
+    "Built strictly through MCP, with an accurate final report"
+  ],
+  "issues": [
+    { "severity": "major", "text": "blogPost has no metadata properties (no date, excerpt or listing image). The listing scrapes heroIntro/heroImage from the post's hero block and sorts by UpdateDate (Views/Partials/blockgrid/Components/blogListingBlock.cshtml)" },
+    { "severity": "major", "text": "Posts are very thin: one hero plus a single rich-text block with two short paragraphs each (/mcp-makes-content-operations-conversational/, /mcp-turns-umbraco-into-a-creative-teammate/)" },
+    { "severity": "minor", "text": "blogPost renders (it has a template) but is filed in the 'Repository Items' folder instead of Pages" },
+    { "severity": "minor", "text": "Weak block set: no standalone image/quote block, so images appear only in heroes" },
+    { "severity": "minor", "text": "blockSettings backgroundColor/spacing are free-text textstrings that are only emitted as data attributes and never affect styling (Views/Shared/Components/*/Default.cshtml)" },
+    { "severity": "minor", "text": "Hero component hard-codes the eyebrow 'MCP / Umbraco / Field notes' (Views/Shared/Components/Hero/Default.cshtml), and the front page has no site header" },
+    { "severity": "minor", "text": "blogFrontPage.cshtml and blogPost.cshtml each duplicate a full HTML document instead of sharing a layout" }
+  ]
+}

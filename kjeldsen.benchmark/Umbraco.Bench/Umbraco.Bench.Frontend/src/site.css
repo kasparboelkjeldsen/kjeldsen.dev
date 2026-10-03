@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Tailwind scans these for class names. Razor views live outside this project,
+   so they need an explicit @source; everything under src/ is picked up as well. */
+@source "../../Umbraco.Bench.Umbraco/Views";
+
+/* Site-wide styles below. Vue custom elements have their own shadow-DOM styles,
+   but content passed into their slots renders in the light DOM and is styled here. */

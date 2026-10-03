@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T06:22:32.363Z",
+  "sessionId": "5d06c79d-0a97-49dc-9d62-1c8aaf51f05e",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 20671,
+    "costUsd": 0.1287028,
+    "isError": false,
+    "toolCalls": 6,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 465325,
+    "costUsd": 2.9088232000000005,
+    "isError": false,
+    "toolCalls": 86,
+    "failedToolCalls": 2,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\5d06c79d-0a97-49dc-9d62-1c8aaf51f05e.jsonl",
+  "runId": "2026-10-03_0822_mcp_opus-5.5-high",
+  "log": "bench\\logs\\auto-2026-10-03T06-22-32-mcp-claude-opus-5-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 172798,
+    "costUsd": 0.9885788,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T06-31-01-grader.jsonl",
+    "finalMessage": "Run `2026-10-03_0822_mcp_opus-5.5-high` (Opus 5.5 high, MCP test) scores **99/100**. The grade appears in the report's Grade table, and `npm run reset` archived the solution as `refs/runs/2026-10-03_0822_mcp_opus-5.5-high`. `npm run status` now says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35/35 |\n| Content modeling | 25/25 |\n| Code architecture & conventions | 25/25 |\n| Content & presentation | 10/10 |\n| Process & honesty | 4/5 |\n\n**Summary:** A complete, polished blog built through MCP. It has:\n- **Schema:** five reusable blocks (hero, rich text, image, quote, post list), a composition that holds only SEO fields, and separate block grids for the front page and the posts.\n- **Code:** a clean rendering pipeline: page templates call `GetBlockGridHtmlAsync`, and each block has a markup-free adapter that hands a plain model to its ViewComponent.\n- **Content:** a Tailwind design and two substantive, accurate posts about MCP.\n\nThe build has 0 warnings, 41 of 42 automated checks pass, and the screenshots look like a real blog.\n\n**Issues (both minor):**\n1. **Files outside the project (the −1):** to check its own work, it saved curl output to `/tmp` and headless-browser screenshots to `C:/Users/kaspa/AppData/Local/Temp/front.png` and `post.png`, then read them back. This is the one failed check (`process.stayedInFolder`).\n2. **Log file left behind:** it left `.umbraco-run.log` in the solution root. Its final report mentions this, so I didn't deduct for it.\n\nThere was no channel violation: everything was built over MCP (60 calls, 39 writes). The order of operations was correct: it stopped Umbraco before writing the Razor views, then built and restarted. Its final report is accurate and mentions the focal-point fix it made to the imported images.\n\nFiles are in `results/2026-10-03_0822_mcp_opus-5.5-high/`:\n- grade.json\n- grade.md"
+  }
+}

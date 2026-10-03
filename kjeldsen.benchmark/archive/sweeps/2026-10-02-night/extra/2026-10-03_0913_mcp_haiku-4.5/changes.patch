@@ -1,0 +1,109 @@
+diff --git a/Umbraco.Bench.Umbraco/Views/BlogFrontPage.cshtml b/Umbraco.Bench.Umbraco/Views/BlogFrontPage.cshtml
+new file mode 100644
+index 0000000..7417b86
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/BlogFrontPage.cshtml
+@@ -0,0 +1,54 @@
++﻿@using Umbraco.Bench.Umbraco.Models
++@using Umbraco.Cms.Web.Common.PublishedModels
++@inherits UmbracoViewPage<BlogFrontPage>
++@{
++    Layout = null;
++}
++<!DOCTYPE html>
++<html>
++<head>
++    <meta charset="utf-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1" />
++    <title>@Model.Value("title")</title>
++    <script src="https://cdn.tailwindcss.com"></script>
++</head>
++<body class="bg-gray-50">
++    <div class="min-h-screen">
++        <header class="bg-white shadow">
++            <div class="max-w-6xl mx-auto px-6 py-12">
++                <h1 class="text-4xl font-bold text-gray-900">@Model.Value("title")</h1>
++                <p class="text-xl text-gray-600 mt-4">Exploring the power of Model Context Protocol</p>
++            </div>
++        </header>
++
++        <main class="max-w-6xl mx-auto px-6 py-12">
++            <div class="grid gap-8 md:grid-cols-2">
++                @foreach (var post in Model.Children<BlogPost>())
++                {
++                    <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
++                        @if (post.FeaturedImage != null)
++                        {
++                            <div class="h-64 overflow-hidden bg-gray-200">
++                                <img src="@post.FeaturedImage.GetCropUrl(width: 600, height: 400)"
++                                     alt="@post.Title"
++                                     class="w-full h-full object-cover" />
++                            </div>
++                        }
++                        <div class="p-6">
++                            <h2 class="text-2xl font-bold text-gray-900 mb-3">
++                                <a href="@post.Url()" class="hover:text-blue-600">@post.Title</a>
++                            </h2>
++                            <p class="text-gray-600 mb-4">
++                                Published @post.CreateDate.ToString("MMMM d, yyyy")
++                            </p>
++                            <a href="@post.Url()" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
++                                Read More
++                            </a>
++                        </div>
++                    </article>
++                }
++            </div>
++        </main>
++    </div>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/Umbraco.Bench.Umbraco/Views/BlogPost.cshtml b/Umbraco.Bench.Umbraco/Views/BlogPost.cshtml
+new file mode 100644
+index 0000000..7a51060
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/BlogPost.cshtml
+@@ -0,0 +1,41 @@
++﻿@using Umbraco.Bench.Umbraco.Models
++@using Umbraco.Cms.Web.Common.PublishedModels
++@inherits UmbracoViewPage<BlogPost>
++@{
++    Layout = null;
++}
++<!DOCTYPE html>
++<html>
++<head>
++    <meta charset="utf-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1" />
++    <title>@Model.Title</title>
++    <script src="https://cdn.tailwindcss.com"></script>
++</head>
++<body class="bg-gray-50">
++    <div class="min-h-screen">
++        <header class="bg-white shadow">
++            <div class="max-w-3xl mx-auto px-6 py-6">
++                <a href="/" class="text-blue-600 hover:text-blue-700 mb-4 inline-block">← Back to Blog</a>
++                <h1 class="text-4xl font-bold text-gray-900">@Model.Title</h1>
++                <p class="text-gray-600 mt-2">Published @Model.CreateDate.ToString("MMMM d, yyyy")</p>
++            </div>
++        </header>
++
++        @if (Model.FeaturedImage != null)
++        {
++            <div class="h-96 overflow-hidden bg-gray-200">
++                <img src="@Model.FeaturedImage.GetCropUrl(width: 1200, height: 400)"
++                     alt="@Model.Title"
++                     class="w-full h-full object-cover" />
++            </div>
++        }
++
++        <main class="max-w-3xl mx-auto px-6 py-12">
++            <article class="prose prose-lg max-w-none">
++                @Html.Raw(Model.Content?.ToString() ?? "")
++            </article>
++        </main>
++    </div>
++</body>
++</html>
+\ No newline at end of file

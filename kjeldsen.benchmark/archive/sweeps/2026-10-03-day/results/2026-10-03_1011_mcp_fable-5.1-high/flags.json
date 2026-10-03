@@ -1,0 +1,4 @@
+{
+  "excludeFromScore": true,
+  "reason": "the Umbraco MCP server hung for ~15 min mid-run (fetch failed after 314 s, token request 500 after 582 s); rerun on 2026-10-03"
+}

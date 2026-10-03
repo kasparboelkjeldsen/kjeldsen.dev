@@ -13,6 +13,7 @@ Each part has its own README; this one is the map.
 | `kjeldsen.backend/` | Umbraco 18.1 on .NET 10 with Engage 18, the Delivery API, uSync, blob-backed media and image cache, and the custom code that talks to the frontend | [knowledge/](knowledge/README.md) |
 | `kjeldsen.frontend/` | Nuxt 4, Tailwind 4, a generated Delivery API client, two caches, server-side syntax highlighting, an RSS feed | [kjeldsen.frontend/README.md](kjeldsen.frontend/README.md) |
 | `kjeldsen.infra/` | Pulumi in C# against a local file backend, adopted from the live resources, plus the Azure Pipelines YAML | [kjeldsen.infra/README.md](kjeldsen.infra/README.md) |
+| `kjeldsen.benchmark/` | A model benchmark: eleven Anthropic and OpenAI models build the same Umbraco block-grid blog through the Umbraco MCP server, graded and honesty-checked. Standalone; it doesn't build or deploy with the site | [kjeldsen.benchmark/README.md](kjeldsen.benchmark/README.md) |
 | `knowledge/` | Working notes: the reasons behind decisions that look odd without context, the traps that cost time, and how the model-drawn illustrations work | [knowledge/README.md](knowledge/README.md) |
 
 ## How it fits together

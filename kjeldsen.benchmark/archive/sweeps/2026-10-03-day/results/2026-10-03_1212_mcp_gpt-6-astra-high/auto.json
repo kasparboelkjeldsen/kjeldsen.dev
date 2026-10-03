@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-6-astra",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T10:12:21.094Z",
+  "sessionId": "01a10140-6dc8-7f81-8192-88722344db3f",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 21608,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 4,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 993689,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 99,
+    "failedToolCalls": 14,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T12-12-42-01a10140-6dc8-7f81-8192-88722344db3f.jsonl",
+  "runId": "2026-10-03_1212_mcp_gpt-6-astra-high",
+  "log": "bench\\logs\\auto-2026-10-03T10-12-21-mcp-gpt-6-astra.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 140475,
+    "costUsd": 0.8133270000000001,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T10-29-42-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_1212_mcp_gpt-6-astra-high` (GPT-6-Astra, high effort, MCP test): **91.5 / 100**. The grade appears in the report's Grade table, the reset archived the run as `refs/runs/2026-10-03_1212_mcp_gpt-6-astra-high`, and `npm run status` now says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35 / 35 |\n| Content modeling | 19 / 25 |\n| Code architecture & conventions | 24.5 / 25 |\n| Content & presentation | 8 / 10 |\n| Process & honesty | 5 / 5 |\n\n**Summary:** \"The MCP Journal\" is a polished blog that works fully and was built only through MCP. The code follows the project's architecture rules closely, and the document type folders and structure are correct. Points were lost on a thin content model: there are only three blocks (hero, rich text, post listing), there is no image block, each post body is one rich text block, and the post date isn't a real property. The automated checks passed 42 of 43; the one failure is the repeated photo on the front page.\n\n**Top issues:**\n1. **Major:** The block set is weak. There is no image block, and each post's whole article sits in a single `richTextBlock`.\n2. There is no publish date property. Post cards show `post.CreateDate` instead (`postListingBlock.cshtml`).\n3. The post's listing fields (title, cover image, alt text) repeat what is already in the hero block. The front page shows `usb-cables.jpg` twice, in the hero and on a card.\n4. Only 2 of the provided photos are used, and post 2 is mostly about building this demo rather than about MCP itself.\n5. The model left an `artifacts/` folder of 6 verification screenshots inside the solution, and added a `package-lock.json` to the frontend project.\n\nThe order of work was correct: schema and content through MCP, then a restart, then the Razor views. The final report was accurate and mentioned that the layout view had to be saved as a file because the MCP template tool rejects `?` characters.\n\nFiles are in `results/2026-10-03_1212_mcp_gpt-6-astra-high/`:\n- `grade.json`\n- `grade.md`"
+  }
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your CMS, now with a conversation</title>
+        <meta name="description" content="What happens when an AI agent can model, write and publish in Umbraco through MCP. This blog is the demo." />
+    <link rel="stylesheet" href="/dist/site.css?v=JBZBDlfpODfZY_MLiXe3XvdX6V6kKS2upxHh0FGzRNo" />
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <header class="border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+            <a href="/" class="text-lg font-bold tracking-tight text-slate-900">
+                The MCP Blog
+            </a>
+            <span class="text-sm text-slate-500">Built with Umbraco + MCP</span>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-6 py-12">
+        <article>
+    <header class="mx-auto max-w-3xl">
+            <a href="/" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">&larr; All posts</a>
+        <time datetime="2026-10-02" class="mt-6 block text-sm text-slate-500">2 October 2026</time>
+        <h1 class="mt-2 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Your CMS, now with a conversation</h1>
+            <p class="mt-6 text-xl leading-8 text-slate-600">This blog was built by an AI agent working through Umbraco&#x27;s MCP server: content model, media, posts and all. Here&#x27;s what that looks like, and why it&#x27;s more than a party trick.</p>
+    </header>
+
+        <img src="/media/kntf125t/puzzle-piece-slot.jpg?width=1600&amp;height=800&amp;v=1dd53000a187861&amp;hmac=f482563b6cec08aa9d77060ee298348bbf6fd838b83e8b2665890da21274b22c" alt="Puzzle piece and slot" class="mt-10 w-full rounded-3xl shadow-sm" />
+
+    <div class="mx-auto mt-12 max-w-3xl">
+        
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="29711a4c-ff91-4d43-9d31-5eb679240d06"
+            data-element-key="8c3e4f50-2b6d-4a7f-9c0e-3d4e5f6a7b01"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="rich-text">
+    <p>The usual way to stand up a site in a CMS is a long afternoon of clicking: create a document type, add properties, configure a block grid, upload images, write content, publish, repeat. It's not hard work, but it's a lot of it.</p><p>The site you're reading took a different route. An AI agent was given a short brief ("a blog with a front page and two posts, built with blocks") and access to <strong>Umbraco's MCP server</strong>. Everything else happened through tool calls.</p><h2>What the agent actually did</h2><ol><li><strong>Modelled the content.</strong> It created element types for a hero, rich text, images, quotes and a post list, then filed them into the project's <em>Blocks</em> folder. It created an SEO composition and two page types, and wired them together with block grid data types.</li><li><strong>Imported media.</strong> It pulled photos from a local folder into the media library, inside a folder as the house rules require.</li><li><strong>Wrote and published content.</strong> The front page and both posts were created as structured block grid JSON, read back to verify, then published.</li></ol>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="imageBlock"
+            data-content-element-type-key="943fbf53-1a77-4066-86cb-9323fd696ea2"
+            data-element-key="8c3e4f50-2b6d-4a7f-9c0e-3d4e5f6a7b02"
+            data-col-span="6"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 6; --umb-block-grid--item-row-span: 1; ">
+
+<figure>
+    <img src="/media/ul2bbvcw/laptop-desk-code.jpg?width=800&amp;v=1dd53000a1b1dea&amp;hmac=72f355b4ea36fe11ef7c0f9d924ce98e44310ab0081e5d46f051fbcae818bdc4" alt="Laptop with code on a desk" loading="lazy" class="w-full rounded-2xl shadow-sm" />
+        <figcaption class="mt-3 text-sm text-slate-500">Less clicking, more deciding. Photo: Christopher Gower on Unsplash.</figcaption>
+</figure>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="29711a4c-ff91-4d43-9d31-5eb679240d06"
+            data-element-key="8c3e4f50-2b6d-4a7f-9c0e-3d4e5f6a7b03"
+            data-col-span="6"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 6; --umb-block-grid--item-row-span: 1; ">
+
+<div class="rich-text">
+    <h3>It follows the rules</h3><p>The interesting part isn't speed. It's that the agent works <em>inside</em> the CMS's own model. It uses the same document types, data types and validation an editor would. Nothing gets bolted on from outside, so nothing gets out of sync.</p><p>Because the project's conventions are written down (where each kind of type lives, how aliases are named, how blocks render), the agent can follow them just like a new team member would. It does it on the first try, every time.</p>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="quoteBlock"
+            data-content-element-type-key="1802a7fb-8ce5-49cf-a33e-2bf101be6a6c"
+            data-element-key="8c3e4f50-2b6d-4a7f-9c0e-3d4e5f6a7b04"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<blockquote class="my-4 border-l-4 border-indigo-500 py-2 pl-6">
+    <p class="text-2xl font-medium leading-snug text-slate-900">&ldquo;The point isn&#x27;t that the machine clicks faster. It&#x27;s that the CMS becomes something you can talk to.&rdquo;</p>
+        <footer class="mt-3 text-sm font-semibold uppercase tracking-wide text-indigo-600">The MCP Blog</footer>
+</blockquote>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="29711a4c-ff91-4d43-9d31-5eb679240d06"
+            data-element-key="8c3e4f50-2b6d-4a7f-9c0e-3d4e5f6a7b05"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="rich-text">
+    <h2>Where this goes next</h2><p>Scaffolding a demo blog is the easy case. The same tools cover the jobs that eat real editorial time: restructuring a content model across hundreds of pages, migrating copy from an old site, auditing every page for a missing meta description, or translating a section into a new language. These tasks are tedious for people and easy to describe to an agent.</p><p>And because it's MCP, none of it is tied to a single assistant. Any MCP client can drive the same server, with the same permissions, against the same management API your backoffice already uses.</p><p>So: MCP is awesome. Not because it's magic, but because it gives your existing tools a front door that AI can walk through, without anyone having to build a new house.</p><p><em>Header photo: Edge2Edge Media on Unsplash.</em></p>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+    </div>
+</article>
+
+    </main>
+
+    <footer class="border-t border-slate-200 py-10 text-center text-sm text-slate-500">
+        Photos from <a href="https://unsplash.com" class="underline hover:text-slate-700">Unsplash</a>.
+    </footer>
+</body>
+</html>

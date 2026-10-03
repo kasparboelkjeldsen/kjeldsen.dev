@@ -1,0 +1,14 @@
+# The "secret" below is NOT a secret — it is a deliberately committed, local-development-only
+# credential for the Umbraco MCP server (.mcp.json), so every developer who pulls this project
+# has a working MCP setup with zero configuration.
+#
+# Why this is safe:
+#   - The MCPUSER API user is only created when ASPNETCORE_ENVIRONMENT is Development or Local
+#     (see Umbraco.Bench.Umbraco/Notifications/McpApiUserHandler.cs).
+#   - On any other environment that same handler DELETES the user if it exists (protects
+#     against dev databases being copied to staging/production).
+#   - The value grants nothing anywhere except a developer's own local instance.
+#
+# Fingerprints (file:rule:line) for the committed local-only MCP credential:
+.mcp.json:generic-api-key:9
+Umbraco.Bench.Umbraco/Notifications/McpApiUserHandler.cs:generic-api-key:25

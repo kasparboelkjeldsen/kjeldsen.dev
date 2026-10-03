@@ -1,0 +1,34 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "effort": null,
+  "variant": "mcp",
+  "startedAt": "2026-10-03T06:36:08.147Z",
+  "sessionId": "6bcba6f1-c4c9-4da6-b82b-0da993b71547",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "bypassPermissions",
+  "settingSources": "project,local",
+  "permissionFallback": "auto mode isn't available for claude-haiku-4-5-20251001; ran with bypassPermissions",
+  "prompt1": {
+    "durationMs": 14298,
+    "costUsd": 0.0170501,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 266631,
+    "costUsd": 0.6593825000000001,
+    "isError": false,
+    "toolCalls": 72,
+    "failedToolCalls": 13,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\6bcba6f1-c4c9-4da6-b82b-0da993b71547.jsonl",
+  "runId": "2026-10-03_0836_mcp_haiku-4.5",
+  "log": "bench\\logs\\auto-2026-10-03T06-36-08-mcp-claude-haiku-4-5-20251001.jsonl"
+}

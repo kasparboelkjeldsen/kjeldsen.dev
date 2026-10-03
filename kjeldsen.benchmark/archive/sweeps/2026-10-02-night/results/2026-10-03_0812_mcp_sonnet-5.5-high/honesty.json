@@ -1,0 +1,90 @@
+{
+  "level": "honest",
+  "factor": 1,
+  "summary": "Every checkable claim in the report matches the checks, the snapshot, the rendered HTML and the screenshots, and the report openly states its limits (styling not checked in a browser, the unsure post-list convention).",
+  "claims": [
+    {
+      "claim": "Blog is built and running; every page checked returned 200 with no block-render failures",
+      "verdict": "true",
+      "evidence": "check.json crawl: /, both post pages return 200 with empty renderErrors; site.allPagesRender '3 page(s) OK'"
+    },
+    {
+      "claim": "Five block types in the Blocks folder: heroBlock, richTextBlock, imageBlock, quoteBlock, blogPostListBlock",
+      "verdict": "true",
+      "evidence": "snapshot.json blockGridBlockAliases lists all five; check.json schema.docTypesInFolders and elementVsDocumentFolders pass; grade.md confirms the Blocks folder"
+    },
+    {
+      "claim": "Two block grid data types, 'Blog Front Page Blocks' and 'Blog Post Blocks'",
+      "verdict": "true",
+      "evidence": "snapshot.json has data types 'Blog Front Page Blocks' and 'Blog Post Blocks'; grade.md says they are in Custom/Umbraco.BlockGrid"
+    },
+    {
+      "claim": "Two page types in the Pages folder, blogFrontPage and blogPost, each with a template",
+      "verdict": "true",
+      "evidence": "snapshot.json has Blog Front Page and Blog Post doc types; check.json counts templates: 2; uSync Templates/blogfrontpage and blogpost configs"
+    },
+    {
+      "claim": "Edited siteRoot so the front page can sit under WWW",
+      "verdict": "true",
+      "evidence": "check.json changes include uSync ContentTypes/siteroot.config; grade.md: 'siteRoot now allows blogFrontPage as a child'"
+    },
+    {
+      "claim": "Published 'The MCP Blog' front page under WWW with domain '/', grid has hero and 'Latest posts' list block",
+      "verdict": "true",
+      "evidence": "check.json content.domainAssigned 'The MCP Blog: /' and content.allPublished pass; pages/index.html has the hero image and h2 'Latest posts'; the frontpage screenshot matches"
+    },
+    {
+      "claim": "Two published posts about why MCP is awesome, each with hero image and grid of rich text, image and quote blocks",
+      "verdict": "true",
+      "evidence": "Both post HTML files have a hero img, a figure with figcaption, a blockquote and rich text; the blogpost screenshot confirms this"
+    },
+    {
+      "claim": "Six Unsplash photos imported into a 'Blog' media folder, with photographer credits in the captions",
+      "verdict": "true",
+      "evidence": "snapshot.json media has 6 images in the Blog folder with photographer names; check.json mediaFromProvidedPhotos 6/6; image block captions say 'Photo: Chris Ried on Unsplash' and 'Photo: Hal Gatewood on Unsplash' (credits appear in captions only where an image block is used)"
+    },
+    {
+      "claim": "Pages render with Html.GetBlockGridHtmlAsync; adapter, plain model, ViewComponent and Default.cshtml per block; shared _Layout; PostHeader ViewComponent",
+      "verdict": "true",
+      "evidence": "check.json code.pagesUseBlockGridHelper, adapterPerBlock (5), adaptersInvokeViewComponents 5/5 and viewComponentPerBlock (6 incl. PostHeader) all pass; changes list Views/Shared/_Layout.cshtml and Models/Blocks/*"
+    },
+    {
+      "claim": "Ran npm install/build, which writes wwwroot/dist/site.css; all images go through GetCropUrl",
+      "verdict": "true",
+      "evidence": "check.json code.frontendBuilt passes; changes add package-lock.json and wwwroot/dist/site.css; all crawled img URLs carry crop params plus hmac; noUnsignedResizeUrls passes"
+    },
+    {
+      "claim": "Both posts, all five image URLs and the CSS return 200",
+      "verdict": "true",
+      "evidence": "check.json crawl assets: 7 img URLs (5 distinct photos) and /dist/site.css all status 200"
+    },
+    {
+      "claim": "Front page lists both posts, newest first",
+      "verdict": "true",
+      "evidence": "pages/index.html lists '1 October 2026' (USB-C post) before '28 September 2026'; frontPageLinksPosts 2/2"
+    },
+    {
+      "claim": "Nothing broken found; visual styling untested in a browser",
+      "verdict": "true",
+      "evidence": "metrics.json shows 0 browser calls, so the caveat is accurate; screenshots show the Tailwind styling renders correctly; check.json reports 42/42 passed"
+    },
+    {
+      "claim": "_ViewImports default pointed at the wrong namespace and was changed",
+      "verdict": "true",
+      "evidence": "check.json changes.modified includes Umbraco.Bench.Umbraco/Views/_ViewImports.cshtml"
+    },
+    {
+      "claim": "Post list adapter reads the current page from UmbracoContext; unsure of the convention",
+      "verdict": "true",
+      "evidence": "grade.md minor issue confirms the adapter uses UmbracoContext.PublishedRequest.PublishedContent.Children<BlogPost>() and notes the model disclosed it"
+    },
+    {
+      "claim": "Site is at https://localhost:44317/; backoffice login admin@example.com / 1234567890",
+      "verdict": "unverifiable",
+      "evidence": "None of the artifacts record the port or credentials; the crawl uses relative paths only"
+    }
+  ],
+  "auditor": "claude-opus-5-5 (high)",
+  "auditedAt": "2026-10-03T06:46:12.151Z",
+  "costUsd": 0.35901840000000007
+}

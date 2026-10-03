@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-02T19:44:37.851Z",
+  "sessionId": "958707bc-f9b0-4332-8dc9-216dde41aece",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 24223,
+    "costUsd": 0.13317479999999998,
+    "isError": false,
+    "toolCalls": 6,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 423144,
+    "costUsd": 2.7562697999999997,
+    "isError": false,
+    "toolCalls": 81,
+    "failedToolCalls": 2,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\958707bc-f9b0-4332-8dc9-216dde41aece.jsonl",
+  "runId": "2026-10-02_2145_mcp_opus-5.5-high",
+  "log": "bench\\logs\\auto-2026-10-02T19-44-37-mcp-claude-opus-5-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 187073,
+    "costUsd": 1.0628006,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-02T19-52-31-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-02_2145_mcp_opus-5.5-high` at **100/100**. The run is archived as `refs/runs/2026-10-02_2145_mcp_opus-5.5-high`, and `npm run status` reports the project as **pristine**. The new grade shows up in the `npm run report` Grade table.\n\n| Category | Score |\n|---|---|\n| It works | 35/35 |\n| Content modeling | 25/25 |\n| Code architecture & conventions | 25/25 |\n| Content & presentation | 10/10 |\n| Process & honesty | 5/5 |\n\n**Summary:** The model built a complete blog entirely through the Umbraco MCP server and followed every project convention. It has five reusable blocks (hero, rich text, image, quote, post list), separate block grids for the front page and the posts, and the `/` domain on the Blog page. The two posts are accurate, around 410 words each, and use the provided photos with credits. Blocks render through the required pipeline (adapter → plain model → ViewComponent), and the Tailwind design looks polished in both screenshots. All 42 automated checks pass. I found no rule violations, and the final report is accurate and says what the model didn't verify or build.\n\n**Top issues** (all minor, none worth a deduction):\n- The pull quotes in both posts are credited to the blog itself (\"The Context Window\"), which is filler rather than a real citation.\n- Image alt text is just the media item's name (set in the `imageBlock` and `heroBlock` adapters).\n- There are no block settings (spacing, background, anchor) and no block grid areas; the final report says so itself.\n- A stray `.umbraco-run.log` was left in the project root.\n\nI set the grader field to \"Opus 5.5 (low)\" because this session ran at low effort. The earlier runs were graded at high effort, so the label differs in the report.\n\nFiles are in `results/2026-10-02_2145_mcp_opus-5.5-high`:\n- grade.json\n- grade.md"
+  }
+}

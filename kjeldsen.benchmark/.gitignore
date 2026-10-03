@@ -1,0 +1,15 @@
+# Runtime state stays local: the baseline repo, live runs, screenshots and runner logs
+/bench/.baseline-git/
+/bench/logs/
+/results/
+/results-extra/
+/screenshots/
+
+# The published archive is the lean record: grades, honesty checks, metrics, checks,
+# snapshots, patches and rendered pages. Session transcripts, raw CLI streams and
+# screenshots are kept out of the public repo.
+archive/**/transcript.jsonl
+archive/**/*-stream.jsonl
+archive/**/subagents/
+archive/**/*.png
+archive/**/*.jpg

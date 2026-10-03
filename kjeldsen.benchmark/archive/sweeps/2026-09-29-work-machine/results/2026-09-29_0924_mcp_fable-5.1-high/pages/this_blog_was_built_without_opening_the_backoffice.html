@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>This Blog Was Built Without Opening the Backoffice | MCP Notes</title>
+    <link rel="stylesheet" href="/dist/site.css?v=ysbTZA1hIvOaRzrwKyRL1bO6zxSu5exHeEfMqeP6AUU" />
+</head>
+<body class="flex min-h-screen flex-col bg-slate-50 text-slate-800 antialiased">
+    <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
+            <a href="/" class="text-lg font-bold tracking-tight text-slate-900">MCP Notes</a>
+            <span class="text-sm text-slate-500">Built over the Umbraco MCP server</span>
+        </div>
+    </header>
+
+    <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-2 text-sm text-slate-500">
+    <a href="/" class="font-medium text-indigo-600 hover:text-indigo-800">&larr; All posts</a>
+    <p>
+        <time datetime="2026-09-29">29 September 2026</time>
+            <span>&middot; Claude</span>
+    </p>
+</div>
+
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="heroBlock"
+            data-content-element-type-key="8ab0babf-d52c-43d0-a9ca-98e912d703fc"
+            data-element-key="ac2d2a2c-9e01-402e-952e-8694e339b278"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<section class="relative isolate flex min-h-[22rem] items-end overflow-hidden rounded-3xl bg-slate-900 sm:min-h-[28rem]">
+        <img src="/media/5gqheewy/code-on-screen.jpg?width=1600&amp;height=700&amp;v=1dd4fe5505d7a26&amp;hmac=1375f5e3553dec71ed6c34d639cd8f93ede0d77b979fed068b055d5da257ad51" alt="" class="absolute inset-0 -z-20 h-full w-full object-cover" />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20"></div>
+    <div class="max-w-3xl p-8 sm:p-12">
+        <h1 class="text-4xl font-bold tracking-tight text-balance text-white sm:text-5xl">This Blog Was Built Without Opening the Backoffice</h1>
+            <p class="mt-4 text-lg text-slate-200 sm:text-xl">What it looks like when a CMS speaks MCP and an agent is handed the keys.</p>
+    </div>
+</section>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="1c6d98ba-87f1-47b7-9be3-a13f639be8f3"
+            data-element-key="fcac2c87-5bfe-4c60-b65d-de06a9bfd638"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="rich-text mx-auto max-w-3xl">
+    <h2>The brief</h2><p>The instruction was one paragraph: spin up a simple blog, build everything with blocks and the block grid, and write two posts about why MCP is awesome. You are reading the second one.</p><h2>What the agent actually did</h2><ol><li><strong>Modeled the content.</strong> Five element types (hero, rich text, image, quote, post list), a block grid data type that allows them, and two page types with templates.</li><li><strong>Filed everything where it belongs.</strong> Blocks went into the Blocks folder and pages into Pages, following the project's own rules.</li><li><strong>Pulled in media.</strong> Images were streamed from Unsplash straight into a media folder.</li><li><strong>Wrote and published.</strong> A front page and two posts, each assembled from blocks, plus a domain so the site answers on the root url.</li></ol><p>Every one of those steps was an MCP tool call against the Umbraco Management API.</p>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="quoteBlock"
+            data-content-element-type-key="60fd48f9-8f37-4576-a666-aa6caf6446c4"
+            data-element-key="12efff10-b6b0-44cf-96b1-aae6acbb48a7"
+            data-col-span="6"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 6; --umb-block-grid--item-row-span: 1; ">
+
+<figure class="flex h-full flex-col justify-center rounded-2xl border-l-4 border-indigo-500 bg-indigo-50 p-8">
+    <blockquote class="text-2xl leading-snug font-semibold text-balance text-slate-900">
+        &ldquo;I did not click a single button. I read the schema, called the tools, and read the result back to check my work.&rdquo;
+    </blockquote>
+        <figcaption class="mt-4 text-sm font-medium text-indigo-700">The agent that built this site</figcaption>
+</figure>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="imageBlock"
+            data-content-element-type-key="c3446cea-f21c-4972-b49c-8d6352174ec6"
+            data-element-key="3a7091af-c68a-4ef9-8592-594286aa64e4"
+            data-col-span="6"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 6; --umb-block-grid--item-row-span: 1; ">
+
+    <figure class="h-full">
+        <img src="/media/vali3nfz/laptop-workspace.jpg?width=1200&amp;height=800&amp;v=1dd4fe550af1f1c&amp;hmac=02bde51f675d2c3e0b675b4f2c7b53ce3980440cd2e5a1b6c993ab4f796b3275" alt="Laptop workspace" loading="lazy" class="w-full rounded-2xl object-cover shadow-sm" />
+            <figcaption class="mt-3 text-sm text-slate-500">The editor stays in charge. Photo from Unsplash.</figcaption>
+    </figure>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="1c6d98ba-87f1-47b7-9be3-a13f639be8f3"
+            data-element-key="578aa7ab-9cfb-471f-a632-c1090ffeea1b"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="rich-text mx-auto max-w-3xl">
+    <h2>Why this matters for a CMS</h2><ul><li><strong>The boring parts disappear.</strong> Scaffolding document types and seeding realistic content takes minutes.</li><li><strong>It is real content.</strong> Nothing here is a mock-up. Editors can open any page in the backoffice and keep working on it, block by block.</li><li><strong>The rules still apply.</strong> The agent works through the same API, permissions and validation as everyone else, and the project conventions are written down where it can read them.</li><li><strong>It is verifiable.</strong> Every write can be read back. When a payload is wrong, the agent sees that and corrects it.</li></ul><h2>The takeaway</h2><p>MCP does not replace the editor or the developer. It removes the distance between deciding what should exist and having it exist. That is why it is awesome.</p>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+        <div class="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-500 sm:px-6">
+            &copy; 2026 MCP Notes. Images from Unsplash.
+        </div>
+    </footer>
+
+    <script type="module" src="/dist/main.js?v=Yrh5v2Rv-GLlDsK-Oo7jtTP-wDdcbYSYBDXY4bYdMRo"></script>
+</body>
+</html>

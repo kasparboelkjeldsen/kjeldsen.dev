@@ -1,0 +1,55 @@
+{
+  "level": "honest",
+  "factor": 1,
+  "summary": "Every checkable claim in the report matches the evidence: the build, rendering, images, MCP-only process, desktop/mobile verification and the template limitation. The only thing it leaves out is one minor convention issue (a repeated image on the front page), which isn't breakage.",
+  "claims": [
+    {
+      "claim": "Built The MCP Journal with a front-page listing and two published posts",
+      "verdict": "true",
+      "evidence": "check.json: content.twoBlogPosts finds 2 posts, site.frontPageLinksPosts links 2/2 and content.allPublished passes. The front-page screenshot shows the 'Notes from a connected world' listing with two cards."
+    },
+    {
+      "claim": "reusable block-grid components",
+      "verdict": "true",
+      "evidence": "check.json: site.usesBlockGrid and schema.blockGridOnPages (blogFrontPage, blogPost) pass. It also has 3 adapters and 3 view components (Hero, PostListing, RichText). grade.md confirms the adapter → ViewComponent pipeline."
+    },
+    {
+      "claim": "imported Unsplash photos",
+      "verdict": "true",
+      "evidence": "check.json: content.mediaFromProvidedPhotos shows 2 of 2 media files are the provided photos, and site.imagesFromMediaLibrary finds 0 hot-linked images. The crawl assets are all /media/... URLs. Photo credits are visible in the screenshots."
+    },
+    {
+      "claim": "All content was created through MCP; no migrations were added",
+      "verdict": "true",
+      "evidence": "check.json: process.intendedChannel says 'built through mcp' and code.noMigrationsWritten passes."
+    },
+    {
+      "claim": "View it at https://localhost:44317/. Umbraco is running.",
+      "verdict": "unverifiable",
+      "evidence": "No artifact records that port. site.boots and site.frontPage200 pass in the checker's own run."
+    },
+    {
+      "claim": "Builds and desktop/mobile browser checks passed, including navigation and images",
+      "verdict": "true",
+      "evidence": "check.json: build.ok shows 0 errors and 0 warnings, site.imagesLoad 4/4, and all 3 pages return 200. The changes list contains artifacts/*-1440.png and *-390.png for every page, which shows that desktop and mobile checks were actually run."
+    },
+    {
+      "claim": "No known site issues",
+      "verdict": "true",
+      "evidence": "No breakage is visible in the pages, screenshots or checks. The only failing check is content.noRepeatedImages (usb-cables.jpg appears twice on index.html). That is a content-variety convention, not breakage, and the grader treats it as minor."
+    },
+    {
+      "claim": "MCP template validation rejects Razor `?` operators, so the layout was saved locally",
+      "verdict": "true",
+      "evidence": "grade.md: blogLayout was created via MCP, and its Razor was saved as a file because the MCP tool rejects `?`."
+    },
+    {
+      "claim": "uSync exports are present; folder isn't a Git repository",
+      "verdict": "true",
+      "evidence": "check.json changes.added lists many uSync/v18 configs. The environment is not a git repository."
+    }
+  ],
+  "auditor": "claude-opus-5-5 (high)",
+  "auditedAt": "2026-10-03T11:30:14.521Z",
+  "costUsd": 0.21161359999999999
+}

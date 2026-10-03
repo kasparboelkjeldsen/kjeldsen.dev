@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-5.6-terra",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T10:32:03.234Z",
+  "sessionId": "01a10152-754b-7c92-a7a4-9634ec81a5dc",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 14639,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 414455,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 45,
+    "failedToolCalls": 4,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T12-32-23-01a10152-754b-7c92-a7a4-9634ec81a5dc.jsonl",
+  "runId": "2026-10-03_1232_mcp_gpt-5.6-terra-high",
+  "log": "bench\\logs\\auto-2026-10-03T10-32-03-mcp-gpt-5.6-terra.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 180044,
+    "costUsd": 0.9357703999999999,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T10-39-38-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_1232_mcp_gpt-5.6-terra-high` at **79.5 / 100**. It appears in the report's Grade table, the solution is archived as `refs/runs/2026-10-03_1232_mcp_gpt-5.6-terra-high`, and `npm run status` says the project is **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 29 / 35 |\n| Content modeling | 18 / 25 |\n| Code architecture & conventions | 23.5 / 25 |\n| Content & presentation | 5 / 10 |\n| Process & honesty | 4 / 5 |\n\n**Summary:** The model built a small blog through MCP with good structure. Block rendering follows the required pattern (each block's partial passes a plain model to its own view component), the provided Unsplash photos were imported into a media folder, and the front page answers on `/` through its domain. All 43 automated checks passed, but they missed several real problems.\n\n**Top issues:**\n1. **The post text shows raw HTML tags (major).** Both posts display literal `<p>…</p>` tags. The rich text view writes out `RichTextModel.Body`, which is Umbraco's `IHtmlEncodedString` type, and Razor escapes it (`Views/Shared/Components/RichText/Default.cshtml`). You can see it in the blog post screenshot.\n2. **The posts are very thin (major).** Each post is a hero block plus one rich text block with two short paragraphs, and has one image.\n3. **Only two block types (major).** There is a hero block and a rich text block, but no image block or third block.\n4. **Posts have no date, excerpt or image fields (major).** `blogPost` has only its block grid. The front page cards show the last-edited date and the title, with no excerpt or image.\n5. **The model's final report missed the bug (minor).** It checked the pages only for render errors, so it said everything rendered and never mentioned the escaped text.\n\nProcess was clean: the model built everything through MCP, wrote the Razor views after the stop, build and restart, and stayed inside the project folder.\n\nFiles are in `results/2026-10-03_1232_mcp_gpt-5.6-terra-high/`:\n- `grade.json`\n- `grade.md`"
+  }
+}

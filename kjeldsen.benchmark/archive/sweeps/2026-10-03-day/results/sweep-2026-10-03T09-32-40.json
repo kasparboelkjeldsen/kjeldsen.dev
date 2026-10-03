@@ -1,0 +1,43 @@
+{
+  "state": "finished",
+  "startedAt": "2026-10-03T09:32:40.960Z",
+  "updatedAt": "2026-10-03T11:13:47.386Z",
+  "done": [
+    {
+      "label": "gpt-6-sol:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1157_mcp_gpt-6-sol-high",
+      "grade": "90/100",
+      "error": null
+    },
+    {
+      "label": "gpt-6-astra:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1212_mcp_gpt-6-astra-high",
+      "grade": "91.5/100",
+      "error": null
+    },
+    {
+      "label": "gpt-5.6-terra:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1232_mcp_gpt-5.6-terra-high",
+      "grade": "79.5/100",
+      "error": null
+    },
+    {
+      "label": "gpt-5.6-luna:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1243_mcp_gpt-5.6-luna-high",
+      "grade": "87.5/100",
+      "error": null
+    },
+    {
+      "label": "gpt-5.6-sol:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1258_mcp_gpt-5.6-sol-high",
+      "grade": "92/100",
+      "error": null
+    }
+  ],
+  "queued": []
+}

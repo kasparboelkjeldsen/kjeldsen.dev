@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Umbraco.Bench.Umbraco/Umbraco.Bench.Umbraco.csproj" />
+  <Project Path="Umbraco.Bench.Frontend/Umbraco.Bench.Frontend.esproj" />
+  <Project Path="Umbraco.Bench.BackofficeExtensions/Umbraco.Bench.BackofficeExtensions.esproj" />
+</Solution>

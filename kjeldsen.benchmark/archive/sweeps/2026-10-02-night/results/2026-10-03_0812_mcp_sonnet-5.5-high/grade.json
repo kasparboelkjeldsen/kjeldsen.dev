@@ -1,0 +1,28 @@
+{
+  "runId": "2026-10-03_0812_mcp_sonnet-5.5-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T09:00:00Z",
+  "total": 99,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build: 0 errors, 0 warnings. / returns 200 via the '/' domain on 'The MCP Blog' (child of WWW) and lists both posts as cards with image, date, title, excerpt and link, all working. Both posts render every block (richTextBlock, imageBlock, quoteBlock) with no render errors. 6 of the provided Unsplash photos are imported via MCP filePath into a 'Blog' media folder; all 7 images on the pages are signed GetCropUrl URLs that load. Everything is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 25, "max": 25, "notes": "5 element types (heroBlock, richTextBlock, imageBlock, quoteBlock, blogPostListBlock) in Blocks; blogFrontPage and blogPost are documents in Pages. siteRoot is still the only root type and now allows blogFrontPage, which allows only blogPost. Templates are assigned, aliases are camelCase, and the two block grid data types sit in Custom/Umbraco.BlockGrid. Post metadata (summary, publishDate, heroImage) are real properties. No compositions, duplicates or orphaned types. Each page has its own block set (front: hero/postList/richText; post: richText/image/quote)." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "Both page templates use Html.GetBlockGridHtmlAsync, and the scaffold's blockgrid partials are untouched. There are 5 markup-free adapters at Components/<alias>.cshtml, each mapping BlockGridItem<T> to a plain record in Models/Blocks and calling Component.InvokeAsync. Each block has a trivial ViewComponent with Default.cshtml under Views/Shared/Components. Component views depend only on plain models. A PostHeader ViewComponent (Models/Pages) renders the post header from page properties. Program.cs and appsettings untouched, no migrations, friendly extensions plus GetCropUrl, Tailwind built to dist/site.css. The blogPostListBlock adapter gets the current page from UmbracoContext.PublishedRequest. That works, and the model disclosed it." },
+    { "id": "content", "name": "Content & presentation", "score": 9, "max": 10, "notes": "Two on-topic, accurate posts: MCP turning a CMS assistant from describing changes into making them, and MCP as the 'USB-C' that solves the N-by-M integration problem. Each has 4 blocks (rich text, image, pull quote, rich text with an h2 and a bullet list) and relevant photos with credits. The posts are on the short side (about 3 paragraphs plus a bullet list each), and the pull quotes are attributed to the blog itself. The presentation is polished: a dark image hero, a 2-column card grid, a post header with date/title/summary over the hero image, readable prose styling, and a consistent nav and footer." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "Schema, media and content were built only over MCP (42 calls, 30 writes), with no Management API, DB, uSync or migrations. Order: model, then content, then stop and build, then Razor and restart. No memory access, nothing read outside the project, no references to the bench folder. The final report is accurate: it lists what was built, notes the _ViewImports namespace fix and the UmbracoContext choice, and says the visual styling was untested in a browser." }
+  ],
+  "summary": "A clean, convention-perfect MCP build: 5 block types, 2 page types, a domain-routed blog front page with a hero and a card listing, and 2 published posts about MCP rendered through the adapter -> ViewComponent pipeline with Tailwind styling. The only shortfall is that the posts are a bit brief.",
+  "strengths": [
+    "All 42 automated checks pass; the build has 0 warnings",
+    "Textbook block pipeline: GetBlockGridHtmlAsync, markup-free adapters, plain record models, one ViewComponent per block",
+    "Well-separated block sets per page type, with post metadata as real properties driving both the cards and the post header",
+    "Provided Unsplash photos imported via MCP into a media folder, with credits in the captions",
+    "Polished, coherent visual design",
+    "Accurate and candid final report"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "Posts are fairly short (about 3 paragraphs plus a bullet list each), and the pull quotes are attributed to 'The MCP Blog' itself (/mcp-lets-ai-work-with-your-cms-not-just-talk-about-it/, /one-protocol-every-tool-the-usb-c-moment-for-ai/)" },
+    { "severity": "minor", "text": "The blogPostListBlock adapter queries UmbracoContext.PublishedRequest.PublishedContent.Children<BlogPost>(), so the list block only works on the page whose children are posts (Views/Partials/blockgrid/Components/blogPostListBlock.cshtml)" },
+    { "severity": "minor", "text": "Image block alt text is the caption, which includes the photo credit (Views/Shared/Components/Image/Default.cshtml); one imported photo (circuit board) is unused" }
+  ]
+}

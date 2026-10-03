@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-fable-5-1",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T11:14:17.321Z",
+  "sessionId": "e39f1c22-5d23-4796-ab0b-e7866a09ff38",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 15475,
+    "costUsd": 0.27733925,
+    "isError": false,
+    "toolCalls": 3,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 520639,
+    "costUsd": 5.5037104999999995,
+    "isError": false,
+    "toolCalls": 62,
+    "failedToolCalls": 2,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\e39f1c22-5d23-4796-ab0b-e7866a09ff38.jsonl",
+  "runId": "2026-10-03_1314_mcp_fable-5.1-high",
+  "log": "bench\\logs\\auto-2026-10-03T11-14-17-mcp-claude-fable-5-1.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 152704,
+    "costUsd": 0.9807904000000001,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T11-23-39-grader.jsonl",
+    "finalMessage": "Run `2026-10-03_1314_mcp_fable-5.1-high` (Fable 5.1, MCP test) scored **99 / 100**. The grade is written, it shows in the report's Grade table, and after the reset `npm run status` says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35 / 35 |\n| Content modeling | 25 / 25 |\n| Code architecture & conventions | 24.5 / 25 |\n| Content & presentation | 9.5 / 10 |\n| Process & honesty | 5 / 5 |\n\n**Summary:** This is a complete, clean blog built through MCP. It has 5 well-designed blocks (hero, rich text, image, quote, post list), 2 page types, a front page with a hero and post cards, and 2 posts made of several blocks each. Everything renders through Umbraco's block grid in the order the project rules require: one small file per block, a plain model, and a separate view for the markup. All 43 automated checks passed, and the build had 0 errors and 0 warnings. The process was MCP-only and in the required order, and the final report is accurate.\n\n**Issues (both minor):**\n1. A stray `umbraco-run.log` (the output of its background `dotnet run`) was left in the `Umbraco.Bench/` root.\n2. Post 2 (`/mcp-in-practice-building-this-blog-without-opening-the-backoffice/`) reads more like a build walkthrough than an argument for why MCP is awesome. It also contradicts itself: it says the server validates the block keys, but later says bad block data fails without an error.\n\nFiles are in `results/2026-10-03_1314_mcp_fable-5.1-high/`:\n- grade.json\n- grade.md"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "name": "2026-09-29-work-machine",
+  "archivedAt": "2026-10-03T06:41:32.871Z",
+  "note": "Manual runs on the work machine (x:\benchmarking), before the autonomous runner. Images were fetched from Unsplash by the models (no provided photos); first-boot HMAC key made appsettingsJsonUnchanged fail for every run.",
+  "runs": [
+    {
+      "id": "2026-09-29_0924_mcp_fable-5.1-high",
+      "provider": "anthropic",
+      "model": "claude-fable-5-1",
+      "effort": "high",
+      "variant": "mcp",
+      "grade": 97,
+      "honesty": null,
+      "blogPromptMs": 722134,
+      "excluded": null,
+      "cli": "claude 2.1.284 (by hand, VS Code)",
+      "permissionMode": "auto"
+    },
+    {
+      "id": "2026-09-29_0959_mcp_opus-5.5-high",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "variant": "mcp",
+      "grade": 97,
+      "honesty": null,
+      "blogPromptMs": 429517,
+      "excluded": null,
+      "cli": "claude 2.1.284 (by hand, VS Code)",
+      "permissionMode": "auto"
+    },
+    {
+      "id": "2026-09-29_1023_mcp_sonnet-5.5-high",
+      "provider": "anthropic",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "variant": "mcp",
+      "grade": 96,
+      "honesty": null,
+      "blogPromptMs": 415504,
+      "excluded": null,
+      "cli": "claude 2.1.284 (by hand, VS Code)",
+      "permissionMode": "auto"
+    },
+    {
+      "id": "2026-09-29_1038_mcp_haiku-4.5",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "effort": null,
+      "variant": "mcp",
+      "grade": 56,
+      "honesty": null,
+      "blogPromptMs": 346707,
+      "excluded": null,
+      "cli": "claude 2.1.284 (by hand, VS Code)",
+      "permissionMode": "default"
+    },
+    {
+      "id": "2026-09-29_1058_mcp_sonnet-5-high",
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "effort": "high",
+      "variant": "mcp",
+      "grade": 95,
+      "honesty": null,
+      "blogPromptMs": 762652,
+      "excluded": null,
+      "cli": "claude 2.1.284 (by hand, VS Code)",
+      "permissionMode": "auto"
+    },
+    {
+      "id": "2026-09-29_1422_mcp_opus-5.5-high",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5",
+      "effort": "ultracode",
+      "variant": "mcp",
+      "grade": 99,
+      "honesty": null,
+      "blogPromptMs": 941576,
+      "excluded": null,
+      "cli": "claude 2.1.284 (by hand, VS Code)",
+      "permissionMode": "auto"
+    }
+  ]
+}

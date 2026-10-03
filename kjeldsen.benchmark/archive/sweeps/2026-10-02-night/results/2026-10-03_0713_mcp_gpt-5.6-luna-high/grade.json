@@ -1,0 +1,29 @@
+{
+  "runId": "2026-10-03_0713_mcp_gpt-5.6-luna-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T05:32:48Z",
+  "total": 87,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 34, "max": 35, "notes": "Build clean (0 warnings). / is the blog landing page via a '/' domain on the site page, lists both posts with working links; all three pages 200, every block renders. Three provided Unsplash photos imported into a 'Blog Images' media folder and served through signed GetCropUrl URLs. All content published. -1: cards show only a date (CreateDate) and title, no excerpt or image." },
+    { "id": "modeling", "name": "Content modeling", "score": 20, "max": 25, "notes": "All 6 types correctly filed (3 element blocks in Blocks, blogLandingPage/blogPost in Pages, siteRoot in Repositories). Structure correct: siteRoot only root, siteRoot>blogLandingPage>blogPost, templates assigned, camelCase, block grid data type in /Custom. Block set is thin: heroBlock (heading/intro/image), richTextBlock, blogPostListBlock (no properties); no standalone image block, and each post is just a hero plus one rich text block holding the whole body (-3). No post metadata properties: date is CreateDate, no excerpt or listing image; list heading hard-coded as a model default (-2)." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 22, "max": 25, "notes": "Both templates use Html.GetBlockGridHtmlAsync; scaffold blockgrid partials untouched. One adapter per block at Components/<alias>.cshtml, each calling Component.InvokeAsync with no markup, but blogPostListBlock.cshtml maps nothing and passes an empty model (-1). BlogPostListViewComponent injects IUmbracoContextAccessor and queries the current request's page, so the component only works when the current page is a BlogLandingPage (-1). Models in Models/Blocks, component views plain. Program.cs/appsettings untouched, no migrations, friendly Url()/GetCropUrl. Tailwind pipeline used, but the RichText view relies on 'prose' classes with no typography plugin, so they are dead and paragraphs have no spacing; the two templates duplicate the whole HTML shell instead of sharing a layout (-1)." },
+    { "id": "content", "name": "Content & presentation", "score": 6, "max": 10, "notes": "Both posts are on topic (MCP turns tools into teammates / makes complexity approachable) and accurate, but short and generic: about 3 short paragraphs (~110-130 words) each in a single rich text block. The images are relevant but only appear as faint 30%-opacity hero backgrounds (3/6). The site looks coherent: a polished dark theme with a large hero and a two-card listing. The cards are sparse, though, and post bodies run paragraphs together with no spacing because prose styles are missing (3/4)." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "Schema and content built entirely through the Umbraco MCP (53 calls, 29 writes). No Management API, uSync, DB, browser or migrations; no memory or out-of-folder access (NuGet cache only). Order: model, content, stop/build/restart, then Razor. It later re-saved the block grid data type with defaults and republished while debugging, all via MCP, and no warnings were raised. It used a few web searches for block grid config shape, which is not forbidden. The final report is accurate and modest." }
+  ],
+  "summary": "A clean, convention-following MCP build: blog landing page plus two posts on a block grid with hero, rich text and post-list blocks, rendered through the proper adapter -> ViewComponent pipeline, with a polished dark Tailwind design. It is let down by thin content (each post is a hero plus one short rich text block), no post metadata properties (cards show only CreateDate and title), and missing prose styles.",
+  "strengths": [
+    "All 42 automated checks pass; clean build with 0 warnings",
+    "Textbook rendering pipeline: GetBlockGridHtmlAsync, alias-named adapters, one ViewComponent per block, plain models in Models/Blocks",
+    "Correct folders, structure, domain on the site page, provided photos imported into a media folder with signed crop URLs",
+    "Built strictly through MCP in the required order; honest final report"
+  ],
+  "issues": [
+    { "severity": "major", "text": "Posts are thin: each is a hero plus a single rich text block with ~3 short paragraphs; no image or other content blocks (snapshot.json, /mcp-turns-tools-into-teammates/)" },
+    { "severity": "major", "text": "blogPost has no date/excerpt/listing image properties; cards show CreateDate and title only (ViewComponents/BlogPostListViewComponent.cs)" },
+    { "severity": "minor", "text": "BlogPostListViewComponent injects IUmbracoContextAccessor and reads PublishedRequest, so it only works on a BlogLandingPage; its adapter passes an empty model (Views/Partials/blockgrid/Components/blogPostListBlock.cshtml)" },
+    { "severity": "minor", "text": "RichText view uses 'prose' classes but the Tailwind typography plugin isn't installed, so paragraphs run together (Views/Shared/Components/RichText/Default.cshtml)" },
+    { "severity": "minor", "text": "Post images only appear as 30%-opacity hero backgrounds, barely visible (Views/Shared/Components/Hero/Default.cshtml)" },
+    { "severity": "minor", "text": "blogLandingPage.cshtml and blogPost.cshtml duplicate the full HTML shell instead of sharing a layout" }
+  ]
+}

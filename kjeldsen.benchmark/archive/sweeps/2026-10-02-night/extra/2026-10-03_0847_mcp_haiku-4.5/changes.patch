@@ -1,0 +1,173 @@
+diff --git a/Umbraco.Bench.Umbraco/Views/Content/blogListPage.cshtml b/Umbraco.Bench.Umbraco/Views/Content/blogListPage.cshtml
+new file mode 100644
+index 0000000..5360ad4
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/Content/blogListPage.cshtml
+@@ -0,0 +1,61 @@
++@using Umbraco.Cms.Web.Common.PublishedModels
++@inherits UmbracoViewPage
++@{
++    Layout = "_Layout.cshtml";
++}
++
++<div class="max-w-4xl mx-auto px-6 py-12">
++    <h1 class="text-4xl font-bold mb-4">@Model.Value("pageTitle")</h1>
++    @if(Model.Value("description") != null)
++    {
++        <p class="text-xl text-gray-600 mb-12">@Model.Value("description")</p>
++    }
++
++    <div class="grid gap-8">
++        @foreach(var child in Model.Children())
++        {
++            <article class="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
++                @{
++                    var image = child.Value<IPublishedContent>("featuredImage");
++                    if(image != null)
++                    {
++                        var imageUrl = image.GetCropUrl(width: 400, height: 250);
++                        <img src="@imageUrl" alt="@child.Value("title")" class="w-full h-64 object-cover" />
++                    }
++                }
++                <div class="p-6">
++                    <a href="@child.Url()" class="text-2xl font-bold text-blue-600 hover:text-blue-800">
++                        @child.Value("title")
++                    </a>
++                    @{
++                        var publishDate = child.Value<DateTime?>("publishDate");
++                        if(publishDate.HasValue)
++                        {
++                            <p class="text-gray-500 text-sm mt-2">Published: @publishDate.Value.ToString("MMMM d, yyyy")</p>
++                        }
++                    }
++                    <div class="mt-4 text-gray-700 line-clamp-3">
++                        @{
++                            var bodyRaw = child.Value("body");
++                            var bodyHtml = bodyRaw?.ToString() ?? "";
++                            if(bodyHtml.Contains("\"markup\":"))
++                            {
++                                var startIdx = bodyHtml.IndexOf("\"markup\":\"") + 10;
++                                var endIdx = bodyHtml.IndexOf("\",\"blocks\"", startIdx);
++                                if(startIdx > 9 && endIdx > startIdx)
++                                {
++                                    bodyHtml = bodyHtml.Substring(startIdx, endIdx - startIdx);
++                                    bodyHtml = bodyHtml.Replace("\\\"", "\"").Replace("\\/", "/");
++                                }
++                            }
++                            @Html.Raw(System.Text.RegularExpressions.Regex.Replace(bodyHtml, "<[^>]+>", "").Substring(0, Math.Min(150, System.Text.RegularExpressions.Regex.Replace(bodyHtml, "<[^>]+>", "").Length)) + "...")
++                        }
++                    </div>
++                    <a href="@child.Url()" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800">
++                        Read More
++                    </a>
++                </div>
++            </article>
++        }
++    </div>
++</div>
+diff --git a/Umbraco.Bench.Umbraco/Views/Content/blogPostPage.cshtml b/Umbraco.Bench.Umbraco/Views/Content/blogPostPage.cshtml
+new file mode 100644
+index 0000000..9f0d6f7
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/Content/blogPostPage.cshtml
+@@ -0,0 +1,65 @@
++@using Umbraco.Cms.Web.Common.PublishedModels
++@inherits UmbracoViewPage
++@{
++    Layout = "_Layout.cshtml";
++}
++
++<article class="max-w-3xl mx-auto px-6 py-12">
++    <header class="mb-12">
++        <h1 class="text-5xl font-bold mb-4">@Model.Value("title")</h1>
++        @{
++            var publishDate = Model.Value<DateTime?>("publishDate");
++            if(publishDate.HasValue)
++            {
++                <p class="text-gray-500 text-lg">Published: @publishDate.Value.ToString("MMMM d, yyyy")</p>
++            }
++        }
++    </header>
++
++    @{
++        var image = Model.Value<IPublishedContent>("featuredImage");
++        if(image != null)
++        {
++            var imageUrl = image.GetCropUrl(width: 800, height: 400);
++            <img src="@imageUrl" alt="@Model.Value("title")" class="w-full mb-12 rounded-lg" />
++        }
++    }
++
++    <div class="prose prose-lg max-w-none mb-12">
++        @{
++            var bodyRaw = Model.Value("body");
++            if(bodyRaw != null)
++            {
++                var bodyStr = bodyRaw.ToString();
++                if(bodyStr.Contains("\"markup\":"))
++                {
++                    var startIdx = bodyStr.IndexOf("\"markup\":\"") + 10;
++                    var endIdx = bodyStr.IndexOf("\",\"blocks\"", startIdx);
++                    if(startIdx > 9 && endIdx > startIdx)
++                    {
++                        var markup = bodyStr.Substring(startIdx, endIdx - startIdx);
++                        markup = markup.Replace("\\\"", "\"").Replace("\\/", "/");
++                        markup = System.Text.RegularExpressions.Regex.Unescape(markup);
++                        @Html.Raw(markup)
++                    }
++                }
++                else
++                {
++                    @Html.Raw(bodyStr)
++                }
++            }
++        }
++    </div>
++
++    <hr class="my-12" />
++
++    <footer>
++        @{
++            var parent = Model.Parent();
++            if(parent != null)
++            {
++                <a href="@parent.Url()" class="text-blue-600 hover:text-blue-800">← Back to Blog</a>
++            }
++        }
++    </footer>
++</article>
+diff --git a/Umbraco.Bench.Umbraco/Views/_Layout.cshtml b/Umbraco.Bench.Umbraco/Views/_Layout.cshtml
+new file mode 100644
+index 0000000..8fb8436
+--- /dev/null
++++ b/Umbraco.Bench.Umbraco/Views/_Layout.cshtml
+@@ -0,0 +1,29 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="utf-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1" />
++    <title>Blog - Umbraco MCP Demo</title>
++    <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
++</head>
++<body class="bg-gray-50">
++    <nav class="bg-white shadow-md">
++        <div class="max-w-4xl mx-auto px-6 py-4">
++            <a href="/" class="text-2xl font-bold text-blue-600">Umbraco Blog</a>
++        </div>
++    </nav>
++
++    <main>
++        @RenderBody()
++    </main>
++
++    <footer class="bg-gray-800 text-white mt-16 py-8">
++        <div class="max-w-4xl mx-auto px-6 text-center">
++            <p>&copy; 2026 Blog powered by Umbraco MCP</p>
++            <p class="text-sm text-gray-400 mt-2">Demonstrating the power of Model-Context Protocol</p>
++        </div>
++    </footer>
++
++    <script type="module" src="~/dist/main.js" asp-append-version="true"></script>
++</body>
++</html>

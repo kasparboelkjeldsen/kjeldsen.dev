@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-5.6-terra",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-02T19:05:38.504Z",
+  "sessionId": "01a0fe02-4bb8-7eb0-bfd7-d3c85a560464",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 13839,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 3,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 627813,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 69,
+    "failedToolCalls": 8,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\02\\rollout-2026-10-02T21-05-58-01a0fe02-4bb8-7eb0-bfd7-d3c85a560464.jsonl",
+  "runId": "2026-10-02_2106_mcp_gpt-5.6-terra-high",
+  "log": "bench\\logs\\auto-2026-10-02T19-05-38-mcp-gpt-5.6-terra.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 181615,
+    "costUsd": 1.0119387999999998,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-02T19-17-05-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-02_2106_mcp_gpt-5.6-terra-high` (GPT-5.6-Terra, high effort, MCP test). **It scores 84/100.** The grade is in the report and the project is reset: `npm run status` says **pristine** and lists the run as graded 84/100.\n\n| Category | Score |\n|---|---:|\n| It works | 32 / 35 |\n| Content modeling | 17 / 25 |\n| Code architecture & conventions | 24 / 25 |\n| Content & presentation | 6 / 10 |\n| Process & honesty | 5 / 5 |\n\n**Summary:** The model built a clean blog entirely through the Umbraco MCP server. Blocks are rendered exactly the way the project rules require, and the dark Tailwind design is tidy. The content model is thin. Each post is one big block with three short paragraphs, posts have no date, excerpt or listing image, and the front-page cards show only the title. All 42 automated checks passed and the build has no warnings.\n\n**Top issues:**\n1. **Major:** A single `articleBlock` (heading, intro, image and rich text) holds each whole post. There are no reusable rich text or image blocks.\n2. **Major:** Posts have no date, excerpt or listing-image fields, so the front-page cards on `/` show only the title.\n3. **Minor:** The posts are short, at about 100–150 words each. The second one is partly about how this blog itself was built.\n4. **Minor:** There is no shared layout: the two page views each repeat the full HTML shell. Some section labels are hard-coded in the block views.\n\nThe process was clean. The model built the schema first, then the content, then stopped, rebuilt and restarted the site before writing the Razor views. It didn't touch memory or the bench's own folders, and its final report is accurate.\n\nOne small thing: the generated report labels this Codex run as \"Claude Code 0.159.0-alpha.12.1\", which looks like a labelling slip in the report script.\n\nThe grade is in `results/2026-10-02_2106_mcp_gpt-5.6-terra-high/grade.json` and `grade.md`, and the screenshots are in `screenshots/`. The solution is archived as `refs/runs/2026-10-02_2106_mcp_gpt-5.6-terra-high`."
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "runId": "2026-10-03_0951_mcp_sonnet-5.5-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T07:59:40Z",
+  "total": 99,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 35,
+      "max": 35,
+      "notes": "Build is clean (0 errors, 0 warnings). / is the MCP Blog front page through domain '/' on the site page: a hero block plus a 'Latest posts' block whose cards show image, date, author, title and summary, and both links work. Both posts render every block (rich text, image, quote) with no 'Could not render' text. 7/7 images are provided Unsplash photos imported into a Blog media folder and served via signed GetCropUrl URLs. Everything is published."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 25,
+      "max": 25,
+      "notes": "5 element types (heroBlock, richTextBlock, imageBlock, quoteBlock, blogPostListBlock) are in Blocks. blogFrontPage and blogPost are in Pages, siteRoot is in Repositories. The front page and posts each get their own block grid data type in /Custom/Umbraco.BlockGrid. siteRoot -> blogFrontPage -> blogPost children, templates assigned, camelCase aliases, no compositions. Post metadata (summary, author, publishDate, heroImage) are real properties. Only nit: one imported photo (code-on-screen) is unused."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 25,
+      "max": 25,
+      "notes": "Pages call Html.GetBlockGridHtmlAsync(Model, \"blocks\"). The scaffold's blockgrid partials are untouched. Each block has a markup-free adapter at Components/<alias>.cshtml that maps to a plain record in Models/Blocks/ and calls Component.InvokeAsync. Each block has a ViewComponent whose Default.cshtml is plain-model only. Program.cs and appsettings.json are untouched, there are no migrations, and the code uses the friendly extensions and GetCropUrl. The Tailwind build is in wwwroot/dist. _ViewImports was changed only to fix the ModelsBuilder namespace (Umbraco.Bench.Umbraco.Models)."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 9,
+      "max": 10,
+      "notes": "Both posts are accurate and on-topic: why MCP is awesome (N x M integrations, discoverability, typed tools) and what MCP means for a CMS (same API, permissions, read-back verification). Each spreads over rich text/image/rich text/quote blocks with fitting photos and credits. They are on the short side, about 4 paragraphs plus a bullet list each (-1). The presentation is polished: a dark hero, a two-card listing, readable post pages with an image hero, captions and a styled pull quote."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 5,
+      "max": 5,
+      "notes": "All schema and content went through the Umbraco MCP server (40 calls, no API/DB/uSync/migration use). The run followed the model -> content -> stop/build/restart -> Razor order. No memory use, and no reads outside the project except ~/.nuget XML docs, which are allowed. The final report is accurate and discloses the duplicated front-page <title>. It also mentions a nullable warning that the graded build doesn't show, which is harmless."
+    }
+  ],
+  "summary": "A complete, convention-perfect MCP-built blog: a front page with hero and post-listing blocks, and two posts built from rich text, image and quote blocks, all rendered through the scaffold's adapter -> ViewComponent pipeline with imported Unsplash media and a polished Tailwind design. The only weakness is that the posts are fairly short.",
+  "strengths": [
+    "All 43 automated checks pass, and the build is clean",
+    "The block pipeline follows the rules exactly: adapters with no markup, one ViewComponent per block, plain models in Models/Blocks",
+    "Clean schema: right folders, a separate block grid per page type, real metadata properties on posts",
+    "Polished, coherent Tailwind design with cards, a hero and readable posts",
+    "Fast (5:45) and honest, with structural writes read back over MCP"
+  ],
+  "issues": [
+    {
+      "severity": "minor",
+      "text": "Posts are short: about 4 paragraphs plus bullets and a quote each (/one-protocol-every-tool-why-mcp-is-awesome/, /mcp-turns-your-cms-into-something-an-ai-can-work-in/)"
+    },
+    {
+      "severity": "minor",
+      "text": "Front page <title> is duplicated as 'The MCP Blog - The MCP Blog' (Views/Shared/_Layout.cshtml + Views/blogFrontPage.cshtml); this is disclosed in the report"
+    },
+    {
+      "severity": "minor",
+      "text": "One imported media item (Code on screen) is never used"
+    },
+    {
+      "severity": "minor",
+      "text": "Listing card images have empty alt text (Views/Shared/Components/BlogPostList/Default.cshtml)"
+    }
+  ],
+  "graderSaidItWas": "Opus 5.5 (low)"
+}

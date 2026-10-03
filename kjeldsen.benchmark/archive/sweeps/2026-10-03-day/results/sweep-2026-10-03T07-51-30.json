@@ -1,0 +1,75 @@
+{
+  "state": "running",
+  "startedAt": "2026-10-03T07:51:30.903Z",
+  "updatedAt": "2026-10-03T09:32:10.920Z",
+  "done": [
+    {
+      "label": "claude-sonnet-5-5:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0951_mcp_sonnet-5.5-high",
+      "grade": "99/100",
+      "error": null
+    },
+    {
+      "label": "claude-opus-5-5:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1001_mcp_opus-5.5-high",
+      "grade": "98.5/100",
+      "error": null
+    },
+    {
+      "label": "claude-fable-5-1:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1011_mcp_fable-5.1-high",
+      "grade": "98/100",
+      "error": null
+    },
+    {
+      "label": "claude-sonnet-5:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1037_mcp_sonnet-5-high",
+      "grade": "95/100",
+      "error": null
+    },
+    {
+      "label": "gpt-6-luna:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1051_mcp_gpt-6-luna-high",
+      "grade": "94/100",
+      "error": null
+    },
+    {
+      "label": "gpt-6-sol:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1107_mcp_gpt-6-sol-high",
+      "grade": "91.5/100",
+      "error": null
+    }
+  ],
+  "queued": [
+    {
+      "label": "gpt-6-astra:high · MCP",
+      "notBefore": "2026-10-03T09:56:44.000Z",
+      "infraTries": 0,
+      "limitWaits": 1
+    },
+    {
+      "label": "gpt-5.6-terra:high · MCP",
+      "notBefore": "2026-10-03T09:56:44.000Z",
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "gpt-5.6-luna:high · MCP",
+      "notBefore": "2026-10-03T09:56:44.000Z",
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "gpt-5.6-sol:high · MCP",
+      "notBefore": "2026-10-03T09:56:44.000Z",
+      "infraTries": 0,
+      "limitWaits": 0
+    }
+  ]
+}

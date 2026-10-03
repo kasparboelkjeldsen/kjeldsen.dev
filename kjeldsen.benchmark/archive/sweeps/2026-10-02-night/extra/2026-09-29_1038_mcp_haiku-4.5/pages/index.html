@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Blog</title>
+    <link rel="stylesheet" href="/dist/site.css" />
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 3rem 0; text-align: center; }
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin: 0.5rem 0 0; opacity: 0.95; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0; }
+        .blog-card { border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+        .blog-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.15); }
+        .blog-card-image { width: 100%; height: 200px; object-fit: cover; background: #f0f0f0; }
+        .blog-card-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .blog-card-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 0.5rem; }
+        .blog-card-date { font-size: 0.9rem; color: #666; margin-bottom: 1rem; }
+        .blog-card-link { color: #667eea; font-weight: 500; text-decoration: none; margin-top: auto; }
+        .blog-card-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Welcome to the Blog</h1>
+                <p><p>Discover insights about MCP and modern content management practices.</p></p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="blog-grid">
+                        <a href="/why-mcp-is-awesome-unlocking-ai-integration/" class="blog-card">
+                                <img src="/media/pclg1sbc/mcp-integration-hero.jpg?rxy=0,0.5&amp;width=400&amp;height=250&amp;v=1dd4fee700c6216&amp;hmac=d0507dc0862a162dc1c4fd51324c08da9c2a742c92aa9a1c8716f8a5826f555f" alt="Why MCP is Awesome: Unlocking AI Integration" class="blog-card-image" />
+                            <div class="blog-card-content">
+                                <h2 class="blog-card-title">Why MCP is Awesome: Unlocking AI Integration</h2>
+                                    <p class="blog-card-date">September 29, 2026</p>
+                                <span class="blog-card-link">Read More →</span>
+                            </div>
+                        </a>
+                        <a href="/mcp-transforms-content-management/" class="blog-card">
+                                <img src="/media/qqwdcuik/content-management-benefits.jpg?rxy=0,0.5&amp;width=400&amp;height=250&amp;v=1dd4fee7079f070&amp;hmac=01778d2e44ecbb76727cc8184dcd2e71e1aa03d958a04420ddae8ff74c27ee7b" alt="MCP Transforms Content Management" class="blog-card-image" />
+                            <div class="blog-card-content">
+                                <h2 class="blog-card-title">MCP Transforms Content Management</h2>
+                                    <p class="blog-card-date">September 29, 2026</p>
+                                <span class="blog-card-link">Read More →</span>
+                            </div>
+                        </a>
+        </div>
+    </div>
+</body>
+</html>

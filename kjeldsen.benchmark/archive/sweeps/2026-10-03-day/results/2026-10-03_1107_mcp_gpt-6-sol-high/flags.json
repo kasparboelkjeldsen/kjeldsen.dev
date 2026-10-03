@@ -1,0 +1,4 @@
+{
+  "excludeFromScore": true,
+  "reason": "the runner started prompt 1 before the Umbraco MCP server was ready, so the model never saw its tools (fixed 2026-10-03: waitForMcp); rerun on 2026-10-03"
+}

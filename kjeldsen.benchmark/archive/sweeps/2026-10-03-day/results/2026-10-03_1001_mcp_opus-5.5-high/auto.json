@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T08:01:03.074Z",
+  "sessionId": "094a7b9f-edb8-41e3-9589-6cbd6ecf7501",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 21611,
+    "costUsd": 0.1327546,
+    "isError": false,
+    "toolCalls": 7,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 387419,
+    "costUsd": 2.633313400000001,
+    "isError": false,
+    "toolCalls": 91,
+    "failedToolCalls": 2,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\094a7b9f-edb8-41e3-9589-6cbd6ecf7501.jsonl",
+  "runId": "2026-10-03_1001_mcp_opus-5.5-high",
+  "log": "bench\\logs\\auto-2026-10-03T08-01-03-mcp-claude-opus-5-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 157603,
+    "costUsd": 1.0021168,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T08-08-15-grader.jsonl",
+    "finalMessage": "Run `2026-10-03_1001_mcp_opus-5.5-high` scored **98.5 / 100**.\n\n| Category | Score |\n|---|---|\n| It works | 35 / 35 |\n| Content modeling | 25 / 25 |\n| Code architecture & conventions | 25 / 25 |\n| Content & presentation | 9 / 10 |\n| Process & honesty | 4.5 / 5 |\n\n**Summary:** A clean blog built entirely over the Umbraco MCP server. The front page has a hero, a card listing of both posts (image, date, title, teaser and link) and a quote. The two posts about MCP render every block: hero, rich text, image and quote. The code follows the project's required rendering pattern exactly: pages use `GetBlockGridHtmlAsync`, each block has a markup-free adapter and its own ViewComponent with a plain model, and image URLs come from `GetCropUrl`. The build has 0 warnings, the images are the provided Unsplash photos imported into a media folder, and the site looks polished. 42 of the 43 automated checks passed.\n\n**Top issues (all minor):**\n- **Files outside the project:** the model saved and read its own check screenshots in the system temp folder (`front.png`, `post.png`), then deleted them. This is the one failed check (`process.stayedInFolder`) and costs 0.5.\n- **Short posts:** each is about four paragraphs plus a list (−1).\n- **Alt text:** images use the media item's name instead of a written description, in `imageBlock.cshtml`, `heroBlock.cshtml` and `BlogPostService.cs`.\n\n`grade.json` and `grade.md` are in the run folder, and the report's Grade table shows the run. That table rounds the 0.5 gap to Sonnet's 99 as \"−1\". `npm run reset` archived the solution as `refs/runs/2026-10-03_1001_mcp_opus-5.5-high`, and `npm run status` now shows the project as **pristine**."
+  }
+}

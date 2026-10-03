@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-6-sol",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T09:56:44.013Z",
+  "sessionId": "01a10132-3af1-7b22-9903-97118f02310f",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 14828,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 731672,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 69,
+    "failedToolCalls": 5,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T11-57-11-01a10132-3af1-7b22-9903-97118f02310f.jsonl",
+  "runId": "2026-10-03_1157_mcp_gpt-6-sol-high",
+  "log": "bench\\logs\\auto-2026-10-03T09-56-44-mcp-gpt-6-sol.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 146801,
+    "costUsd": 0.8611156,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T10-09-53-grader.jsonl",
+    "finalMessage": "I graded `2026-10-03_1157_mcp_gpt-6-sol-high` (GPT-6-Sol, high effort, MCP test) at **90 / 100**. All 43 automated checks passed. The grade appears in the report, the run is archived as `refs/runs/2026-10-03_1157_mcp_gpt-6-sol-high`, and `npm run status` says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35/35 |\n| Content modeling | 17/25 |\n| Code architecture & conventions | 25/25 |\n| Content & presentation | 8/10 |\n| Process & honesty | 5/5 |\n\n**Summary:** The model built \"MCP Journal\": a front page with a large intro banner and two image cards, plus two published posts about MCP. The page code follows the project's conventions exactly and the design is polished. Where it loses points is the content model: there is no rich text or image block, and the front-page cards are typed in by hand instead of being read from the posts.\n\n**Top issues:**\n1. **Hand-maintained listing (major):** each front-page card repeats its post's title, summary and image, and the post URL is typed into a plain text field rather than picked from the content tree. Blog posts have no date, excerpt or listing-image fields, so a new or renamed post won't show up correctly on the front page.\n2. **Thin block set (major):** there are only three blocks: an intro banner, a text block and a post card. The text block's body is plain text split on line breaks, so it can't hold links, lists or emphasis, and there is no image block.\n3. **Few images in posts (minor):** each post's only image is a dimmed background behind its opening banner, the same photo as its front-page card.\n4. **No dates (minor):** there are no publish dates on the listing or the posts.\n\nThe model used only the MCP server, in the right order, and stayed inside the project folder. Its final report is accurate.\n\nFiles are in `results/2026-10-03_1157_mcp_gpt-6-sol-high/`:\n- grade.json\n- grade.md\n\nScreenshots are in `screenshots/`:\n- gpt-6-sol-high-2026-10-03_1157-frontpage.png\n- gpt-6-sol-high-2026-10-03_1157-blogpost.png"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "state": "running",
+  "startedAt": "2026-10-02T19:55:48.555Z",
+  "updatedAt": "2026-10-02T20:07:25.994Z",
+  "done": [
+    {
+      "label": "gpt-6-sol:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-02_2156_mcp_gpt-6-sol-high",
+      "grade": "91/100",
+      "error": null
+    }
+  ],
+  "queued": [
+    {
+      "label": "gpt-6-astra:high · MCP",
+      "notBefore": null,
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "claude-haiku-4-5-20251001 · MCP",
+      "notBefore": null,
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "gpt-5.6-luna:high · MCP",
+      "notBefore": null,
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "claude-sonnet-5:high · MCP",
+      "notBefore": null,
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "gpt-5.6-sol:high · MCP",
+      "notBefore": null,
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "claude-sonnet-5-5:high · MCP",
+      "notBefore": null,
+      "infraTries": 0,
+      "limitWaits": 0
+    },
+    {
+      "label": "claude-opus-5-5:high · MCP",
+      "notBefore": null,
+      "infraTries": 0,
+      "limitWaits": 0
+    }
+  ]
+}

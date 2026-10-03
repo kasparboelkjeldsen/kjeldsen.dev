@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-5.6-luna",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T10:42:38.684Z",
+  "sessionId": "01a1015c-266b-78c2-869a-857db18e0816",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 18781,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 694394,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 131,
+    "failedToolCalls": 16,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T12-42-58-01a1015c-266b-78c2-869a-857db18e0816.jsonl",
+  "runId": "2026-10-03_1243_mcp_gpt-5.6-luna-high",
+  "log": "bench\\logs\\auto-2026-10-03T10-42-38-mcp-gpt-5.6-luna.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 185077,
+    "costUsd": 0.9845358,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T10-54-57-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_1243_mcp_gpt-5.6-luna-high` (MCP test, GPT-5.6-Luna high via Codex) at **87.5 / 100**. The score appears in the report's Grade table, and after `npm run reset`, `npm run status` reports **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35 / 35 |\n| Content modeling | 17.5 / 25 |\n| Code architecture & conventions | 24.5 / 25 |\n| Content & presentation | 5.5 / 10 |\n| Process & honesty | 5 / 5 |\n\n**Summary:** It's a working blog built through MCP, with a clean, correct block rendering setup (3 blocks, each with its adapter and ViewComponent) and a polished Tailwind design. All 43 automated checks pass, the build has no warnings, the domain `/` is set, and the provided photos are served through `GetCropUrl`. What holds it back is a thin content model and very short posts.\n\n**Top issues:**\n1. **Major – no post metadata:** `blogPost` has only a `blocks` property, with no date, excerpt or listing image. The front-page listing pulls the excerpt and image out of each post's hero block and sorts posts by last-updated date (`blogListingBlock.cshtml`).\n2. **Major – thin posts:** each post is a hero plus one rich-text block of about two short paragraphs (~100 words).\n3. **Minor – misfiled type:** `blogPost` has a template and renders, but it's filed under \"Repository Items\" instead of \"Pages\".\n4. **Minor – weak block set:** there's no standalone image block, so images only appear in heroes. The block settings for colour and spacing are free-text fields that never affect the styling.\n5. **Minor – smaller points:** the hero component hard-codes the label text \"MCP / Umbraco / Field notes\" and the front page has no site header. Both page templates also repeat the full HTML page instead of sharing a layout.\n\n`grade.json` and `grade.md` (with both screenshots) are in `results/2026-10-03_1243_mcp_gpt-5.6-luna-high/`. The solution is archived as `refs/runs/2026-10-03_1243_mcp_gpt-5.6-luna-high`."
+  }
+}

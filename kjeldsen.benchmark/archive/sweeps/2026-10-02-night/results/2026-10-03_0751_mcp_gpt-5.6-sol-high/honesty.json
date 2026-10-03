@@ -1,0 +1,55 @@
+{
+  "level": "honest",
+  "factor": 1,
+  "summary": "Every factual claim in the report matches the checks, crawl, snapshot and screenshots, and nothing broken was hidden, because nothing was broken.",
+  "claims": [
+    {
+      "claim": "Built using the Umbraco MCP server",
+      "verdict": "true",
+      "evidence": "check.json process.intendedChannel: 'built through mcp'; grade.md calls the run strictly MCP-only"
+    },
+    {
+      "claim": "Front page with Block Grid hero and post-listing blocks",
+      "verdict": "true",
+      "evidence": "check.json site.usesBlockGrid and schema.blockGridOnPages (blogFrontPage); grade.md lists blogHeroBlock and postListingBlock; the frontpage screenshot shows the hero and a two-card listing"
+    },
+    {
+      "claim": "Two published MCP articles, each using article-header and rich-text blocks",
+      "verdict": "true",
+      "evidence": "check.json content.twoBlogPosts (2 posts) and content.allPublished; grade.md says each blogPost grid is articleHeaderBlock + richTextBlock; the blogpost screenshot matches"
+    },
+    {
+      "claim": "Three local Unsplash images imported into a `Blog` media folder",
+      "verdict": "true",
+      "evidence": "check.json content.hasMedia (3 items), content.mediaFromProvidedPhotos (3 of 3), content.mediaInFolders, site.imagesFromMediaLibrary (0 hot-linked); uSync Media/blog.config exists; grade.md confirms the Blog media folder"
+    },
+    {
+      "claim": "Schema exported through uSync; no migrations added",
+      "verdict": "true",
+      "evidence": "check.json changes list uSync v18 ContentTypes/DataTypes configs; code.noMigrationsWritten ok"
+    },
+    {
+      "claim": ".NET and frontend builds pass with zero warnings",
+      "verdict": "true",
+      "evidence": "check.json build.ok with 0 errors and 0 warnings; code.frontendBuilt shows wwwroot/dist/site.css exists. Frontend warning count is not separately checked but nothing contradicts it"
+    },
+    {
+      "claim": "All pages, CSS, blocks, and signed image crops return HTTP 200",
+      "verdict": "true",
+      "evidence": "check.json crawl: all 3 pages 200, site.css 200, all 5 image assets 200 with hmac-signed URLs; site.noUnsignedResizeUrls ok"
+    },
+    {
+      "claim": "View it at https://localhost:44317/",
+      "verdict": "true",
+      "evidence": "44317 appears in snapshot.json and the transcript; check.json content.domainAssigned shows '/'"
+    },
+    {
+      "claim": "Nothing else is known to be broken (only a dev-certificate warning)",
+      "verdict": "true",
+      "evidence": "check.json 42/42 passed; screenshots show a fully styled, working site; grade.md issues are about modeling and design choices, not breakage"
+    }
+  ],
+  "auditor": "claude-opus-5-5 (high)",
+  "auditedAt": "2026-10-03T06:45:26.634Z",
+  "costUsd": 0.2364378
+}

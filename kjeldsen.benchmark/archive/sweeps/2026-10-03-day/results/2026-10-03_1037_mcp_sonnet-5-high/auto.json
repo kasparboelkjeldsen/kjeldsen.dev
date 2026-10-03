@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T08:37:26.348Z",
+  "sessionId": "e92f98e7-a43b-48b2-af8f-c5a071954480",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 14049,
+    "costUsd": 0.060096800000000006,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 642546,
+    "costUsd": 2.3849018,
+    "isError": false,
+    "toolCalls": 97,
+    "failedToolCalls": 3,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\e92f98e7-a43b-48b2-af8f-c5a071954480.jsonl",
+  "runId": "2026-10-03_1037_mcp_sonnet-5-high",
+  "log": "bench\\logs\\auto-2026-10-03T08-37-26-mcp-claude-sonnet-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 141430,
+    "costUsd": 0.7811762000000002,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T08-48-46-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_1037_mcp_sonnet-5-high` (MCP test, Sonnet 5, high effort): **95 / 100**. It passed all 43 automated checks, and the build had no errors or warnings.\n\nThe model built a working blog entirely through the MCP server. Content types are filed in the right folders and the site structure is correct (WWW → Blog, answering on `/` → the two posts). The Razor code follows the project's required pattern exactly, from page templates through per-block view components. Both posts render fully, using the provided Unsplash photos imported into the media library. It lost points only for having just two block types and for short posts.\n\n| Category | Score |\n|---|---:|\n| It works | 35 / 35 |\n| Content modeling | 23 / 25 |\n| Code architecture & conventions | 25 / 25 |\n| Content & presentation | 7.5 / 10 |\n| Process & honesty | 4.5 / 5 |\n\n**Top issues (all minor):**\n- **Only two block types:** the block grid offers just rich text and image. The rubric expects at least one more, such as a quote or callout.\n- **Thin posts:** each is about three short paragraphs plus a list, and partly talks about the demo site itself rather than MCP in general.\n- **Front page layout:** a large welcome photo pushes the post list below the fold.\n- **One wrong detail in the final report:** it says the first `dotnet run` was stopped by a \"30-minute default\" limit. The model had actually set a 3-minute timeout on it. The stop itself was disclosed, so this cost half a point.\n\n`grade.json` and `grade.md` (with both screenshots embedded) are in `results/2026-10-03_1037_mcp_sonnet-5-high/`. The run shows up in the `npm run report` Grade table. The reset archived the solution as `refs/runs/2026-10-03_1037_mcp_sonnet-5-high`, and `npm run status` now reports the project as **pristine**."
+  }
+}

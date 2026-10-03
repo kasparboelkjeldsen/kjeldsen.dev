@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Why MCP Is Awesome: A New Contract Between AI and Your Tools</title>
+        <meta name="description" content="The Model Context Protocol turns &quot;the AI guessed an API&quot; into &quot;the AI called a documented tool.&quot; Here&#x27;s why that shift matters." />
+    <link rel="stylesheet" href="/dist/site.css?v=BRcjK92TFIpPGU-dV-dTnZT9fLYTBV_IrwgD4pGhPz4" />
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto max-w-3xl px-4 py-6">
+                <a href="/" class="text-sm font-medium text-teal-700 hover:underline">&larr; Back to Blog</a>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-3xl px-4 py-10">
+        <article>
+            <p class="text-sm text-slate-500">September 22, 2026</p>
+            <h1 class="mt-1 text-4xl font-extrabold tracking-tight">Why MCP Is Awesome: A New Contract Between AI and Your Tools</h1>
+
+                <img src="/media/dkxhgffw/circuit-board-close-up.jpg?rxy=0,0.5&amp;width=1600&amp;height=700&amp;v=1dd4ff159a27ebf&amp;hmac=9a32eec1158aa141568b27372792f9da83adfa06fa5fe60b262489bf972ece8e" alt="Why MCP Is Awesome: A New Contract Between AI and Your Tools" class="mt-8 w-full rounded-xl object-cover" />
+
+            <div class="mt-8">
+                
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="ae4ff244-b2a9-49ba-a612-66f2ce4697f9"
+            data-element-key="22222222-2222-4222-8222-222222222201"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="max-w-none text-slate-700 leading-relaxed [&_p]:mb-4 [&_h3]:mb-3 [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-slate-900 [&_strong]:font-semibold [&_strong]:text-slate-900 [&_a]:text-teal-700 [&_a]:underline">
+    <p>Every AI assistant eventually hits the same wall: it's great at reasoning, mediocre at knowing which button to press. For years, the answer was bespoke integrations — one plugin per app, one schema per vendor, glued together with hope. The <strong>Model Context Protocol (MCP)</strong> replaces that patchwork with a single, open contract: any client that speaks MCP can discover and call tools from any server that implements it, without either side knowing the other exists in advance.</p>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="imageBlock"
+            data-content-element-type-key="18df21c1-ea00-4b80-8e46-57707b6b9507"
+            data-element-key="22222222-2222-4222-8222-222222222202"
+            data-col-span="6"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 6; --umb-block-grid--item-row-span: 1; ">
+
+    <figure class="my-2">
+        <img src="/media/dkxhgffw/circuit-board-close-up.jpg?rxy=0,0.5&amp;width=1600&amp;v=1dd4ff159a27ebf&amp;hmac=44c1c3066c85686814c8d40c28319ed7ab229f0029603e5dbe07500c0e292eda" alt="A shared protocol means fewer one-off wires between systems." class="w-full rounded-lg object-cover" loading="lazy" />
+            <figcaption class="mt-2 text-sm text-slate-500">A shared protocol means fewer one-off wires between systems.</figcaption>
+    </figure>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="ae4ff244-b2a9-49ba-a612-66f2ce4697f9"
+            data-element-key="22222222-2222-4222-8222-222222222203"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="max-w-none text-slate-700 leading-relaxed [&_p]:mb-4 [&_h3]:mb-3 [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-slate-900 [&_strong]:font-semibold [&_strong]:text-slate-900 [&_a]:text-teal-700 [&_a]:underline">
+    <p>What makes this genuinely exciting isn't the transport — JSON-RPC over stdio or HTTP is unglamorous by design. It's the <em>discovery</em>. A server exposes its tools, resources and prompts with real schemas, and a client can list them at runtime. That means an assistant working inside Umbraco.Bench can ask "what can I do here?" and get back a live answer: create a document type, move a data type, publish a page — the exact vocabulary this project's own MCP server exposes, no bespoke glue code required on either side.</p><p>It also means the boundary between "the model" and "the system" gets a lot cleaner. Instead of an LLM improvising a raw HTTP call against an API it half-remembers, it calls a named tool with a validated payload, and gets back a structured result it can reason about. Errors are typed. Side effects are explicit. Nobody has to trust the model to have memorized your OpenAPI spec correctly.</p>
+</div>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="quoteBlock"
+            data-content-element-type-key="73fd7552-c7cd-4b19-b9f7-b227ce024d7a"
+            data-element-key="22222222-2222-4222-8222-222222222204"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<blockquote class="my-2 border-l-4 border-teal-600 bg-teal-50 py-4 pl-6 pr-4 italic text-slate-700">
+    <p class="text-lg">&ldquo;MCP is the difference between an assistant that guesses your API and one that reads your menu.&rdquo;</p>
+        <footer class="mt-2 text-sm font-medium not-italic text-slate-500">&mdash; Anonymous platform engineer</footer>
+</blockquote>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="ae4ff244-b2a9-49ba-a612-66f2ce4697f9"
+            data-element-key="22222222-2222-4222-8222-222222222205"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+
+<div class="max-w-none text-slate-700 leading-relaxed [&_p]:mb-4 [&_h3]:mb-3 [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-slate-900 [&_strong]:font-semibold [&_strong]:text-slate-900 [&_a]:text-teal-700 [&_a]:underline">
+    <p>None of this required us to write a single migration or hand-roll a content API for this blog. Every document type, data type, block, and piece of content on this page was created by an agent talking to Umbraco's own MCP server — the same server you'd point any other MCP-aware client at. That's the real pitch: not a smarter model, but a common language that lets any sufficiently capable model operate your tools safely.</p>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+            </div>
+        </article>
+    </main>
+</body>
+</html>

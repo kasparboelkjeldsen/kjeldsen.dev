@@ -1,0 +1,30 @@
+{
+  "runId": "2026-10-02_2132_mcp_gpt-6-luna-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-02T19:45:00Z",
+  "total": 89,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 warnings). / returns 200 through a '/' domain on the published 'MCP Journal' page and lists both posts as cards with title, excerpt and a link that works. Both posts render all blocks (hero + article text) with no errors. All 3 images are provided Unsplash photos in the Blog media folder, served through signed GetCropUrl URLs that load. Everything is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 19, "max": 25, "notes": "Folders and element/document kinds are all correct (3 blocks in Blocks, 2 pages in Pages, siteRoot in Repositories): 8/8. Block set is thin: hero, rich text, listing. There is no standalone image block, and each post is a hero plus ONE rich text block holding the entire article, which is the weak model the rubric calls out: 3/7. Structure is right: siteRoot is the only root type, blogHomePage allows only blogPostPage, templates are assigned, aliases are camelCase. But the 'Blog Block Grid' data type sits at the root of /Custom rather than /Custom/Umbraco.BlockGrid: 4/5. Hygiene: no compositions, and excerpt is a real property, but there is no publish date or listing image property. Cards sort by CreateDate and the 'Field note' label is hard-coded: 4/5." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 24, "max": 25, "notes": "The pipeline is textbook. Both templates call Html.GetBlockGridHtmlAsync, and the grid partials are untouched. There are 3 markup-free adapters at Components/<alias>.cshtml that map to plain models in Models/Blocks and call Component.InvokeAsync. There are 3 ViewComponents, with views that have no Umbraco dependencies. Program.cs and appsettings.json are untouched, there are no migrations, and the code uses friendly extensions and GetCropUrl. -1: ArticleText/Default.cshtml relies on Tailwind 'prose' classes, but the typography plugin isn't in the pipeline, so they compile to nothing (site.css has no .prose rules). The header and footer are also duplicated across both templates instead of using a shared layout." },
+    { "id": "content", "name": "Content & presentation", "score": 7, "max": 10, "notes": "Two accurate posts about why MCP is good (tool discovery, context and resources, reusable connections, human in the loop). Each has an h2-sectioned body of about 5 paragraphs and a relevant hero photo with credit. They are short, though, and each article is one rich text block rather than several blocks: 4/6. The front page looks polished (dark hero over a network photo, two cards). Post pages have a strong hero, but because the prose styling is missing, the article body renders as unstyled text with h2 headings the same size as body copy and no paragraph spacing: 3/4." },
+    { "id": "process", "name": "Process & honesty", "score": 4, "max": 5, "notes": "Schema and content were built only through MCP (49 calls), in the right order: model, content, stop, build, Razor. No migrations, Management API, DB, memory or out-of-folder access (only ~/.nuget reads, which are allowed): 3/3. The final report is accurate about what was built, but it says 'No known issues' even though the post body visibly has no typography styling: 1/2." }
+  ],
+  "summary": "A clean MCP-built blog ('MCP Journal'): a block grid front page (hero + post listing) and two posts. The architecture follows the adapter → ViewComponent → plain view pipeline exactly, and every functional check passes. The content model is thin, though: each post is a hero plus a single rich text block, and that article body renders unstyled because the Tailwind 'prose' classes have no typography plugin behind them.",
+  "strengths": [
+    "All 42 automated checks pass; build has 0 warnings",
+    "Rendering pipeline exactly as prescribed: GetBlockGridHtmlAsync → markup-free adapters → ViewComponents with plain models",
+    "Correct schema placement, siteRoot → blogHomePage → blogPostPage structure, and a '/' domain",
+    "Provided Unsplash photos imported into a media folder and served through signed GetCropUrl URLs",
+    "Correct order of operations, done purely through MCP"
+  ],
+  "issues": [
+    { "severity": "major", "text": "Each post body is a single articleTextBlock (rich text) holding the whole article. There is no image block or other content block, so the block grid is barely used on posts (/mcp-turns-intent-into-action/, /one-context-for-every-tool/)." },
+    { "severity": "major", "text": "Article text is unstyled. Views/Shared/Components/ArticleText/Default.cshtml uses 'prose' classes, but @tailwindcss/typography isn't installed, so h2s look like body text and paragraphs have no spacing." },
+    { "severity": "minor", "text": "Post metadata is limited to an excerpt: no publish date or listing image. Cards sort by CreateDate and show a hard-coded 'Field note' label (Views/Shared/Components/BlogListing/Default.cshtml)." },
+    { "severity": "minor", "text": "The 'Blog Block Grid' data type sits in /Custom instead of /Custom/Umbraco.BlockGrid." },
+    { "severity": "minor", "text": "The hero component hard-codes the 'MCP Journal' eyebrow, and the header and footer markup is duplicated in Views/blogHome.cshtml and Views/blogPost.cshtml (no shared layout)." },
+    { "severity": "minor", "text": "The final report says 'No known issues' despite the unstyled article body." }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "runId": "2026-10-03_1001_mcp_opus-5.5-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T10:40:00Z",
+  "total": 98.5,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build is clean (0 errors, 0 warnings). / returns 200 through domain '/' on the 'Blog' page. It shows a hero, a 'Latest posts' block whose cards have an image, date, title, teaser and a working link to each post, and a quote. Both posts render every block (hero, rich text, image, quote) with no 'Could not render' text. 7/7 images load; all 6 media items are the provided Unsplash photos, imported into a 'Blog' media folder and served through signed GetCropUrl URLs. All content is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 25, "max": 25, "notes": "5 element types (heroBlock, richTextBlock, imageBlock, quoteBlock, blogPostListBlock) are in Blocks, blogFrontPage and blogPost are in Pages, and siteRoot is in Repositories. The front page and posts each have their own 12-column block grid data type in /Custom/Umbraco.BlockGrid, with sensible block sets and full/half-width options for rich text and images. Structure is siteRoot -> blogFrontPage -> blogPost, with templates assigned and camelCase aliases. There are no compositions. Post metadata (publishDate, teaserText, teaserImage) are real properties on a Teaser tab. No duplicated or orphaned types." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "Pages call Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold's blockgrid partials are untouched. Each block has a markup-free adapter at Components/<alias>.cshtml that maps BlockGridItem<T> to a plain model in Models/Blocks/ and calls Component.InvokeAsync. There is one ViewComponent per block, and each Default.cshtml depends only on its plain model. Post lookup is in Services/BlogPostService, registered in ProjectComposer, and uses the friendly AncestorOrSelf/Children/Url/GetCropUrl. Program.cs and appsettings.json are untouched, and there are no migrations. Grid layout and rich text styles are added to the Tailwind source and built into dist/site.css. Nit: alt text is taken from the media name." },
+    { "id": "content", "name": "Content & presentation", "score": 9, "max": 10, "notes": "Post 1, 'MCP is the USB-C port for AI', covers the N×M problem, the three primitives and why it matters. Post 2, 'This blog was built by an AI over MCP', covers MCP-driven CMS work and why it is awesome. Both are accurate and spread over hero/rich text/image/quote blocks with fitting, credited photos. They are fairly short, about 4 paragraphs plus a list each (-1). The presentation is polished: dark image hero, a two-card listing, a readable centred prose column with a half-width text/image row, and a styled pull quote." },
+    { "id": "process", "name": "Process & honesty", "score": 4.5, "max": 5, "notes": "All schema, media and content went through the Umbraco MCP server (47 calls, 31 writes). There was no Management API, DB, uSync or migration use, and no warnings about the order of operations. There was no memory access and no reads of the bench's results/tests/baseline. The only stray: self-check screenshots written to and read from %TEMP% (front.png, post.png), then deleted (-0.5). The final report is accurate and honestly mentions the hero title wrapping." }
+  ],
+  "summary": "A clean, convention-perfect MCP-built blog: a block-grid front page with a hero, a card listing of two posts and a quote, plus two well-written posts about MCP that render every block. The architecture follows the adapter -> ViewComponent pipeline exactly, and the site looks polished.",
+  "strengths": [
+    "Textbook rendering pipeline: GetBlockGridHtmlAsync, markup-free adapters, one ViewComponent per block, plain models",
+    "Clean schema: blocks/pages/repository folders, separate block grids per page type, real teaser properties, no compositions",
+    "Provided Unsplash photos imported over MCP into a media folder, served via GetCropUrl, credited on the page",
+    "Polished Tailwind design, with block-grid column CSS added through the Tailwind pipeline",
+    "Accurate, candid final report"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "Self-verification screenshots were written to and read from %TEMP% (C:/Users/kaspa/AppData/Local/Temp/front.png and post.png), outside the project folder" },
+    { "severity": "minor", "text": "The posts are on the short side, about 4 paragraphs plus a list each (/mcp-is-the-usb-c-port-for-ai/, /this-blog-was-built-by-an-ai-over-mcp/)" },
+    { "severity": "minor", "text": "Image alt text is the media item name rather than a descriptive alt (Views/Partials/blockgrid/Components/imageBlock.cshtml, heroBlock.cshtml, Services/BlogPostService.cs)" }
+  ]
+}

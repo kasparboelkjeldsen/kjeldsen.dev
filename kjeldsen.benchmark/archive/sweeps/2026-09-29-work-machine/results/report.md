@@ -1,0 +1,100 @@
+# Umbraco benchmark — model comparison
+
+Generated 02/10/2026, 20:30:04
+
+## Test: MCP
+
+### Time
+
+| Phase | Fable 5.1 (high) | Opus 5.5 (high) | Sonnet 5.5 (high) | Haiku 4.5 | Sonnet 5 (high) | Opus 5.5 (ultracode) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Prompt 1: verify MCP | 0:29 | 0:23 | 0:17 | 0:08 | 0:10 | 0:23 |
+| Boot, read rules, plan → first type created | 1:38 | 0:43 | 0:33 | 1:18 | 1:44 | 0:57 |
+| Content modeling | 0:30 | 1:36 | 1:18 | 1:41 | 2:10 | 1:56 |
+| Content: media, pages, publish | 3:13 | 1:41 | 1:14 | 1:14 | 4:43 | 2:15 |
+| Stop, build, Razor, restart | 5:58 | 2:29 | 3:29 | 1:23 | 3:34 | 10:12 |
+| Checking the result and final report | 0:43 | 0:42 | 0:22 | 0:11 | 0:33 | 0:22 |
+| Total from first prompt | 12:31 | 7:33 | 7:13 | 5:55 | 12:53 | 16:05 |
+| Blog prompt only | 12:02 | 7:10 | 6:56 | 5:47 | 12:43 | 15:42 |
+
+### Tokens
+
+| Tokens | Fable 5.1 (high) | Opus 5.5 (high) | Sonnet 5.5 (high) | Haiku 4.5 | Sonnet 5 (high) | Opus 5.5 (ultracode) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| API requests | 32 | 42 | 43 | 60 | 76 | 118 |
+| &nbsp;&nbsp;of which subagent requests | 0 | 0 | 0 | 0 | 0 | 51 |
+| Fresh input | 64 | 84 | 86 | 499 | 152 | 240 |
+| Cache creation | 156,350 | 122,352 | 114,481 | 78,997 | 156,816 | 463,120 |
+| Cache read | 3,625,390 | 4,289,152 | 4,387,570 | 4,421,371 | 10,389,228 | 12,201,039 |
+| Output | 57,681 | 41,792 | 42,301 | 29,329 | 60,291 | 76,633 |
+| &nbsp;&nbsp;of which thinking | 12,366 | 11,081 | 6,541 | 6,530 | 23,738 | 19,035 |
+| Total | 3,839,485 | 4,453,380 | 4,544,438 | 4,530,196 | 10,606,487 | 12,741,032 |
+| Total excluding cache reads | 214,095 | 164,228 | 156,868 | 108,825 | 217,259 | 539,993 |
+
+### Tokens by activity
+
+| Activity | Fable 5.1 (high) | Opus 5.5 (high) | Sonnet 5.5 (high) | Haiku 4.5 | Sonnet 5 (high) | Opus 5.5 (ultracode) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Umbraco MCP | 1,111,714 (29%) | 1,229,606 (28%) | 1,198,959 (26%) | 1,309,981 (29%) | 4,536,180 (43%) | 3,244,934 (25%) |
+| Coding: site (views, components, models) | 1,058,466 (28%) | 787,556 (18%) | 830,617 (18%) | 713,892 (16%) | 1,397,335 (13%) | 2,451,883 (19%) |
+| Build, run & verify | 101,412 (3%) | 81,205 (2%) | 106,094 (2%) | 38,698 (1%) | 399,446 (4%) | 442,552 (3%) |
+| Other tools | 0 (0%) | 12,354 (0%) | 14,957 (0%) | 0 (0%) | 21,901 (0%) | 2,894,051 (23%) |
+| Base context & reasoning | 1,567,892 (41%) | 2,342,659 (53%) | 2,393,813 (53%) | 2,467,627 (54%) | 4,251,627 (40%) | 3,707,610 (29%) |
+
+### Tokens by activity, excluding cache reads
+
+| Activity | Fable 5.1 (high) | Opus 5.5 (high) | Sonnet 5.5 (high) | Haiku 4.5 | Sonnet 5 (high) | Opus 5.5 (ultracode) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Umbraco MCP | 83,389 (39%) | 67,163 (41%) | 58,661 (37%) | 55,432 (51%) | 120,208 (55%) | 90,731 (17%) |
+| Coding: site (views, components, models) | 91,123 (43%) | 55,724 (34%) | 58,028 (37%) | 32,802 (30%) | 55,231 (25%) | 99,703 (18%) |
+| Build, run & verify | 13,330 (6%) | 10,732 (7%) | 10,695 (7%) | 3,178 (3%) | 19,186 (9%) | 23,059 (4%) |
+| Other tools | 0 (0%) | 1,676 (1%) | 1,293 (1%) | 0 (0%) | 882 (0%) | 292,453 (54%) |
+| Base context & reasoning | 26,252 (12%) | 28,933 (18%) | 28,192 (18%) | 17,415 (16%) | 21,754 (10%) | 34,045 (6%) |
+
+### Tool calls
+
+| Tool | Fable 5.1 (high) | Opus 5.5 (high) | Sonnet 5.5 (high) | Haiku 4.5 | Sonnet 5 (high) | Opus 5.5 (ultracode) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Shell (Bash) | 8 | 5 | 17 | 2 | 14 | 35 |
+| Shell (PowerShell) | 11 | 7 | 0 | 5 | 0 | 1 |
+| Umbraco MCP | 52 | 34 | 40 | 54 | 52 | 49 |
+| Read / Grep / Glob | 16 | 13 | 9 | 18 | 26 | 15 |
+| Edit / Write | 26 | 22 | 28 | 5 | 17 | 15 |
+| ToolSearch | 3 | 5 | 4 | 8 | 9 | 5 |
+| Background task control | 0 | 1 | 2 | 0 | 2 | 0 |
+| Subagents | 0 | 0 | 0 | 0 | 0 | 1 |
+| &nbsp;&nbsp;Umbraco MCP reads / writes | 19 / 33 | 10 / 24 | 11 / 29 | 23 / 31 | 20 / 32 | 18 / 31 |
+| Total tool calls | 116 | 87 | 100 | 92 | 120 | 121 |
+| Tool calls per API request | 3.63 | 2.07 | 2.33 | 1.53 | 1.58 | 1.81 |
+| Failed tool calls | 1 | 1 | 1 | 18 | 5 | 2 |
+| Files written with heredocs | 22 files in 1 calls | 0 | 0 | 0 | 0 | 23 files in 2 calls |
+| dotnet build (failed) | 1 (0) | 1 (0) | 4 (1) | 1 (0) | 2 (0) | 4 (0) |
+| Human interruptions / follow-ups | 0 / 1 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+
+### Grade
+
+| Category | Fable 5.1 (high) | Opus 5.5 (high) | Sonnet 5.5 (high) | Haiku 4.5 | Sonnet 5 (high) | Opus 5.5 (ultracode) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| It works (/35) | 35 | 35 | 35 | 29 | 35 | 35 |
+| Content modeling (/25) | 24 | 24 | 24 | 13 | 23 | 24 |
+| Code architecture & conventions (/25) | 25 | 24 | 24 | 5 | 25 | 25 |
+| Content & presentation (/10) | 9 | 9 | 8 | 6 | 7 | 10 |
+| Process & honesty (/5) | 4 | 5 | 5 | 3 | 5 | 5 |
+| Total | 97/100 | 97/100 | 96/100 | 56/100 | 95/100 | 99/100 |
+| Automated checks passed | 40/41 | 40/41 | 40/41 | 29/37 | 39/41 | 40/41 |
+| Graded by | Fable 5.1 (effort not visible to the grader) | Fable 5.1 | Fable 5.1 (effort not visible to the grader) | Fable 5.1 (effort not visible to the grader) | Fable 5.1 (effort not visible to the grader) | Fable 5.1 (effort not visible to the grader) |
+
+#### Runs
+
+- **Fable 5.1 (high)** — `2026-09-29_0924_mcp_fable-5.1-high`, model `claude-fable-5-1`, effort high, Claude Code 2.1.284, by hand (claude-vscode, auto)
+  - A complete, working block-grid blog built entirely over the Umbraco MCP server: front page with hero, intro and post cards, plus two 5-block posts, with the adapter -> ViewComponent -> plain model pipeline followed exactly. The only real blemish is that the run needed a human 'go' before it started.
+- **Opus 5.5 (high)** — `2026-09-29_0959_mcp_opus-5.5-high`, model `claude-opus-5-5`, effort high, Claude Code 2.1.284, by hand (claude-vscode, auto)
+  - A complete, working blog built through the Umbraco MCP server: a front page with hero and post list, and two published posts composed of hero, rich text and image blocks, rendered through the prescribed adapter > ViewComponent pipeline with a clean Tailwind design. The only real flaws are small: query logic in the post list adapter, no alt text property on the image block, and posts that are on the short side.
+- **Sonnet 5.5 (high)** — `2026-09-29_1023_mcp_sonnet-5.5-high`, model `claude-sonnet-5-5`, effort high, Claude Code 2.1.284, by hand (claude-vscode, auto)
+  - A complete, working blog built through the Umbraco MCP server: a front page with hero and post list blocks, and two published posts built from rich text, image and quote blocks, rendered through the prescribed adapter > ViewComponent pipeline with a clean Tailwind design. The flaws are small: thin posts of about 200 words, query logic in the post list adapter, and a block set without alt text or any layout options.
+- **Haiku 4.5** — `2026-09-29_1038_mcp_haiku-4.5`, model `claude-haiku-4-5-20251001`, effort ?, Claude Code 2.1.284, by hand (claude-vscode, default)
+  - A working but non-compliant blog built over MCP: a front page listing two short MCP posts, rendered by two self-contained Razor views. The central requirement was skipped: there is no block grid, no adapters and no ViewComponents, the three block element types are orphaned, and the site page sits at the content root beside WWW.
+- **Sonnet 5 (high)** — `2026-09-29_1058_mcp_sonnet-5-high`, model `claude-sonnet-5`, effort high, Claude Code 2.1.284, by hand (claude-vscode, auto)
+  - A complete, working block-grid blog built over MCP: front page with a card listing and two posts about MCP, with textbook adapter / ViewComponent / plain-model architecture. It loses points for a minimal block set with the listing hard-coded in the template, and for short posts that show the same photo twice.
+- **Opus 5.5 (ultracode)** — `2026-09-29_1422_mcp_opus-5.5-high`, model `claude-opus-5-5`, effort ultracode, Claude Code 2.1.284, by hand (claude-vscode, auto)
+  - A complete, working block-grid blog built through the Umbraco MCP server: a front page with hero, post list and intro text, and two substantive posts of 6 blocks each, rendered through the prescribed adapter > ViewComponent pipeline with the post query in a service and a clean Tailwind design. The only deduction is for the block model: no alt text property on the image block and no settings or layout options on any block.

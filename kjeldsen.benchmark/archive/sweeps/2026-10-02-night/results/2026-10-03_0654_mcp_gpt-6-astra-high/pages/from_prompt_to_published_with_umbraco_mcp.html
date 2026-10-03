@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>From a good idea to a published page. &#x2014; Common Ground</title>
+    <meta name="description" content="A local Umbraco experiment shows how a connected assistant can handle the repetitive work while keeping content structured and editable." />
+    <meta name="theme-color" content="#f6f5ef" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/dist/site.css?v=pwoGV0V21VEs5tr9z6rBOKXvh4XXTeHFUeD4wtPAja8" />
+</head>
+<body class="bg-paper text-ink antialiased">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="mx-auto max-w-[1320px] px-6 md:px-12 lg:px-16">
+        <header class="flex items-center justify-between gap-5 border-b border-line py-7 md:py-8">
+            <a class="flex items-center gap-3 text-xl font-semibold tracking-[-0.055em] md:text-2xl" href="/" aria-label="Common Ground home"><span class="brand-mark" aria-hidden="true"></span>Common Ground<span class="text-accent" aria-hidden="true">.</span></a>
+            <nav aria-label="Main navigation" class="flex items-center gap-6 text-sm md:gap-9">
+                <a class="hover:text-accent" href="/#journal">Journal <span class="ml-1 text-accent" aria-hidden="true">↗</span></a>
+                <a class="hidden text-muted hover:text-accent sm:inline" href="#about">About</a>
+            </nav>
+        </header>
+        <main id="main" tabindex="-1"><article>
+
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="articleHeaderBlock"
+            data-content-element-type-key="56c2aa32-9538-4b56-acbb-c01357f77737"
+            data-element-key="cb5322b8-75f0-4153-8a4f-e764d38679ab"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<header class="pt-8 md:pt-12">
+    <a class="inline-flex items-center gap-3 text-sm text-muted hover:text-accent" href="/#journal"><span aria-hidden="true">←</span> Back to the journal</a>
+    <div class="mx-auto max-w-4xl pt-12 pb-10 text-center md:pt-16 md:pb-14">
+        <p class="eyebrow mb-6 text-accent">In practice</p>
+        <h1 class="text-[clamp(2.8rem,5.5vw,5rem)] leading-[1.05] font-semibold tracking-[-0.06em]">From a good idea to a published page.</h1>
+        <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">A local Umbraco experiment shows how a connected assistant can handle the repetitive work while keeping content structured and editable.</p>
+        <div class="mt-7 flex flex-wrap justify-center gap-3 text-xs text-muted">
+            <time datetime="2026-10-02">02 October 2026</time>
+            <span aria-hidden="true">/</span><span>3 min read</span>
+        </div>
+    </div>
+        <figure>
+            <img src="/media/auuj1jra/code-on-screen.jpg?rxy=0,0.5&amp;width=1600&amp;height=850&amp;v=1dd52f3e5652fbd&amp;hmac=40ccc5f862f439945c9f69948a2e7b535a53d01ce48a86a81a15a91fae79d493" alt="Colourful source code on a dark computer screen" width="1600" height="850" fetchpriority="high" class="aspect-[32/17] w-full rounded-[3px] object-cover" />
+            <figcaption class="mt-3 text-right text-[11px] text-muted">Photography by Chris Ried / Unsplash</figcaption>
+        </figure>
+</header>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="6de1299e-8d4d-47d1-b16a-8a6014e18a73"
+            data-element-key="877751b2-ecd8-4a65-8432-4792635cf7fa"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<div class="article-copy mx-auto max-w-[700px] pt-12 pb-16 md:pt-16 md:pb-24">
+    <p>A useful tool should make a real task easier. So our test for MCP was straightforward: build a small blog in a local Umbraco project, write two articles, and use the CMS properly all the way through.</p>
+<p>The result is the journal you are reading. Its content was created through the Umbraco MCP server, using a sequence that kept the content model, editorial work, and presentation in their proper places.</p>
+<h2>First, understand the shape of the site</h2>
+<p>The starting point was a running Umbraco instance and a published WWW repository. Before creating anything, the assistant inspected the existing document types and data types. That revealed what could be reused and what the blog needed.</p>
+<p>The new model is deliberately small: a front page, a blog post type, and blocks for the hero, post listing, article header, and rich text. The front page and articles each have their own block grid, so editors see the blocks that make sense for that page.</p>
+<h2>Then, put real content in the CMS</h2>
+<p>The photographs were imported from the supplied local files into a media folder. The front page was created beneath WWW and given a domain so that it could answer at the site root. The articles were added below the front page and published.</p>
+<p>This is where the connection is especially useful. A request that sounds like one task to a person becomes a series of explicit CMS operations: create a media item, set a property, save a document, publish it. The assistant can coordinate those steps without asking an editor to copy the same information between screens.</p>
+<h2>Read back what you wrote</h2>
+<p>A successful tool response is useful evidence, but it is not the whole check. Block grids contain linked identifiers for their layout and content. We read the saved documents back to confirm that those references, media selections, and published states survived the write.</p>
+<p>This habit gives the workflow a practical feedback loop. Inspect, change, inspect again. If the stored result differs from the intention, fix that before building more work on top of it.</p>
+<blockquote><p>Automation is more useful when its results are easy to inspect.</p></blockquote>
+<h2>Give the content a proper home on the page</h2>
+<p>Schema changes generate new C# models in this project, so the application must be stopped, built, and restarted before Razor uses them. The rendering code can then follow the project's normal pipeline: a page calls the block grid renderer, a block adapter prepares a plain model, and a ViewComponent renders the markup.</p>
+<p>MCP handles the CMS work in this experiment; the project's normal build tools handle the presentation. Both parts matter. Publishing content does not, by itself, prove that a page renders correctly.</p>
+<h2>Keep the result useful tomorrow</h2>
+<p>The best part is what remains after the demonstration. The posts are editable documents. The images live in the media library. The listing can discover published child posts. Adding the next article continues the same workflow.</p>
+<p>That is the kind of automation worth getting excited about: a little less repetitive work today, and a clear, familiar structure to build on tomorrow.</p>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+</article>
+</main>
+        <footer id="about" class="border-t border-line py-9 md:py-12">
+            <div class="flex flex-col justify-between gap-6 md:flex-row md:items-start">
+                <div>
+                    <a class="text-xl font-semibold tracking-[-0.04em]" href="/">Common Ground<span class="text-accent">.</span></a>
+                    <p class="mt-3 max-w-md text-sm leading-relaxed text-muted">A small journal about connected tools, thoughtful workflows, and what happens when AI can work with your CMS.</p>
+                </div>
+                <a class="inline-flex items-center gap-5 text-sm font-medium hover:text-accent" href="/#journal">Find your next connection <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="mt-10 flex flex-wrap justify-between gap-3 border-t border-line pt-5 text-[11px] text-muted">
+                <span>© 2026 Common Ground</span><span>Made with curiosity. Published with Umbraco.</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

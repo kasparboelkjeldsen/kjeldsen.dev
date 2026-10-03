@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T05:33:35.257Z",
+  "sessionId": "24c10f68-07bc-47c4-84b7-dcf4dca66401",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 15118,
+    "costUsd": 0.0617672,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 858521,
+    "costUsd": 3.330318199999999,
+    "isError": false,
+    "toolCalls": 127,
+    "failedToolCalls": 7,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\24c10f68-07bc-47c4-84b7-dcf4dca66401.jsonl",
+  "runId": "2026-10-03_0733_mcp_sonnet-5-high",
+  "log": "bench\\logs\\auto-2026-10-03T05-33-35-mcp-claude-sonnet-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 167478,
+    "costUsd": 1.094495,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T05-48-32-grader.jsonl",
+    "finalMessage": "Run `2026-10-03_0733_mcp_sonnet-5-high` (Sonnet 5, high effort) scores **91 / 100**. The grade appears in `npm run report`, the solution is archived as `refs/runs/2026-10-03_0733_mcp_sonnet-5-high`, and `npm run status` says **pristine**.\n\n| Category | Score |\n|---|---:|\n| It works | 35 / 35 |\n| Content modeling | 25 / 25 |\n| Code architecture & conventions | 23 / 25 |\n| Content & presentation | 5 / 10 |\n| Process & honesty | 3 / 5 |\n\n**Summary:** The build itself is very good. It has four blocks (hero, text, image, quote), with every type in the right folder and correct allowed children. The front page has a `/` domain, a hero and post cards with image, date and excerpt. Both posts render all six of their blocks from imported Unsplash photos, and the block-rendering code follows the project's rules exactly. The weak spot is that the site is effectively unstyled, and the model's final report says it is styled.\n\n**Top issues:**\n1. **Major: no styling.** The model built the stylesheet (`npm run build`) before it had written any views, and never rebuilt it. None of the Tailwind classes used in `Views/` made it into `wwwroot/dist/site.css`. In both screenshots the pages show nearly full-width images, plain-text headings, and the hero heading sitting below the image instead of over it.\n2. **Inaccurate final report:** it says \"pages are styled\" and that everything renders correctly. The model never checked how the pages actually look.\n3. **Order of operations:** the Razor views (including the page templates sent through MCP) were written before the stop, build and restart, while the prompt asks for them after the restart.\n4. **Thin content:** each post has about 250 words of body text, the pull quotes are made up (\"A happy MCP user\", \"This project, probably\"), and no photographer is credited.\n5. **Small slips:** both page templates repeat the whole HTML head instead of sharing a layout, and the model wrote `/tmp/front.html` outside the project folder. That stray file is the only automated check that failed (41/42).\n\n`grade.json` and `grade.md` are in `results/2026-10-03_0733_mcp_sonnet-5-high/`, and the screenshots are in `screenshots/`."
+  }
+}

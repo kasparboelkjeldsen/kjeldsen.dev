@@ -2,6 +2,8 @@
 
 A headless Umbraco 18 backend (`kjeldsen.backend/`), a Nuxt 4 frontend (`kjeldsen.frontend/`) and
 Pulumi infrastructure (`kjeldsen.infra/`). The repository is public: never commit a secret.
+`kjeldsen.benchmark/` is a standalone model benchmark with its own README and its own Umbraco
+scaffold; it is not part of the site and nothing in the site builds or deploys it.
 Local runs share the production database (see `knowledge/local-development.md`).
 
 The `knowledge/` folder holds the notes that are not obvious from the code; its README is the

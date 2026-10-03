@@ -1,0 +1,42 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "anthropic",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-02T19:20:37.729Z",
+  "sessionId": "0aece54f-6321-4e4f-bf94-6a1820695b45",
+  "claudeCli": "C:\\Users\\kaspa\\.local\\bin\\claude.exe",
+  "claudeVersion": "2.1.287",
+  "permissionMode": "auto",
+  "settingSources": "project,local",
+  "prompt1": {
+    "durationMs": 19090,
+    "costUsd": 0.08877280000000001,
+    "isError": false,
+    "toolCalls": 5,
+    "mcpServers": "umbraco=connected",
+    "successfulToolCalls": 1
+  },
+  "prompt2": {
+    "durationMs": 403703,
+    "costUsd": 1.5573274,
+    "isError": false,
+    "toolCalls": 98,
+    "failedToolCalls": 0,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.claude\\projects\\C--code-benchmark-Umbraco-Bench\\0aece54f-6321-4e4f-bf94-6a1820695b45.jsonl",
+  "runId": "2026-10-02_2121_mcp_sonnet-5.5-high",
+  "log": "bench\\logs\\auto-2026-10-02T19-20-37-mcp-claude-sonnet-5-5.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 203422,
+    "costUsd": 1.1734632,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-02T19-28-06-grader.jsonl",
+    "finalMessage": "Run `2026-10-02_2121_mcp_sonnet-5.5-high` (Sonnet 5.5, high effort, MCP test) scored **99/100**. The grade appears in `npm run report`. After grading I ran `npm run reset`, which archived the solution as `refs/runs/2026-10-02_2121_mcp_sonnet-5.5-high`, and `npm run status` now says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35/35 |\n| Content modeling | 25/25 |\n| Code architecture & conventions | 25/25 |\n| Content & presentation | 9/10 |\n| Process & honesty | 5/5 |\n\n**Summary:** the model built the whole blog over MCP and every automated check passed (42/42), with 0 build warnings:\n- **Blocks:** five blocks (hero, post list, rich text, image, quote) across two block grids, one for the front page and one for posts.\n- **Front page:** a hero and a card listing of both posts. Each card shows an image, date, author and summary.\n- **Posts:** two posts of four blocks each, with correct photographer credits on the provided Unsplash photos.\n- **Code:** it follows the project's block rendering pattern exactly, and the Tailwind design is polished.\n- **Process:** all building went through MCP, in the required order. The final report is accurate and says what it didn't check.\n\n**Top issues (all minor):**\n- The posts are short, about 250 words each. The content is accurate but light.\n- The pull quotes are credited to \"The MCP Blog\" itself rather than a real source.\n- The image block's alt text reuses the caption, photo credit included (`Views/Shared/Components/Image/Default.cshtml`).\n- The post page shows the listing thumbnail as a header image outside the block grid (`Views/blogPost.cshtml`), so the first post opens with two large photos back to back.\n\nFiles are in `results/2026-10-02_2121_mcp_sonnet-5.5-high/`:\n- grade.json\n- grade.md\n\nScreenshots are in `screenshots/`:\n- sonnet-5.5-high-2026-10-02_2121-frontpage.png\n- sonnet-5.5-high-2026-10-02_2121-blogpost.png"
+  }
+}

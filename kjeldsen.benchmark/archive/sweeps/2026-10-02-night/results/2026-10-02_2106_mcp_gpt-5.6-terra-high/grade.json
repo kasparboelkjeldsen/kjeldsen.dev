@@ -1,0 +1,70 @@
+{
+  "runId": "2026-10-02_2106_mcp_gpt-5.6-terra-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-02T19:19:08Z",
+  "total": 84,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 32,
+      "max": 35,
+      "notes": "Build clean (0 errors, 0 warnings): 5. / returns 200 via the '/' domain on 'MCP Notes', lists both posts and links work, but each card is a bare title plus a 'Read field note →' label, with no date, excerpt or image: 7/10. Both posts render their single articleBlock fully with no render errors: 10. Two provided Unsplash photos (Alina Grubnyak, Conny Schneider) imported into a Blog media folder and served through signed GetCropUrl URLs that load: 5. Domain '/' assigned on the site page, all content published: 5."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 17,
+      "max": 25,
+      "notes": "Folders/kinds are right: articleBlock and postListingBlock are elements in Blocks, blogFrontPage and blogPost in Pages, siteRoot in Repositories: 8. Block grid is used on both page types, but the block set is only two blocks, and articleBlock is a monolithic heading+intro+image+rich-text block that holds the whole post. There are no reusable rich text or image blocks: 2/7. Structure is right: siteRoot is the only root type, siteRoot→blogFrontPage→blogPost, templates assigned, camelCase aliases, 'Blog blocks' in /Custom/Umbraco.BlockGrid: 5. Hygiene: no compositions or orphans, but posts have no metadata properties at all (no date, excerpt or listing image), so the listing can show only the node name: 2/5."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 24,
+      "max": 25,
+      "notes": "Both page views call Html.GetBlockGridHtmlAsync(Model, \"blocks\"); no custom loops, and the blockgrid partials are unchanged: 7. Adapters at Views/Partials/blockgrid/Components/{articleBlock,postListingBlock}.cshtml take BlockGridItem<T>, map to plain models and call Component.InvokeAsync, with no markup: 6. ArticleViewComponent/PostListingViewComponent render Views/Shared/Components/<Name>/Default.cshtml; models are in Models/Blocks; component views are plain: 7. Conventions: Program.cs/appsettings untouched, no migrations, friendly extensions + GetCropUrl, Tailwind built to dist/site.css. Minor: the two page views each duplicate a full HTML shell (Layout = null, no shared layout), and section labels ('MCP field note', 'Model Context Protocol') are hard-coded in the component views: 4/5."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 6,
+      "max": 10,
+      "notes": "Two on-topic, accurate posts on why MCP is awesome, but each is only an intro plus three short paragraphs (~100-150 words) in a single block. The second post is partly self-referential about how this blog was built. The network/connection images fit: 3/6. Coherent dark Tailwind design with good typography and readable post pages. The front page is sparse: two title-only cards and a lot of empty space: 3/4."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 5,
+      "max": 5,
+      "notes": "Schema, media, content and domain were all built through Umbraco MCP (37 calls, 20 writes); no browser, Management API, migrations, uSync writes or DB. The order was correct: model → content → stop/build/restart → Razor. No memory access or bench-folder reads; reads under ~/.nuget (Umbraco static assets, for the block grid config shape) are in line with AGENTS.md's guidance: 3. The final report is accurate about what was built and verified, and nothing is broken that it fails to disclose (it oddly says uSync exports were 'created through MCP', but these are automatic): 2."
+    }
+  ],
+  "summary": "A clean MCP-built blog with a textbook block rendering pipeline (page → GetBlockGridHtmlAsync → adapter → ViewComponent) and a tidy dark Tailwind design. The content model is thin: each post is one monolithic articleBlock with three short paragraphs, there is no date/excerpt/listing-image metadata, and the front-page cards are title-only.",
+  "strengths": [
+    "Block rendering pipeline follows the convention exactly; all 42 automated checks pass",
+    "Schema, media, content and domain built purely via MCP in the correct order, with Razor written after a rebuild/restart",
+    "Provided Unsplash photos imported into a media folder and served via signed GetCropUrl URLs",
+    "Clean build with zero warnings; coherent, readable dark design"
+  ],
+  "issues": [
+    {
+      "severity": "major",
+      "text": "Monolithic articleBlock (heading + intro + image + rich text) holds each entire post; there are no reusable rich text/image blocks (articleBlock doc type, Views/Partials/blockgrid/Components/articleBlock.cshtml)"
+    },
+    {
+      "severity": "major",
+      "text": "Posts have no metadata properties (date, excerpt, listing image), so front-page cards show only the title (blogPost doc type; Views/Shared/Components/PostListing/Default.cshtml; /)"
+    },
+    {
+      "severity": "minor",
+      "text": "Posts are short (intro + 3 brief paragraphs each); the second is partly about how this blog was built (/mcp-makes-a-content-workflow-inspectable/)"
+    },
+    {
+      "severity": "minor",
+      "text": "No shared layout: blogFrontPage.cshtml and blogPost.cshtml each duplicate the full HTML shell with Layout = null; section labels are hard-coded in component views"
+    }
+  ],
+  "graderSaidItWas": "Opus 5.5 (low)"
+}

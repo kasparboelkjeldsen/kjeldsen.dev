@@ -1,0 +1,28 @@
+{
+  "runId": "2026-10-02_2121_mcp_sonnet-5.5-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-02T22:10:00Z",
+  "total": 99,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build OK with 0 errors and 0 warnings. / returns 200 through the '/' domain on 'MCP Blog' and lists both posts. Each card shows the image, date, author, summary and a 'Read more' link, and the links work. Both posts render all 4 blocks (rich text, image, quote) with no 'Could not render component'. 5 of the provided Unsplash photos were imported into a 'Blog' media folder over MCP and are served through signed GetCropUrl URLs (7/7 load). Everything is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 25, "max": 25, "notes": "There are 5 blocks in Blocks (heroBlock, blogPostListBlock, richTextBlock, imageBlock, quoteBlock) and seoComposition in Compositions; all are elements. blogHome and blogPost are documents in Pages. Each page type has its own block grid: the home grid allows hero, post list and rich text; the post grid allows rich text, image and quote. The block properties are sensible (heading/intro/maxItems, image/caption, quote/attribution). siteRoot is the only root type, siteRoot allows blogHome, and blogHome allows blogPost. Templates are assigned, aliases are camelCase, and both block grid data types are in /Custom/Umbraco.BlockGrid. Post metadata (summary, publishDate, author, thumbnail) are real properties. The composition holds only SEO meta. Nothing is duplicated or orphaned." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "blogHome.cshtml and blogPost.cshtml call Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold's blockgrid partials are untouched. There are 5 camelCase adapters in blockgrid/Components; each takes BlockGridItem<T>, maps to a plain model in Models/Blocks and calls Component.InvokeAsync, with no markup. There are 5 thin ViewComponents (ViewComponents/), whose Default.cshtml views use only the plain models. The post list adapter queries the current page's children and maps them to card models, which is acceptable adapter work. It uses the friendly extensions (Children<T>, Url(), GetCropUrl) and injects nothing. Program.cs and appsettings.json are unchanged and there are no migrations. Styling uses Tailwind through the Frontend build (dist/site.css), plus a few block grid layout and .rich-text rules in src/site.css. _ViewImports gained two model namespaces, which is fine." },
+    { "id": "content", "name": "Content & presentation", "score": 9, "max": 10, "notes": "There are 2 posts on why MCP is awesome: 'MCP turns your AI from a talker into a doer' and 'One protocol, endless integrations'. They are accurate, well written and split over 4 blocks each, with relevant photos and correct photographer credits. They are on the short side (roughly 230-260 words each), and the pull quotes are self-attributed ('The MCP Blog'). Presentation is polished: a full-bleed hero with a gradient over the network photo, a two-column card grid, a readable single-column post layout with a lead paragraph, a header image, a styled rich text list and a blockquote, plus a consistent header and footer." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "All schema, media and content went through MCP (45 calls, 31 writes), with no Management API, DB, uSync, migrations or browser. The order was model, then content, then stop Umbraco, then Razor, then build and restart. There are no warnings, no memory access and no reads outside the folder. The final report is accurate and open about what wasn't verified: no visual check, and the 'allowed in library' flag on the page types." }
+  ],
+  "summary": "A clean MCP-built blog: 5 well-designed blocks across two block grids, a front page with a hero and a post list block, and two posts of 4 blocks each. The rendering follows the adapter -> ViewComponent -> plain view pipeline exactly, and the Tailwind design is polished. The only weakness is that the posts are fairly short.",
+  "strengths": [
+    "Textbook block pipeline: GetBlockGridHtmlAsync, markup-free camelCase adapters, thin ViewComponents, plain models in Models/Blocks",
+    "Good modeling: separate home and post block grids, a reusable post list block with maxItems, post metadata as real properties, SEO-only composition",
+    "All 42 automated checks pass, with 0 build warnings and the domain '/' assigned over MCP",
+    "Polished, coherent Tailwind design with a hero, a card grid and a readable article layout",
+    "Honest, accurate final report"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "Both posts are fairly short (about 250 words each); the content is accurate but light for 'several paragraphs' (/mcp-turns-your-ai-from-a-talker-into-a-doer/, /one-protocol-endless-integrations/)" },
+    { "severity": "minor", "text": "The pull quotes are attributed to 'The MCP Blog' itself, which is filler rather than a real citation" },
+    { "severity": "minor", "text": "Image block alt text reuses the caption, including the photo credit (Views/Shared/Components/Image/Default.cshtml)" },
+    { "severity": "minor", "text": "The post page repeats the listing thumbnail as a header image outside the block grid (Views/blogPost.cshtml), so the first post shows two large photos in a row" }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "runId": "2026-09-29_1023_mcp_sonnet-5.5-high",
+  "grader": "Fable 5.1 (effort not visible to the grader)",
+  "gradedAt": "2026-09-29T08:35:00.000Z",
+  "total": 96,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 35,
+      "max": 35,
+      "notes": "Build 5/5: 0 errors, 0 warnings. Front page 10/10: / returns 200, is the blog front page (hero + post list), lists both posts with image, date, title and summary, and both links resolve. Posts 10/10: both render all 4 blocks (rich text, image, quote, rich text) plus the hero image, with no 'Could not render component' or exception text. Images 5/5: 5 Unsplash images imported into the media folder 'Blog', served through signed GetCropUrl URLs; 7/7 image requests load, none hot-linked. Domain 5/5: domain '/' is set on the 'MCP Notes' page under WWW and all 4 documents are published."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 24,
+      "max": 25,
+      "notes": "Folders 8/8: 5 element types in Blocks, blogFrontPage and blogPost in Pages, siteRoot in Repositories; kinds are right. Block set 6/7: hero, rich text, image, quote and post list are reusable with sensible properties, and each page type has its own grid data type allowing only the blocks that fit. -1: imageBlock has no alt text property (the caption doubles as alt), and every block is locked to a 12-column span with no areas or settings, so the grid works as a plain list. Structure 5/5: siteRoot is the only root type, siteRoot > blogFrontPage > blogPost, templates assigned, camelCase aliases, both grid data types in Custom/Umbraco.BlockGrid. Hygiene 5/5: no compositions; summary, publishDate and heroImage are real properties; nothing duplicated or orphaned."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 24,
+      "max": 25,
+      "notes": "Pages 7/7: both page views call Html.GetBlockGridHtmlAsync(Model, \"blocks\"); the scaffold's Views/Partials/blockgrid/*.cshtml are unchanged; no custom loops or parallel partials. Adapters 5/6: five adapters named after the exact aliases, no markup, all invoke a ViewComponent; but blogPostListBlock.cshtml holds the post query and digs the current page out of Context.Features.Get<UmbracoRouteValues>(), which is more than mapping and more plumbing than needed. ViewComponents 7/7: one per block, default view lookup, plain models in Models/Blocks/, component views depend only on the plain model. Conventions 5/5: Program.cs untouched, no migrations, friendly extensions and GetCropUrl throughout, no injected services, styling through the Tailwind pipeline. _ViewImports.cshtml was changed to import the ModelsBuilder namespace, which is a legitimate fix. The code.appsettingsJsonUnchanged FAIL is a false positive: the only change is Imaging:HMACSecretKey, the file was last written at 08:23:31Z, before the run started at 08:23:48Z, and the transcript has no edit of that file."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 8,
+      "max": 10,
+      "notes": "Content 4/6: two on-topic, accurate posts (one open protocol instead of per-tool adapters, JSON Schema typed tools, ecosystem effect; an account of building this site over MCP), each spread over 4 blocks with relevant images and captions. -2: they are thin, about 240 and 200 words of body in four short paragraphs each. Presentation 4/4: coherent and readable: site header, full-width hero, two-column card listing with image, date, title and summary, post pages with a constrained text column, captioned figure, styled pull quote and footer."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 5,
+      "max": 5,
+      "notes": "Channel 3/3: 40 MCP calls (29 writes) and nothing through the Management API, uSync, the database, a browser or migrations. Modeling, then content, then stop/build/Razor/restart, with no warnings. No memory access and no reads of other projects or the bench's results; the only paths outside the project are scratch curl output in /tmp and the model's own background task log, which is not deducted. Report 2/2: accurate, says it only verified with curl, and discloses the fixed 12-column spans and the unchecked data type folders."
+    }
+  ],
+  "summary": "A complete, working blog built through the Umbraco MCP server: a front page with hero and post list blocks, and two published posts built from rich text, image and quote blocks, rendered through the prescribed adapter > ViewComponent pipeline with a clean Tailwind design. The flaws are small: thin posts of about 200 words, query logic in the post list adapter, and a block set without alt text or any layout options.",
+  "strengths": [
+    "Everything works on first check: build clean, 3 pages render, 7/7 images load, domain and publishing correct",
+    "Separate block grid data types for front page and posts, each allowing only the blocks that fit",
+    "Rendering pipeline followed exactly: GetBlockGridHtmlAsync, alias-named adapters, one ViewComponent per block, plain models in Models/Blocks",
+    "Built through MCP only, in the prescribed order, in 7:13",
+    "Honest final report that states how it verified and what it did not check"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "Posts are thin: about 240 and 200 words of body, four short paragraphs each (/one-protocol-to-connect-them-all/, /building-a-cms-site-by-conversation/)." },
+    { "severity": "minor", "text": "The post list adapter does the content query and reads the current page from Context.Features.Get<UmbracoRouteValues>() instead of only mapping (Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/blogPostListBlock.cshtml)." },
+    { "severity": "minor", "text": "imageBlock has no alt text property; the caption is reused as alt (Umbraco.Bench.Umbraco/Views/Shared/Components/ImageBlock/Default.cshtml). Every block is fixed at 12 columns with no areas or settings, so the grid offers no layout choices (data types 'Blog Front Page Block Grid' and 'Blog Post Block Grid')." },
+    { "severity": "minor", "text": "Bench tooling, not the model: code.appsettingsJsonUnchanged fails on the Imaging:HMACSecretKey that Umbraco writes to appsettings.json on first boot. No points deducted." }
+  ]
+}

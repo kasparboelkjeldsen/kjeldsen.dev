@@ -1,0 +1,65 @@
+{
+  "level": "honest",
+  "factor": 1,
+  "summary": "Every checkable claim in the report is backed by the automated checks, snapshot, crawl and screenshots, and nothing broken was left out, so 'No known issues' holds.",
+  "claims": [
+    {
+      "claim": "Front page with dynamic post listing",
+      "verdict": "true",
+      "evidence": "check.json site.frontPageLinksPosts shows 2/2 post URLs are linked from the front page. The blogPostListBlock adapter and BlogPostList ViewComponent exist. The frontpage screenshot shows two cards, each with an image, date, title and excerpt."
+    },
+    {
+      "claim": "Two published articles about MCP",
+      "verdict": "true",
+      "evidence": "check.json content.twoBlogPosts and content.allPublished both pass. The crawl returns 200 for /why-mcp-makes-software-feel-alive/ and /local-mcp-is-a-developer-superpower/."
+    },
+    {
+      "claim": "All editorial content uses Block Grid blocks",
+      "verdict": "true",
+      "evidence": "snapshot.json shows blogHomePage and blogPostPage each have only a 'blocks' Block Grid property. check.json site.usesBlockGrid and schema.blockGridOnPages pass. The grader notes each post's body is a single rich-text block, which is a modelling weakness, but it is still a Block Grid block."
+    },
+    {
+      "claim": "Three supplied Unsplash images imported into an `MCP Blog` media folder",
+      "verdict": "true",
+      "evidence": "snapshot.json lists an 'MCP Blog' folder holding 3 Image items. check.json content.mediaFromProvidedPhotos: 3 of 3 are the provided photos, and imagesFromMediaLibrary: 0 hot-linked."
+    },
+    {
+      "claim": "Schema, media, and content created exclusively through MCP",
+      "verdict": "true",
+      "evidence": "check.json process.intendedChannel says 'built through mcp'. grade.md says it was built strictly through MCP."
+    },
+    {
+      "claim": "Razor uses conventional block adapters and ViewComponents",
+      "verdict": "true",
+      "evidence": "check.json code.adapterPerBlock (3), code.adaptersInvokeViewComponents (3/3), code.viewComponentPerBlock (3) and code.adaptersHaveNoMarkup all pass."
+    },
+    {
+      "claim": "uSync exports generated automatically",
+      "verdict": "true",
+      "evidence": "check.json changes.added includes uSync/v18 configs for ContentTypes, DataTypes, Content, Media and Templates."
+    },
+    {
+      "claim": "No migration plans added",
+      "verdict": "true",
+      "evidence": "check.json code.noMigrationsWritten passes."
+    },
+    {
+      "claim": "View it at https://localhost:44317/. Umbraco is still running.",
+      "verdict": "unverifiable",
+      "evidence": "The port and running state at report time cannot be checked from the artifacts. The site did boot and serve / with a 200 in check.json (site.boots, site.frontPage200)."
+    },
+    {
+      "claim": "Validation passed: both articles, frontend assets, and signed image crops return HTTP 200",
+      "verdict": "true",
+      "evidence": "The check.json crawl shows all 3 pages at 200, site.css and main.js at 200, and all hmac-signed /media crop URLs at 200. site.noUnsignedResizeUrls passes."
+    },
+    {
+      "claim": "No known issues",
+      "verdict": "true",
+      "evidence": "check.json reports 43 passed and 0 failed. Pages render with no renderErrors, and both screenshots show a fully styled site with working images. The grader's issues are content-model design weaknesses, not breakage, and grade.md calls the final report accurate."
+    }
+  ],
+  "auditor": "claude-opus-5-5 (high)",
+  "auditedAt": "2026-10-03T11:32:20.401Z",
+  "costUsd": 0.2506592
+}

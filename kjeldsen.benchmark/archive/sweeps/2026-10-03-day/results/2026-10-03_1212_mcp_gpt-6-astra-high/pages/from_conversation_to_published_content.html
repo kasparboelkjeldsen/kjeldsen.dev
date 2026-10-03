@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>From conversation to published content. | The MCP Journal</title>
+        <meta name="description" content="A little Umbraco experiment with a big payoff: ideas become editable, structured content." />
+    <link rel="stylesheet" href="/dist/site.css?v=vFYXL4ZOJloXx31SCv-BCsLPX9OV_gqDmOzeLtHPR48" />
+</head>
+<body class="bg-paper font-sans text-ink antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:p-4">Skip to content</a>
+    <div class="mx-auto max-w-7xl px-6 md:px-10">
+        <header class="flex items-center justify-between gap-4 border-b border-line py-7">
+            <a href="/" class="flex items-center gap-3 font-serif text-xl font-bold tracking-tight sm:text-2xl">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-olive font-sans text-lg text-paper" aria-hidden="true">↗</span>
+                The MCP Journal
+            </a>
+            <nav aria-label="Main navigation">
+                <a href="/#articles" class="text-sm font-medium text-olive underline-offset-4 hover:underline">All stories <span aria-hidden="true">↗</span></a>
+            </nav>
+        </header>
+        <main id="main" tabindex="-1">
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="heroBlock"
+            data-content-element-type-key="fdbc4e54-f779-4231-8663-1c251c8d9011"
+            data-element-key="e73bcad4-f72c-42fa-ab07-041a01317b4d"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<section class="grid items-center gap-10 py-12 md:grid-cols-2 md:gap-16 md:py-20">
+    <div>
+        <p class="mb-7 font-mono text-xs font-semibold tracking-widest text-olive">02 / IN PRACTICE</p>
+        <h1 class="font-serif text-5xl leading-[1.04] tracking-tight text-ink sm:text-6xl lg:text-7xl">From conversation to published content.</h1>
+        <div class="my-8 h-1 w-12 bg-rust" aria-hidden="true"></div>
+        <p class="max-w-lg text-lg leading-relaxed text-muted">A little Umbraco experiment with a big payoff: ideas become editable, structured content.</p>
+    </div>
+        <figure>
+            <div class="overflow-hidden rounded-t-[5rem] rounded-br-[5rem] bg-stone-200">
+                <img src="/media/lwmd2idb/code-on-screen.jpg?rxy=0,0.5&amp;width=1200&amp;height=1000&amp;v=1dd53201cea507e&amp;hmac=b7b2578a82457b38871961653d20d716a080503921a135000a3290c9f313ed34" alt="Colourful source code displayed on a dark computer screen" width="1200" height="1000" fetchpriority="high" class="aspect-[6/5] w-full object-cover" />
+            </div>
+            <figcaption class="mt-3 text-right font-mono text-[10px] tracking-wide text-muted">Photo by Chris Ried on Unsplash</figcaption>
+        </figure>
+</section>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="49dfbd93-20f8-43af-b406-327af9055d02"
+            data-element-key="22c57e56-0b9a-4086-a44d-a3da04e718a2"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<div class="border-t border-line py-12 md:py-16">
+    <div class="article-copy mx-auto max-w-3xl"><p>A good demo should leave something useful behind. For this experiment, the brief was simple: create a blog front page, write two posts about MCP, and use the local Umbraco server to make it happen. The interesting part is how many ordinary CMS tasks fit into that small request.</p>
+<h2>Start with the shape of the content</h2>
+<p>Before writing a view, we inspected the project conventions and the existing CMS. The published WWW repository was already there. We added a front page beneath it and a post type for its children, keeping the new types in the Pages folder.</p>
+<p>Then came three reusable blocks: a hero for the introduction and photograph, rich text for the story, and a listing for the published posts. Each page stores its main content in a block grid. That gives an editor a familiar place to change the words or rearrange the page.</p>
+<h2>Make the CMS do the CMS work</h2>
+<p>The MCP tools created the schema and content through Umbraco. They also imported two photographs from the project's Unsplash collection into a named media folder. There was no need to invent an alternative content store or write a migration to insert the articles.</p>
+<p>Reading the pages back was a particularly satisfying checkpoint. We could verify the published state, the block keys, and the image selections against what Umbraco had actually saved. A successful write is useful; seeing the saved result makes it much easier to trust the next step.</p>
+<h2>Keep the rendering conventions</h2>
+<p>Content modeling and rendering still have different jobs. Once the content was ready, the site needed a rebuild and restart so its generated models could catch up. The Razor pages then used Umbraco's standard block renderer, with each block mapped to a plain model and rendered by a ViewComponent.</p>
+<p>That boundary is a strength of the experiment. MCP handled the CMS operations, and the application kept its established rendering pipeline. An editor gets structured content, while a developer gets components with a clear responsibility.</p>
+<h2>Small demo, practical possibility</h2>
+<p>What makes MCP awesome here is the short path from intention to something editable. The outcome is a real content tree, real media, and two published stories. The next change can begin from that existing structure. For a modest local experiment, that is a very useful place to end up.</p></div>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+</main>
+        <footer class="flex flex-wrap items-center justify-between gap-5 border-t border-line py-8 text-sm text-muted">
+            <a href="/" class="font-serif text-lg text-ink">The MCP Journal</a>
+            <p>Ideas, tools, and the connections between them.</p>
+            <a href="#main" class="text-olive hover:underline">Back to top ↑</a>
+        </footer>
+    </div>
+</body>
+</html>

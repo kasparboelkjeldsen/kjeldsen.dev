@@ -1,0 +1,26 @@
+{
+  "runId": "2026-10-02_2207_mcp_fable-5.1-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T04:53:23Z",
+  "total": 99,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build 0 errors / 0 warnings. / → 200 via domain '/' on the Blog (blogHome) node; the front page is a hero + intro + post list showing both posts as cards with image, date, author and summary, all linking correctly. Both posts render every block (rich text x2, image x2, quote) with no fallback text. 6 media items are all provided Unsplash photos in a Blog media folder, served through signed GetCropUrl URLs; 9/9 images load. All content published." },
+    { "id": "modeling", "name": "Content modeling", "score": 25, "max": 25, "notes": "5 element types (heroBlock, richTextBlock, imageBlock, quoteBlock, postListBlock) in Blocks; blogHome and blogPost in Pages; siteRoot is the only root type and allows blogHome; blogHome allows blogPost; templates assigned. One reusable 'Page Blocks' block grid in Custom/Umbraco.BlockGrid used by both pages. Post metadata (title, summary, heroImage, publishDate, author) are real properties; no compositions, no duplicate or orphaned types." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "Pages call Html.GetBlockGridHtmlAsync(Model, \"blocks\"); scaffold blockgrid partials untouched (grid layout CSS added to site.css instead). Five markup-free adapters at Views/Partials/blockgrid/Components/<alias>.cshtml map BlockGridItem<T> to plain models in Models/Blocks/ and invoke one ViewComponent each; component views are plain. Friendly extensions (Children<BlogPost>(), Url(), GetCropUrl) throughout. Program.cs/appsettings untouched, no migrations, Tailwind pipeline built into wwwroot/dist/site.css." },
+    { "id": "content", "name": "Content & presentation", "score": 9, "max": 10, "notes": "Two substantive, accurate posts on why MCP is awesome (~600 words each, headings, lists, pull quote, captioned and credited images). Clean, coherent blog design with a proper card listing and readable post pages. Small deduction: post 1 shows the same USB-cables photo as both its header image and its first inline image block, which looks repetitive. (The last image on the post screenshot is blank only because loading=\"lazy\" wasn't triggered by the full-page screenshot; the <img> is present and loads.)" },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "53 Umbraco MCP calls, no browser, migration, Management API, uSync-file or DB shortcuts; no memory or outside-folder access; no order-of-operation warnings; Razor written after a restart. Final report is accurate and discloses the botched first boot and the umbraco-run.log file it left in the project." }
+  ],
+  "summary": "A complete, clean MCP-built blog: a block-grid front page with hero and post-card listing, and two substantive MCP posts built from rich text, image and quote blocks, all rendered through textbook adapter + ViewComponent code. The only blemish is one post reusing its header photo as an inline image.",
+  "strengths": [
+    "Exact adherence to the adapter → plain model → ViewComponent convention with Umbraco's own GetBlockGridHtmlAsync",
+    "Well-structured schema: five sensible blocks, real post metadata properties, one shared Custom block grid data type",
+    "Substantive, accurate posts with credited Unsplash photos imported into the media library",
+    "Polished Tailwind design with a proper card listing; zero build warnings, all 42 checks pass"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "Post 'One protocol, every tool' uses the USB-cables photo both as heroImage and as its first imageBlock, so the same picture appears twice in a row (/one-protocol-every-tool/)" },
+    { "severity": "minor", "text": "Left a stray Umbraco.Bench.Umbraco/umbraco-run.log in the project from running the site in the background (disclosed in the final report)" },
+    { "severity": "minor", "text": "Slowest run of the batch (14:16) after a first boot without the launch profile made the MCP tools return 500s until a restart" }
+  ]
+}

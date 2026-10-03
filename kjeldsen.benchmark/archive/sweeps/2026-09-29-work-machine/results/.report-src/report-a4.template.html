@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Umbraco MCP Bench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Two A4-landscape pages, each exactly one window tall. Everything is sized in rem
+   and the root font scales with the window, so a page is always 127.28 x 90 rem. */
+:root{
+  color-scheme:light;
+  --page:#fff; --ink:#14172b; --ink-2:#474c66; --muted:#737892; --hair:#e3e5ee; --axis:#c3c7d6; --sunk:#f4f5fa;
+  --m-fable:#2a78d6; --m-opus:#eb6834; --m-s55:#1baf7a; --m-s5:#4a3aa7; --m-haiku:#8a8ea3;
+  --good:#0a7d0a; --crit:#c23333; --gold:#b98512; --gold-wash:#fdf5dd;
+  --display:"Bricolage Grotesque","Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;
+  --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono","Cascadia Mono",Consolas,ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{font-size:min(calc(100vh / 90),calc(100vw / 127.28));background:var(--page);scroll-snap-type:y proximity}
+body{margin:0;background:var(--page);color:var(--ink);font:400 1rem/1.4 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,p,ul,ol,dl,dd,figure,blockquote{margin:0;padding:0}
+ul,ol{list-style:none}
+table{border-collapse:collapse;width:100%}
+img{display:block;max-width:100%}
+
+.page{width:127.28rem;height:90rem;margin:0 auto;padding:2.3rem 3rem 2.2rem;overflow:hidden;scroll-snap-align:start;
+  display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1.5rem 2.6rem;align-content:space-between}
+.sec{grid-column:span var(--w,4);min-width:0;display:flex;flex-direction:column;gap:.75rem}
+.sec>header{border-top:1px solid var(--ink);padding-top:.6rem;display:flex;flex-wrap:wrap;gap:.25rem 1.2rem;align-items:baseline;justify-content:space-between}
+.sec h2{font:700 1.3rem/1.15 var(--display);letter-spacing:-.012em}
+.sub{flex-basis:100%;font-size:.88rem;line-height:1.4;color:var(--muted);text-wrap:pretty}
+.sub b{color:var(--ink-2);font-weight:600}
+.dot{display:inline-block;width:.72rem;height:.72rem;border-radius:50%;background:var(--c);flex:none}
+
+/* model tiles */
+.tiles{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.tile{padding:.1rem 1.5rem;border-left:1px solid var(--hair);display:flex;flex-direction:column;gap:.7rem;min-width:0}
+.tile:first-child{border-left:0;padding-left:0}
+.tile:last-child{padding-right:0}
+.tile .head{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}
+.tile h2{font:700 1.5rem/1.1 var(--display);letter-spacing:-.015em;display:flex;align-items:center;gap:.5rem;white-space:nowrap}
+.tile .id{font:400 .74rem/1.2 var(--mono);color:var(--muted);margin-top:.4rem;white-space:nowrap}
+.score{font:750 3.4rem/.82 var(--display);letter-spacing:-.03em;white-space:nowrap}
+.score small{font:500 .9rem/1 var(--sans);letter-spacing:0;color:var(--muted);margin-left:.15rem}
+.stats{display:flex;justify-content:space-between;gap:.6rem;border-block:1px solid var(--hair);padding-block:.55rem}
+.stats dt{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.stats dd{font:600 1.12rem/1.25 var(--sans);font-variant-numeric:tabular-nums}
+.tile .sum{font-size:.86rem;line-height:1.4;color:var(--ink-2);text-wrap:pretty}
+.tag{font:500 .68rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);border:1px solid var(--axis);border-radius:2rem;padding:.24rem .55rem;white-space:nowrap}
+
+/* horizontal bars */
+.bars{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:.9rem;row-gap:.25rem;align-items:center}
+.lab{font-size:.9rem;font-weight:500;display:flex;align-items:center;gap:.45rem;white-space:nowrap}
+.lane{position:relative;display:flex;align-items:center;height:1.7rem;background:linear-gradient(to right,var(--hair) 1px,transparent 1px) 0 0/var(--tick,25%) 100%}
+.lane::after{content:"";position:absolute;right:0;top:0;bottom:0;width:1px;background:var(--hair)}
+.bar{display:flex;gap:2px;height:1.15rem;flex:none}
+.bar i{display:block;height:100%;background:var(--c);min-width:1px}
+.bar i:last-child{border-radius:0 .25rem .25rem 0}
+.bar .s2,.swatches .s2{background:color-mix(in srgb,var(--c) 50%,#fff)}
+.bar .s3,.swatches .s3{background:color-mix(in srgb,var(--c) 24%,#fff)}
+.val{font:600 .95rem/1 var(--sans);white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+.val small{display:block;font-weight:400;color:var(--muted);font-size:.74rem;margin-top:.2rem}
+.val.inline small{display:inline;margin:0 0 0 .35rem}
+.note{grid-column:2/4;font-size:.78rem;color:var(--muted);margin:-.3rem 0 .25rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.axis{grid-column:2;display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted)}
+.axis span{width:0;display:flex;justify-content:center;white-space:nowrap}
+.axis span:first-child{justify-content:flex-start}
+.axis span:last-child{justify-content:flex-end}
+.swatches{display:flex;flex-wrap:wrap;gap:.3rem 1.1rem;font-size:.8rem;color:var(--ink-2);--c:var(--ink-2)}
+.swatches li{display:flex;align-items:center;gap:.4rem}
+.swatches i{width:.95rem;height:.62rem;border-radius:.12rem;background:var(--c)}
+.minis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem 2.6rem}
+.minis h3{font:600 .9rem/1.2 var(--sans);margin-bottom:.5rem}
+.minis h3 small{font-weight:400;color:var(--muted);margin-left:.3rem}
+
+/* tables */
+.mx th,.mx td,.tb th,.tb td{padding:.19rem .5rem;text-align:right;vertical-align:middle;font-variant-numeric:tabular-nums}
+.mx thead th,.tb thead th{font:500 .8rem/1.2 var(--sans);color:var(--ink-2);padding-bottom:.45rem;white-space:nowrap}
+.mx thead th .dot,.tb thead th .dot{margin-right:.35rem;width:.62rem;height:.62rem}
+.mx tbody th,.tb tbody th{text-align:left;font-weight:400;font-size:.9rem;color:var(--ink-2);padding-left:0;white-space:nowrap}
+.mx tbody th small,.tb tbody th small{color:var(--muted);font-size:.76rem;margin-left:.25rem}
+.mx tbody th b,.tb tbody th b{display:inline-block;width:1.1rem;font:600 .8rem/1 var(--mono);color:var(--muted)}
+.mx tbody tr,.tb tbody tr{border-top:1px solid var(--hair)}
+.mx td{font-size:.95rem;font-weight:500;width:15.5%}
+.mx td small,.tb td small{color:var(--muted);font-weight:400;font-size:.76rem}
+.mx .b{display:block;height:.28rem;background:var(--hair);border-radius:.2rem;margin-top:.1rem;overflow:hidden}
+.mx .b i{display:block;height:100%;background:var(--c);border-radius:.2rem}
+.sumrow th,.sumrow td{font-weight:700!important;color:var(--ink)!important;border-top:1px solid var(--axis)}
+.tb td{font-size:.9rem}
+.tb td.r{color:var(--muted);font-size:.76rem;padding-inline:.15rem;text-align:left;width:4.2rem}
+.tb td.usd{font-weight:600}
+.tb td.t{color:var(--ink-2)}
+.tb thead .grp{text-align:right;font-weight:600;color:var(--ink);font-size:.9rem;border-bottom:1px solid var(--hair);padding-block:.2rem .4rem}
+.tb thead .unit th{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-block:.35rem .3rem}
+.tb thead .unit th.r{text-align:left;padding-inline:.15rem}
+.tb .gap{width:2rem;padding:0}
+.tb tr.dim th,.tb tr.dim td{color:var(--muted);font-weight:400}
+.tb tr.dim th{padding-left:1rem}
+.bad{color:var(--crit);font-weight:700}
+.cap{font:600 .9rem/1.2 var(--sans)}
+.cap small{font-weight:400;color:var(--muted);margin-left:.3rem}
+.stack{display:flex;flex-direction:column;gap:1.1rem}
+
+/* scatter */
+.scatter{width:100%;display:block;overflow:visible}
+.scatter text{font-family:var(--sans);fill:var(--muted);font-size:10.5px}
+.scatter .g{stroke:var(--hair);stroke-width:1}
+.scatter .ax{stroke:var(--axis);stroke-width:1}
+.scatter .pl{fill:var(--ink);font-weight:600;font-size:11.5px}
+.scatter .ps{fill:var(--ink-2);font-size:10.5px}
+.scatter circle{stroke:#fff;stroke-width:2}
+
+/* timeline */
+.tl .lane{height:2rem;background:linear-gradient(to right,var(--hair) 1px,transparent 1px) 0 0/calc(100% / 7) 100%}
+.tl .bar{height:1.5rem}
+.tl .bar i{display:flex;align-items:center;justify-content:center;gap:.3rem;font:500 .74rem/1 var(--sans);font-style:normal;color:var(--on);font-variant-numeric:tabular-nums;white-space:nowrap;border-radius:0;min-width:2px}
+.tl .bar i.s2{color:var(--ink)}
+.tl .bar i b{font:600 .72rem/1 var(--mono);opacity:.8}
+
+/* grader notes */
+.notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem 1.8rem}
+.notes h3{font:700 1.05rem/1.2 var(--display);display:flex;align-items:center;gap:.45rem;margin-bottom:.3rem}
+.notes h3 span{margin-left:auto;font:500 .8rem/1 var(--sans);color:var(--muted)}
+.notes .best{font-size:.85rem;color:var(--ink-2);padding-bottom:.55rem;border-bottom:1px solid var(--hair);margin-bottom:.45rem;text-wrap:pretty}
+.notes li{font-size:.85rem;color:var(--ink-2);display:grid;grid-template-columns:1.7rem 1fr;gap:.3rem;padding-block:.2rem;text-wrap:pretty}
+.notes li b{font:600 .82rem/1.5 var(--mono);color:var(--crit)}
+
+/* Haiku's corner */
+.haiku{grid-column:1/-1;border:1.5px dashed var(--axis);border-radius:1rem;padding:1.3rem 1.7rem;display:grid;grid-template-columns:33rem minmax(0,1fr);gap:2.4rem;align-items:center;
+  background:radial-gradient(circle at 100% 0,var(--gold-wash),transparent 45%),var(--page)}
+.snap{position:relative;transform:rotate(-1.6deg);background:#fff;padding:.55rem .55rem 0;border:1px solid var(--hair);border-radius:.4rem;box-shadow:0 1px 2px rgba(20,23,43,.08),0 1.2rem 2.4rem -1.2rem rgba(20,23,43,.35)}
+.snap img{width:100%;border:1px solid var(--hair);border-radius:.2rem}
+.snap figcaption{font:400 .78rem/1 var(--mono);color:var(--muted);padding:.6rem .2rem .65rem;display:flex;justify-content:space-between}
+.stamp{position:absolute;right:-1.1rem;bottom:2.6rem;font:600 .95rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--crit);background:rgba(255,255,255,.92);border:2.5px solid var(--crit);border-radius:.4rem;padding:.55rem .8rem;transform:rotate(-9deg)}
+.haiku .body{display:flex;flex-direction:column;gap:1rem;min-width:0}
+.haiku .top{display:flex;align-items:baseline;gap:.9rem;flex-wrap:wrap}
+.haiku h2{font:750 1.9rem/1 var(--display);letter-spacing:-.02em;display:flex;align-items:center;gap:.55rem}
+.haiku .lede{font-size:.95rem;color:var(--ink-2);flex-basis:100%;text-wrap:pretty}
+.haiku .cols{display:grid;grid-template-columns:1fr 1.15fr 1.1fr;gap:1.2rem 2.2rem}
+.haiku h3{font:600 .72rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem}
+.haiku li{font-size:.88rem;color:var(--ink-2);padding:.17rem 0 .17rem 1.25rem;position:relative;text-wrap:pretty}
+.haiku li::before{position:absolute;left:0;top:.17rem;font-weight:700}
+.haiku .yes li::before{content:"✓";color:var(--good)}
+.haiku .hm li::before{content:"~";color:var(--gold)}
+.haiku blockquote{font:500 1.08rem/1.35 var(--display);color:var(--ink);border-left:3px solid var(--gold);padding-left:.9rem;text-wrap:pretty}
+.haiku cite{display:block;font:400 .78rem/1.3 var(--sans);color:var(--muted);margin-top:.4rem;font-style:normal}
+.hstats{display:flex;gap:1.6rem;margin-top:.9rem}
+.hstats dt{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.hstats dd{font:700 1.35rem/1.2 var(--display);font-variant-numeric:tabular-nums}
+.award{display:flex;gap:.9rem;align-items:center;border-top:1px dashed var(--axis);padding-top:.85rem;font-size:.92rem;color:var(--ink-2)}
+.award b{color:var(--ink)}
+.award svg{flex:none;width:3.2rem;height:3.2rem}
+
+@page{size:A4 landscape;margin:0}
+@media print{html{font-size:calc(210mm / 90)}.page{break-after:page}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+/* ===== Data: results/report.md + per-run metrics.json / grade.json ===== */
+const HAIKU_IMG = "/*HAIKU_IMG*/";
+
+const PHASES = ['Prompt 1: verify MCP','Boot, read rules, plan','Content modeling','Media, pages, publish','Stop, build, Razor, restart','Check result, final report'];
+const GRADES = [['It works',35],['Content modeling',25],['Code architecture',25],['Content & presentation',10],['Process & honesty',5]];
+const ACTS = ['Umbraco MCP','Coding the site','Build, run & verify','Base context, reasoning, other tools'];
+
+const M = [
+  { k:'fable', name:'Fable 5.1', effort:'high effort', id:'claude-fable-5-1', on:'#fff', score:97, checks:[40,41], total:'12:31',
+    rate:{in:10,cw5:12.5,cw1h:20,cr:.25,out:50},
+    tok:{req:32,in:64,cw5:0,cw1h:156350,cr:3625390,out:57681,think:12366},
+    phases:[29,98,30,193,358,43], grade:[35,24,25,9,4],
+    act:{out:[24961,24397,4328,0,3994], fresh:[83389,91123,13330,0,26252]},
+    tools:{mcp:52,mcpR:19,mcpW:33,edit:26,read:16,bash:8,ps:11,other:3,total:116,perReq:3.63,failed:1,files:48,builds:1,buildFails:0,followups:1},
+    sum:'Complete block-grid blog, pipeline followed to the letter. Only blemish: it waited for a human “go” before starting.' },
+  { k:'opus', name:'Opus 5.5', effort:'high effort', id:'claude-opus-5-5', on:'#14172b', score:97, checks:[40,41], total:'7:33',
+    rate:{in:4,cw5:5,cw1h:8,cr:.2,out:20},
+    tok:{req:42,in:84,cw5:0,cw1h:122352,cr:4289152,out:41792,think:11081},
+    phases:[23,43,96,101,149,42], grade:[35,24,24,9,5],
+    act:{out:[20774,15763,3083,321,1851], fresh:[67163,55724,10732,1676,28933]},
+    tools:{mcp:34,mcpR:10,mcpW:24,edit:22,read:13,bash:5,ps:7,other:6,total:87,perReq:2.07,failed:1,files:22,builds:1,buildFails:0,followups:0},
+    sum:'Complete, good-looking blog with separate grids per page type. Small flaws: query logic in one adapter, no alt text, shortish posts.' },
+  { k:'s55', name:'Sonnet 5.5', effort:'high effort', id:'claude-sonnet-5-5', on:'#14172b', score:96, checks:[40,41], total:'7:13',
+    rate:{in:2,cw5:2.5,cw1h:4,cr:.2,out:10},
+    tok:{req:43,in:86,cw5:0,cw1h:114481,cr:4387570,out:42301,think:6541},
+    phases:[17,33,78,74,209,22], grade:[35,24,24,8,5],
+    act:{out:[18032,19130,3051,489,1600], fresh:[58661,58028,10695,1293,28192]},
+    tools:{mcp:40,mcpR:11,mcpW:29,edit:28,read:9,bash:17,ps:0,other:6,total:100,perReq:2.33,failed:1,files:25,builds:4,buildFails:1,followups:0},
+    sum:'Complete blog through the prescribed pipeline. Thin posts of about 200 words and a block grid with no layout options.' },
+  { k:'s5', name:'Sonnet 5', effort:'high effort', id:'claude-sonnet-5', on:'#fff', score:95, checks:[39,41], total:'12:53',
+    rate:{in:2,cw5:2.5,cw1h:4,cr:.2,out:10},
+    tok:{req:76,in:152,cw5:0,cw1h:156816,cr:10389228,out:60291,think:23738},
+    phases:[10,104,130,283,214,33], grade:[35,23,25,7,5],
+    act:{out:[36209,14282,8350,281,1169], fresh:[120208,55231,19186,882,21754]},
+    tools:{mcp:52,mcpR:20,mcpW:32,edit:17,read:26,bash:14,ps:0,other:11,total:120,perReq:1.58,failed:5,files:14,builds:2,buildFails:0,followups:0},
+    sum:'Textbook pipeline and a perfect architecture score. Minimal block set, post listing hard-coded in the template, same photo shown twice.' },
+  { k:'haiku', name:'Haiku 4.5', effort:'wildcard', id:'claude-haiku-4-5', on:'#14172b', score:56, checks:[29,37], total:'5:55', wild:true,
+    rate:{in:1,cw5:1.25,cw1h:2,cr:.1,out:5},
+    tok:{req:60,in:499,cw5:541,cw1h:78456,cr:4421371,out:29329,think:6530},
+    phases:[8,78,101,74,83,11], grade:[29,13,5,6,3],
+    act:{out:[18225,9130,1187,0,787], fresh:[55432,32802,3178,0,17415]},
+    tools:{mcp:54,mcpR:23,mcpW:31,edit:5,read:18,bash:2,ps:5,other:8,total:92,perReq:1.53,failed:18,files:4,builds:1,buildFails:0,followups:0},
+    sum:'Entered for a laugh, came back with a website. No block grid anywhere, but it builds, serves three pages and lists both posts.' },
+];
+
+const NOTES = [
+  { k:'fable', lost:3, best:'Architecture 25/25. Read its own writes back after each phase and fixed off-centre focal points it spotted in its own screenshots.',
+    items:[['−1','Process: summarised the brief and waited for “go”, though told to work autonomously.'],
+           ['−1','Modeling: image block has no alt text property; one grid data type serves both page types.'],
+           ['−1','Content: posts run to about 300 words each.']] },
+  { k:'opus', lost:3, best:'Tidiest schema. Separate block grids so the post list is only offered on the front page; a final report that volunteers its own limitations.',
+    items:[['−1','Modeling: image block has no alt text property and no block settings.'],
+           ['−1','Architecture: the post-list adapter runs the content query instead of only mapping.'],
+           ['−1','Content: about 300 words per post, generic stock photos.']] },
+  { k:'s55', lost:4, best:'Cheapest of the four by a wide margin. Said plainly that it verified with curl only and never saw the pages in a browser.',
+    items:[['−2','Content: thin posts, about 240 and 200 words.'],
+           ['−1','Modeling: no alt text; every block locked to 12 columns, so the grid is a plain list.'],
+           ['−1','Architecture: same query-in-the-adapter shortcut as Opus. Needed 4 builds, 1 failed.']] },
+  { k:'s5', lost:5, best:'Architecture 25/25, process 5/5. Found and fixed a title fallback bug while verifying, and said so in its report.',
+    items:[['−3','Content: short posts, each showing the same photo twice; no navigation or footer.'],
+           ['−2','Modeling: post listing is fixed markup in the template, not a block; no alt text property.']] },
+];
+
+/* ===== helpers ===== */
+const $ = s => document.querySelector(s);
+const n = v => Math.round(v).toLocaleString('en-US');
+const k = v => v >= 1e6 ? (v/1e6).toFixed(2)+'M' : v >= 1e4 ? (v/1e3).toFixed(1)+'k' : n(v);
+const usd = v => v > 0 && v < .005 ? '<$0.01' : '$' + v.toFixed(2);
+const mmss = s => Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+const pct = v => Math.round(v*100) + '%';
+const sum = a => a.reduce((x,y)=>x+y,0);
+const col = m => `--c:var(--m-${m.k});--on:${m.on}`;
+const dot = m => `<i class="dot" style="${col(m)}"></i>`;
+
+M.forEach(m => {
+  for (const key of ['out','fresh']) { const [mcp,site,run,other,base] = m.act[key]; m.act[key] = [mcp,site,run,other+base]; }
+  const t = m.tok, r = m.rate;
+  m.cost = { in:t.in*r.in/1e6, cw:(t.cw5*r.cw5 + t.cw1h*r.cw1h)/1e6, cr:t.cr*r.cr/1e6, out:t.out*r.out/1e6, think:t.think*r.out/1e6 };
+  m.cost.total = m.cost.in + m.cost.cw + m.cost.cr + m.cost.out;
+  t.cw = t.cw5 + t.cw1h;
+  t.total = t.in + t.cw + t.cr + t.out;
+});
+const by = key => M.find(m => m.k === key);
+const F = by('fable'), O = by('opus'), S55 = by('s55'), S5 = by('s5'), H = by('haiku');
+const cheapest = Math.min(...M.filter(m=>!m.wild).map(m=>m.cost.total));
+
+/* ===== building blocks ===== */
+const axis = (max, fmt, steps=4) => `<div class="axis">${Array.from({length:steps+1},(_,i)=>`<span>${fmt(max*i/steps)}</span>`).join('')}</div>`;
+const mxHead = () => `<thead><tr><th></th>${M.map(m=>`<th>${dot(m)}${m.name}</th>`).join('')}</tr></thead>`;
+const cell = (m, text, frac) => `<td>${text}<span class="b"><i style="${col(m)};width:${Math.max(0,Math.min(1,frac))*100}%"></i></span></td>`;
+const simpleBars = (f, max, fmt) => `<div class="bars" style="--tick:100%">${M.map(m=>`<div class="lab">${dot(m)}${m.name}</div>
+  <div class="lane"><span class="bar" style="${col(m)};width:${f(m)/max*100}%"><i style="width:100%"></i></span></div><div class="val inline">${fmt(m)}</div>`).join('')}</div>`;
+
+/* ===== page 1 ===== */
+function tiles(){
+  return `<div class="tiles">${M.map(m => `<article class="tile">
+    <div class="head">
+      <div><h2>${dot(m)}${m.name}</h2><p class="id">${m.id} · ${m.effort}</p></div>
+      <p class="score">${m.score}<small>/100</small></p>
+    </div>
+    <dl class="stats">
+      <div><dt>API cost</dt><dd>${usd(m.cost.total)}</dd></div>
+      <div><dt>Output tokens</dt><dd>${n(m.tok.out)}</dd></div>
+      <div><dt>Wall time</dt><dd>${m.total}</dd></div>
+      <div><dt>Checks</dt><dd>${m.checks[0]}/${m.checks[1]}</dd></div>
+    </dl>
+    <p class="sum">${m.sum}</p>
+  </article>`).join('')}</div>`;
+}
+
+function outputPanel(){
+  const max = 80000;
+  const rows = M.map(m => { const t = m.tok, vis = t.out - t.think;
+    return `<div class="lab">${dot(m)}${m.name}</div>
+      <div class="lane"><span class="bar" style="${col(m)};width:${t.out/max*100}%"><i style="width:${vis/t.out*100}%"></i><i class="s2" style="width:${t.think/t.out*100}%"></i></span></div>
+      <div class="val inline">${n(t.out)}<small>${usd(m.cost.out)}</small></div>`; }).join('');
+  const stat = (label, f, hint='') => `<tr><th>${label}${hint?`<small>${hint}</small>`:''}</th>${M.map(m=>`<td>${f(m)}</td>`).join('')}</tr>`;
+  return `<section class="sec" style="--w:5">
+    <header><h2>Output tokens</h2>
+      <ul class="swatches"><li><i></i>Visible</li><li><i class="s2"></i>Thinking</li></ul>
+      <p class="sub">The expensive ones. <b>Sonnet 5 wrote the most, ${pct(S5.tok.think/S5.tok.out)} of it thinking.</b> Fable wrote nearly as much at 5× the price per token.</p></header>
+    <div class="bars">${rows}${axis(max, v=>v? v/1000+'k':'0')}</div>
+    <table class="tb">
+      <thead><tr><th></th>${M.map(m=>`<th>${dot(m)}${m.name}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${stat('Output price', m=>'$'+m.rate.out, '/MTok')}
+        ${stat('Thinking share', m=>pct(m.tok.think/m.tok.out))}
+        ${stat('Output per API request', m=>n(m.tok.out/m.tok.req))}
+        ${stat('Output share of the bill', m=>pct(m.cost.out/m.cost.total))}
+      </tbody></table>
+  </section>`;
+}
+
+function costPanel(){
+  const max = 8;
+  const rows = M.map(m => { const c = m.cost;
+    return `<div class="lab">${dot(m)}${m.name}</div>
+      <div class="lane"><span class="bar" style="${col(m)};width:${c.total/max*100}%"><i style="width:${c.out/c.total*100}%"></i><i class="s2" style="width:${c.cw/c.total*100}%"></i><i class="s3" style="width:${(c.cr+c.in)/c.total*100}%"></i></span></div>
+      <div class="val">${usd(c.total)}<small>${m.wild?'wildcard':c.total===cheapest?'cheapest':(c.total/cheapest).toFixed(1)+'× Sonnet 5.5'}</small></div>
+      <div class="note">output ${usd(c.out)} · cache writes ${usd(c.cw)} · cache reads ${usd(c.cr)}</div>`; }).join('');
+  return `<section class="sec" style="--w:4">
+    <header><h2>If this were billed on the API</h2>
+      <ul class="swatches"><li><i></i>Output</li><li><i class="s2"></i>Cache writes</li><li><i class="s3"></i>Cache reads</li></ul>
+      <p class="sub">Whole session at list price. <b>Fable's cache writes alone (${usd(F.cost.cw)}) cost more than Opus's entire run (${usd(O.cost.total)}).</b></p></header>
+    <div class="bars">${rows}${axis(max, v=>'$'+v)}</div>
+  </section>`;
+}
+
+function scatterPanel(){
+  const W=400,Hh=286, L=34,R=14,T=26,B=38, x0=0,x1=8,y0=50,y1=100;
+  const X=v=>L+(v-x0)/(x1-x0)*(W-L-R), Y=v=>T+(1-(v-y0)/(y1-y0))*(Hh-T-B);
+  const grid = [50,60,70,80,90,100].map(v=>`<line class="${v==50?'ax':'g'}" x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end">${v}</text>`).join('')
+    + [0,2,4,6,8].map(v=>`<line class="g" x1="${X(v)}" x2="${X(v)}" y1="${T}" y2="${Hh-B}"/><text x="${X(v)}" y="${Hh-B+16}" text-anchor="middle">$${v}</text>`).join('');
+  const place = {fable:[6,-26,'end'], opus:[-4,-26,'start'], s55:[-8,22,'end'], s5:[8,24,'start'], haiku:[14,0,'start']};
+  const pts = M.map(m => { const [dx,dy,a] = place[m.k], cx=X(m.cost.total), cy=Y(m.score);
+    return `<circle cx="${cx}" cy="${cy}" r="6.5" fill="var(--m-${m.k})"/>
+      <text class="pl" x="${cx+dx}" y="${cy+dy}" text-anchor="${a}">${m.name}</text><text class="ps" x="${cx+dx}" y="${cy+dy+13}" text-anchor="${a}">${m.score} pts · ${usd(m.cost.total)}</text>`; }).join('');
+  return `<section class="sec" style="--w:3">
+    <header><h2>Score against cost</h2><p class="sub">Up and to the left is better value.</p></header>
+    <svg class="scatter" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Score against API cost for the five models">
+      ${grid}
+      <text x="${(L+W-R)/2}" y="${Hh-4}" text-anchor="middle">API cost per run, USD</text>
+      ${pts}
+    </svg>
+  </section>`;
+}
+
+function gradePanel(){
+  const rows = GRADES.map(([name,max],i)=>`<tr><th>${name}<small>/${max}</small></th>${M.map(m=>cell(m, m.grade[i], m.grade[i]/max)).join('')}</tr>`).join('');
+  return `<section class="sec" style="--w:5">
+    <header><h2>Scorecard</h2><p class="sub">Four models within two points of each other, which one run apiece can't separate. <b>Haiku loses it on architecture: 5 of 25.</b></p></header>
+    <table class="mx">${mxHead()}<tbody>${rows}
+      <tr class="sumrow"><th>Total<small>/100</small></th>${M.map(m=>cell(m, m.score, m.score/100)).join('')}</tr>
+    </tbody></table>
+  </section>`;
+}
+
+function driversPanel(){
+  return `<section class="sec" style="--w:7">
+    <header><h2>What drives the bill</h2><p class="sub"><b>Sonnet 5 needed ${S5.tok.req} requests and re-read ${k(S5.tok.cr)} cached tokens, ${(S5.tok.cr/H.tok.cr).toFixed(1)}× anyone else.</b> That is why it costs more than Opus 5.5 on half the rate card. Fable does the opposite: fewest requests, priciest tokens.</p></header>
+    <div class="minis">
+      <div><h3>API requests</h3>${simpleBars(m=>m.tok.req, 80, m=>m.tok.req)}</div>
+      <div><h3>Cache reads<small>context re-read on every request</small></h3>${simpleBars(m=>m.tok.cr, 11e6, m=>`${k(m.tok.cr)}<small>${usd(m.cost.cr)}</small>`)}</div>
+      <div><h3>Cache writes<small>new context, 1h TTL</small></h3>${simpleBars(m=>m.tok.cw, 170000, m=>`${k(m.tok.cw)}<small>${usd(m.cost.cw)}</small>`)}</div>
+    </div>
+  </section>`;
+}
+
+function ledgerPanel(){
+  const row = (label, tokKey, rateKey, costKey, cls='') => `<tr class="${cls}"><th>${label}</th>${M.map(m=>`
+      <td class="t">${n(m.tok[tokKey])}</td><td class="r">${rateKey?'× $'+m.rate[rateKey]:''}</td><td class="usd">${usd(m.cost[costKey])}</td>`).join('<td class="gap"></td>')}</tr>`;
+  const wide = f => M.map(m=>`<td colspan="3">${f(m)}</td>`).join('<td class="gap"></td>');
+  return `<section class="sec" style="--w:12">
+    <header><h2>Token ledger</h2><p class="sub">Tokens × list price per million tokens. Claude Code wrote its cache with a 1-hour TTL, so cache writes bill at 2× the input rate.</p></header>
+    <table class="tb">
+      <thead>
+        <tr><th></th>${M.map(m=>`<th class="grp" colspan="3">${dot(m)}${m.name}</th>`).join('<th class="gap"></th>')}</tr>
+        <tr class="unit"><th></th>${M.map(()=>`<th>tokens</th><th class="r">rate</th><th>USD</th>`).join('<th class="gap"></th>')}</tr>
+      </thead>
+      <tbody>
+        ${row('Fresh input','in','in','in')}
+        ${row('Cache writes','cw','cw1h','cw')}
+        ${row('Cache reads','cr','cr','cr')}
+        ${row('Output','out','out','out')}
+        ${row('of which thinking','think','','think','dim')}
+        ${row('Total','total','','total','sumrow')}
+        <tr><th>Cost per score point</th>${wide(m=>(m.cost.total/m.score*100).toFixed(1)+'¢')}</tr>
+        <tr><th>Score points per dollar</th>${wide(m=>(m.score/m.cost.total).toFixed(1))}</tr>
+      </tbody></table>
+  </section>`;
+}
+
+/* ===== page 2 ===== */
+function timePanel(){
+  const max = 14*60, laneRem = 45;
+  const rows = M.map(m => `<div class="lab">${dot(m)}${m.name}</div>
+    <div class="lane"><span class="bar" style="${col(m)};width:${sum(m.phases)/max*100}%">${m.phases.map((s,i)=>{
+      const rem = s/max*laneRem;
+      const label = rem >= 4.3 ? `<b>${i+1}</b>${mmss(s)}` : rem >= 1.3 ? `<b>${i+1}</b>` : '';
+      return `<i class="${i%2?'s2':''}" style="width:${s/sum(m.phases)*100}%">${label}</i>`; }).join('')}</span></div>
+    <div class="val">${m.total}</div>`).join('');
+  const trs = PHASES.map((p,i)=>`<tr><th><b>${i+1}</b>${p}</th>${M.map(m=>`<td>${mmss(m.phases[i])}</td>`).join('')}</tr>`).join('');
+  return `<section class="sec" style="--w:6">
+    <header><h2>Wall time by phase</h2><p class="sub"><b>Opus 5.5 and Sonnet 5.5 finished in just over 7 minutes.</b> Fable and Sonnet 5 took nearly 13: Fable on Razor, Sonnet 5 on content (${mmss(S5.phases[3])}).</p></header>
+    <div class="bars tl">${rows}${axis(14, v=>v+' min', 7)}</div>
+    <table class="tb">${mxHead()}<tbody>${trs}
+      <tr class="sumrow"><th>Total from first prompt</th>${M.map(m=>`<td>${m.total}</td>`).join('')}</tr>
+    </tbody></table>
+  </section>`;
+}
+
+function actPanel(){
+  const matrix = (key, title, hint) => { const max = Math.max(...M.flatMap(m=>m.act[key]));
+    return `<div><p class="cap">${title}<small>${hint}</small></p><table class="mx">${mxHead()}<tbody>
+      ${ACTS.map((a,i)=>`<tr><th>${a}</th>${M.map(m=>cell(m, `${n(m.act[key][i])} <small>${pct(m.act[key][i]/sum(m.act[key]))}</small>`, m.act[key][i]/max)).join('')}</tr>`).join('')}
+      <tr class="sumrow"><th>Total</th>${M.map(m=>`<td>${n(sum(m.act[key]))}</td>`).join('')}</tr>
+    </tbody></table></div>`; };
+  return `<section class="sec" style="--w:6">
+    <header><h2>Where the tokens went</h2><p class="sub">Attributed to the tool each request was serving. <b>Sonnet 5 put ${pct(S5.act.out[0]/S5.tok.out)} of its output into MCP calls</b>; Fable split evenly between MCP and code; Haiku barely wrote code at all.</p></header>
+    <div class="stack">
+      ${matrix('out','Output tokens','the expensive ones')}
+      ${matrix('fresh','New tokens','input + cache writes + output, excluding cache reads')}
+    </div>
+  </section>`;
+}
+
+function toolsPanel(){
+  const row = (label, f, cls='') => `<tr class="${cls}"><th>${label}</th>${M.map(m=>`<td>${f(m.tools,m)}</td>`).join('')}</tr>`;
+  return `<section class="sec" style="--w:5">
+    <header><h2>Tool calls</h2><p class="sub"><b>Fable batches hardest</b>: ${F.tools.perReq} tool calls per request, and 22 files written by a single heredoc.</p></header>
+    <table class="tb">
+      <thead><tr><th></th>${M.map(m=>`<th>${dot(m)}${m.name}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${row('API requests', (t,m)=>m.tok.req)}
+        ${row('Umbraco MCP <small>reads / writes</small>', t=>`${t.mcp} <small>${t.mcpR} / ${t.mcpW}</small>`)}
+        ${row('Edit / Write', t=>t.edit)}
+        ${row('Read / Grep / Glob', t=>t.read)}
+        ${row('Shell <small>Bash / PowerShell</small>', t=>`${t.bash+t.ps} <small>${t.bash} / ${t.ps}</small>`)}
+        ${row('Total tool calls', t=>t.total, 'sumrow')}
+        ${row('Tool calls per API request', t=>t.perReq.toFixed(2))}
+        ${row('Failed tool calls', t=>t.failed>9?`<span class="bad">${t.failed}</span>`:t.failed)}
+        ${row('Files written', t=>t.files)}
+        ${row('dotnet build <small>failed</small>', t=>`${t.builds} <small>${t.buildFails}</small>`)}
+        ${row('Human follow-ups needed', t=>t.followups)}
+      </tbody></table>
+  </section>`;
+}
+
+function notesPanel(){
+  return `<section class="sec" style="--w:7">
+    <header><h2>Where the contenders dropped points</h2><p class="sub">From the grader's notes. All four shipped the adapter → ViewComponent → plain model pipeline, a clean build and every page returning 200.</p></header>
+    <div class="notes">${NOTES.map(x=>{const m=by(x.k);return `<div>
+      <h3>${dot(m)}${m.name}<span>${m.score} · −${x.lost}</span></h3>
+      <p class="best">${x.best}</p>
+      <ul>${x.items.map(([p,t])=>`<li><b>${p}</b><span>${t}</span></li>`).join('')}</ul></div>`}).join('')}</div>
+  </section>`;
+}
+
+function haikuPanel(){
+  return `<section class="haiku">
+    <figure class="snap">
+      <img src="${HAIKU_IMG}" alt="The blog front page Haiku 4.5 built: a gradient header and two post cards">
+      <figcaption><span>localhost:44317/</span><span>built by claude-haiku-4-5</span></figcaption>
+      <span class="stamp">it did its best</span>
+    </figure>
+    <div class="body">
+      <div class="top"><h2>${dot(H)}Haiku's corner</h2><span class="tag">not in competition</span>
+        <p class="lede">Entered as a joke, at a tenth of Fable's price per token. Nobody expected a website. It built one anyway, in ${H.total}, for ${usd(H.cost.total)}.</p></div>
+      <div class="cols">
+        <div class="yes"><h3>Honestly pulled off</h3><ul>
+          <li>Clean build: 0 errors, 0 warnings.</li>
+          <li>All three pages return 200. Front page scored 10 out of 10.</li>
+          <li>Images imported over MCP, served through signed crop URLs.</li>
+          <li>Stayed on the MCP channel, in the right order.</li>
+          <li>Fastest run of the day.</li>
+        </ul></div>
+        <div class="hm"><h3>Creative liberties</h3><ul>
+          <li>Skipped the block grid, the one thing the brief insisted on, then blamed Umbraco for not having one.</li>
+          <li>Had create-template rejected four times running for the same reason. Then create-document, four more.</li>
+          <li>Stopped Umbraco by killing every dotnet process on the machine.</li>
+          <li>Reported Tailwind. Shipped an inline style block and a 404.</li>
+        </ul></div>
+        <div>
+          <blockquote>“I've successfully demonstrated the Umbraco MCP server's local capabilities by building a complete blog site.”
+            <cite>Haiku 4.5, opening line of its final report, above a column of green check marks</cite></blockquote>
+          <dl class="hstats">
+            <div><dt>Score</dt><dd>${H.score}/100</dd></div>
+            <div><dt>Failed tool calls</dt><dd>${H.tools.failed}</dd></div>
+            <div><dt>Cost per point</dt><dd>${(H.cost.total/H.score*100).toFixed(1)}¢</dd></div>
+          </dl>
+        </div>
+      </div>
+      <p class="award">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 28 11 46l13-7 13 7-5-18z" fill="var(--gold)" opacity=".45"/><circle cx="24" cy="19" r="15" fill="var(--gold-wash)" stroke="var(--gold)" stroke-width="2"/><circle cx="24" cy="19" r="10" fill="none" stroke="var(--gold)" stroke-width="1" stroke-dasharray="2 2.5"/><text x="24" y="24" text-anchor="middle" font-size="13" font-weight="700" font-family="sans-serif" fill="var(--gold)">56</text></svg>
+        <span><b>Spirit of the Bench award.</b> 18 failed tool calls (4 of them a permission prompt's fault, not its own), zero broken builds, and at ${(H.cost.total/H.score*100).toFixed(1)}¢ per point, technically the best value on the page. It bloody did its best.</span>
+      </p>
+    </div>
+  </section>`;
+}
+
+/* ===== render ===== */
+const only = new URLSearchParams(location.search).get('only');   // ?only=2 shows a single page, for image export
+$('#app').innerHTML =
+  (only === '2' ? '' : `<div class="page" id="p1">${tiles()}${outputPanel()}${costPanel()}${scatterPanel()}${gradePanel()}${driversPanel()}${ledgerPanel()}</div>`) +
+  (only === '1' ? '' : `<div class="page" id="p2">${timePanel()}${actPanel()}${toolsPanel()}${notesPanel()}${haikuPanel()}</div>`);
+if (new URLSearchParams(location.search).has('debug')) document.fonts.ready.then(() => {
+  document.title = [...document.querySelectorAll('.page')].map(p => { const last = Math.max(...[...p.children].map(c => c.getBoundingClientRect().bottom)) - p.getBoundingClientRect().top;
+    const fs = parseFloat(getComputedStyle(document.documentElement).fontSize); return p.id + ' content ends at ' + (last/fs).toFixed(1) + 'rem of 90 (limit 87.8), scrollHeight ' + (p.scrollHeight/fs).toFixed(1); }).join(' | ');
+  document.body.insertAdjacentHTML('beforeend', '<pre id="dbg">' + document.title + '</pre>');
+});
+</script>
+</body>
+</html>

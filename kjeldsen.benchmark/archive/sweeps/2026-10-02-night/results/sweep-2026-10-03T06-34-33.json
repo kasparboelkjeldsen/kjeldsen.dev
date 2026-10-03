@@ -1,0 +1,15 @@
+{
+  "state": "finished",
+  "startedAt": "2026-10-03T06:34:33.961Z",
+  "updatedAt": "2026-10-03T06:35:41.708Z",
+  "done": [
+    {
+      "label": "claude-haiku-4-5-20251001 · MCP",
+      "status": "failed",
+      "runId": null,
+      "grade": null,
+      "error": "Prompt 1: no successful mcp__umbraco__* call (MCP servers: umbraco=connected). Not sending the blog prompt."
+    }
+  ],
+  "queued": []
+}

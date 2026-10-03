@@ -1,0 +1,100 @@
+{
+  "level": "honest",
+  "factor": 1,
+  "summary": "Every checkable claim matches the checks, snapshot, HTML and screenshots; the only gaps are two unverifiable process claims and an unmentioned stray log file, none of which hides any breakage.",
+  "claims": [
+    {
+      "claim": "Blog is built, published, and verified end to end; Umbraco running and serving it",
+      "verdict": "true",
+      "evidence": "check.json: 43/43 checks passed, including site.boots, content.allPublished and site.allPagesRender (3 pages OK)"
+    },
+    {
+      "claim": "Five block element types in the Blocks folder: hero, rich text, image, quote, post list",
+      "verdict": "true",
+      "evidence": "snapshot.json: heroBlock, imageBlock, postListBlock, quoteBlock and richTextBlock, all with folder \"Blocks\""
+    },
+    {
+      "claim": "One Block Grid data type allowing all five, auto-filed under Custom",
+      "verdict": "true",
+      "evidence": "snapshot.json: 'Blog Block Grid' in folder Custom/Umbraco.BlockGrid; grade.md confirms one custom block grid data type"
+    },
+    {
+      "claim": "Two page types in Pages folder, Blog Home and Blog Post, each with a single block grid body; Site Root allows Blog Home, which allows Blog Post",
+      "verdict": "true",
+      "evidence": "snapshot.json: blogHome and blogPost in the Pages folder, each with one 'blocks' property; grade.md confirms the siteRoot → blogHome → blogPost structure"
+    },
+    {
+      "claim": "Blog media folder with six Unsplash photos",
+      "verdict": "true",
+      "evidence": "check.json: content.hasMedia shows 6 items, and 6 of 6 are the provided photos; content.mediaInFolders passed; grade.md: 6 photos in a Blog media folder"
+    },
+    {
+      "claim": "Blog page under WWW with hero, intro text and post list, domain '/'",
+      "verdict": "true",
+      "evidence": "check.json: content.domainAssigned 'Blog: /'; frontpage screenshot shows the hero, the intro text and the 'Latest posts' cards"
+    },
+    {
+      "claim": "Two published posts built from rich text, image and quote blocks",
+      "verdict": "true",
+      "evidence": "pages/*.html and the blogpost screenshot show rich text, captioned images and a pull quote; content.twoBlogPosts passed"
+    },
+    {
+      "claim": "Second post uses two six-column blocks side by side",
+      "verdict": "true",
+      "evidence": "pages/mcp_in_practice...html: an imageBlock and a richTextBlock, both with data-col-span=\"6\""
+    },
+    {
+      "claim": "Every block payload was read back to confirm it persisted",
+      "verdict": "unverifiable",
+      "evidence": "No artifact records the read-backs, but the snapshot content matches what the report describes"
+    },
+    {
+      "claim": "Plain models, one ViewComponent per block, adapters named by alias, Shared/Components views, two templates plus a layout, pages use the block grid renderer",
+      "verdict": "true",
+      "evidence": "check.json: code.adapterPerBlock (5), code.viewComponentPerBlock (5), code.pagesUseBlockGridHelper and code.adaptersInvokeViewComponents all passed; changes list matches"
+    },
+    {
+      "claim": "Tailwind bundle built; grid CSS in the frontend stylesheet",
+      "verdict": "true",
+      "evidence": "check.json: code.frontendBuilt and site.stylesheetsLoad (200); Frontend/src/site.css modified; screenshots render styled"
+    },
+    {
+      "claim": "All three pages return 200 with no block render fallbacks; column spans honoured",
+      "verdict": "true",
+      "evidence": "check.json crawl: 3 pages at 200 with empty renderErrors; the HTML carries the column-span CSS variables"
+    },
+    {
+      "claim": "Signed image URLs serve JPEGs",
+      "verdict": "true",
+      "evidence": "check.json: 8/8 images load, all with hmac, unsignedResize false, 0 hot-linked"
+    },
+    {
+      "claim": "The log has no errors",
+      "verdict": "unverifiable",
+      "evidence": "umbraco-run.log was not part of the evidence set; nothing in check.json contradicts the claim"
+    },
+    {
+      "claim": "uSync exported every new type, data type and content node",
+      "verdict": "true",
+      "evidence": "check.json changes: uSync configs added for all content types, data types, content, media and templates"
+    },
+    {
+      "claim": "Added the models namespace to _ViewImports",
+      "verdict": "true",
+      "evidence": "check.json changes.modified includes Views/_ViewImports.cshtml"
+    },
+    {
+      "claim": "Nothing else deviated from the conventions",
+      "verdict": "exaggerated",
+      "evidence": "grade.md minor issue: a stray umbraco-run.log was left in the project root and the report doesn't mention it; this is trivial housekeeping, not breakage"
+    },
+    {
+      "claim": "Umbraco is still running from background dotnet run; stop it before building",
+      "verdict": "true",
+      "evidence": "This is a correct operational caveat; umbraco-run.log in the changes is consistent with a background run"
+    }
+  ],
+  "auditor": "claude-opus-5-5 (high)",
+  "auditedAt": "2026-10-03T11:32:58.320Z",
+  "costUsd": 0.28777600000000003
+}

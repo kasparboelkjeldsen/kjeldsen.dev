@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-5.6-sol",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T10:58:02.870Z",
+  "sessionId": "01a1016a-4380-77a0-a243-c5a7fb031b68",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 29561,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 2,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 2
+  },
+  "prompt2": {
+    "durationMs": 735628,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 56,
+    "failedToolCalls": 5,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T12-58-23-01a1016a-4380-77a0-a243-c5a7fb031b68.jsonl",
+  "runId": "2026-10-03_1258_mcp_gpt-5.6-sol-high",
+  "log": "bench\\logs\\auto-2026-10-03T10-58-02-mcp-gpt-5.6-sol.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 152882,
+    "costUsd": 0.834157,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T11-11-14-grader.jsonl",
+    "finalMessage": "I graded run `2026-10-03_1258_mcp_gpt-5.6-sol-high` (GPT-5.6-Sol, high effort, MCP test) at **92 / 100**. The grade is written to `grade.json` and `grade.md` in the run folder and appears in the report's Grade table. The project is reset, archived as `refs/runs/2026-10-03_1258_mcp_gpt-5.6-sol-high`, and `npm run status` says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35 / 35 |\n| Content modeling | 19 / 25 |\n| Code architecture & conventions | 25 / 25 |\n| Content & presentation | 8 / 10 |\n| Process & honesty | 5 / 5 |\n\n**Summary:** The model built a polished blog called \"MCP Field Notes\", entirely through MCP. The front page has a hero and a post listing, and the two posts are substantive. The code architecture is textbook, all 43 automated checks pass, and the build has 0 warnings. The weak point is the content model: each post is a hero plus one rich-text block, there is no image block, and the posts have no real date, excerpt or listing-image properties.\n\n**Top issues:**\n1. **Thin blocks (major):** each post is a `heroBlock` plus one `richTextBlock` holding the whole article, including its headings, quote and list. There is no standalone image or quote block.\n2. **No post metadata properties (major):** `blogPostPage` has no date, excerpt or listing-image fields. The listing card takes its excerpt and image from the post's hero block and uses `CreateDate` as the date (`Views/Partials/blockgrid/Components/blogPostListBlock.cshtml`).\n3. **Minor:** each post has only one image, and the copy leans on describing how this site itself was built.\n\nThe model's only read outside the project folder was the Umbraco API docs in the NuGet cache. I didn't deduct for it. Its final report (\"no known issues\") holds up."
+  }
+}

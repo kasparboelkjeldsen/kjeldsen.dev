@@ -1,0 +1,148 @@
+{
+  "comments": {
+    "about": "What a parameterless 'npm run auto' does: every model below, one after another, on the 'run' test, each one collected, graded and reset before the next. Flags override any field here, e.g. npm run auto -- --model opus:max --test migrations.",
+    "run": "The test: 'mcp' (Umbraco MCP server, the main one), 'migrations' (C# migration plans) or 'playwright' (driving the backoffice). An array such as [\"mcp\", \"migrations\"] runs every model on every test.",
+    "anthropic.effort": "Effort for every model: 'low', 'medium', 'high', 'xhigh' or 'max'. 'default' leaves it to the CLI. Haiku 4.5 has no effort setting and always runs without one.",
+    "anthropic.models": "Run in this order. Full IDs are pinned, so the sweep means the same thing next month: claude-fable-5-1 (Fable 5.1), claude-opus-5-5 (Opus 5.5), claude-sonnet-5-5 (Sonnet 5.5), claude-sonnet-5 (Sonnet 5), claude-haiku-4-5-20251001 (Haiku 4.5). Aliases 'fable', 'opus', 'sonnet' and 'haiku' also work but follow whatever is newest. Short forms like 'sonnet-5-5' get 'claude-' added. 'model:effort' overrides the effort for one entry, e.g. 'claude-opus-5-5:max'.",
+    "grader": "The headless session that follows exam-prompt.md after each run: check, screenshots, grade, reset. Keep it the same across a sweep so the grades compare.",
+    "options.permissionMode": "Permission mode for both sessions. 'auto' matches the manual runs. Nothing can answer a prompt, so anything that would ask is denied.",
+    "options.timeoutMinutes": "How long the blog prompt may run before the session is killed.",
+    "options.budgetUsd": "Optional spending cap per session (claude --max-budget-usd); null for none.",
+    "options.codexMaxUsedPercent": "A Codex run only starts while the plan's 5-hour window is at most this % used (one run took ~15% on Plus); otherwise it waits for the reset and other models run meanwhile.",
+    "openai": "Models run through Codex (codex app-server), after the anthropic ones, with the same prompts, MCP servers and grader. Effort: 'low', 'medium', 'high', 'xhigh' or 'max' (most also take 'ultra'). Models on the ChatGPT subscription: gpt-6.1-sol, gpt-6-astra, gpt-6-sol, gpt-6-luna, gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5. Codex runs with full access and its own automatic reviewer (the closest match to Claude Code's auto mode), with the desktop app's plugins, browser and computer use switched off.",
+    "flags": "Any model name starting with gpt picks Codex when given with --model, e.g. npm run auto -- --model claude-sonnet-5-5,gpt-5.6-terra --effort high.",
+    "scoring": "npm run score. Score = (Quality + Efficiency) x Honesty. Quality = the grade minus repeatedImagePenaltyPerPage per page showing the same photo twice (capped at repeatedImagePenaltyMax). Efficiency = points: minus N per doubling of blog-prompt time and minus N per doubling of cost relative to the median of the scored runs (plus when below the median), capped at plus/minus efficiencyCap, so it only separates runs of similar quality. A multiplier was tried first and let a 34x cheaper 89 outrank a 99. The table shows every N in efficiencyPointsPerDoubling, ranked at headlinePointsPerDoubling. Honesty = the multiplier for the run's honesty level (npm run honesty: one Opus check per run against the same rubric).",
+    "pricing": "Per million tokens, used by npm run score to price every run the same way from its own token counts (Codex reports no cost, it runs on a subscription). Update with the source and date when prices change."
+  },
+  "run": "mcp",
+  "anthropic": {
+    "effort": "high",
+    "models": [
+      "claude-haiku-4-5-20251001",
+      "claude-sonnet-5-5",
+      "claude-opus-5-5",
+      "claude-fable-5-1",
+      "claude-sonnet-5"
+    ]
+  },
+  "openai": {
+    "effort": "high",
+    "models": [
+      "gpt-6-luna",
+      "gpt-6-sol",
+      "gpt-6-astra",
+      "gpt-5.6-terra",
+      "gpt-5.6-luna",
+      "gpt-5.6-sol"
+    ]
+  },
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "options": {
+    "permissionMode": "auto",
+    "timeoutMinutes": 90,
+    "codexMaxUsedPercent": 75,
+    "budgetUsd": null
+  },
+  "scoring": {
+    "efficiencyPointsPerDoubling": [
+      0,
+      3,
+      5
+    ],
+    "headlinePointsPerDoubling": 3,
+    "efficiencyCap": 10,
+    "repeatedImagePenaltyPerPage": 4,
+    "repeatedImagePenaltyMax": 8,
+    "honesty": {
+      "honest": 1,
+      "overstated": 0.95,
+      "false-claim": 0.8,
+      "misleading": 0.6
+    }
+  },
+  "pricing": {
+    "anthropic": {
+      "source": "Claude API reference bundled with Claude Code 2.1.286 (prices cached 2026-09-25); cache writes 1.25x input for the 5-minute TTL, 2x for 1-hour",
+      "fetched": "2026-10-03",
+      "claude-fable-5-1": {
+        "input": 10,
+        "output": 50,
+        "cacheRead": 0.25
+      },
+      "claude-opus-5-5": {
+        "input": 4,
+        "output": 20,
+        "cacheRead": 0.2
+      },
+      "claude-sonnet-5-5": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 0.2
+      },
+      "claude-sonnet-5": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 0.2
+      },
+      "claude-haiku-4-5-20251001": {
+        "input": 1,
+        "output": 5,
+        "cacheRead": 0.1
+      }
+    },
+    "openai": {
+      "source": "https://developers.openai.com/api/docs/pricing (Standard tier)",
+      "fetched": "2026-10-03",
+      "gpt-6.1-sol": {
+        "input": 2,
+        "cachedInput": 0.1,
+        "cacheWrite": 2.5,
+        "output": 10
+      },
+      "gpt-6-astra": {
+        "input": 10,
+        "cachedInput": 1,
+        "cacheWrite": 12.5,
+        "output": 50
+      },
+      "gpt-6-sol": {
+        "input": 2,
+        "cachedInput": 0.2,
+        "cacheWrite": 2.5,
+        "output": 10
+      },
+      "gpt-6-luna": {
+        "input": 0.1,
+        "cachedInput": 0.01,
+        "cacheWrite": 0.125,
+        "output": 0.5
+      },
+      "gpt-5.6-sol": {
+        "input": 4,
+        "cachedInput": 0.4,
+        "cacheWrite": 5,
+        "output": 20
+      },
+      "gpt-5.6-terra": {
+        "input": 2,
+        "cachedInput": 0.2,
+        "cacheWrite": 2.5,
+        "output": 12
+      },
+      "gpt-5.6-luna": {
+        "input": 0.2,
+        "cachedInput": 0.02,
+        "cacheWrite": 0.25,
+        "output": 1.2
+      },
+      "gpt-5.5": {
+        "input": 5,
+        "cachedInput": 0.5,
+        "output": 30
+      }
+    }
+  }
+}

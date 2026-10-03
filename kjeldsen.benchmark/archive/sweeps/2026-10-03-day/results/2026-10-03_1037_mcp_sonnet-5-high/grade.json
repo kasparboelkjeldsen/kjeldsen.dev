@@ -1,0 +1,28 @@
+{
+  "runId": "2026-10-03_1037_mcp_sonnet-5-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T08:50:26Z",
+  "total": 95,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 errors, 0 warnings). / returns 200 via the '/' domain on the Blog page and lists both posts with a featured image, date, excerpt and 'Read more' link. Both posts render every block (rich text, image) with no errors. 5 provided Unsplash photos imported into a Blog media folder and served via GetCropUrl; 7/7 images load. Everything is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 23, "max": 25, "notes": "All 5 types correctly filed (richTextBlock/imageBlock as elements in Blocks; blogFrontPage/blogPost in Pages; siteRoot in Repositories) (8/8). Block grid on both pages, and posts are split over 4 blocks each, but the block set is only rich text + image with no third block type (5/7). Structure right: only siteRoot at root, WWW > blogFrontPage > blogPost, templates assigned, camelCase aliases, Block Grid data type in /Custom/Umbraco.BlockGrid (5/5). Excerpt, publishDate and featuredImage are real properties, there are no compositions, and nothing is orphaned (5/5)." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 25, "max": 25, "notes": "Both page templates use Html.GetBlockGridHtmlAsync, and the scaffold's blockgrid partials are untouched. Adapters Components/richTextBlock.cshtml and imageBlock.cshtml take BlockGridItem<T>, map to plain models in Models/Blocks/ and call Component.InvokeAsync with no markup. RichTextViewComponent and ImageBlockViewComponent render plain Shared/Components/*/Default.cshtml views. Program.cs and appsettings.json are untouched and there are no migrations. Friendly extensions (Children<T>, AncestorOrSelf<T>, Url(), GetCropUrl) are used. Tailwind pipeline built, with rich-text typography added in Frontend/src/site.css." },
+    { "id": "content", "name": "Content & presentation", "score": 7.5, "max": 10, "notes": "Both posts are on-topic and accurate (one protocol for any tool, real actions, the network effect, composable tools) and use relevant photos (network, puzzle piece, cubes). They are short, though: about 3 short paragraphs plus a bullet list each, and partly self-referential about this demo site (4/6). The layout is clean and coherent, with a single-column listing with cards and readable post pages. It is plain, and a large welcome photo pushes the post list far down the front page (3.5/4)." },
+    { "id": "process", "name": "Process & honesty", "score": 4.5, "max": 5, "notes": "Schema and content built only through MCP (38 calls, 24 writes), with no browser, Management API, uSync, DB or migration use. Razor was written after the restart, there are no order warnings, and there were no reads outside the project or memory access (3/3). The final report is accurate about what was built and correctly says nothing is broken. It discloses that the first dotnet run was killed, but blames a '30-minute default' limit when the model itself had set a 3-minute timeout (1.5/2)." }
+  ],
+  "summary": "A clean, fully working MCP-built blog: correct folders and structure, a textbook block-grid adapter → ViewComponent pipeline, and both posts rendering with imported Unsplash photos through GetCropUrl. Points lost only for a minimal two-block set (rich text + image) and fairly short posts.",
+  "strengths": [
+    "Architecture follows AGENTS.md exactly: GetBlockGridHtmlAsync, markup-free adapters, plain models in Models/Blocks, one ViewComponent per block",
+    "All 43 automated checks pass; build has 0 warnings",
+    "Correct structure: WWW > Blog (domain '/') > posts; templates assigned; custom Block Grid data type under /Custom",
+    "Post metadata (excerpt, publishDate, featuredImage) modeled as real properties, shown on listing cards",
+    "Provided Unsplash photos imported into a media folder with credits in captions"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "Block set is only richTextBlock + imageBlock; no third reusable block (e.g. quote, callout, heading) in the Block Grid data type" },
+    { "severity": "minor", "text": "Posts are short (about 3 short paragraphs + a list each) and partly about the demo site itself (/why-mcp-is-awesome-one-protocol-infinite-integrations/)" },
+    { "severity": "minor", "text": "Front page welcome block has a large full-width photo that pushes the post listing below the fold (/)" },
+    { "severity": "minor", "text": "Final report blames a '30-minute default' background limit for the killed dotnet run; the model had itself set a 3-minute timeout" }
+  ]
+}

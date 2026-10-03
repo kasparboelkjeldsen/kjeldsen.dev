@@ -1,0 +1,19 @@
+{
+  "name": "umbraco.bench.backoffice-extensions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "watch": "vite build --watch",
+    "skills:copilot": "npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill * -a github-copilot",
+    "skills:cursor": "npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill * -a cursor",
+    "skills:windsurf": "npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill * -a windsurf",
+    "skills:claude": "npx skills add umbraco/Umbraco-CMS-Backoffice-Skills --skill * -a claude"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@umbraco-cms/backoffice": "^18.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^8.0.0"
+  }
+}

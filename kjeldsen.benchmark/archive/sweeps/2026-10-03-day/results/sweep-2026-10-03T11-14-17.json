@@ -1,0 +1,15 @@
+{
+  "state": "finished",
+  "startedAt": "2026-10-03T11:14:17.257Z",
+  "updatedAt": "2026-10-03T11:26:12.711Z",
+  "done": [
+    {
+      "label": "claude-fable-5-1:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_1314_mcp_fable-5.1-high",
+      "grade": "99/100",
+      "error": null
+    }
+  ],
+  "queued": []
+}

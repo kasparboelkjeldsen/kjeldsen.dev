@@ -1,0 +1,26 @@
+{
+  "runId": "2026-10-03_1314_mcp_fable-5.1-high",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T13:45:00Z",
+  "total": 99,
+  "max": 100,
+  "categories": [
+    { "id": "works", "name": "It works", "score": 35, "max": 35, "notes": "Build clean (0 errors, 0 warnings). / returns 200 via the '/' domain on the Blog page and shows a hero, an intro and a post list block. Both cards have an image, date, author, title and summary, and their links work. Both posts render every block (rich text, image, quote, plus a 6/6 image+text row in post 2) with no fallbacks. 6 provided Unsplash photos are imported into a Blog media folder and served through signed GetCropUrl URLs, 8/8 load. All content is published." },
+    { "id": "modeling", "name": "Content modeling", "score": 25, "max": 25, "notes": "5 element types (heroBlock, richTextBlock, imageBlock, quoteBlock, postListBlock) in Blocks; blogHome and blogPost in Pages. siteRoot (Repositories) allows only blogHome, and blogHome allows only blogPost. Templates are assigned. One custom data type (Blog Block Grid, 12 columns, sensible span options) is filed under Custom/Umbraco.BlockGrid. Post metadata (title, summary, coverImage, author, publishDate) are real properties. No compositions, no duplicates or orphans." },
+    { "id": "architecture", "name": "Code architecture & conventions", "score": 24.5, "max": 25, "notes": "Pages call Html.GetBlockGridHtmlAsync(Model, \"blocks\"), and the scaffold's blockgrid partials are untouched. 5 alias-named adapters map BlockGridItem<T> to plain models in Models/Blocks/ and call Component.InvokeAsync with no markup. 5 one-line ViewComponents render plain Default.cshtml views. Friendly extensions and GetCropUrl throughout; Program.cs, appsettings.json and migrations untouched. Grid layout CSS and rich-text styles go through the Tailwind src/site.css. _ViewImports gained the ModelsBuilder namespace (reasonable, disclosed). -0.5: a stray umbraco-run.log (dotnet run output) was left in the Umbraco.Bench root." },
+    { "id": "content", "name": "Content & presentation", "score": 9.5, "max": 10, "notes": "Post 1 ('Why MCP is awesome: one protocol for every tool') is a strong, accurate argument: the N×M problem, self-describing tools, transport-agnostic, host-side permissions, and fit for a CMS. Post 2 is a practical case study of building this blog over MCP. It is substantive and on-theme, but leans toward a build log and contradicts itself slightly ('the server validates that they do' vs 'payloads fail quietly'). Images are relevant and credited. The layout is a clean, coherent Tailwind blog: hero, card grid, readable prose column, styled quote." },
+    { "id": "process", "name": "Process & honesty", "score": 5, "max": 5, "notes": "42 Umbraco MCP calls; no browser, Management API, migration, uSync or DB use. Order followed: model, content, stop/build/restart, then Razor. No memory access or reads outside the project. The final report is accurate and discloses the _ViewImports change and the still-running process." }
+  ],
+  "summary": "A complete, clean MCP-built blog: 5 well-designed blocks, 2 page types, a front page with a hero and post cards, and 2 multi-block posts, all rendered through Umbraco's block grid pipeline exactly per the scaffold conventions. Only nits remain: a stray run log file and a second post that reads a bit like a build log.",
+  "strengths": [
+    "Textbook adapter → plain model → ViewComponent pipeline for all 5 blocks, with no Umbraco dependencies in component views",
+    "Lean, correct schema: right folders, allowed children, one custom block grid data type, real post metadata properties",
+    "Uses the grid properly (6/6 image + text row) with layout CSS through the Tailwind pipeline",
+    "Polished, coherent design; all images are signed crop URLs of the provided photos with credits in captions",
+    "Strictly followed the MCP channel and the model/content/restart/Razor order; honest final report"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "Stray umbraco-run.log (dotnet run output) left in Umbraco.Bench/ root" },
+    { "severity": "minor", "text": "Post 2 (/mcp-in-practice-building-this-blog-without-opening-the-backoffice/) is more of a build walkthrough than an argument for MCP, and says the server validates block keys while also saying bad payloads fail quietly" }
+  ]
+}

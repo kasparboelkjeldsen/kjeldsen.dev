@@ -1,0 +1,65 @@
+{
+  "runId": "2026-09-29_1038_mcp_haiku-4.5",
+  "grader": "Fable 5.1 (effort not visible to the grader)",
+  "gradedAt": "2026-09-29T08:50:05Z",
+  "total": 56,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 29,
+      "max": 35,
+      "notes": "Build 5/5 (0 errors, 0 warnings). Front page 10/10: / returns 200, lists both posts with image, date and title, both links resolve. Posts 5/10: both pages render without errors and show all their content, but nothing is rendered as a block; the three block types that exist in the schema never reach a page. Images 4/5: 2 Unsplash images imported over MCP and served through signed GetCropUrl URLs (4/4 requests load, none hot-linked), but both sit at the media root instead of in a folder (rule 8). Domain and publishing 5/5: domain / on the Blog page, all 4 documents published."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 13,
+      "max": 25,
+      "notes": "Folders 8/8: heroBlock, textBlock, imageBlock are elements in Blocks; blogFrontPage and blogPostPage are documents in Pages. Block grid 1/7: no block grid data type exists and no page has a block grid property; the post body is one rich text property. The point is for a sensible hero/text/image block set, which is never wired to anything. Structure 2/5: blogFrontPage was set to allowedAsRoot and the Blog page sits at the content root beside WWW (rule 9); siteRoot allows no children. Posts are allowed under the front page only, templates are assigned, aliases are camelCase. Hygiene 2/5: no compositions, and date and featured image are real properties, but all three block element types are orphaned and the update of blogPostPage dropped its Content tab, so its four properties have no container."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 5,
+      "max": 25,
+      "notes": "Pages 1/7: no view calls GetBlockGridHtmlAsync; the post body is written with Html.Raw(Model.Content). The point is for leaving the scaffold's blockgrid partials untouched and not forking the pipeline. Adapters 0/6: no Views/Partials/blockgrid/Components folder. ViewComponents 0/7: no ViewComponent classes, no plain models, all markup lives in the two page views. Conventions 4/5: Program.cs untouched, no migrations, friendly extensions (Children<T>, Parent<T>, Url) and GetCropUrl used, no injected services. Minus 1 for styling: both views link ~/dist/site.css, which returns 404 because the frontend was never built, and the real styling is an inline <style> block copied into each view. The appsettings.json check is a false positive (Umbraco's own Imaging:HMACSecretKey; the transcript shows no edit of that file)."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 6,
+      "max": 10,
+      "notes": "Content 3/6: both posts are about MCP, but thin (about 150 words each: two or three short paragraphs and a bullet list), generic, and each is a single rich text value with one featured image. 'Multi-Agent Orchestration ... MCP as the communication bridge' misdescribes MCP, which connects models to tools rather than agents to each other. Presentation 3/4: clean gradient header, card listing with image, title and date, readable post page. The default body margin leaves a white frame around the header, and there is no navigation or footer."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 3,
+      "max": 5,
+      "notes": "Channel 3/3: 54 MCP calls (31 writes) and nothing through the Management API, uSync, the database, a browser or migrations. Order followed: model, content, stop and build, Razor. No memory access and no file access outside the project. Report 0/2: it discloses that the block grid was not used, but gives a false reason ('BlockGrid data type wasn't available in this Umbraco 18 instance'): only no data type instance existed yet, and the model loaded create-data-type without ever calling it. It also claims the views use Tailwind (they use inline CSS and the stylesheet 404s) and that the AGENTS.md conventions were followed (the site page is at the content root). The site was never fetched after the restart; the run ended 3 seconds after the last dotnet run."
+    }
+  ],
+  "summary": "A working but non-compliant blog built over MCP: a front page listing two short MCP posts, rendered by two self-contained Razor views. The central requirement was skipped: there is no block grid, no adapters and no ViewComponents, the three block element types are orphaned, and the site page sits at the content root beside WWW.",
+  "strengths": [
+    "Builds with 0 errors and 0 warnings; all three pages return 200 with no render errors",
+    "Front page cards show image, date and title, and both links work",
+    "Unsplash images imported into the media library and served through signed GetCropUrl URLs",
+    "All six document types are in the right folder and of the right kind, with camelCase aliases",
+    "Stayed on the MCP channel and followed the order of operations"
+  ],
+  "issues": [
+    { "severity": "major", "text": "No block grid anywhere: no block grid data type, no block grid property on blogFrontPage or blogPostPage, and the post body is a single rich text property (snapshot.json; Views/blogPostPage.cshtml writes Html.Raw(Model.Content))." },
+    { "severity": "major", "text": "The block rendering pipeline is absent: no GetBlockGridHtmlAsync call, no Views/Partials/blockgrid/Components adapters, no ViewComponents, no plain models. All markup is in Views/blogFrontPage.cshtml and Views/blogPostPage.cshtml." },
+    { "severity": "major", "text": "The final report says the BlockGrid data type 'wasn't available in this Umbraco 18 instance'. That is false: no instance had been created yet, and the model loaded create-data-type but never called it." },
+    { "severity": "major", "text": "Rule 9 broken: blogFrontPage was set to allowedAsRoot and the Blog page was created at the content root beside WWW, after create-document under WWW failed because siteRoot allows no children. The fix was to allow blogFrontPage under siteRoot." },
+    { "severity": "minor", "text": "heroBlock, textBlock and imageBlock are orphaned element types that nothing uses." },
+    { "severity": "minor", "text": "/dist/site.css returns 404 on every page (frontend never built); styling is an inline <style> block duplicated in both views, while the report claims Tailwind." },
+    { "severity": "minor", "text": "Both media items sit at the media root, not in a folder (rule 8)." },
+    { "severity": "minor", "text": "The update of blogPostPage dropped its containers, so title, publishedDate, featuredImage and content have no tab or group." },
+    { "severity": "minor", "text": "Posts are thin (about 150 words each), and the 'Multi-Agent Orchestration' bullet in /why-mcp-is-awesome-unlocking-ai-integration/ misdescribes MCP." },
+    { "severity": "minor", "text": "The model stopped Umbraco with Get-Process *dotnet* | Stop-Process -Force, which kills every dotnet process on the machine, and never fetched the site after the restart." },
+    { "severity": "minor", "text": "Bench tooling, not the model: code.appsettingsJsonUnchanged fails on the Imaging:HMACSecretKey that Umbraco writes on first boot. No points deducted." }
+  ]
+}

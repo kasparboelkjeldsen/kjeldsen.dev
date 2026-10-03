@@ -1,0 +1,62 @@
+{
+  "runId": "2026-09-29_1058_mcp_sonnet-5-high",
+  "grader": "Fable 5.1 (effort not visible to the grader)",
+  "gradedAt": "2026-09-29T09:17:00Z",
+  "total": 95,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 35,
+      "max": 35,
+      "notes": "Build 5/5: 0 errors, 0 warnings. Front page 10/10: / returns 200, lists both posts newest first as cards with image, date, title and excerpt, and both links work. Posts 10/10: both render every block (5 and 6 blocks; rich text, image, quote) with no 'Could not render component' or exception text. Images 5/5: two Unsplash photos imported with create-media (sourceType url) into a 'Blog' media folder, served through signed GetCropUrl URLs, 6/6 load, none hot-linked. Domain 5/5: '/' is assigned to the Blog page under WWW and all four documents are published."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 23,
+      "max": 25,
+      "notes": "Folders 8/8: richTextBlock, imageBlock and quoteBlock are elements in Blocks, seoComposition is an element in Compositions, blogFrontPage and blogPost are documents in Pages, siteRoot is in Repositories. Block set 5/7: block grid on both page types with a reusable rich text / image / quote set whose properties make sense, but it is the minimum set. -1: the post listing is not a block; it is fixed markup in the blogFrontPage template and the front page grid ('intro') holds a single rich text block, although the brief asked for everything to be built with blocks. -1: imageBlock has no alt text property (the caption doubles as alt), and the image block's 6-column span option has no effect because no block grid layout CSS is loaded. Structure 5/5: siteRoot is the only root type, siteRoot > blogFrontPage > blogPost, templates assigned and set as default, camelCase aliases, the grid data type sits in Custom/Umbraco.BlockGrid. Hygiene 5/5: seoComposition holds only metaTitle and metaDescription (meta, not content); title, publishDate, excerpt and featuredImage are real properties on blogPost; nothing duplicated or orphaned."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 25,
+      "max": 25,
+      "notes": "Pages 7/7: both page views call Html.GetBlockGridHtmlAsync (intro, body); the scaffold's Views/Partials/blockgrid/*.cshtml are unchanged; no custom loops, wrapper models or parallel partial folders. Adapters 6/6: three adapters named after the exact aliases in blockgrid/Components, each takes BlockGridItem<T>, maps to a plain model and calls Component.InvokeAsync, with no markup. ViewComponents 7/7: one per block in ViewComponents/, default view lookup to Views/Shared/Components/<Name>/Default.cshtml, plain models in Models/Blocks/, component views depend only on the plain model. Conventions 5/5: Program.cs untouched, no migrations, nothing added to Services/, no .cs in the Models root, friendly extensions (Children<T>, AncestorOrSelf<T>, Url) and GetCropUrl throughout, no injected services, styling through the Tailwind pipeline (the model ran the frontend build). The code.appsettingsJsonUnchanged FAIL is a false positive: the only change is Imaging:HMACSecretKey, the file was last written at 08:58:23Z, before the run started at 08:58:46Z, and the transcript has no edit of that file. Not deducted: the two page views each carry a full HTML document (head and header duplicated) instead of sharing a layout."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 7,
+      "max": 10,
+      "notes": "Content 4/6: two on-topic, accurate posts ('Why MCP Is Awesome: A New Contract Between AI and Your Tools' on open discovery, typed tool calls and JSON-RPC over stdio/HTTP; '5 Reasons MCP Changes How We Build With AI' as a five-point list), spread over 5 and 6 blocks with captions and a pull quote. -1: short at about 340 and 300 words. -1: only two images exist and each post reuses its featured image as its inline image block, so the same photo appears twice on the page; the second one is a 'Python' sticky note, which is only loosely relevant. Presentation 3/4: coherent Tailwind design with a constrained column, card listing with image, date, title and excerpt, readable typography, captions and a styled blockquote. -1: the repeated full-width photo dominates both post pages, and there is no site navigation or footer beyond a 'Back to Blog' link."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 5,
+      "max": 5,
+      "notes": "Channel 3/3: 52 MCP calls (32 writes) and nothing through the Management API, uSync, the database, a browser or migrations. Order followed: modeling, content, then stop/build/Razor/restart, with no warnings. No memory access and nothing read from the bench's results, tests or baseline repo. The process.stayedInFolder FAIL is scratch curl output of the model's own pages written to /tmp (front.html, post1.html, post2.html) and read back, plus its session scratchpad; not deducted, in line with earlier runs. Report 2/2: accurate. It describes what was built, gives working URLs, and discloses the title fallback bug it fixed and the rebuild needed for every .cshtml change. Nothing is broken that it fails to mention."
+    }
+  ],
+  "summary": "A complete, working block-grid blog built over MCP: front page with a card listing and two posts about MCP, with textbook adapter / ViewComponent / plain-model architecture. It loses points for a minimal block set with the listing hard-coded in the template, and for short posts that show the same photo twice.",
+  "strengths": [
+    "Everything works: clean build, all pages and blocks render, signed crop URLs load, domain '/' assigned",
+    "Block pipeline follows AGENTS.md exactly: GetBlockGridHtmlAsync, alias-named adapters without markup, one ViewComponent per block, plain models in Models/Blocks",
+    "Composition used correctly for SEO meta only; post metadata are real properties",
+    "Built only through MCP in the prescribed order, and verified the rendered pages before reporting",
+    "Accurate final report that discloses the bug it found and fixed"
+  ],
+  "issues": [
+    { "severity": "minor", "text": "The post listing is fixed markup in Umbraco.Bench.Umbraco/Views/blogFrontPage.cshtml, not a block; the front page grid holds one rich text block." },
+    { "severity": "minor", "text": "Each post reuses its featured image as its inline image block, so the same photo appears twice (/why-mcp-is-awesome-a-new-contract-between-ai-and-your-tools/, /5-reasons-mcp-changes-how-we-build-with-ai/); only two media items exist." },
+    { "severity": "minor", "text": "Posts are short, about 340 and 300 words." },
+    { "severity": "minor", "text": "imageBlock has no alt text property; Views/Partials/blockgrid/Components/imageBlock.cshtml passes the caption, which the component uses as alt." },
+    { "severity": "minor", "text": "No block grid layout CSS is loaded, so the 6-column span set on the image block in the second post has no effect and the grid renders as a plain stack." },
+    { "severity": "minor", "text": "blogFrontPage.cshtml and blogPost.cshtml each contain a full HTML document; head and header are duplicated instead of shared in a layout. No site navigation or footer." },
+    { "severity": "minor", "text": "Wrote scratch curl output to /tmp (front.html, post1.html, post2.html), outside the project folder. Not deducted." },
+    { "severity": "minor", "text": "Bench tooling, not the model: code.appsettingsJsonUnchanged fails on the Imaging:HMACSecretKey that Umbraco writes to appsettings.json on first boot. No points deducted." }
+  ]
+}

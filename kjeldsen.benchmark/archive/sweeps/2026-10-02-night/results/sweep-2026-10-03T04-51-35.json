@@ -1,0 +1,57 @@
+{
+  "state": "finished",
+  "startedAt": "2026-10-03T04:51:35.378Z",
+  "updatedAt": "2026-10-03T06:33:55.083Z",
+  "done": [
+    {
+      "label": "gpt-6-astra:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0654_mcp_gpt-6-astra-high",
+      "grade": "93/100",
+      "error": null
+    },
+    {
+      "label": "claude-haiku-4-5-20251001 · MCP",
+      "status": "failed",
+      "runId": null,
+      "grade": null,
+      "error": "model: the CLI started in permission mode \"default\", not \"auto\". Stopped before it did anything."
+    },
+    {
+      "label": "gpt-5.6-luna:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0713_mcp_gpt-5.6-luna-high",
+      "grade": "87/100",
+      "error": null
+    },
+    {
+      "label": "claude-sonnet-5:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0733_mcp_sonnet-5-high",
+      "grade": "91/100",
+      "error": null
+    },
+    {
+      "label": "gpt-5.6-sol:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0751_mcp_gpt-5.6-sol-high",
+      "grade": "93/100",
+      "error": null
+    },
+    {
+      "label": "claude-sonnet-5-5:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0812_mcp_sonnet-5.5-high",
+      "grade": "99/100",
+      "error": null
+    },
+    {
+      "label": "claude-opus-5-5:high · MCP",
+      "status": "graded",
+      "runId": "2026-10-03_0822_mcp_opus-5.5-high",
+      "grade": "99/100",
+      "error": null
+    }
+  ],
+  "queued": []
+}

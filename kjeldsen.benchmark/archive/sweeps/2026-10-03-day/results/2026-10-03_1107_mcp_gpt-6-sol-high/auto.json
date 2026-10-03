@@ -1,0 +1,54 @@
+{
+  "driver": "bench/auto.mjs",
+  "provider": "openai",
+  "model": "gpt-6-sol",
+  "effort": "high",
+  "variant": "mcp",
+  "startedAt": "2026-10-03T09:07:12.193Z",
+  "sessionId": "01a10104-bd09-71c1-b2d5-780c45664c36",
+  "codexCli": "C:\\Users\\kaspa\\AppData\\Local\\OpenAI\\Codex\\bin\\be3fd7e5c1969ff6\\codex.exe",
+  "codexVersion": "0.159.0-alpha.12.1",
+  "permissionMode": "on-request / auto_review / danger-full-access",
+  "disabledFeatures": [
+    "plugins",
+    "apps",
+    "browser_use",
+    "browser_use_external",
+    "computer_use",
+    "in_app_browser",
+    "image_generation",
+    "memories"
+  ],
+  "mcpServers": [
+    "umbraco"
+  ],
+  "prompt1": {
+    "durationMs": 74931,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 8,
+    "mcpServers": "node_repl=? (0 tools), umbraco=ready (160 tools)",
+    "successfulToolCalls": 0
+  },
+  "prompt2": {
+    "durationMs": 819212,
+    "costUsd": 0,
+    "isError": false,
+    "toolCalls": 51,
+    "failedToolCalls": 7,
+    "results": 1,
+    "terminalReason": "completed"
+  },
+  "transcript": "C:\\Users\\kaspa\\.codex\\sessions\\2026\\10\\03\\rollout-2026-10-03T11-07-30-01a10104-bd09-71c1-b2d5-780c45664c36.jsonl",
+  "runId": "2026-10-03_1107_mcp_gpt-6-sol-high",
+  "log": "bench\\logs\\auto-2026-10-03T09-07-12-mcp-gpt-6-sol.jsonl",
+  "grader": {
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "durationMs": 172321,
+    "costUsd": 1.5315434,
+    "isError": false,
+    "log": "bench\\logs\\auto-2026-10-03T09-22-26-grader.jsonl",
+    "finalMessage": "Run `2026-10-03_1107_mcp_gpt-6-sol-high` (GPT-6-Sol, high) scores **91.5 / 100**. That is the lowest of today's six runs, mainly because of thin content modeling. The grade is written, it shows up in the report's Grade table, and after the reset `npm run status` says **pristine**.\n\n| Category | Score |\n|---|---|\n| It works | 35 / 35 |\n| Content modeling | 19.5 / 25 |\n| Code architecture & conventions | 24.5 / 25 |\n| Content & presentation | 8 / 10 |\n| Process & honesty | 4.5 / 5 |\n\n**Summary:** It built a polished \"MCP Journal\" blog with a hero / article / post-feed block grid and two published posts about MCP, using the provided Unsplash photos. The build is clean, `/` is answered through a domain, both posts render fully, and images are served through signed `GetCropUrl` URLs. The code follows the AGENTS.md block pipeline exactly: block grid helper, adapters with no markup, plain models, and one ViewComponent per block.\n\n**The one failed automated check (channel) is a measurement artifact, not a rule break.** The Codex session didn't expose the Umbraco MCP tools. So the model started the project's own configured MCP server from `.mcp.json` over stdio, using a temporary Python script it deleted afterwards. Every schema, media and content write went through that MCP server, which is why the metrics count 0 MCP calls. It disclosed this in its answer to the first prompt. I deducted only 0.5, for one read-only Management API connectivity check and because the writes are invisible to the harness.\n\n**Top issues:**\n- **Weak block model (major):** each post is a hero plus a single article block that holds the whole body. There is no standalone image or text block.\n- **No post metadata (major):** posts have no date, excerpt or listing-image properties. The front-page cards copy their title, summary and image from each post's first block (`postFeedBlock.cshtml`), so they break silently if an editor reorders blocks. No date is shown anywhere.\n- **Thin posts (minor):** about 250 words each, partly about the demo itself, with only 2 blocks and 1 image per post.\n- **Duplicated page shell (minor):** the full HTML head, header and footer are repeated in both page templates instead of a shared layout.\n\nThe full write-up is in `results/2026-10-03_1107_mcp_gpt-6-sol-high/grade.md`, and the solution is archived as `refs/runs/2026-10-03_1107_mcp_gpt-6-sol-high`."
+  }
+}

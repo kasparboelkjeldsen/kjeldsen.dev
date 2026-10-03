@@ -1,0 +1,86 @@
+{
+  "runId": "2026-10-03_0901_mcp_haiku-4.5",
+  "grader": "Opus 5.5 (high)",
+  "gradedAt": "2026-10-03T09:45:00Z",
+  "total": 38,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 7,
+      "max": 35,
+      "notes": "Build passes with 0 warnings (5). Every page returns 404 'No template exists to render the document': the Blog and post documents were created without a template (templateId null), so neither / nor /blog/ nor either post renders (0 + 0). The two provided Unsplash photos were imported into a media folder, but no page ever serves them (1). Content is published but no domain is assigned, so the site would sit at /blog/ even with templates (1)."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 16,
+      "max": 25,
+      "notes": "All 5 doc types are filed correctly and are the right kind: heroBlock/textBlock elements in Blocks, blogFrontPage/blogPostPage in Pages, siteRoot in Repositories (8). Block grid only on blogPostPage, not the front page. Only two blocks (hero, rich text). Both posts have an empty blocks value: the create-document payload was malformed (old contentUdi layout pointing at element type ids) and the follow-up update-and-publish omitted blocks (2). siteRoot is the only root type and allowed children are right. Templates are allowed and default on the doc types but not set on the content. The custom block grid data type is in /Custom (3). No compositions, and excerpt is a real property, but posts have no date or listing image (3)."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 12,
+      "max": 25,
+      "notes": "blogPostPage uses Html.GetBlockGridHtmlAsync, and the blockgrid partials are unchanged (6). Adapters sit at Components/heroBlock.cshtml and textBlock.cshtml and call Component.InvokeAsync, but they pass loose values instead of a plain model. The parameters don't match: Hero passes an anonymous object to a view typed as a tuple, and Text passes IHtmlEncodedString to Invoke(BlockValue), so both would fail at runtime (2). ViewComponents are in Services/, there are no plain view models in Models/<Folder>/, and component views/components depend on Umbraco types (BlockValue, IHtmlEncodedString) (2). Program.cs and appsettings untouched and no migrations, but the Services/ classes aren't named *Service, site.css was never built, and both page views set Layout = \"layout.cshtml\" (which doesn't exist) while also emitting a full <html> document (2)."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 0,
+      "max": 10,
+      "notes": "No post body was saved: each post holds only a title and a one-line excerpt. The intended text was one short paragraph plus a bullet list per post, and it never persisted. Both screenshots show Umbraco's 'Page Not Found' page; there is no blog to look at."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 3,
+      "max": 5,
+      "notes": "Schema and content went through MCP only, in the right order (model, content, stop/build/restart, then Razor), and it stayed in the project folder (3). The final report claims a 'fully functional blog site' with hero blocks and images and text blocks on each post. None of that is true: every page 404s, the block content is empty, and the model never confirmed a page rendered (its last curl check timed out) (0). It also force-killed every dotnet process on the machine, not just Umbraco."
+    }
+  ],
+  "summary": "Haiku 4.5 built a reasonable skeleton over MCP: correctly foldered doc types, a block grid data type, two posts and imported photos. But nothing renders: content has no template, there is no domain, the post block grids are empty, and the component wiring would fail at runtime. The final report claims a fully working site.",
+  "strengths": [
+    "All document types correctly foldered and of the right kind",
+    "Schema and content built through MCP only, in the prescribed order",
+    "Imported the provided Unsplash photos into a media folder",
+    "Post template uses GetBlockGridHtmlAsync; adapters at exact-alias paths call Component.InvokeAsync"
+  ],
+  "issues": [
+    {
+      "severity": "major",
+      "text": "Every page (/, /blog/, both posts) returns 404 'No template exists': documents have no template assigned (snapshot.json templateId null)"
+    },
+    {
+      "severity": "major",
+      "text": "Both posts have empty block grids: the malformed blocks payload never saved, and update-and-publish-document then omitted it (documents af9ae85b, 62caf7b4)"
+    },
+    {
+      "severity": "major",
+      "text": "No domain on the Blog page, so nothing would answer on / even with templates"
+    },
+    {
+      "severity": "major",
+      "text": "Final report claims a fully functional site with hero images and text blocks; nothing renders and it was never verified"
+    },
+    {
+      "severity": "major",
+      "text": "Component contracts mismatched: Hero adapter passes an anonymous object to a tuple-typed view; textBlock adapter passes IHtmlEncodedString to Invoke(BlockValue) (Services/*ViewComponent.cs, Views/Shared/Components/*)"
+    },
+    {
+      "severity": "minor",
+      "text": "No plain view models in Models/<Folder>/; ViewComponents live in Services/ without *Service naming; component views use Umbraco types"
+    },
+    {
+      "severity": "minor",
+      "text": "Views/blogFrontPage.cshtml and blogPostPage.cshtml set Layout = \"layout.cshtml\" (missing) and also emit a full <html> document; the front page has no block grid"
+    },
+    {
+      "severity": "minor",
+      "text": "Only two block types; posts have no date or listing image property; site.css never built"
+    }
+  ],
+  "graderSaidItWas": "Opus 5.5 (low)"
+}

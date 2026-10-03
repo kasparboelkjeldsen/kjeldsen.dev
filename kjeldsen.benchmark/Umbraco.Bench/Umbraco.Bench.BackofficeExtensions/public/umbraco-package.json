@@ -1,0 +1,14 @@
+{
+  "id": "Umbraco.Bench.BackofficeExtensions",
+  "name": "Umbraco.Bench Backoffice Extensions",
+  "allowPackageTelemetry": false,
+  "version": "0.1.0",
+  "extensions": [
+    {
+      "type": "backofficeEntryPoint",
+      "alias": "Umbraco.Bench.EntryPoint",
+      "name": "Umbraco.Bench Entry Point",
+      "js": "/App_Plugins/umbraco.bench.extensions/dist.js"
+    }
+  ]
+}

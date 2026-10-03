@@ -1,0 +1,86 @@
+{
+  "runId": "2026-09-29_1422_mcp_opus-5.5-high",
+  "grader": "Fable 5.1 (effort not visible to the grader)",
+  "gradedAt": "2026-09-29T12:50:00Z",
+  "total": 99,
+  "max": 100,
+  "categories": [
+    {
+      "id": "works",
+      "name": "It works",
+      "score": 35,
+      "max": 35,
+      "notes": "Build 5/5: 0 errors, 0 warnings. Front page 10/10: / returns 200 and is the blog front page (hero, post list, rich text); both cards show image, date, title, excerpt and a link, newest first, and both links resolve. Posts 10/10: both render all 6 blocks (hero, 3 rich text, image, quote) with no 'Could not render component' or exception text. Images 5/5: 5 Unsplash images imported with create-media (sourceType url) into the media folder 'Blog', served through signed GetCropUrl URLs; 7/7 image requests load, none hot-linked. Domain 5/5: domain '/' is set on 'The Model Context Blog' under WWW and all 4 documents are published."
+    },
+    {
+      "id": "modeling",
+      "name": "Content modeling",
+      "score": 24,
+      "max": 25,
+      "notes": "Folders 8/8: 5 element types in Blocks, blogFrontPage and blogPost in Pages, siteRoot in Repositories; kinds are right. Block set 6/7: hero, rich text, image, quote and post list are reusable with sensible properties, and each page type has its own grid data type offering only the blocks that fit (post list only on the front page). -1: imageBlock has no alt text property, so the caption doubles as alt text and is read twice; no block has settings, areas or column span options, so the grid works as a plain list; the post title is typed twice (node name and hero heading). Structure 5/5: siteRoot is the only root type, siteRoot > blogFrontPage > blogPost, templates assigned, camelCase aliases, both grid data types in Custom/Umbraco.BlockGrid. Hygiene 5/5: no compositions; excerpt, listingImage and publishDate are real properties on their own Listing tab; nothing duplicated or orphaned, all 5 media items are used."
+    },
+    {
+      "id": "architecture",
+      "name": "Code architecture & conventions",
+      "score": 25,
+      "max": 25,
+      "notes": "Pages 7/7: both page views call Html.GetBlockGridHtmlAsync(Model, \"blocks\"); the scaffold's Views/Partials/blockgrid/*.cshtml and _ViewImports.cshtml are unchanged; no custom loops or parallel partials. Adapters 6/6: five adapters named after the exact aliases, each BlockGridItem<T> -> plain model -> Component.InvokeAsync, no markup. The post list adapter gets its posts from BlogPostService (friendly extensions only, registered in Composers/BlogComposer.cs) instead of querying itself; it still takes the current page from UmbracoContext.PublishedRequest, noted but not deducted. ViewComponents 7/7: one per block, default view lookup, plain models in Models/Blocks/ and Models/Blog/, component views depend only on the plain model. Conventions 5/5: Program.cs untouched, no migrations, service named *Service, no .cs in the Models root, friendly extensions and GetCropUrl throughout, no injected URL or image services, styling through the Tailwind pipeline (src/site.css -> wwwroot/dist/site.css). The code.appsettingsJsonUnchanged FAIL is a false positive: the only change is Imaging:HMACSecretKey, the file was last written at 12:22:24Z, before the run started at 12:22:45Z, and the transcript has no edit of that file."
+    },
+    {
+      "id": "content",
+      "name": "Content & presentation",
+      "score": 10,
+      "max": 10,
+      "notes": "Content 6/6: two on-topic posts of about 470 and 490 words. 'MCP Is the USB-C Port for AI' covers the N x M integration problem, tools/resources/prompts and why it matters; 'I Built This Blog by Talking to Umbraco' is a first-hand account of building this site over MCP. Each is spread over 6 blocks with headings, lists, a pull quote and a captioned image. Images are generic tech stock photos but fit their captions. One imprecise sentence: post 2 says ModelsBuilder only regenerates models when the site restarts, while in this project the files are generated at once and it is the running assembly that needs the rebuild. Presentation 4/4: coherent Tailwind design with sticky header, full-width hero, two-column card listing, constrained text column, styled quote, captioned figure and footer. Nit: hero text, post list and rich text use three different container widths, so their left edges don't line up."
+    },
+    {
+      "id": "process",
+      "name": "Process & honesty",
+      "score": 5,
+      "max": 5,
+      "notes": "Channel 3/3: 49 MCP calls (31 writes) in the main session and nothing through the Management API, uSync, the database, a browser or migrations. Order followed: model, content, stop, build, Razor, restart; no warnings. No memory access and nothing read from the bench's results, tests or baseline. The run used one Workflow with 7 subagents (3 audits, 4 verifiers) for a review after the site was done; they only read project files and ~/.nuget, made read-only MCP calls and fetched pages. Not deducted: logs, page dumps and screenshots went to the session's own scratchpad in the temp folder and to /tmp, and the model read its own workflow journal under ~/.claude/projects. Report 2/2: accurate. It discloses the layout path mistake it fixed, the bug its review found and fixed, and the far-left focal point on all five images, which does not affect the current crops."
+    }
+  ],
+  "summary": "A complete, working block-grid blog built through the Umbraco MCP server: a front page with hero, post list and intro text, and two substantive posts of 6 blocks each, rendered through the prescribed adapter > ViewComponent pipeline with the post query in a service and a clean Tailwind design. The only deduction is for the block model: no alt text property on the image block and no settings or layout options on any block.",
+  "strengths": [
+    "Everything works on first check: clean build, all 3 pages and 7 images load, domain and publishing correct",
+    "Post query lives in BlogPostService, registered in a composer, so the post list adapter stays an adapter",
+    "Separate block grid data types for front page and posts, each offering only the blocks that fit",
+    "Posts are substantive (about 470 and 490 words) and spread over 6 blocks with headings, lists, quote and captioned image",
+    "Ran its own audit-and-verify review, fixed the one confirmed bug, and reported the rest honestly"
+  ],
+  "issues": [
+    {
+      "severity": "minor",
+      "text": "imageBlock has no alt text property; the adapter uses the caption as alt text, so it is read twice and never describes the image (Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/imageBlock.cshtml). The model's own review flagged this and its verifier dismissed it."
+    },
+    {
+      "severity": "minor",
+      "text": "No block has settings, areas or column span options, so the grid works as a plain list (data types 'Blog Front Page Grid' and 'Blog Post Grid'); the post title is entered twice, as node name and as heroBlock heading."
+    },
+    {
+      "severity": "minor",
+      "text": "The post list adapter takes the current page from UmbracoContext.PublishedRequest, so the block depends on the page being requested (Umbraco.Bench.Umbraco/Views/Partials/blockgrid/Components/blogPostListBlock.cshtml). Not deducted."
+    },
+    {
+      "severity": "minor",
+      "text": "All 5 media items are stored with focal point left 0; current crops only trim top and bottom so nothing shows it, but a narrower crop would anchor hard left. Disclosed in the report, not fixed."
+    },
+    {
+      "severity": "minor",
+      "text": "Post 2 says ModelsBuilder only regenerates models when the site restarts, which is imprecise for this project (/i-built-this-blog-by-talking-to-umbraco/). Blocks use three different container widths, so left edges don't line up (/)."
+    },
+    {
+      "severity": "minor",
+      "text": "Cost of ultracode: 16:05 and 12.7M tokens (540k excluding cache reads), 118 requests of which 51 in workflow subagents; about twice the time and three times the fresh tokens of the Opus 5.5 high run, for a review that found one low-severity bug."
+    },
+    {
+      "severity": "minor",
+      "text": "Bench tooling, not the model: code.appsettingsJsonUnchanged fails on the Imaging:HMACSecretKey that Umbraco writes to appsettings.json on first boot. No points deducted."
+    },
+    {
+      "severity": "minor",
+      "text": "Bench tooling, not the model: the collector labelled this run 'high' and skipped the workflow subagents' tokens. bench/lib/transcript.mjs was patched to report effort 'ultracode' and to count subagents/workflows/*/agent-*.jsonl; metrics.json is re-collected with both. The run folder keeps its original name ending in -high."
+    }
+  ]
+}

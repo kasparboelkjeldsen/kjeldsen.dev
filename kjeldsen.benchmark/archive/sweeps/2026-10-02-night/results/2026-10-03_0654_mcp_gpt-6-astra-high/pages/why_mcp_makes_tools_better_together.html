@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>One connection. A world of possibility. &#x2014; Common Ground</title>
+    <meta name="description" content="Why MCP feels like a common language for your tools&#x2014;and why that gives us more time to make things worth making." />
+    <meta name="theme-color" content="#f6f5ef" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/dist/site.css?v=pwoGV0V21VEs5tr9z6rBOKXvh4XXTeHFUeD4wtPAja8" />
+</head>
+<body class="bg-paper text-ink antialiased">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="mx-auto max-w-[1320px] px-6 md:px-12 lg:px-16">
+        <header class="flex items-center justify-between gap-5 border-b border-line py-7 md:py-8">
+            <a class="flex items-center gap-3 text-xl font-semibold tracking-[-0.055em] md:text-2xl" href="/" aria-label="Common Ground home"><span class="brand-mark" aria-hidden="true"></span>Common Ground<span class="text-accent" aria-hidden="true">.</span></a>
+            <nav aria-label="Main navigation" class="flex items-center gap-6 text-sm md:gap-9">
+                <a class="hover:text-accent" href="/#journal">Journal <span class="ml-1 text-accent" aria-hidden="true">↗</span></a>
+                <a class="hidden text-muted hover:text-accent sm:inline" href="#about">About</a>
+            </nav>
+        </header>
+        <main id="main" tabindex="-1"><article>
+
+<div class="umb-block-grid" data-grid-columns="12" style="--umb-block-grid--grid-columns: 12;">
+    
+<div class="umb-block-grid__layout-container">
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="articleHeaderBlock"
+            data-content-element-type-key="56c2aa32-9538-4b56-acbb-c01357f77737"
+            data-element-key="efa3cbd9-273c-4ede-a6f4-1188ed5e19e9"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<header class="pt-8 md:pt-12">
+    <a class="inline-flex items-center gap-3 text-sm text-muted hover:text-accent" href="/#journal"><span aria-hidden="true">←</span> Back to the journal</a>
+    <div class="mx-auto max-w-4xl pt-12 pb-10 text-center md:pt-16 md:pb-14">
+        <p class="eyebrow mb-6 text-accent">The bigger picture</p>
+        <h1 class="text-[clamp(2.8rem,5.5vw,5rem)] leading-[1.05] font-semibold tracking-[-0.06em]">One connection. A world of possibility.</h1>
+        <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">Why MCP feels like a common language for your tools&#x2014;and why that gives us more time to make things worth making.</p>
+        <div class="mt-7 flex flex-wrap justify-center gap-3 text-xs text-muted">
+            <time datetime="2026-10-03">03 October 2026</time>
+            <span aria-hidden="true">/</span><span>3 min read</span>
+        </div>
+    </div>
+        <figure>
+            <img src="/media/oddab3wq/orange-usb-cables.jpg?rxy=0,0.5&amp;width=1600&amp;height=850&amp;v=1dd52f3e3d67281&amp;hmac=546a2e7e48e73826983f78eacdb30396205fd8c8174961c8409650ed7439d6a9" alt="A bundle of bright orange USB cables" width="1600" height="850" fetchpriority="high" class="aspect-[32/17] w-full rounded-[3px] object-cover" />
+            <figcaption class="mt-3 text-right text-[11px] text-muted">Photography by Lucian Alexe / Unsplash</figcaption>
+        </figure>
+</header>
+
+        </div>
+        <div
+            class="umb-block-grid__layout-item"
+            data-content-element-type-alias="richTextBlock"
+            data-content-element-type-key="6de1299e-8d4d-47d1-b16a-8a6014e18a73"
+            data-element-key="791103d7-64a2-451d-b61d-71dd1149e4d8"
+            data-col-span="12"
+            data-row-span="1"
+            style=" --umb-block-grid--item-column-span: 12; --umb-block-grid--item-row-span: 1; ">
+<div class="article-copy mx-auto max-w-[700px] pt-12 pb-16 md:pt-16 md:pb-24">
+    <p>There is a particular kind of friction that every maker knows: you have a clear idea, but getting it into your tools means a dozen tiny detours. Find the right screen. Look up an identifier. Copy a value. Check which field accepts which format. Repeat.</p>
+<p>Model Context Protocol, or MCP, makes a compelling promise for this kind of work: give an AI assistant a defined way to discover and use the capabilities of a connected application. In this local Umbraco project, that means an assistant can ask what content types exist, inspect their fields, and use named tools to create and publish content.</p>
+<h2>From a description to something you can use</h2>
+<p>An assistant without access to the CMS can suggest a blog structure. With the local Umbraco MCP server, it can help turn that structure into actual document types, blocks, media, and pages. The difference becomes tangible when you open the backoffice: the work is there, ready to inspect and edit.</p>
+<p>This journal is a small example. Its front page lives beneath the WWW repository. Its articles are normal Umbraco documents. The photographs came from the project's local image collection and were imported into a media folder. Each of those steps used a tool exposed by the MCP server.</p>
+<h2>Less guessing, better questions</h2>
+<p>One of the most useful steps happens before anything is created. The assistant can read the existing schema. That makes it possible to reuse a text editor or image picker, choose a valid document type, and understand the shape of a block grid value before sending it.</p>
+<p>That context matters. “Add an image” is a vague instruction until you know which media item to reference and which property expects it. Reading the application first turns a broad request into a concrete change that can be checked afterwards.</p>
+<blockquote><p>The exciting part is the shorter distance between an idea and an editable result.</p></blockquote>
+<h2>The application still has a job to do</h2>
+<p>MCP does not replace Umbraco's content model, publishing system, or rendering conventions. Here, pages still render through Razor. Blocks still use Umbraco's block grid renderer. Editors still work with the same content in the backoffice.</p>
+<p>That is a strength. A connected assistant can help with repetitive setup while the CMS remains the place where the content belongs. There is no separate pile of article HTML hiding in a script, and no new publishing system to learn.</p>
+<h2>Start with one useful connection</h2>
+<p>You do not need an elaborate demonstration to see the appeal. Create a page, attach a photograph, publish it, and read it back. Each successful step makes the workflow a little more direct.</p>
+<p>For us, that is why MCP is awesome: it makes the tools we already use easier to work with, and leaves more attention for the ideas we want to put into them.</p>
+</div>
+
+        </div>
+</div>
+
+</div>
+
+</article>
+</main>
+        <footer id="about" class="border-t border-line py-9 md:py-12">
+            <div class="flex flex-col justify-between gap-6 md:flex-row md:items-start">
+                <div>
+                    <a class="text-xl font-semibold tracking-[-0.04em]" href="/">Common Ground<span class="text-accent">.</span></a>
+                    <p class="mt-3 max-w-md text-sm leading-relaxed text-muted">A small journal about connected tools, thoughtful workflows, and what happens when AI can work with your CMS.</p>
+                </div>
+                <a class="inline-flex items-center gap-5 text-sm font-medium hover:text-accent" href="/#journal">Find your next connection <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="mt-10 flex flex-wrap justify-between gap-3 border-t border-line pt-5 text-[11px] text-muted">
+                <span>© 2026 Common Ground</span><span>Made with curiosity. Published with Umbraco.</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
