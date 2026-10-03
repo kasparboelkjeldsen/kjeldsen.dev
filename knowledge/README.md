@@ -17,6 +17,7 @@ behind decisions that look strange without context.
 | [generated-graphics.md](generated-graphics.md) | Illustrations drawn by the model: the Generated Graphics media type, the save-time generation through Umbraco.AI, the SVG/GSAP contract and how the frontend plays it |
 | [data-visio.md](data-visio.md) | Charts drawn by the model from a pasted dataset: the Data Visio block, the ECharts contract, server-rendered stills, sizing by grid span |
 | [blocks.md](blocks.md) | Every block in the grid: properties, what the frontend does with each, the Table block's JSON format, and how to write blocks through the API |
+| [blog-guide.md](blog-guide.md) | Self-contained brief for drafting a post: the block notation, what each block takes, how to choose tables versus charts, an example draft. Hand it to any model with the notes |
 
 ## A note on sources
 

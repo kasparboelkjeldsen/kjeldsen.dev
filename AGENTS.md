@@ -13,6 +13,10 @@ Pages are block grids. [knowledge/blocks.md](knowledge/blocks.md) is the catalog
 block's alias, key, column spans and properties, the grid JSON a page is written as, the Table
 block's JSON format and the Data Visio block's brief. Read it before writing content.
 
+To draft a post from notes and data, use [knowledge/blog-guide.md](knowledge/blog-guide.md): it
+defines the `[HEADER]` / `[RTE]` / `[TABLE]` / `[CHART]` draft notation that the placer then maps
+onto the blocks above.
+
 Text fields across the site accept `**bold**` and `--italic--` as emphasis markers; nothing else
 in a text field becomes markup.
 
