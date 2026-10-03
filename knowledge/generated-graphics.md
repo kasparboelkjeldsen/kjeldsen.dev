@@ -99,5 +99,13 @@ closely once told to. Profiles live in `umbracoAIProfile`; the management API fo
   timeline never runs there.
 - **Cost.** About $0.25 a drawing at Sonnet prices. The fingerprint stops a save that changed
   nothing in the brief from paying again; hand edits to the SVG survive until the brief changes.
+- **A hand edit reaches a page's blocks only after that page is republished.** Saving the media
+  item updates pickers resolved per request (the SEO list image, so the hero) at once, but a
+  graphic inside a grid block stays as it was in the page's cached block value until the page is
+  published again. Fixing the key in *Securing and Expanding the Delivery Api* (2026-10-03: the
+  model drew the key's "reflection" as a mirror image floating 160 units below it, turning the
+  other way; it became a blurred cast shadow offset like the lock plate's, rotating about the
+  offset pivot) needed a republish of the post. `kjeldsen.experiment/visio/key-shadow.mjs` is
+  the edit, as a pattern for the next one.
 - **Reference photos** come through `MediaFileManager.FileSystem`, so blob storage in every
   environment. Anthropic takes up to 5 MB / 8000 px; the originals are bigger, hence the resize.
