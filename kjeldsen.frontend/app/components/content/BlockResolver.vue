@@ -33,6 +33,7 @@
     vimeoBlock: defineAsyncComponent(() => import('~/components/blocks/VimeoBlock.vue')),
     imageBlock: defineAsyncComponent(() => import('~/components/blocks/ImageBlock.vue')),
     dataVisioBlock: defineAsyncComponent(() => import('~/components/blocks/DataVisioBlock.vue')),
+    tableBlock: defineAsyncComponent(() => import('~/components/blocks/TableBlock.vue')),
     apiUserTest: defineAsyncComponent(() => import('~/components/blocks/ApiUserTest.vue')),
     cacheKeyExampleBlock: defineAsyncComponent(
       () => import('~/components/blocks/CacheKeyExampleBlock.vue')

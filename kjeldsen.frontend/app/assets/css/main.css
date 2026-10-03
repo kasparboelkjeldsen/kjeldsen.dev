@@ -646,6 +646,106 @@
   text-align: center;
 }
 
+/* A Table block (app/components/blocks/TableBlock.vue): JSON in, a table in the same frame a
+   photo gets. Wider than its cell it scrolls sideways inside the frame rather than widening the
+   page. With a mobile variant in the markup, the width decides which of the two tables shows. */
+.table-frame {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-mobile {
+  display: block;
+}
+.table-desktop {
+  display: none;
+}
+@media (min-width: 48rem) {
+  .table-mobile {
+    display: none;
+  }
+  .table-desktop {
+    display: block;
+  }
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-fg-2);
+}
+.data-table .cell {
+  padding: 0.7rem 1rem;
+  vertical-align: top;
+  text-align: left;
+}
+.data-table thead .cell {
+  padding-top: 0.85rem;
+  padding-bottom: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  background: rgb(255 255 255 / 0.025);
+  border-bottom: 1px solid var(--color-line);
+  white-space: nowrap;
+}
+.data-table tbody tr + tr .cell {
+  border-top: 1px solid var(--color-line);
+}
+.data-table tbody tr:hover .cell {
+  background: rgb(255 255 255 / 0.02);
+}
+.data-table tfoot .cell {
+  border-top: 1px solid var(--color-line-2);
+  font-weight: 600;
+  color: var(--color-fg);
+}
+.data-table .align-right {
+  text-align: right;
+}
+.data-table .align-center {
+  text-align: center;
+}
+.data-table .is-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+.data-table .is-strong {
+  font-weight: 600;
+  color: var(--color-fg);
+}
+.data-table .is-muted {
+  color: var(--color-muted);
+}
+.data-table .is-nowrap {
+  white-space: nowrap;
+}
+.data-table .cell-link {
+  color: var(--color-sky);
+  text-decoration: underline;
+  text-decoration-color: rgb(125 211 252 / 0.4);
+  text-underline-offset: 3px;
+}
+.data-table .cell-link:hover {
+  text-decoration-color: currentColor;
+}
+@media (max-width: 47.9rem) {
+  .data-table {
+    font-size: 0.85rem;
+  }
+  .data-table .cell {
+    padding: 0.6rem 0.75rem;
+  }
+}
+.table-empty {
+  padding: 1.5rem;
+  text-align: center;
+}
+
 /* Blocks that want more room than the text column. Only when the block owns the whole row - a
    half-width block next to another must stay inside its cell. */
 @media (min-width: 64rem) {
@@ -725,7 +825,8 @@
 .block-cell[data-type='imageBlock'],
 .block-cell[data-type='vimeoBlock'],
 .block-cell[data-type='codeBlock'],
-.block-cell[data-type='dataVisioBlock'] {
+.block-cell[data-type='dataVisioBlock'],
+.block-cell[data-type='tableBlock'] {
   margin-block: 0.5rem;
 }
 .block-cell[data-type='spotlightBlock'] {

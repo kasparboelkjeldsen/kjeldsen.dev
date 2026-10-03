@@ -16,6 +16,7 @@ behind decisions that look strange without context.
 | [engage-headless-v2.md](engage-headless-v2.md) | How the V2 frontend is wired to Engage: one pageview per navigation, segments resolved by Engage, what to verify |
 | [generated-graphics.md](generated-graphics.md) | Illustrations drawn by the model: the Generated Graphics media type, the save-time generation through Umbraco.AI, the SVG/GSAP contract and how the frontend plays it |
 | [data-visio.md](data-visio.md) | Charts drawn by the model from a pasted dataset: the Data Visio block, the ECharts contract, server-rendered stills, sizing by grid span |
+| [table-block.md](table-block.md) | The Table block's JSON format: columns, rows, cells, footer, and the mobile variant that falls back to the desktop table |
 
 ## A note on sources
 

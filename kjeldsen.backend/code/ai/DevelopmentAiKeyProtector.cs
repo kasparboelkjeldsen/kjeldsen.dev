@@ -37,14 +37,14 @@ public sealed class DevelopmentAiKeyProtector(
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            logger.LogDebug(ex, "Could not decrypt a protected AI field locally; using the development key");
+            logger.LogInformation(ex, "Could not decrypt a protected AI field locally; using the development key");
             return developmentKey;
         }
 
         // The stock protector swallows the failure and hands the ciphertext back.
         if (inner.IsProtected(result) || result == value)
         {
-            logger.LogDebug("A protected AI field did not decrypt locally; using the development key");
+            logger.LogInformation("A protected AI field did not decrypt locally; using the development key");
             return developmentKey;
         }
         return result;
@@ -64,8 +64,13 @@ public static class DevelopmentAiKeyExtensions
         if (!builder.Environment.IsDevelopment()) return builder;
 
         var key = builder.Configuration[ConfigurationKey];
-        if (string.IsNullOrWhiteSpace(key)) return builder;
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            Console.WriteLine($"[DevelopmentAiKey] {ConfigurationKey} is not set; the shared AI connection will not decrypt here. Set it with: dotnet user-secrets set \"{ConfigurationKey}\" \"<key>\" --project kjeldsen.backend");
+            return builder;
+        }
 
+        Console.WriteLine($"[DevelopmentAiKey] {ConfigurationKey} is set; using it where a stored AI secret does not decrypt.");
         builder.Services.Decorate<IAISensitiveFieldProtector>((inner, services) =>
             new DevelopmentAiKeyProtector(inner, key, services.GetRequiredService<ILogger<DevelopmentAiKeyProtector>>()));
         return builder;

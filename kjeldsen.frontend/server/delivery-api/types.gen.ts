@@ -400,7 +400,9 @@ export type IApiElementModel = ({
     contentType: 'writerElement';
 } & WriterElementElementModel) | ({
     contentType: 'dataVisioBlock';
-} & DataVisioBlockElementModel);
+} & DataVisioBlockElementModel) | ({
+    contentType: 'tableBlock';
+} & TableBlockElementModel);
 
 export type IApiMediaWithCropsBaseModel = {
     focalPoint?: ImageFocalPointModel;
@@ -605,6 +607,16 @@ export type SpotlightBlockElementPropertiesModel = {
     header?: null | string;
     text?: RichTextModel | null;
     iconImage?: null | Array<IApiMediaWithCropsModel>;
+};
+
+export type TableBlockElementModel = IApiElementBaseModel & {
+    contentType: 'tableBlock';
+    properties?: TableBlockElementPropertiesModel;
+};
+
+export type TableBlockElementPropertiesModel = {
+    table?: null | string;
+    caption?: null | string;
 };
 
 export type TestBlockElementModel = IApiElementBaseModel & {
