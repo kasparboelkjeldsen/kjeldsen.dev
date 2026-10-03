@@ -71,9 +71,10 @@ letterboxes slightly until the live chart takes over.
   charts on one page generate one after another in the same save. Front Door gives the origin
   240 s; past that the backoffice sees a 504 while the save finishes anyway, as with generated
   graphics. Save charts a block or two at a time.
-- **Generation runs where the Anthropic key decrypts** - production, as described in
-  [generated-graphics.md](generated-graphics.md). Locally the handler reports `invalid x-api-key`
-  in *Status* and leaves any existing chart alone.
+- **Generation needs a key that decrypts here.** Production has it; a local run gets it from
+  user secrets through `code/ai/DevelopmentAiKeyProtector.cs` (see
+  [generated-graphics.md](generated-graphics.md)). Without that secret the handler reports
+  `invalid x-api-key` in *Status* and leaves any existing chart alone.
 - **The script runs on the page and on the server.** That is the design: the editor who saved
   the block is trusted with the page already (the rich text editor extends the same trust). The
   generator refuses a script that names the document, window, network or timers; the frontend

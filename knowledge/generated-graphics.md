@@ -82,6 +82,10 @@ closely once told to. Profiles live in `umbracoAIProfile`; the management API fo
   Generate through production's Management API in that case (the API user is in the shared
   database and the generator code is deployed), rather than re-saving the key locally, which
   would break production the same way.
+  **Since 2026-10-03 a local run can draw too**: `code/ai/DevelopmentAiKeyProtector.cs`
+  decorates Umbraco.AI's field protector in Development and substitutes the key from user
+  secrets (`dotnet user-secrets set "Umbraco:AI:DevelopmentApiKey" "<key>"`) whenever a stored
+  secret does not decrypt on this machine. Saving a connection locally is still a bad idea.
 - **Batch generation from a script**: one item at a time, and read the result off the saved
   item rather than the HTTP status - through Front Door the request can come back before the
   save does. `kjeldsen.experiment` keeps the script used for *Headless - Not Hovedløst*.

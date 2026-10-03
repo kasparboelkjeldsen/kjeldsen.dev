@@ -28,6 +28,12 @@ Two consequences worth keeping in mind:
   within a minute. Seen 2026-10-02 with a page created via the MCP's `create-document`; pages
   edited through the backoffice have not shown it. Check the table before blaming the deploy.
 
+- **Umbraco.AI's connection secret does not decrypt locally** (Data Protection keys are per
+  server). `Program.cs` calls `AddDevelopmentAiKey()`, which in Development swaps in
+  `Umbraco:AI:DevelopmentApiKey` from user secrets for any protected value this machine cannot
+  read. Set it once with `dotnet user-secrets set "Umbraco:AI:DevelopmentApiKey" "<key>" --project kjeldsen.backend`
+  and local saves of generated graphics and charts call Anthropic for real (and bill that key).
+
 The SQL server's firewall must allow the machine's IP (`az sql server firewall-rule create`), and
 `DefaultAzureCredential` skips managed identity in Development because the IMDS probe on a
 laptop fails hard instead of falling through to the Azure CLI login (`SecretsExtension.cs`).

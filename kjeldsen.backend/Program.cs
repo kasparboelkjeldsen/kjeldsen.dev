@@ -1,3 +1,4 @@
+using kjeldsen.backend.code.ai;
 using kjeldsen.backend.code.controllers;
 using kjeldsen.backend.code.engage.Setup;
 using kjeldsen.backend.code.extensions;
@@ -27,6 +28,10 @@ builder
     .Build()
 
 ;
+
+// Local only: use the Anthropic key from user secrets where the shared database's connection
+// secret cannot be decrypted on this machine. See code/ai/DevelopmentAiKeyProtector.cs.
+builder.AddDevelopmentAiKey();
 
 // MCP server — SSE transport with capture_note tool
 builder.Services
