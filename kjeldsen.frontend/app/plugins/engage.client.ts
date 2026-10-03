@@ -167,6 +167,8 @@ export default defineNuxtPlugin(() => {
     void to
   })
   router.afterEach((to) => {
+    // An editor previewing a draft is not a visitor.
+    if (to.path.startsWith('/preview/')) return
     void register(to.path)
   })
 

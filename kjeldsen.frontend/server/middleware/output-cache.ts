@@ -15,6 +15,15 @@ export default defineEventHandler(async (event) => {
   const path = event.path.split('?')[0]!
   if (path.includes('.') || path.startsWith('/api/') || path.startsWith('/_') || path.startsWith('/__')) return
 
+  // Drafts, behind a pass in the query string - which the cache key ignores, so a stored preview
+  // would be served to anyone asking for the path without one.
+  if (path.startsWith('/preview/')) {
+    event.context.outputCache = 'bypass'
+    setResponseHeader(event, 'Cache-Control', 'private, no-store')
+    setResponseHeader(event, 'X-Robots-Tag', 'noindex')
+    return
+  }
+
   const personalized = readVisitor(event) !== null && (await segmentsFor(path)).length > 0
   if (personalized) {
     event.context.outputCache = 'bypass'
