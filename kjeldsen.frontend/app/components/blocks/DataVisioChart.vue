@@ -36,7 +36,7 @@
     span?: number
   }>()
 
-  type Chart = { setOption(o: object, opts?: object): void; resize(): void; dispose(): void }
+  type Chart = { setOption(o: object, opts?: object): void; resize(): void; dispose(): void; dispatchAction(a: object): void }
 
   const host = ref<HTMLElement | null>(null)
   const canvas = ref<HTMLElement | null>(null)
@@ -100,6 +100,13 @@
     layout()
     resizer = new ResizeObserver(() => layout())
     resizer.observe(host.value)
+    document.addEventListener('pointerdown', hideTipOutside, { passive: true })
+  }
+
+  // A tooltip opened by a tap stays until the next tap inside the chart; a tap anywhere else on
+  // the page closes it too, rather than leaving it over the chart while the reader scrolls on.
+  function hideTipOutside(event: PointerEvent) {
+    if (chart && !host.value?.contains(event.target as Node)) chart.dispatchAction({ type: 'hideTip' })
   }
 
   onMounted(() => {
@@ -119,6 +126,7 @@
   onBeforeUnmount(() => {
     observer?.disconnect()
     resizer?.disconnect()
+    document.removeEventListener('pointerdown', hideTipOutside)
     chart?.dispose()
     chart = null
   })

@@ -136,7 +136,8 @@ export function visioContext(width: number, height: number, span: number): Visio
 
 /**
  * What the host settles for every chart regardless of the script: a title that truncates with an
- * ellipsis at the box's width rather than running off it, and smaller type in a compact box. The
+ * ellipsis at the box's width rather than running off it, a tooltip kept inside the box, and
+ * smaller type in a compact box. The
  * script's own choices win where it made any. Applied to the option before it is drawn, on the
  * server and in the browser alike.
  */
@@ -158,10 +159,22 @@ export function tuneOption(option: object, ctx: VisioContext): object {
       ...(t.subtextStyle ?? {}),
     }
   }
+  // The tooltip is drawn inside the chart's box, which clips: one placed by the finger near an
+  // edge was cut off on a phone. Confined, ECharts keeps it inside the box instead.
+  const tips = (option as { tooltip?: TooltipLike | TooltipLike[] }).tooltip
+  for (const tip of Array.isArray(tips) ? tips : tips ? [tips] : []) {
+    if (!tip || typeof tip !== 'object') continue
+    tip.confine ??= true
+    if (ctx.compact) {
+      tip.padding ??= [6, 10]
+      tip.textStyle = { fontSize: 12, ...(tip.textStyle ?? {}) }
+    }
+  }
   return o
 }
 
 type TitleLike = { textStyle?: Record<string, unknown>; subtextStyle?: Record<string, unknown> }
+type TooltipLike = { confine?: boolean; padding?: unknown; textStyle?: Record<string, unknown> }
 
 /**
  * The same guard the generator applies before storing a script, applied again where it runs.
