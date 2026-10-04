@@ -1,0 +1,12 @@
+{
+  "name": "kjeldsen.dev Engage date range",
+  "version": "1.0.0",
+  "extensions": [
+    {
+      "type": "backofficeEntryPoint",
+      "alias": "kjeldsen.EngageDateRange.EntryPoint",
+      "name": "Recompute Engage's remembered relative date range",
+      "js": "/App_Plugins/engage-date-range/entry.js"
+    }
+  ]
+}

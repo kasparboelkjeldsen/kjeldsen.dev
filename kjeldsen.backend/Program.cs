@@ -1,5 +1,6 @@
 using kjeldsen.backend.code.ai;
 using kjeldsen.backend.code.controllers;
+using kjeldsen.backend.code.engage.Heatmaps;
 using kjeldsen.backend.code.engage.Setup;
 using kjeldsen.backend.code.extensions;
 using kjeldsen.backend.code.mcp;
@@ -59,6 +60,7 @@ app.MapMcp("/mcp").RequireAuthorization("McpAccess");
 
 app.AddStaticRedirects();
 app.AddEngageTrackingRewrite();
+app.UseEngageHeatmapRedirect();
 
 app.UseUmbraco()
     .WithMiddleware(u =>

@@ -161,3 +161,34 @@ In roughly this order, each on its own:
 
 Not built yet, by decision: the warm cache keyed on (path, segment) from the design notes. The
 route already sends the alias and the private header it will need.
+
+## Heatmaps (2026-10-04)
+
+Engage's scroll heatmap is listed as unsupported headless, but only half of it is. The scroll data
+is collected fine: the client plugin's batch carries `scrollDepth`, and the processed rows land in
+`umbracoEngageAnalyticsScrollDepth` like any rendered site's. What breaks is the picture. The
+heatmap tab draws its colours over an iframe pointed at `<cms>/<document key>?culture=…` (plus
+`&segment=…` for a variant), which the CMS can only answer by rendering the document's template.
+This site has none, so the frame was the CMS's 404 page.
+
+- **Backend**: `code/engage/Heatmaps/HeatmapFrontendRedirect.cs` answers a GET for exactly
+  `/<guid>` with a redirect to `Nuxt:Host` + the Delivery API route of the published document +
+  `?engage-heatmap=1`. Unpublished or unknown keys fall through to the old 404. It reveals nothing
+  the Delivery API does not already serve publicly.
+- **Frontend**: `isEngageHeatmap()` (`app/composables/useEngage.ts`) reads the flag. The Engage
+  plugin does nothing under it - otherwise every editor opening the tab would file a pageview
+  "scrolled" to the bottom of a page-tall frame, skewing the very heatmap being drawn - and
+  `v-reveal` shows everything at once, since the page never scrolls inside the frame.
+- **Limits that are Engage's, not ours**: the frame is 1280 / 1024 / 640 px wide by device and as
+  tall as the *average* page height Engage derives from the scroll rows, so a page that has grown
+  since older visits is cut short at the bottom. The `segment` parameter is ignored; no page here
+  varies yet. When one does, pass it through as a forced segment.
+- The older `Services/CustomHeatMapService.cs` still stretches the date range's end to 23:59:59 so
+  today's visits are included.
+- **"No heatmap data" is usually the date range.** Engage remembers the picker in the browser's
+  localStorage (`ue:analyticsContext`) as a mode *and* the dates it resolved to, and restores the
+  dates without resolving the mode again, so a "Last 7 days" picked months ago stays months ago.
+  `wwwroot/App_Plugins/engage-date-range/entry.js` (a backoffice entry point) re-resolves relative
+  modes against today before Engage reads them; custom ranges are left alone. Separately, every
+  "Last N days" mode ends **yesterday**: a post published yesterday has no desktop data under
+  "Last 7 days" until tomorrow. "This month" includes today.

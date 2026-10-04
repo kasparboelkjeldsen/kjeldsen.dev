@@ -31,6 +31,9 @@ interface Pageview {
 }
 
 export default defineNuxtPlugin(() => {
+  // Drawn under a heatmap in the backoffice: nothing to register, nothing to measure.
+  if (isEngageHeatmap()) return
+
   const info = useEngageInfo()
   const router = useRouter()
 

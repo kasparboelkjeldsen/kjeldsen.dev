@@ -43,8 +43,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       const delay = binding.value?.delay ?? 0
       if (delay) el.style.setProperty('--reveal-delay', `${delay}ms`)
 
+      // Under a heatmap the frame is as tall as the page and only partly on screen, so most of it
+      // would wait for a scroll that never happens inside the frame.
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (reduced || !('IntersectionObserver' in window)) {
+      if (reduced || isEngageHeatmap() || !('IntersectionObserver' in window)) {
         el.classList.add('is-in')
         return
       }

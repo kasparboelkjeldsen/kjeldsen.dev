@@ -1,5 +1,6 @@
 ﻿using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Engage.Common.Composing;
 using Umbraco.Engage.Data.Common.NPoco;
 using Umbraco.Engage.Infrastructure.Heatmaps;
 
@@ -34,6 +35,9 @@ public class CustomHeatMapService : IHeatmapService
     }
 }
 
+// Engage registers its own service from a composer of its own; ours must run after it, or there is
+// nothing to remove yet and Engage's registration, added later, wins.
+[ComposeAfter(typeof(UmbracoEngageApplicationComposer))]
 public class CustomHeatMapServiceComposer : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
