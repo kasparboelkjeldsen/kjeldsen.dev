@@ -596,6 +596,22 @@
     padding: 1.25rem 1.25rem 1rem;
   }
 }
+/* On a phone the chart runs to the edges of the screen: the page and text column gutters cost a
+   375 px phone 80 px of plot, and a chart needs the width more than it needs the rounded frame.
+   Every chart is a full row below 48rem, so this holds for half-width blocks too. */
+@media (max-width: 47.99rem) {
+  .visio-figure {
+    margin-inline: calc(50% - 50vw);
+  }
+  .visio-figure > .visio-frame {
+    border-radius: 0;
+    border-inline: 0;
+    padding-inline: 0.75rem;
+  }
+  .visio-figure > figcaption {
+    padding-inline: 1.25rem;
+  }
+}
 /* Height from the width and the model's aspect ratio, clamped - the same numbers as
    visioHeight() in shared/visio.ts, which sizes the server still. A narrow box is not allowed to
    be as wide-and-short as a desktop one: a 340 px phone would get a 150 px chart. */

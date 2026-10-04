@@ -1,5 +1,5 @@
 <template>
-  <figure v-if="visio" class="m-0" :class="{ breakout: span >= 12 }">
+  <figure v-if="visio" class="visio-figure m-0" :class="{ breakout: span >= 12 }">
     <div class="frame visio-frame">
       <DataVisioChart
         :spec="visio.spec"
