@@ -22,7 +22,11 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
     <PackageReference Include="Scrutor" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="5.0.1" />
+    <!-- Svg.Skia only brings Skia's Windows and macOS binaries. App Service is Linux; keep this on
+         the SkiaSharp version Svg.Skia resolves, or the native and managed halves disagree. -->
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.148.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.12.14" />
+    <PackageReference Include="Svg.Skia" Version="5.2.3" />
     <PackageReference Include="Umbraco.AI" Version="18.4.0" />
     <PackageReference Include="Umbraco.AI.Anthropic" Version="18.1.2" />
     <PackageReference Include="Umbraco.Cms" Version="18.2.0" />

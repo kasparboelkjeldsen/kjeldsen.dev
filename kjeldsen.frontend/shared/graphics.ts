@@ -33,12 +33,27 @@ export function generatedGraphicOf(media: IApiMediaWithCropsModel | MediaLike): 
 }
 
 /**
- * The drawing as a file on this origin, for `og:image` and the like. The revision in the query
- * keeps a regenerated drawing from being served stale by Front Door, which caches /api/media/*.
+ * The drawing as a file on this origin. The revision in the query keeps a regenerated drawing from
+ * being served stale by Front Door, which caches /api/media/*.
  */
 export function graphicFileUrl(graphic: Pick<GeneratedGraphic, 'id' | 'updateDate'>): string {
+  return `/api/media/svg/${graphic.id}.svg${revisionQuery(graphic)}`
+}
+
+/** The size the CMS rasterises a social card at (GeneratedGraphicsFileController). */
+export const CARD_SIZE = { width: 1200, height: 630 } as const
+
+/**
+ * The drawing as a social card, for `og:image`: a JPEG of CARD_SIZE, cropped to fill it the way
+ * the hero backdrop is. Hardly any social network renders an SVG card.
+ */
+export function graphicCardUrl(graphic: Pick<GeneratedGraphic, 'id' | 'updateDate'>): string {
+  return `/api/media/card/${graphic.id}.jpg${revisionQuery(graphic)}`
+}
+
+function revisionQuery(graphic: Pick<GeneratedGraphic, 'updateDate'>): string {
   const revision = graphic.updateDate ? Date.parse(graphic.updateDate) : NaN
-  return `/api/media/svg/${graphic.id}.svg${Number.isFinite(revision) ? `?v=${revision}` : ''}`
+  return Number.isFinite(revision) ? `?v=${revision}` : ''
 }
 
 /**

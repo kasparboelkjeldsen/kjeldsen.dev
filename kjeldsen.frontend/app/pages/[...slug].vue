@@ -11,7 +11,7 @@
 <script setup lang="ts">
   import PageResolver from '~/components/content/PageResolver.vue'
   import { describe } from '~/utils/seo'
-  import { generatedGraphicOf, graphicFileUrl } from '~/utils/graphics'
+  import { CARD_SIZE, generatedGraphicOf, graphicCardUrl } from '~/utils/graphics'
   import type { SeoCompositionContentPropertiesModel } from '~~/server/delivery-api'
 
   const route = useRoute()
@@ -42,20 +42,24 @@
 
   const description = computed(() => seo.value?.seoDescription || describe(data.value))
 
+  const ogMedia = computed(() => seo.value?.seoListImage?.[0])
+  const ogGraphic = computed(() => generatedGraphicOf(ogMedia.value))
+
   useSeoMeta({
     description: () => description.value,
     ogTitle: () => pageTitle.value,
     ogDescription: () => description.value,
     ogType: () => (data.value?.contentType === 'blogPostPage' ? 'article' : 'website'),
-    // A Generated Graphics item is addressed as a file (/api/media/svg/<key>.svg), because
-    // crawlers want an image URL, not markup. Note that most social cards do not render SVG;
-    // a raster rendition is the follow-up if that ever matters.
+    // A Generated Graphics item goes out as a JPEG card the CMS rasterises from the drawing
+    // (/api/media/card/<key>.jpg), because crawlers want an image URL and hardly any of them
+    // render SVG. Its size is known, so it is declared.
     ogImage: () => {
-      const media = seo.value?.seoListImage?.[0]
-      const graphic = generatedGraphicOf(media)
-      const path = graphic ? graphicFileUrl(graphic) : media?.url ? `${media.url}?width=1200` : null
+      const path = ogGraphic.value ? graphicCardUrl(ogGraphic.value) : ogMedia.value?.url ? `${ogMedia.value.url}?width=1200` : null
       return path ? `${config.public.siteUrl.replace(/\/$/, '')}${path}` : undefined
     },
+    ogImageWidth: () => (ogGraphic.value ? CARD_SIZE.width : undefined),
+    ogImageHeight: () => (ogGraphic.value ? CARD_SIZE.height : undefined),
+    ogImageType: () => (ogGraphic.value ? 'image/jpeg' : undefined),
     twitterCard: 'summary_large_image',
   })
 </script>

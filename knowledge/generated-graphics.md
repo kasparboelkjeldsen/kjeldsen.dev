@@ -20,7 +20,7 @@ The first one is the hands passing a heart in *The Culture of Kindness*.
 | Data type *Image or Graphic Picker* | The image block's picker, allowing Image and Generated Graphics. The old *Image Media Picker* (Image only) still serves `seoListImage` and the reference image. |
 | `kjeldsen.frontend/app/components/blocks/GeneratedGraphic.vue` | Renders the SVG with `v-html` (server-side, so it is a still before any script) and builds the timeline after mount with `new Function('svg', 'gsap', script)`. `fit="cover"` fills a box and crops (the root's `preserveAspectRatio` is switched to `slice`); `trigger="manual"` leaves playing to the parent through the exposed `replay()`. `document.querySelector('.graphic').__timeline` in devtools. |
 | `kjeldsen.frontend/shared/graphics.ts` | Reads the properties off a media item, builds the file URL. Shared because the server-side listing loader needs it too; `app/utils/graphics.ts` re-exports it. |
-| `code/graphics/GeneratedGraphicsSvgController.cs` + `kjeldsen.frontend/server/api/media/svg/[key].get.ts` | The drawing as a file: `/api/media/svg/<key>.svg?v=<updateDate>`, for `og:image`. The CMS serves it at `/media/svg/<key>.svg`; the frontend proxies it on its own origin, where Front Door caches `/api/media/*`, so the revision in the query is what makes a regenerated drawing a new URL. |
+| `code/graphics/GeneratedGraphicsFileController.cs` + `kjeldsen.frontend/server/api/media/svg/[key].get.ts`, `.../card/[key].get.ts` | The drawing as a file, `/api/media/svg/<key>.svg?v=<updateDate>`, and as a social card for `og:image`, `/api/media/card/<key>.jpg?v=<updateDate>`. The CMS serves them at `/media/svg/<key>.svg` and `/media/card/<key>.jpg`; the frontend proxies them on its own origin, where Front Door caches `/api/media/*`, so the revision in the query is what makes a regenerated drawing a new URL. |
 
 ## Where a graphic can go
 
@@ -28,8 +28,7 @@ The first one is the hands passing a heart in *The Culture of Kindness*.
 - **SEO list image** on posts (the *Image or Graphic Picker* is on the SEO composition now): it
   becomes the post's hero backdrop, drawn full-bleed under the same veil and fade as a photo and
   playing once on load; the listing card's picture, playing when the card is hovered (or once in
-  view on a device without hover); and the `og:image`, as the SVG file above. Most social
-  networks do not render SVG cards - a raster rendition is the follow-up if that matters.
+  view on a device without hover); and the `og:image`, as the JPEG card above.
 - **Home page background** (the unfiltered Media Picker already allowed it).
 
 ## The contract with the model
@@ -107,5 +106,12 @@ closely once told to. Profiles live in `umbracoAIProfile`; the management API fo
   other way; it became a blurred cast shadow offset like the lock plate's, rotating about the
   offset pivot) needed a republish of the post. `kjeldsen.experiment/visio/key-shadow.mjs` is
   the edit, as a pattern for the next one.
+- **The social card is rasterised on request** by Svg.Skia (SkiaSharp) in the CMS: 1200x630,
+  cropped to fill like the hero backdrop, so a 3:1 drawing loses about a third of its width, and
+  JPEG at quality 85 (30-50 KB; the same cards as PNG were 90-240 KB, the gradients compress
+  badly). Nothing is stored; Front Door keeps the result under the revisioned URL. Skia's Linux
+  binary comes from `SkiaSharp.NativeAssets.Linux.NoDependencies`, pinned to the SkiaSharp
+  version Svg.Skia resolves. No fonts are loaded, so `<text>` in a drawing would not appear on
+  the card; the drawings so far have none.
 - **Reference photos** come through `MediaFileManager.FileSystem`, so blob storage in every
   environment. Anthropic takes up to 5 MB / 8000 px; the originals are bigger, hence the resize.
