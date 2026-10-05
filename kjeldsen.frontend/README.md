@@ -167,6 +167,7 @@ posted JSON off, because it otherwise hides component edits.
 | `server/utils/graphic-file.ts` | Fetches either of those from the CMS. |
 | `server/utils/children.ts` | The loader behind that: one delivery call, cached under the children's keys. |
 | `server/routes/feed.xml.get.ts` | The blog as RSS 2.0, from the same summaries. Announced in the head and the footer. |
+| `server/routes/robots.txt.get.ts` | Allows every crawler everywhere except `/preview/`; names the feed as the sitemap. |
 | `server/routes/api/[...].ts` | 404s unmatched `/api/` paths — see the note in the file. |
 | `server/utils/delivery.ts` | The configured delivery client. |
 | `server/utils/media.ts` | Which image commands get signed, and how. |
