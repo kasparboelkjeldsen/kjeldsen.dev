@@ -31,6 +31,8 @@ Dropdown values are arrays (`["H2"]`); media pickers are arrays of
 rich text is `{ "markup": "<p>...</p>", "blocks": null }`. `kjeldsen.experiment/visio/` keeps
 scripts that write whole pages this way. Pages vary by culture (`en-US`) even though properties do
 not. A page created from a local run needs a re-save and publish before production routes it.
+Publishing announces the post to the Umbraco community (see `AGENTS.md`): save drafts, inspect
+them with Preview, and leave the publish to the owner.
 
 **Column spans.** A block spanning 12 owns the row and may break out of the text column (images,
 code, charts, tables do); 6 sits beside a neighbour on a wide screen and stacks on a phone.

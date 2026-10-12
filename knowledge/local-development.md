@@ -27,6 +27,8 @@ Two consequences worth keeping in mind:
   (a rename to the same name) and publishing again wrote the rows and production picked it up
   within a minute. Seen 2026-10-02 with a page created via the MCP's `create-document`; pages
   edited through the backoffice have not shown it. Check the table before blaming the deploy.
+  Do that re-save and publish only as the real launch: the site is on Umbraco's community blog
+  list, so a post's first publish is announced on Umbraco's Discord and elsewhere.
 
 - **Umbraco.AI's connection secret does not decrypt locally** (Data Protection keys are per
   server). `Program.cs` calls `AddDevelopmentAiKey()`, which in Development swaps in

@@ -22,6 +22,12 @@ onto the blocks above.
 Text fields across the site accept `**bold**` and `--italic--` as emphasis markers; nothing else
 in a text field becomes markup.
 
+**Never publish a post to look at it.** kjeldsen.dev is on Umbraco's community blog list, so the
+first publish of a post is announced on Umbraco's Discord and other community channels; there is
+no publishing, inspecting and fixing before anyone notices. Agents save drafts only, the
+backoffice's Preview button shows a saved draft through the real frontend
+([knowledge/preview.md](knowledge/preview.md)), and the owner publishes.
+
 A page created through the API from a local run needs a re-save and publish before production
-routes it (`knowledge/local-development.md`). Saves that trigger generation (graphics, charts)
+routes it (`knowledge/local-development.md`); that is the owner's final publish, not a check. Saves that trigger generation (graphics, charts)
 wait for the model; do one at a time.
