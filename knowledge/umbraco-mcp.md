@@ -7,18 +7,15 @@ root; **local development only** — the API user behind it is deliberately not 
 ## Where the secret lives
 
 `.mcp.json` is committed and contains **no credentials**. It references
-`${UMBRACO_MCP_CLIENT_SECRET}`, which Claude Code expands from the environment. The actual value is
-in `.claude/settings.local.json`, which is gitignored:
-
-```jsonc
-{ "env": { "UMBRACO_MCP_CLIENT_SECRET": "…" } }
-```
+`${UMBRACO_MCP_CLIENT_SECRET}`, which Claude Code expands from the environment. Since 2026-10-12 it
+is a Windows user environment variable (set it, then restart the Claude app, which only reads the
+environment at launch). Unset, the server sends an empty secret and the connection just closes.
 
 This repository is public, so nothing else is acceptable — even for a credential that only works
 against localhost. A secret committed to a public repo gets scraped and flagged regardless of what
 it can reach.
 
-The matching API user (client id `umbraco-back-office-mcp`) is created in the backoffice under
+The matching API user (client id `umbraco-back-office-claude2`) is created in the backoffice under
 *Users → API Users*.
 
 ## Four things that will bite
@@ -47,7 +44,7 @@ directly.
 
 ```
 POST /umbraco/management/api/v1/security/back-office/token
-grant_type=client_credentials&client_id=umbraco-back-office-mcp&client_secret=…
+grant_type=client_credentials&client_id=umbraco-back-office-claude2&client_secret=…
 ```
 
 then `Bearer` against `/umbraco/management/api/v1/…`. That also sidesteps the MCP's content
