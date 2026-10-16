@@ -37,6 +37,9 @@
     dataVisioBlock: defineAsyncComponent(() => import('~/components/blocks/DataVisioBlock.vue')),
     tableBlock: defineAsyncComponent(() => import('~/components/blocks/TableBlock.vue')),
     apiUserTest: defineAsyncComponent(() => import('~/components/blocks/ApiUserTest.vue')),
+    dangerouslyInlineScriptBlock: defineAsyncComponent(
+      () => import('~/components/blocks/DangerouslyInlineScriptBlock.vue')
+    ),
     cacheKeyExampleBlock: defineAsyncComponent(
       () => import('~/components/blocks/CacheKeyExampleBlock.vue')
     ),

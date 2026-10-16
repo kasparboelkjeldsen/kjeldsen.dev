@@ -199,6 +199,18 @@ whose name contains "Caching".
 No properties. Two buttons that call the Delivery API from the browser, anonymously and as a
 deliberately published, read-one-node API user, for the post about API users.
 
+### Dangerously Inline Script - `dangerouslyInlineScriptBlock` (`e453a100-f9f0-4178-9b68-c5d9ced53aa2`), 6 or 12
+
+Raw HTML, written out verbatim with no sanitising: markup, `<style>` and `<script>` all go
+through. Safe only because the site has one editor. Scripts run on a server-rendered load and
+again after a client-side navigation (`DangerouslyInlineScriptBlock.vue` re-creates them then,
+since innerHTML never runs a script), so a script that registers global listeners should guard
+against a second run. `document.write` only works on the server-rendered load.
+
+| Property | Editor | Notes |
+|---|---|---|
+| `html` | Code editor (`HTML Code Editor`, `6a78e1c4-549e-4b8f-8415-41497cf8fec1`) | Rendered exactly as written. |
+
 ## Defined but without a frontend component
 
 These exist in the CMS (and in the grid's allowed list) but `BlockResolver.vue` has no component

@@ -150,6 +150,15 @@ export type ContentPageContentPropertiesModel = HeadlessCompositionContentProper
 
 export type ContentPageContentResponseModel = IApiContentResponseBaseModel & ContentPageContentModel;
 
+export type DangerouslyInlineScriptBlockElementModel = IApiElementBaseModel & {
+    contentType: 'dangerouslyInlineScriptBlock';
+    properties?: DangerouslyInlineScriptBlockElementPropertiesModel;
+};
+
+export type DangerouslyInlineScriptBlockElementPropertiesModel = {
+    html?: null | string;
+};
+
 export type DataVisioBlockElementModel = IApiElementBaseModel & {
     contentType: 'dataVisioBlock';
     properties?: DataVisioBlockElementPropertiesModel;
@@ -406,7 +415,9 @@ export type IApiElementModel = ({
     contentType: 'readMoreBlock';
 } & ReadMoreBlockElementModel) | ({
     contentType: 'openImageBlock';
-} & OpenImageBlockElementModel);
+} & OpenImageBlockElementModel) | ({
+    contentType: 'dangerouslyInlineScriptBlock';
+} & DangerouslyInlineScriptBlockElementModel);
 
 export type IApiMediaWithCropsBaseModel = {
     focalPoint?: ImageFocalPointModel;
