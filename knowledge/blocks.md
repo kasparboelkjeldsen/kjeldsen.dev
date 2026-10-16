@@ -201,8 +201,10 @@ deliberately published, read-one-node API user, for the post about API users.
 
 ### Dangerously Inline Script - `dangerouslyInlineScriptBlock` (`e453a100-f9f0-4178-9b68-c5d9ced53aa2`), 6 or 12
 
-Raw HTML, written out verbatim with no sanitising: markup, `<style>` and `<script>` all go
-through. Safe only because the site has one editor. Scripts run on a server-rendered load and
+Raw HTML, written out verbatim with no sanitising and no wrapper element: markup, `<style>` and
+`<script>` land straight in the grid cell. Safe only because the site has one editor. HTML that
+starts with a comment trips Vue's hydration, which then re-renders it on the client; start with
+an element or text. Scripts run on a server-rendered load and
 again after a client-side navigation (`DangerouslyInlineScriptBlock.vue` re-creates them then,
 since innerHTML never runs a script), so a script that registers global listeners should guard
 against a second run. `document.write` only works on the server-rendered load.
