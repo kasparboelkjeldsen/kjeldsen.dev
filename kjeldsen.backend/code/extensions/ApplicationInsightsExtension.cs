@@ -1,7 +1,6 @@
-﻿using System.Net;
-using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.ApplicationInsights.Extensibility;
+﻿using System.Diagnostics;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -13,10 +12,16 @@ public static class ApplicationInsightsExtension
     {
         var connectionString = builder.Configuration.GetValue<string>("ApplicationInsights:ConnectionString");
 
+        // Application Insights 3 runs on OpenTelemetry and has no telemetry processors. The filter is
+        // a span processor instead, registered before AddApplicationInsightsTelemetry so it sees each
+        // request span ahead of the exporter: processors run in the order they were added.
+        builder.Services.ConfigureOpenTelemetryTracerProvider(tracing =>
+            tracing.AddProcessor<RequestFilterProcessor>());
+
         builder.Services.AddApplicationInsightsTelemetry(options =>
         {
             options.ConnectionString = connectionString;
-        }).AddApplicationInsightsTelemetryProcessor<CustomTelemetryProcessor>();
+        });
 
         // Mutate the Serilog config section BEFORE Serilog spins up
         var serilogSection = builder.Configuration.GetSection("Serilog");
@@ -24,7 +29,7 @@ public static class ApplicationInsightsExtension
 
         foreach (var sink in writeToSection.GetChildren())
         {
-            if (sink.GetValue<string>("Name") == "ApplicationInsights")
+            if (sink.GetValue<string>("Name") == "AzureApplicationInsights")
             {
                 var args = sink.GetSection("Args");
                 args["connectionString"] = connectionString;
@@ -41,31 +46,49 @@ public static class ApplicationInsightsExtension
     }
 }
 
-public class CustomTelemetryProcessor : ITelemetryProcessor
+/// <summary>
+/// Keeps 404s (logged as a warning instead) and 499s (client closed the connection) out of the
+/// request telemetry. Clearing the Recorded flag is how a span is dropped after it has ended: the
+/// exporter skips spans that are not recorded.
+/// </summary>
+public class RequestFilterProcessor(ILogger<RequestFilterProcessor> logger) : BaseProcessor<Activity>
 {
-    private ITelemetryProcessor Next { get; set; }
-    private readonly ILogger _logger;
+    private readonly ILogger _logger = logger;
 
-    public CustomTelemetryProcessor(ITelemetryProcessor next, ILogger<CustomTelemetryProcessor> logger)
+    public override void OnEnd(Activity activity)
     {
-        _logger = logger;
-        this.Next = next;
-    }
-    public void Process(ITelemetry item)
-    {
-        RequestTelemetry requestTelemetry = item as RequestTelemetry;
-
-        // filter out 404 requests
-        if (requestTelemetry != null && requestTelemetry.ResponseCode != null && int.Parse(requestTelemetry.ResponseCode) == (int)HttpStatusCode.NotFound)
-        {
-            _logger.LogWarning("404 - url: {0}", requestTelemetry.Url);
-            return;
-        }
-        if (requestTelemetry != null && requestTelemetry.ResponseCode != null && int.Parse(requestTelemetry.ResponseCode) == 499) // client closed connection
+        if (activity.Kind != ActivityKind.Server)
         {
             return;
         }
 
-        Next.Process(item);
+        var statusCode = activity.GetTagItem("http.response.status_code") switch
+        {
+            int code => code,
+            string text when int.TryParse(text, out var code) => code,
+            _ => 0,
+        };
+
+        if (statusCode == StatusCodes.Status404NotFound)
+        {
+            // Written outside the request's trace: Application Insights drops the logs that belong
+            // to a dropped span, and this warning is the only record of the 404 that is kept.
+            var current = Activity.Current;
+            Activity.Current = null;
+            try
+            {
+                _logger.LogWarning("404 - url: {Url}", activity.GetTagItem("url.path"));
+            }
+            finally
+            {
+                Activity.Current = current;
+            }
+
+            activity.ActivityTraceFlags &= ~ActivityTraceFlags.Recorded;
+        }
+        else if (statusCode == 499)
+        {
+            activity.ActivityTraceFlags &= ~ActivityTraceFlags.Recorded;
+        }
     }
 }

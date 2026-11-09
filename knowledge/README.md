@@ -8,6 +8,7 @@ behind decisions that look strange without context.
 | [local-development.md](local-development.md) | Running the backend locally: SQLite vs LocalDB, the two launch profiles, first-boot behaviour |
 | [umbraco-18-upgrade.md](umbraco-18-upgrade.md) | The 17 → 18 upgrade: package matrix, code changes, and the traps that cost real time |
 | [engage-on-sqlite.md](engage-on-sqlite.md) | Why Engage needs a translation layer to run on SQLite, what it does, and what still does not work |
+| [application-insights-3.md](application-insights-3.md) | The 2.x → 3.x move onto OpenTelemetry: the span-processor 404 filter, the Serilog sink's own configuration, and why the 404 warnings vanished |
 | [upstream-findings.md](upstream-findings.md) | Portability and correctness findings worth reporting upstream |
 | [frontend-v2.md](frontend-v2.md) | Rebuilding the frontend: where OpenAPI moved in 18, what to keep from V1, and what the personalization round trips cost |
 | [caching-and-personalization.md](caching-and-personalization.md) | Segment-aware caching without a re-rendering frontend: what Front Door can't do, what Engage already exposes, and the resulting design |
