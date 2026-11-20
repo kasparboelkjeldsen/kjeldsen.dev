@@ -181,11 +181,10 @@ post at most.
 `[DECK] file: <compiled deck> | start: <scene id> | caption: optional`
 
 A can-present talk played in the page, full width: a 16:9 stage the reader can click into and
-step through with the arrow keys, or take full screen. `file` names the compiled deck the publisher
+step through with the arrow keys, or take full screen. `file` names the packed deck the publisher
 uploads to the media library; `start` is optional, the scene to open on. Use it when the talk
 itself is the evidence; one per post, and say in the prose around it what to look for, since a
-reader will not sit through forty cards. Until the player ships, the block shows a placeholder
-naming the deck.
+reader will not sit through forty cards.
 
 ### [TABLE]
 

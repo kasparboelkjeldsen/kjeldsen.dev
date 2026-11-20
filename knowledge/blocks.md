@@ -217,15 +217,26 @@ against a second run. `document.write` only works on the server-rendered load.
 ### can-present Deck - `canPresentBlock` (`90a96c88-caa5-4e8a-b634-ce4ec3e5ae48`), 12 only
 
 A [can-present](https://github.com/kasparboelkjeldsen/can-present) deck (an infinite-canvas talk)
-played in the page. **A placeholder for now:** `CanPresentBlock.vue` draws a 16:9 stage naming the
-picked deck and start scene, so a post can be laid out and previewed before the player exists.
-The plan is a `can-present` npm package in the frontend whose `<CanPresent>` component loads a
-deck compiled for embedding; the block then swaps its stage for that and nothing on the CMS side
-changes. Offered on Blog Post Pages only (`code/blockfilter/`).
+played in the page by the `can-present` npm package's `<CanPresentPlayer>`. The reader clicks into
+it and steps through with the arrow keys, O for the overview, or takes it full screen; keys only
+move it while it has focus, and it never touches the page's URL. Offered on Blog Post Pages only
+(`code/blockfilter/`).
+
+**Making a deck file.** In the can-present repo, `npm run pack-deck -- <deck> --out <name>.json`
+packs a deck without the engine (tens of kB). Upload that as a File. **Name it `.json`**, not the
+packer's default `.canpresent`: the Azure Blob media handler only serves extensions it knows and
+answers 404 to the rest, and the player does not care about the name. `examplecanpresent.json` in
+the media library's `decks` folder is the packed example deck.
+
+**How it renders.** The server writes the empty 16:9 stage (`CanPresentStage.vue`, also the
+loading and error state); `CanPresentDeck.vue` loads the player in the browser only, as its own
+chunk, so pages without a deck never fetch the engine. A deck file is code, run in the page with
+`new Function`: only upload your own. The backoffice block preview runs no scripts and shows the
+stage. `shared/can-present.d.ts` types the package until it ships its own.
 
 | Property | Editor | Notes |
 |---|---|---|
-| `deck` | Media picker (`Deck File Picker`, `bfa3207c-e4e0-4a61-b0d0-a94ffb5cf64a`: Files only, one), mandatory | The compiled deck, uploaded to the media library as a File. Same media JSON as the other pickers, with `"mediaTypeAlias": "File"`. |
+| `deck` | Media picker (`Deck File Picker`, `bfa3207c-e4e0-4a61-b0d0-a94ffb5cf64a`: Files only, one), mandatory | The packed deck, uploaded as a File (see above). Same media JSON as the other pickers, with `"mediaTypeAlias": "File"`. |
 | `startScene` | Textstring | Optional scene id to open on (the part after `#` in a deck's URL). Empty starts at the first scene. |
 | `caption` | Textstring | Under the deck. Emphasis markers work. |
 

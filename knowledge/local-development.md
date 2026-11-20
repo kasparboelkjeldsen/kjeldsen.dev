@@ -36,6 +36,15 @@ Two consequences worth keeping in mind:
   read. Set it once with `dotnet user-secrets set "Umbraco:AI:DevelopmentApiKey" "<key>" --project kjeldsen.backend`
   and local saves of generated graphics and charts call Anthropic for real (and bill that key).
 
+**Without switching your own `az` login.** `DefaultAzureCredential` falls through to the Azure
+CLI, which uses whatever subscription `az` has selected. To run the site while `az` stays on
+another job's subscription, give the backend a config folder of its own: copy `azureProfile.json`,
+`msal_token_cache.bin`, `clouds.config` and `config` from `%USERPROFILE%\.azure` to
+`%USERPROFILE%\.azure-kjeldsen-dev`, run `az account set --subscription kjeldsen.dev` with
+`AZURE_CONFIG_DIR` pointing there, and start the backend with the same variable set
+(`cmd /c "set AZURE_CONFIG_DIR=%USERPROFILE%\.azure-kjeldsen-dev&& dotnet run --project kjeldsen.backend"`).
+The default `az` login is untouched. Re-copy when that login's tokens expire.
+
 The SQL server's firewall must allow the machine's IP (`az sql server firewall-rule create`), and
 `DefaultAzureCredential` skips managed identity in Development because the IMDS probe on a
 laptop fails hard instead of falling through to the Azure CLI login (`SecretsExtension.cs`).

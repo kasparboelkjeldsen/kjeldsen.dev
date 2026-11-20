@@ -540,8 +540,8 @@
   overflow: hidden;
 }
 
-/* The can-present block's stage while it is a placeholder (CanPresentBlock.vue): a few cards
-   scattered on the canvas, the way a deck looks zoomed out in its overview. */
+/* The can-present block's empty stage (CanPresentStage.vue: server render, loading, error): a few
+   cards scattered on the canvas, the way a deck looks zoomed out in its overview. */
 .deck-stage {
   background:
     radial-gradient(circle at 30% 20%, rgb(125 211 252 / 0.08), transparent 55%),

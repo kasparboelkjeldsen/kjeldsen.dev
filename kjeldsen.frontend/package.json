@@ -15,6 +15,7 @@
   "dependencies": {
     "@nuxt/fonts": "^1.2.0",
     "@tailwindcss/vite": "^4.3.5",
+    "can-present": "^0.1.0",
     "echarts": "^6.1.0",
     "gsap": "^3.15.1",
     "h3-compression": "^1.1.0",
