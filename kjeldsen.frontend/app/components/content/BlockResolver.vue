@@ -43,6 +43,7 @@
     cacheKeyExampleBlock: defineAsyncComponent(
       () => import('~/components/blocks/CacheKeyExampleBlock.vue')
     ),
+    canPresentBlock: defineAsyncComponent(() => import('~/components/blocks/CanPresentBlock.vue')),
   }
 
   const resolved = computed(() => blocks[props.block.contentType as BlockType] ?? null)

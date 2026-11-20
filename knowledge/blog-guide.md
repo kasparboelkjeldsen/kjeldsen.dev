@@ -59,6 +59,7 @@ order.
 [CHART] type: Bar | model: Sonnet | caption: ... | prompt: ... | dataset below
     { ...dataset json... }
 [VIMEO] https://vimeo.com/123456789
+[DECK] file: shovelling-umbraco | start: map | caption: ...
 ```
 
 What each block takes, in detail:
@@ -174,6 +175,17 @@ post at most.
 ### [VIMEO]
 
 `[VIMEO] https://vimeo.com/<id>` - full width, the page URL is enough.
+
+### [DECK]
+
+`[DECK] file: <compiled deck> | start: <scene id> | caption: optional`
+
+A can-present talk played in the page, full width: a 16:9 stage the reader can click into and
+step through with the arrow keys, or take full screen. `file` names the compiled deck the publisher
+uploads to the media library; `start` is optional, the scene to open on. Use it when the talk
+itself is the evidence; one per post, and say in the prose around it what to look for, since a
+reader will not sit through forty cards. Until the player ships, the block shows a placeholder
+naming the deck.
 
 ### [TABLE]
 

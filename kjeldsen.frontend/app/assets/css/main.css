@@ -540,6 +540,36 @@
   overflow: hidden;
 }
 
+/* The can-present block's stage while it is a placeholder (CanPresentBlock.vue): a few cards
+   scattered on the canvas, the way a deck looks zoomed out in its overview. */
+.deck-stage {
+  background:
+    radial-gradient(circle at 30% 20%, rgb(125 211 252 / 0.08), transparent 55%),
+    radial-gradient(circle at 75% 80%, rgb(167 139 250 / 0.08), transparent 55%),
+    var(--color-surface);
+}
+
+.deck-cards {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.deck-card {
+  position: absolute;
+  width: 22%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--color-line);
+  border-radius: 0.5rem;
+  background: var(--color-surface-2);
+  opacity: 0.55;
+}
+
+.deck-card:nth-child(1) { left: 6%; top: 10%; transform: rotate(-4deg); }
+.deck-card:nth-child(2) { right: 7%; top: 8%; transform: rotate(3deg); }
+.deck-card:nth-child(3) { left: 10%; bottom: 9%; transform: rotate(2deg); }
+.deck-card:nth-child(4) { right: 9%; bottom: 12%; transform: rotate(-3deg); }
+
 /* A generated graphic: an inline SVG the model drew (app/components/blocks/GeneratedGraphic.vue).
    The SVG carries a viewBox and no size of its own, so it fills the frame's width and takes its
    height from the drawing. One that animates replays on hover or tap, hence the hand cursor. */

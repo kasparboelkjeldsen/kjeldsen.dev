@@ -1,4 +1,4 @@
-/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.3.5 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -377,7 +377,7 @@
     flex: none;
   }
   .transform {
-    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+    transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
   }
   .resize {
     resize: both;
@@ -642,6 +642,9 @@
   .opacity-60 {
     opacity: 60%;
   }
+  .opacity-70 {
+    opacity: 70%;
+  }
   .opacity-80 {
     opacity: 80%;
   }
@@ -654,11 +657,11 @@
     outline-width: 1px;
   }
   .filter {
-    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
   }
   .backdrop-filter {
-    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
-    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
   }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
@@ -692,11 +695,11 @@
     transition-timing-function: var(--ease-out-expo);
   }
   @media (hover: hover) {
-    .group-hover\:translate-x-1:is(:where(.group):hover *) {
+    :is(:where(.group):hover .group-hover\:translate-x-1) {
       --tw-translate-x: var(--spacing);
       translate: var(--tw-translate-x) var(--tw-translate-y);
     }
-    .group-hover\:scale-\[1\.05\]:is(:where(.group):hover *) {
+    :is(:where(.group):hover .group-hover\:scale-\[1\.05\]) {
       scale: 1.05;
     }
     .hover\:border-line-2:hover {
@@ -1259,6 +1262,43 @@
   box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.9);
   overflow: hidden;
 }
+.deck-stage {
+  background: radial-gradient(circle at 30% 20%, rgb(125 211 252 / 0.08), transparent 55%), radial-gradient(circle at 75% 80%, rgb(167 139 250 / 0.08), transparent 55%), var(--color-surface);
+}
+.deck-cards {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.deck-card {
+  position: absolute;
+  width: 22%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--color-line);
+  border-radius: 0.5rem;
+  background: var(--color-surface-2);
+  opacity: 0.55;
+}
+.deck-card:nth-child(1) {
+  left: 6%;
+  top: 10%;
+  transform: rotate(-4deg);
+}
+.deck-card:nth-child(2) {
+  right: 7%;
+  top: 8%;
+  transform: rotate(3deg);
+}
+.deck-card:nth-child(3) {
+  left: 10%;
+  bottom: 9%;
+  transform: rotate(2deg);
+}
+.deck-card:nth-child(4) {
+  right: 9%;
+  bottom: 12%;
+  transform: rotate(-3deg);
+}
 .graphic {
   display: block;
   user-select: none;
@@ -1300,6 +1340,19 @@
 @media (min-width: 48rem) {
   .visio-frame {
     padding: 1.25rem 1.25rem 1rem;
+  }
+}
+@media (max-width: 47.99rem) {
+  .visio-figure {
+    margin-inline: calc(50% - 50vw);
+  }
+  .visio-figure > .visio-frame {
+    border-radius: 0;
+    border-inline: 0;
+    padding-inline: 0.75rem;
+  }
+  .visio-figure > figcaption {
+    padding-inline: 1.25rem;
   }
 }
 .visio {
@@ -2320,7 +2373,7 @@
   }
 }
 @layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
       --tw-rotate-x: initial;
       --tw-rotate-y: initial;

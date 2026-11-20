@@ -192,7 +192,8 @@ A highlighted panel with an icon.
 
 No properties. Prints the cache keys of the page it sits on, for the caching posts. The block
 catalogue filter (`code/blockfilter/`) only offers it on the *umbraco packages* page and pages
-whose name contains "Caching".
+whose name contains "Caching". The filter only trims what the backoffice offers; a block written
+through the API lands wherever it is put.
 
 ### Api User Test - `apiUserTest` (`569c6ba9-0dd0-4974-8e82-b2103a5b0aed`), 6 or 12
 
@@ -212,6 +213,21 @@ against a second run. `document.write` only works on the server-rendered load.
 | Property | Editor | Notes |
 |---|---|---|
 | `html` | Code editor (`HTML Code Editor`, `6a78e1c4-549e-4b8f-8415-41497cf8fec1`) | Rendered exactly as written. |
+
+### can-present Deck - `canPresentBlock` (`90a96c88-caa5-4e8a-b634-ce4ec3e5ae48`), 12 only
+
+A [can-present](https://github.com/kasparboelkjeldsen/can-present) deck (an infinite-canvas talk)
+played in the page. **A placeholder for now:** `CanPresentBlock.vue` draws a 16:9 stage naming the
+picked deck and start scene, so a post can be laid out and previewed before the player exists.
+The plan is a `can-present` npm package in the frontend whose `<CanPresent>` component loads a
+deck compiled for embedding; the block then swaps its stage for that and nothing on the CMS side
+changes. Offered on Blog Post Pages only (`code/blockfilter/`).
+
+| Property | Editor | Notes |
+|---|---|---|
+| `deck` | Media picker (`Deck File Picker`, `bfa3207c-e4e0-4a61-b0d0-a94ffb5cf64a`: Files only, one), mandatory | The compiled deck, uploaded to the media library as a File. Same media JSON as the other pickers, with `"mediaTypeAlias": "File"`. |
+| `startScene` | Textstring | Optional scene id to open on (the part after `#` in a deck's URL). Empty starts at the first scene. |
+| `caption` | Textstring | Under the deck. Emphasis markers work. |
 
 ## Defined but without a frontend component
 

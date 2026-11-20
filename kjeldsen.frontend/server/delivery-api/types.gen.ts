@@ -110,6 +110,17 @@ export type CacheKeyExampleBlockElementPropertiesModel = {
     [key: string]: unknown;
 };
 
+export type CanPresentBlockElementModel = IApiElementBaseModel & {
+    contentType: 'canPresentBlock';
+    properties?: CanPresentBlockElementPropertiesModel;
+};
+
+export type CanPresentBlockElementPropertiesModel = {
+    deck?: null | Array<IApiMediaWithCropsModel>;
+    startScene?: null | string;
+    caption?: null | string;
+};
+
 export type CardBlockElementModel = IApiElementBaseModel & {
     contentType: 'cardBlock';
     properties?: CardBlockElementPropertiesModel;
@@ -417,7 +428,9 @@ export type IApiElementModel = ({
     contentType: 'openImageBlock';
 } & OpenImageBlockElementModel) | ({
     contentType: 'dangerouslyInlineScriptBlock';
-} & DangerouslyInlineScriptBlockElementModel);
+} & DangerouslyInlineScriptBlockElementModel) | ({
+    contentType: 'canPresentBlock';
+} & CanPresentBlockElementModel);
 
 export type IApiMediaWithCropsBaseModel = {
     focalPoint?: ImageFocalPointModel;
